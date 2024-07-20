@@ -5,7 +5,7 @@ WORKDIR /usr/app
 
 COPY ./ ./
 
-RUN yarn install --production
+RUN yarn install
 RUN yarn build
 
 EXPOSE 3000
