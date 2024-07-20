@@ -5,9 +5,9 @@ WORKDIR /usr/app
 
 COPY ./ ./
 
-RUN yarn install
+RUN yarn install --production
 RUN yarn build
 
-EXPOSE 4000
+EXPOSE 3000
 
 CMD ["yarn", "start"]
