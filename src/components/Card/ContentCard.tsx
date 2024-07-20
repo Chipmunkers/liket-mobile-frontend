@@ -98,7 +98,7 @@ export const ApiContentCard = ({
       <article className="w-[164px]">
         <div className="relative mb-[8px]">
           <div className="relative w-[164px] h-[232px]">
-            <CustomImage src={thumbnail} fill alt={`${title}에 대한 포스터`} />
+          <CustomImage src={process.env.NEXT_PUBLIC_IMAGE_SERVER + thumbnail} fill alt={`${title}에 대한 포스터`} style={{"objectFit": "cover"}}/>
           </div>
           <Badge
             variant={status}
