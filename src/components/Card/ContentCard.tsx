@@ -9,6 +9,7 @@ import Link from "next/link";
 import { ContentListItem } from "@/types/content";
 import { ContentStateType, GenreType } from "@/types/const";
 import CustomImage from "../CustomImage";
+import dayjs from "dayjs";
 
 export interface ContentCardProps {
   idx: number;
@@ -92,6 +93,7 @@ export const ApiContentCard = ({
   status = "willActive",
 }: ContentListItem) => {
   const { region1Depth, region2Depth } = location;
+  console.log(startDate, endDate);
 
   return (
     <Link href={`/contents/${idx}`}>
@@ -133,7 +135,8 @@ export const ApiContentCard = ({
           <div className="text-body2">{title}</div>
           <div className="text-body5 text-grey-04">{`${region1Depth} ${region2Depth}`}</div>
           <div className="text-body5 text-grey-04">
-            {startDate} - {endDate}
+            {dayjs(startDate).format("YYYY-MM-DD")} -{" "}
+            {dayjs(endDate).format("MM.DD")}
           </div>
         </div>
       </article>
