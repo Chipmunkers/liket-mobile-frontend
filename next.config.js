@@ -14,11 +14,10 @@ const nextConfig = {
     ],
   },
   async rewrites() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_SERVER ? `${process.env.NEXT_PUBLIC_API_SERVER}/:path*` : '/';
     return [
       {
-        source: '/apis/:path*',
-        destination: `${apiUrl}/:path*`,
+        source: "/apis/:path*",
+        destination: `${process.env.NEXT_PUBLIC_API_SERVER}/:path*`,
       },
     ];
   },
