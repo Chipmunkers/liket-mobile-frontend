@@ -9,6 +9,7 @@ import Link from "next/link";
 import { ContentListItem } from "@/types/content";
 import { ContentStateType, GenreType } from "@/types/const";
 import CustomImage from "../CustomImage";
+import dayjs from "dayjs";
 
 export interface ContentCardProps {
   idx: number;
@@ -92,13 +93,19 @@ export const ApiContentCard = ({
   status = "willActive",
 }: ContentListItem) => {
   const { region1Depth, region2Depth } = location;
+  console.log(startDate, endDate);
 
   return (
     <Link href={`/contents/${idx}`}>
       <article className="w-[164px]">
         <div className="relative mb-[8px]">
           <div className="relative w-[164px] h-[232px]">
-          <CustomImage src={process.env.NEXT_PUBLIC_IMAGE_SERVER + thumbnail} fill alt={`${title}에 대한 포스터`} style={{"objectFit": "cover"}}/>
+            <CustomImage
+              src={process.env.NEXT_PUBLIC_IMAGE_SERVER + thumbnail}
+              fill
+              alt={`${title}에 대한 포스터`}
+              style={{ objectFit: "cover" }}
+            />
           </div>
           <Badge
             variant={status}
@@ -128,7 +135,8 @@ export const ApiContentCard = ({
           <div className="text-body2">{title}</div>
           <div className="text-body5 text-grey-04">{`${region1Depth} ${region2Depth}`}</div>
           <div className="text-body5 text-grey-04">
-            {startDate} - {endDate}
+            {dayjs(startDate).format("YYYY-MM-DD")} -{" "}
+            {dayjs(endDate).format("MM.DD")}
           </div>
         </div>
       </article>

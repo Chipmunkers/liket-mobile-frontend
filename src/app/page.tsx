@@ -12,6 +12,7 @@ import { colors } from "@/utils/style";
 import Link from "next/link";
 import CustomScrollContainer from "@/components/CustomScrollContainer";
 import {
+  getHotAgeContents,
   getHotPlaces,
   getSoonEndContents,
   getSoonOpenContents,
@@ -23,6 +24,7 @@ import { getBannerList } from "@/apis/banner";
 export default async function Home() {
   const { contentList: soonOpenContents } = await getSoonOpenContents();
   const { contentList: soonEndContents } = await getSoonEndContents();
+  const hotAgeContents = await getHotAgeContents();
   const { bannerList } = await getBannerList();
   const hotPlaces = await getHotPlaces();
 
@@ -30,7 +32,7 @@ export default async function Home() {
     <>
       <Header>
         <Header.LeftOption logo />
-        <Header.RightOption option={{ search: true, like: true }} />
+        {/* <Header.RightOption option={{ search: true, like: true }} /> */}
       </Header>
       <main>
         <Carousel list={bannerList.map(({ imgPath }) => imgPath)} />
@@ -51,9 +53,18 @@ export default async function Home() {
             곳 ✨
           </h2>
           <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-            {CONTENT_CARDS_DUMMY.map((data, index) => {
-              return <ContentCard key={index} {...data} />;
-            })}
+            <If condition={hotAgeContents.length >= 1}>
+              <Then>
+                {hotAgeContents.map((data, idx) => {
+                  return <ApiContentCard key={idx} {...data} />;
+                })}
+              </Then>
+              <Else>
+                <div className="text-body5 text-grey-04 ml-[24px]">
+                  컨텐츠가 없습니다.
+                </div>
+              </Else>
+            </If>
           </CustomScrollContainer>
         </section>
         <Divider height="8px" width="100%" margin="24px 0" />

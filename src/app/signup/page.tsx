@@ -6,7 +6,9 @@ import EmailForm from "@/components/SignupForm/EmailForm";
 import PasswordForm from "@/components/SignupForm/PasswordForm";
 import ProfileForm from "@/components/SignupForm/ProfileForm";
 import { useLocalSignup } from "@/service/signup/hooks";
+import authStore from "@/stores/authStore";
 import { ProfileFormData } from "@/types/signup";
+import { setAuthToken } from "@/utils/axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -28,10 +30,13 @@ const SignUpPage = () => {
     setFormInformation({ ...formInformation, ...insertedFormData });
     setFormIndex(formIndex + 1);
   };
+  const setToken = authStore(({ setToken }) => setToken);
 
   const { mutate } = useLocalSignup({
-    onSuccess: (res) => {
-      console.log(res);
+    onSuccess: ({ data }) => {
+      setToken(data.token);
+      setAuthToken(data.token);
+      router.replace("/");
     },
   });
 

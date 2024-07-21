@@ -24,3 +24,5 @@ export interface SocialSignupParam extends ProfileFormData {
 export type CheckAuthenticationResponse = AxiosResponse<{
   token: string;
 }>;
+
+export type LocalLoginResponse = AxiosResponse<{ token: string }>;

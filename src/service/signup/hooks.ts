@@ -6,6 +6,7 @@ import {
   SendAuthenticationParam,
   LocalSignupParam,
   SocialSignupParam,
+  LocalLoginResponse,
 } from "./model";
 import { ResponseError } from "@/types/api";
 
@@ -28,7 +29,12 @@ export const useCheckAuthentication = (
 ) => useMutation({ ...queryOptions.check(), ...props });
 
 export const useLocalSignup = (
-  props: UseMutationOptions<unknown, ResponseError, LocalSignupParam, unknown>
+  props: UseMutationOptions<
+    LocalLoginResponse,
+    ResponseError,
+    LocalSignupParam,
+    unknown
+  >
 ) => useMutation({ ...queryOptions.localSignup(), ...props });
 
 export const useSocialSignup = (
