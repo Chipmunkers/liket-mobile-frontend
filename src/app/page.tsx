@@ -32,7 +32,7 @@ export default async function Home() {
     <>
       <Header>
         <Header.LeftOption logo />
-        <Header.RightOption option={{ search: true, like: true }} />
+        {/* <Header.RightOption option={{ search: true, like: true }} /> */}
       </Header>
       <main>
         <Carousel list={bannerList.map(({ imgPath }) => imgPath)} />
