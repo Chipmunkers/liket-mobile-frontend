@@ -39,6 +39,15 @@ export const getHotPlaces = async (): Promise<
     })
   ).json();
 
+export const getHotAgeContents = async (): Promise<ContentListItem[]> =>
+  (
+    await customFetch("/culture-content/hot-age/0/all", {
+      next: {
+        revalidate: false,
+      },
+    })
+  ).json();
+
 export const getContentDetailInformation = async (
   idx: string
 ): Promise<ContentDetailInformation> =>
