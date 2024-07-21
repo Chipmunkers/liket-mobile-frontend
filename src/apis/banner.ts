@@ -7,7 +7,7 @@ export const getBannerList = async (): Promise<{
   (
     await customFetch(`/banner/all`, {
       next: {
-        revalidate: false,
+        revalidate: 10,
       },
     })
   ).json();

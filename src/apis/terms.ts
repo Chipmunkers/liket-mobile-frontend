@@ -7,7 +7,7 @@ export const getTosList = async (): Promise<{
   (
     await customFetch(`/tos/all`, {
       next: {
-        revalidate: false,
+        revalidate: 10,
       },
     })
   ).json();
@@ -18,7 +18,7 @@ export const getTosItem = async (
   (
     await customFetch(`/tos/${param}`, {
       next: {
-        revalidate: false,
+        revalidate: 10,
       },
     })
   ).json();
