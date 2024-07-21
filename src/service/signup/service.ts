@@ -23,7 +23,7 @@ class SignupService extends Service {
   socialSignup(param: SocialSignupParam) {
     return this.http.post("/apis/user/social", param, {
       headers: {
-        "Content-Type": "multiple/form-data",
+        "Content-Type": "multipart/form-data",
       },
     });
   }
