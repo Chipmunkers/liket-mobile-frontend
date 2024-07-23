@@ -34,7 +34,6 @@ export const ContentCard = ({
   status = "willActive",
 }: ContentListItem) => {
   const { region1Depth, region2Depth } = location;
-  console.log(startDate, endDate);
 
   return (
     <Link href={`/contents/${idx}`}>
