@@ -81,9 +81,7 @@ const SignUpPage = () => {
       <Header>
         <Header.LeftOption
           option={{
-            back: {
-              onClick: () => router.back(),
-            },
+            back: true,
           }}
         />
         <Header.MiddleText text={"프로필"} />

@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
 import LinkItem from "@/components/LinkItem";
-import KaKao from "@/icons/kakao.svg";
+import KaKao from "@/icons/logins/kakao.svg";
 import { useLogout } from "@/service/login/hooks";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
