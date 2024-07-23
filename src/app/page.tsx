@@ -1,8 +1,5 @@
 import Carousel from "@/components/Carousel";
-import ContentCard, {
-  ApiContentCard,
-  ContentCardProps,
-} from "@/components/Card/ContentCard";
+import { ContentCard, ContentCardProps } from "@/components/Card/ContentCard";
 // import ReviewCard, { REVIEW_CARDS_DUMMY } from "@/components/Card/ReviewCard";
 import Divider from "@/components/Divider";
 import Header from "@/components/Header";
@@ -47,7 +44,7 @@ export default async function Home() {
             <If condition={hotStyleContents.length >= 1}>
               <Then>
                 {hotStyleContents.map((data, idx) => {
-                  return <ApiContentCard key={idx} {...data} />;
+                  return <ContentCard key={idx} {...data} />;
                 })}
               </Then>
               <Else>
@@ -67,7 +64,7 @@ export default async function Home() {
             <If condition={hotAgeContents.length >= 1}>
               <Then>
                 {hotAgeContents.map((data, idx) => {
-                  return <ApiContentCard key={idx} {...data} />;
+                  return <ContentCard key={idx} {...data} />;
                 })}
               </Then>
               <Else>
@@ -136,7 +133,7 @@ export default async function Home() {
               <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
                 {soonOpenContents.map((data, index) => {
                   return (
-                    <ApiContentCard key={index} {...data} status="willActive" />
+                    <ContentCard key={index} {...data} status="willActive" />
                   );
                 })}
               </CustomScrollContainer>
@@ -154,7 +151,7 @@ export default async function Home() {
             <Then>
               <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
                 {soonEndContents.map((data, index) => {
-                  return <ApiContentCard key={index} {...data} />;
+                  return <ContentCard key={index} {...data} />;
                 })}
               </CustomScrollContainer>
             </Then>

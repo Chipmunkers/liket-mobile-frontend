@@ -22,66 +22,7 @@ export interface ContentCardProps {
   likeState: boolean;
 }
 
-const ContentCard = ({
-  idx,
-  status,
-  genre,
-  title,
-  location,
-  startDate,
-  endDate,
-  likeState,
-}: ContentCardProps) => {
-  return (
-    <Link href={`/contents/${idx}`}>
-      <article className="w-[164px]">
-        <div className="relative mb-[8px]">
-          <div className="relative w-[164px] h-[232px]">
-            <CustomImage
-              src="https://picsum.photos/seed/picsum/164/232"
-              fill
-              alt={`${title}에 대한 포스터`}
-            />
-          </div>
-          <Badge
-            variant={status}
-            style={{
-              position: "absolute",
-              left: "8px",
-              top: "8px",
-            }}
-          >
-            진행중
-          </Badge>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-            className="absolute bottom-[8px] right-[8px]"
-          >
-            {likeState ? (
-              <ActiveLike color={colors.skyblue["01"]} />
-            ) : (
-              <Like color={colors.grey["02"]} />
-            )}
-          </button>
-        </div>
-        <div className="flex flex-col gap-[4px]">
-          <div className="text-body4 text-skyblue-01">{genre}</div>
-          <div className="text-body2">{title}</div>
-          <div className="text-body5 text-grey-04">{location}</div>
-          <div className="text-body5 text-grey-04">
-            {startDate} - {endDate}
-          </div>
-        </div>
-      </article>
-    </Link>
-  );
-};
-
-export default ContentCard;
-
-export const ApiContentCard = ({
+export const ContentCard = ({
   idx,
   title,
   thumbnail,
