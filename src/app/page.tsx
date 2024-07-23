@@ -14,6 +14,7 @@ import CustomScrollContainer from "@/components/CustomScrollContainer";
 import {
   getHotAgeContents,
   getHotPlaces,
+  getHotStyleContents,
   getSoonEndContents,
   getSoonOpenContents,
 } from "@/apis/content";
@@ -25,6 +26,7 @@ export default async function Home() {
   const { contentList: soonOpenContents } = await getSoonOpenContents();
   const { contentList: soonEndContents } = await getSoonEndContents();
   const hotAgeContents = await getHotAgeContents();
+  const hotStyleContents = await getHotStyleContents();
   const { bannerList } = await getBannerList();
   const hotPlaces = await getHotPlaces();
 
@@ -42,9 +44,18 @@ export default async function Home() {
             하기 좋은 곳 🍁
           </h2>
           <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] touch-action-none [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-            {CONTENT_CARDS_DUMMY.map((data, index) => {
-              return <ContentCard key={index} {...data} />;
-            })}
+            <If condition={hotStyleContents.length >= 1}>
+              <Then>
+                {hotStyleContents.map((data, idx) => {
+                  return <ApiContentCard key={idx} {...data} />;
+                })}
+              </Then>
+              <Else>
+                <div className="text-body5 text-grey-04 ml-[24px]">
+                  컨텐츠가 없습니다.
+                </div>
+              </Else>
+            </If>
           </CustomScrollContainer>
         </section>
         <section>
