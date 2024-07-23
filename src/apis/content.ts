@@ -8,7 +8,7 @@ export const getSoonOpenContents = async (): Promise<{
   (
     await customFetch(`/culture-content/soon-open/all`, {
       next: {
-        revalidate: 10,
+        revalidate: 0,
       },
     })
   ).json();
@@ -19,7 +19,7 @@ export const getSoonEndContents = async (): Promise<{
   (
     await customFetch(`/culture-content/soon-end/all`, {
       next: {
-        revalidate: 10,
+        revalidate: 0,
       },
     })
   ).json();
@@ -34,7 +34,7 @@ export const getHotPlaces = async (): Promise<
   (
     await customFetch(`/culture-content/hot/all`, {
       next: {
-        revalidate: 10,
+        revalidate: 0,
       },
     })
   ).json();
@@ -51,7 +51,7 @@ export const getContentDetailInformation = async (
   (
     await customFetch("/culture-content/" + idx, {
       next: {
-        revalidate: 10,
+        revalidate: 0,
       },
     })
   ).json();
