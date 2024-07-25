@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import CustomImage from "./CustomImage";
+import dayjs from "dayjs";
 
 export interface HotPlaceItemProps {
   idx: number;
@@ -20,14 +21,20 @@ const HotPlaceListItem = ({
   <Link href={`/contents/${idx}`}>
     <div className="flex flex-row">
       <div className="w-[48px] h-[48px] relative shrink-0">
-        <CustomImage src={thumbnail} alt={`${title} thumbnail`} />
+        <CustomImage
+          src={process.env.NEXT_PUBLIC_IMAGE_SERVER + thumbnail}
+          alt={`${title} thumbnail`}
+          width={48}
+          height={48}
+        />
       </div>
       <div className="flex flex-col justify-around ml-[12px]">
         <div className="text-body2 w-[150px] overflow-hidden truncate">
           {title}
         </div>
         <div className="text-body5 text-grey-04">
-          {startDate} ~ {endDate}
+          {dayjs(startDate).format("YYYY-MM-DD")} -{" "}
+          {dayjs(endDate).format("MM.DD")}
         </div>
       </div>
     </div>

@@ -83,3 +83,32 @@ export const ContentCard = ({
     </Link>
   );
 };
+
+// const isBetween = (
+//   date: dayjs.Dayjs,
+//   start: dayjs.Dayjs,
+//   end: dayjs.Dayjs
+// ): boolean => {
+//   return date.isSameOrAfter(start) && date.isBefore(end);
+// };
+
+// const getStatus = (startDate: string, endDate: string): Status => {
+//   const today = dayjs.utc(); // 현재 UTC 시간
+//   const start = dayjs.utc(startDate);
+//   const end = dayjs.utc(endDate);
+
+//   const startMinus7Days = start.subtract(7, "day");
+//   const endMinus7Days = end.subtract(7, "day");
+
+//   if (isBetween(today, startMinus7Days, start)) {
+//     return "willActive";
+//   } else if (isBetween(today, endMinus7Days, end)) {
+//     return "willClosed";
+//   } else if (isBetween(today, start, end)) {
+//     return "active";
+//   } else if (today.isAfter(end)) {
+//     return "closed";
+//   }
+
+//   return "unknown"; // 만약 어느 조건에도 맞지 않는다면
+// };
