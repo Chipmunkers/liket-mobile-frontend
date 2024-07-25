@@ -22,8 +22,8 @@ import { getBannerList } from "@/apis/banner";
 export default async function Home() {
   const { contentList: soonOpenContents } = await getSoonOpenContents();
   const { contentList: soonEndContents } = await getSoonEndContents();
-  const hotAgeContents = await getHotAgeContents();
-  const hotStyleContents = await getHotStyleContents();
+  const { contentList: hotAgeContents, age } = await getHotAgeContents();
+  const { contentList: hotStyleContents, style } = await getHotStyleContents();
   const { bannerList } = await getBannerList();
   const hotPlaces = await getHotPlaces();
 
@@ -37,7 +37,8 @@ export default async function Home() {
         <Carousel list={bannerList.map(({ imgPath }) => imgPath)} />
         <section className="mb-[48px] mt-[24px]">
           <h2 className="pl-[24px] mb-[8px]">
-            선선한 가을 날씨에 <span className="text-skyblue-01">#힐링</span>
+            선선한 가을 날씨에{" "}
+            <span className="text-skyblue-01">#{style.name}</span>
             하기 좋은 곳 🍁
           </h2>
           <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] touch-action-none [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
@@ -57,8 +58,8 @@ export default async function Home() {
         </section>
         <section>
           <h2 className="pl-[24px] mb-[8px]">
-            요즘 <span className="text-skyblue-01">#10대</span> Z세대가 주목하는
-            곳 ✨
+            요즘 <span className="text-skyblue-01">#{age.name}</span> Z세대가
+            주목하는 곳 ✨
           </h2>
           <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
             <If condition={hotAgeContents.length >= 1}>
@@ -176,85 +177,3 @@ export default async function Home() {
     </>
   );
 }
-const CONTENT_CARDS_DUMMY: ContentCardProps[] = [
-  {
-    idx: 1,
-    status: "active",
-    genre: "연극",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023.01.30",
-    endDate: "2023.02.23",
-    likeState: false,
-  },
-  {
-    idx: 2,
-    status: "active",
-    genre: "연극",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023.01.30",
-    endDate: "2023.02.23",
-    likeState: false,
-  },
-  {
-    idx: 3,
-    status: "active",
-    genre: "연극",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023.01.30",
-    endDate: "2023.02.23",
-    likeState: false,
-  },
-  {
-    idx: 4,
-    status: "active",
-    genre: "연극",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023.01.30",
-    endDate: "2023.02.23",
-    likeState: false,
-  },
-  {
-    idx: 5,
-    status: "active",
-    genre: "연극",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023.01.30",
-    endDate: "2023.02.23",
-    likeState: false,
-  },
-  {
-    idx: 6,
-    status: "active",
-    genre: "연극",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023.01.30",
-    endDate: "2023.02.23",
-    likeState: false,
-  },
-  {
-    idx: 7,
-    status: "active",
-    genre: "연극",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023.01.30",
-    endDate: "2023.02.23",
-    likeState: false,
-  },
-  {
-    idx: 8,
-    status: "active",
-    genre: "연극",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023.01.30",
-    endDate: "2023.02.23",
-    likeState: false,
-  },
-];

@@ -1,4 +1,4 @@
-import { GenreType } from "@/types/const";
+import { AgeType, GenreType, StyleType } from "@/types/const";
 import { ContentDetailInformation, ContentListItem } from "@/types/content";
 import customFetch from "@/utils/fetch";
 
@@ -39,11 +39,15 @@ export const getHotPlaces = async (): Promise<
     })
   ).json();
 
-export const getHotAgeContents = async (): Promise<ContentListItem[]> =>
-  (await customFetch("/culture-content/hot-age/all")).json();
+export const getHotAgeContents = async (): Promise<{
+  contentList: ContentListItem[];
+  age: { idx: number; name: AgeType };
+}> => (await customFetch("/culture-content/hot-age/all")).json();
 
-export const getHotStyleContents = async (): Promise<ContentListItem[]> =>
-  (await customFetch("/culture-content/hot-style/all")).json();
+export const getHotStyleContents = async (): Promise<{
+  contentList: ContentListItem[];
+  style: { idx: number; name: StyleType };
+}> => (await customFetch("/culture-content/hot-style/all")).json();
 
 export const getContentDetailInformation = async (
   idx: string
