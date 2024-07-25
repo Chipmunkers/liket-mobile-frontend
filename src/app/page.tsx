@@ -145,7 +145,7 @@ export default async function Home() {
             </Else>
           </If>
         </section>
-        <section>
+        <section className="mb-[18px]">
           <h2 className="pl-[24px] mb-[8px]">종료예정 컨텐츠</h2>
           <If condition={soonEndContents.length > 0}>
             <Then>
