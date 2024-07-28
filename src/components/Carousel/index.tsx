@@ -127,6 +127,7 @@ const Carousel = ({ list }: CarouselProps) => {
                 loading="eager"
                 draggable={false}
                 className="select-none shrink-0"
+                priority
               />
             );
           })}
