@@ -1,4 +1,4 @@
-import { getPxLength } from "./helper";
+import { getPxLength } from "./helpers";
 
 export const RECT_HEIGHT = 42;
 export const PADDING_BETWEEN_TEXT_AND_BOX = 24;

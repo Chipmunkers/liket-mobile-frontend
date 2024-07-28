@@ -2,7 +2,7 @@
 
 import Like from "@/icons/like.svg";
 import ActiveLike from "@/icons/like-filled.svg";
-import Badge from "../Badge/Badge";
+import Badge, { variantToText } from "../Badge/Badge";
 
 import { colors } from "@/utils/style";
 import Link from "next/link";
@@ -10,6 +10,8 @@ import { ContentListItem } from "@/types/content";
 import { ContentStateType, GenreType } from "@/types/const";
 import CustomImage from "../CustomImage";
 import dayjs from "dayjs";
+import FallbackContentImg from "../FallbackContentImg";
+import { getStatus } from "@/utils/helpers";
 
 export interface ContentCardProps {
   idx: number;
@@ -31,7 +33,6 @@ export const ContentCard = ({
   endDate,
   location,
   genre,
-  status = "willActive",
 }: ContentListItem) => {
   const { region1Depth, region2Depth } = location;
 
@@ -42,20 +43,26 @@ export const ContentCard = ({
           <div className="relative w-[164px] h-[232px]">
             <CustomImage
               src={process.env.NEXT_PUBLIC_IMAGE_SERVER + thumbnail}
-              fill
+              fallbackComponent={<FallbackContentImg />}
+              width={164}
+              height={232}
               alt={`${title}에 대한 포스터`}
-              style={{ objectFit: "cover" }}
+              style={{
+                width: 164,
+                height: 232,
+                objectFit: "cover",
+              }}
             />
           </div>
           <Badge
-            variant={status}
+            variant={getStatus(startDate, endDate)}
             style={{
               position: "absolute",
               left: "8px",
               top: "8px",
             }}
           >
-            진행중
+            {variantToText[getStatus(startDate, endDate)]}
           </Badge>
           <button
             onClick={(e) => {
@@ -83,32 +90,3 @@ export const ContentCard = ({
     </Link>
   );
 };
-
-// const isBetween = (
-//   date: dayjs.Dayjs,
-//   start: dayjs.Dayjs,
-//   end: dayjs.Dayjs
-// ): boolean => {
-//   return date.isSameOrAfter(start) && date.isBefore(end);
-// };
-
-// const getStatus = (startDate: string, endDate: string): Status => {
-//   const today = dayjs.utc(); // 현재 UTC 시간
-//   const start = dayjs.utc(startDate);
-//   const end = dayjs.utc(endDate);
-
-//   const startMinus7Days = start.subtract(7, "day");
-//   const endMinus7Days = end.subtract(7, "day");
-
-//   if (isBetween(today, startMinus7Days, start)) {
-//     return "willActive";
-//   } else if (isBetween(today, endMinus7Days, end)) {
-//     return "willClosed";
-//   } else if (isBetween(today, start, end)) {
-//     return "active";
-//   } else if (today.isAfter(end)) {
-//     return "closed";
-//   }
-
-//   return "unknown"; // 만약 어느 조건에도 맞지 않는다면
-// };

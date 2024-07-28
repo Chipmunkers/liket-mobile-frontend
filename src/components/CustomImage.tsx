@@ -1,26 +1,40 @@
-/* eslint-disable jsx-a11y/alt-text */
-// Props로 넘겨받을 때 이미 prop check
-import Image, { ImageProps } from "next/image";
-import { If, Then, Else } from "react-if";
+"use client";
 
-const CustomImage = ({ src, ...props }: ImageProps) => {
+import Image, { ImageProps } from "next/image";
+import { ComponentType, ReactElement, ReactNode, useState } from "react";
+import { Switch, Case } from "react-if";
+
+interface Props extends ImageProps {
+  src: string;
+  fallbackComponent?: ReactNode;
+  fallbackImg?: string;
+  alt: string;
+}
+
+const CustomImage = ({
+  fallbackImg,
+  fallbackComponent,
+  alt,
+  src,
+  ...props
+}: Props) => {
+  const [isErrorEmit, setIsErrorTriggered] = useState(false);
+
+  const handleError = () => setIsErrorTriggered(true);
+
   return (
     <>
-      <If condition={!!src}>
-        <Then>
-          <Image src={src} {...props} />
-        </Then>
-        <Else>
-          <div className="w-[100%] h-[100%] bg-grey-03 center">
-            <Image
-              src={"/icons/empty-img.png"}
-              width={32}
-              height={32}
-              alt={props.alt}
-            />
-          </div>
-        </Else>
-      </If>
+      {!isErrorEmit && (
+        <Image src={src} onError={handleError} alt={alt} {...props} />
+      )}
+      {isErrorEmit && fallbackImg && (
+        <Image
+          src={fallbackImg}
+          alt={"이미지를 로드할 수 없습니다"}
+          {...props}
+        />
+      )}
+      {isErrorEmit && fallbackComponent}
     </>
   );
 };

@@ -26,7 +26,7 @@ export const useReIssueToken = (
       document.cookie = `refreshToken=${refreshToken}`;
       return axios.post(
         "/apis/auth/access-token",
-        {},
+        { refreshToken },
         {
           withCredentials: true,
         }

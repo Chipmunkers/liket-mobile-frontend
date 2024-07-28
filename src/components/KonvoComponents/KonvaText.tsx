@@ -5,7 +5,7 @@ import {
   FONT_SIZE,
   PADDING_BETWEEN_TEXT_AND_BOX,
 } from "@/utils/create-liket";
-import { getPxLength } from "@/utils/helper";
+import { getPxLength } from "@/utils/helpers";
 import { colors } from "@/utils/style";
 import { Text, Rect, Group } from "react-konva";
 

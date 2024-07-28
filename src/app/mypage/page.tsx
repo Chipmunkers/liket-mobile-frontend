@@ -1,5 +1,6 @@
 "use client";
 
+import CustomImage from "@/components/CustomImage";
 import Divider from "@/components/Divider";
 import LinkItem from "@/components/LinkItem";
 import LinkableTab from "@/components/LinkableTab";
@@ -55,13 +56,13 @@ export default function Page() {
             </div>
             <div className="">
               <div className="w-[80px] h-[80px] rounded-full relative overflow-hidden">
-                <Image
+                <CustomImage
                   src={
-                    profileImgPath
-                      ? process.env.NEXT_PUBLIC_IMAGE_SERVER + profileImgPath
-                      : "/icons/default-avatar.svg"
+                    profileImgPath &&
+                    process.env.NEXT_PUBLIC_IMAGE_SERVER + profileImgPath
                   }
-                  alt="아바타 이미지"
+                  fallbackImg={"/icons/default-avatar.svg"}
+                  alt="프로필 이미지"
                   fill
                   objectFit="cover"
                 />
@@ -153,13 +154,3 @@ export default function Page() {
     </>
   );
 }
-
-const REVIEW_DUMMY_DATA = Array.from(
-  { length: 20 },
-  (_, index) => `https://picsum.photos/112/112?random=${index}`
-);
-
-const LIKET_DUMMY_DATA = Array.from(
-  { length: 20 },
-  (_, index) => `https://picsum.photos/112/112?random=${index}`
-);
