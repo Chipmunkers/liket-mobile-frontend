@@ -3,6 +3,15 @@ import { ContentStateType } from "@/types/const";
 import { classNames } from "@/utils/helpers";
 import { CSSProperties } from "react";
 
+export const variantToText = {
+  active: "진행중",
+  inactive: "비활성화",
+  closed: "종료",
+  waiting: "등록대기",
+  willActive: "진행예정",
+  willClosed: "종료예정",
+};
+
 const variantToStyleMap = {
   active: "bg-skyblue-01 text-white",
   inactive: "bg-grey-01 text-grey-02",
