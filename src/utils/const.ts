@@ -14,6 +14,7 @@ export const CONTENT_STATES = [
   "willActive",
   "willClosed",
   "inactive",
+  "hotplace",
 ] as const;
 
 export const CITIES = ["서울특별시", "인천광역시", "경기도"] as const;
