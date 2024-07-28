@@ -10,6 +10,8 @@ import { ContentListItem } from "@/types/content";
 import { ContentStateType, GenreType } from "@/types/const";
 import CustomImage from "../CustomImage";
 import dayjs from "dayjs";
+import FallbackContentImg from "../FallbackContentImg";
+import { getStatus } from "@/utils/helpers";
 
 export interface ContentCardProps {
   idx: number;
@@ -31,7 +33,6 @@ export const ContentCard = ({
   endDate,
   location,
   genre,
-  status = "willActive",
 }: ContentListItem) => {
   const { region1Depth, region2Depth } = location;
 
@@ -42,9 +43,15 @@ export const ContentCard = ({
           <div className="relative w-[164px] h-[232px]">
             <CustomImage
               src={process.env.NEXT_PUBLIC_IMAGE_SERVER + thumbnail}
-              fill
+              fallbackComponent={<FallbackContentImg />}
+              width={164}
+              height={232}
               alt={`${title}에 대한 포스터`}
-              style={{ objectFit: "cover" }}
+              style={{
+                width: 164,
+                height: 232,
+                objectFit: "cover",
+              }}
             />
           </div>
           <Badge
@@ -82,26 +89,4 @@ export const ContentCard = ({
       </article>
     </Link>
   );
-};
-
-const getStatus = (startDate: string, endDate: string) => {
-  const today = dayjs();
-  const start = dayjs(startDate);
-  const end = dayjs(endDate);
-
-  if (today.isBefore(start) && today.isAfter(start.subtract(7, "day"))) {
-    return "willActive";
-  } else if (today.isBefore(end) && today.isAfter(end.subtract(7, "day"))) {
-    return "willClosed";
-  } else if (
-    (today.isAfter(start) && today.isBefore(end)) ||
-    today.isSame(start) ||
-    today.isSame(end)
-  ) {
-    return "active";
-  } else if (today.isAfter(end)) {
-    return "closed";
-  }
-
-  return "willActive";
 };
