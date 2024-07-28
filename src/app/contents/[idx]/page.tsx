@@ -1,4 +1,4 @@
-import Badge from "@/components/Badge/Badge";
+import Badge, { variantToText } from "@/components/Badge/Badge";
 import CategoryTab from "@/components/CategoryTab";
 import Divider from "@/components/Divider";
 import Header from "@/components/Header";
@@ -6,7 +6,10 @@ import Like from "@/icons/like.svg";
 import FilledLike from "@/icons/like-filled.svg";
 import { colors } from "@/utils/style";
 import Link from "next/link";
-import SignificantIcon from "@/icons/significant.svg";
+import ParkingIcon from "@/icons/parking.svg";
+import ReservationIcon from "@/icons/reservation.svg";
+import PetIcon from "@/icons/pet.svg";
+import EntranceFeeIcon from "@/icons/entrance-fee.svg";
 import RightArrowIcon from "@/icons/right-arrow.svg";
 import BottomArrowIcon from "@/icons/down-arrow-small.svg";
 import StarRating from "@/components/StarRating";
@@ -16,6 +19,7 @@ import { getContentDetailInformation } from "@/apis/content";
 import dayjs from "dayjs";
 import KaKaoMap from "@/components/KaKaoMap";
 import Carousel from "@/components/Carousel";
+import { getStatus } from "@/utils/helpers";
 interface PageProps {
   params: {
     idx: string;
@@ -45,6 +49,7 @@ export default async function Page({ params: { idx } }: PageProps) {
     likeState,
     openTime,
     websiteLink,
+    isFee,
     isReservation,
     isPet,
     isParking,
@@ -60,23 +65,29 @@ export default async function Page({ params: { idx } }: PageProps) {
       <Header>
         <Header.LeftOption
           option={{
-            back: {
-              // onClick: () => {},
-            },
+            back: true,
           }}
         />
-        <Header.RightOption
+        {/* <Header.RightOption
           option={{
             search: {
               // onClick: () => {},
             },
           }}
-        />
+        /> */}
       </Header>
-      <main>
+      <main className="mb-[24px]">
         <Carousel list={imgList} />
         <div className="px-[24px] py-[24px]">
-          <Badge variant="active">진행중</Badge>
+          <div className="flex items-center">
+            <Badge
+              variant={getStatus(startDate, endDate)}
+              style={{ marginRight: "9px" }}
+            >
+              {variantToText[getStatus(startDate, endDate)]}
+            </Badge>
+            <Badge variant={"hotplace"}>{variantToText["hotplace"]}</Badge>
+          </div>
           <div className="mt-[16px]">
             <div className="flex justify-between">
               <div>
@@ -110,8 +121,11 @@ export default async function Page({ params: { idx } }: PageProps) {
               <Link href={websiteLink} className="text-skyblue-01 text-body3">
                 {websiteLink}
               </Link>
-              <div className="mt-[8px]">
-                <SignificantIcon />
+              <div className="flex gap-[16px] mt-[8px]">
+                {isFee && <EntranceFeeIcon />}
+                {isReservation && <ReservationIcon />}
+                {isPet && <PetIcon />}
+                {isParking && <ParkingIcon />}
               </div>
             </div>
           </div>
