@@ -8,14 +8,18 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
 interface QueryClientParam {
-  onRefreshTokenExpired: () => void;
+  handleExpiredToken: () => void;
+  handleUnauthorizedAccess: () => void;
 }
 
-function makeQueryClient({ onRefreshTokenExpired }: QueryClientParam) {
+function makeQueryClient({
+  handleExpiredToken,
+  handleUnauthorizedAccess,
+}: QueryClientParam) {
   const setToken = authStore(({ setToken }) => setToken);
 
   const queryClient = new QueryClient({
@@ -48,8 +52,23 @@ function makeQueryClient({ onRefreshTokenExpired }: QueryClientParam) {
 
               // TODO: 요청이 실패한 쿼리키에 한해서만 invalidate 하기
               queryClient.invalidateQueries();
-            } catch {
-              onRefreshTokenExpired();
+            } catch (error: unknown) {
+              if (error instanceof AxiosError) {
+                const { response } = error as AxiosError<{
+                  type: "NO_TOKEN" | "INVALID_TOKEN";
+                }>;
+
+                if (response?.data?.type === "NO_TOKEN") {
+                  handleUnauthorizedAccess();
+                  return;
+                }
+
+                if (response?.data?.type === "INVALID_TOKEN") {
+                  handleExpiredToken();
+                  return;
+                }
+              }
+
               return;
             }
           }
@@ -63,12 +82,18 @@ function makeQueryClient({ onRefreshTokenExpired }: QueryClientParam) {
 
 let browserQueryClient: QueryClient | undefined = undefined;
 
-function getQueryClient({ onRefreshTokenExpired }: QueryClientParam) {
+function getQueryClient({
+  handleExpiredToken,
+  handleUnauthorizedAccess,
+}: QueryClientParam) {
   if (isServer) {
-    return makeQueryClient({ onRefreshTokenExpired });
+    return makeQueryClient({ handleExpiredToken, handleUnauthorizedAccess });
   } else {
     if (!browserQueryClient)
-      browserQueryClient = makeQueryClient({ onRefreshTokenExpired });
+      browserQueryClient = makeQueryClient({
+        handleExpiredToken,
+        handleUnauthorizedAccess,
+      });
     return browserQueryClient;
   }
 }
@@ -76,7 +101,8 @@ function getQueryClient({ onRefreshTokenExpired }: QueryClientParam) {
 export default function Providers({ children }: { children: ReactNode }) {
   const router = useRouter();
   const queryClient = getQueryClient({
-    onRefreshTokenExpired: () => router.replace("/login?isTokenExpired=true"),
+    handleUnauthorizedAccess: () => router.replace("/login"),
+    handleExpiredToken: () => router.replace("/login?isTokenExpired=true"),
   });
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
