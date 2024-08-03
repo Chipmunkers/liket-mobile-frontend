@@ -1,7 +1,7 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { LoginParam } from "./model";
 import queryOptions from "./options";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import axios from "@/utils/axios";
 
 export const useLogin = (
@@ -9,7 +9,7 @@ export const useLogin = (
     AxiosResponse<{
       token: string;
     }>,
-    Error,
+    AxiosError,
     LoginParam,
     unknown
   >
@@ -23,7 +23,6 @@ export const useReIssueToken = (
 ) =>
   useMutation({
     mutationFn: async (refreshToken) => {
-      document.cookie = `refreshToken=${refreshToken}`;
       return axios.post(
         "/apis/auth/access-token",
         { refreshToken },
