@@ -10,7 +10,7 @@ interface Action {
   setProfile: (profile: ProfileStoreState) => void;
 }
 
-const authStore = create<ProfileStoreState & Action>((set) => ({
+const profileStore = create<ProfileStoreState & Action>((set) => ({
   gender: 0,
   nickname: "",
   birth: 0,
@@ -19,4 +19,4 @@ const authStore = create<ProfileStoreState & Action>((set) => ({
   setProfile: (profile) => set(() => profile),
 }));
 
-export default authStore;
+export default profileStore;
