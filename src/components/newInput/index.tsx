@@ -35,7 +35,7 @@ interface LabelProps {
   maxLength?: number;
   currentLength?: number;
   htmlFor: string;
-  children: ReactNode;
+  children?: ReactNode;
   style?: CSSProperties;
   required?: boolean;
 }
