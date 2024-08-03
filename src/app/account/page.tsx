@@ -7,14 +7,26 @@ import MiddleText from "@/components/Header/MiddleText";
 import LinkItem from "@/components/LinkItem";
 import KaKao from "@/icons/logins/kakao.svg";
 import { useLogout } from "@/service/login/hooks";
+import authStore from "@/stores/authStore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { setAuthToken } from "@/utils/axios";
+import { useQueryClient } from "@tanstack/react-query";
+import profileStore from "@/stores/profileStore";
 
 export default function Page() {
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const email = profileStore(({ email }) => email);
   const { mutate } = useLogout({
-    onSuccess: () => router.replace("/"),
+    onSuccess: () => {
+      setAuthToken("");
+      setToken("");
+      queryClient.resetQueries();
+      router.replace("/");
+    },
   });
+  const setToken = authStore(({ setToken }) => setToken);
   const handleClickLogout = () => mutate();
 
   return (
@@ -27,7 +39,7 @@ export default function Page() {
         <div className="mt-[16px] px-[24px]">
           <div className="text-caption text-grey-04">이메일</div>
           <div className="flex h-[48px] w-[100%] items-center justify-between">
-            <div className="ml-[8px] text-body3">han6569h@naver.com</div>
+            <div className="ml-[8px] text-body3">{email}</div>
             <KaKao />
           </div>
         </div>

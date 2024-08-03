@@ -12,6 +12,7 @@ import { z } from "zod";
 import Link from "next/link";
 import authStore from "@/stores/authStore";
 import { setAuthToken } from "@/utils/axios";
+import customToast from "@/utils/customToast";
 
 const schema = z.object({
   email: z.string().email("올바른 이메일을 입력해주세요."),
@@ -25,6 +26,22 @@ export default function Page() {
       setAuthToken(data.token);
       setToken(data.token);
       router.push("/");
+    },
+    onError: ({ response }) => {
+      if (response?.status === 400) {
+        customToast("데이터의 형태가 잘못되었습니다.");
+        return;
+      }
+
+      if (response?.status === 401) {
+        customToast("비밀번호가 잘못되었습니다.");
+        return;
+      }
+
+      if (response?.status === 418) {
+        customToast("정지된 사용자입니다.");
+        return;
+      }
     },
   });
 

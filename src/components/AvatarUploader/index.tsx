@@ -1,6 +1,7 @@
 import { getRefValue } from "@/utils/helpers";
 import Image from "next/image";
 import { useRef, useState } from "react";
+import CustomImage from "../CustomImage";
 
 interface AvatarUploaderProps {
   defaultAvatar?: string;
@@ -17,9 +18,10 @@ const AvatarUploader = ({
   return (
     <div className="w-[80px] h-[80px] relative">
       <div className="w-[100%] h-[100%] rounded-full relative overflow-hidden">
-        <Image
+        <CustomImage
           src={ImgSrc}
-          alt="아바타 이미지"
+          fallbackImg={"/icons/default-avatar.svg"}
+          alt="프로필 이미지"
           fill
           style={{
             objectFit: "cover",
