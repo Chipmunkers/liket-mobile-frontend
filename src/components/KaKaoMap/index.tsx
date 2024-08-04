@@ -21,8 +21,6 @@ const KaKaoMap = ({ children }: KaKaoMapProps) => {
     const [bound, setBound] = useState<{ ha: number; oa: number; pa: number; qa: number }>();
     const [level, setLevel] = useState(4);
     const [map, setMap] = useState();
-    const [prevClusteredOverlays, setPrevClusteredOverlays] = useState<any[]>([]);
-    const [prevMarkers, setPrevMarkers] = useState<any[]>([]);
 
     const [clusteredContentList, setClusteredContentList] = useState<any[]>([]);
     const [contentList, setContentList] = useState<any[]>([]);
@@ -64,15 +62,75 @@ const KaKaoMap = ({ children }: KaKaoMapProps) => {
         },
     });
 
+    // * Level이 변경될 경우 클러스러팅 오버레이 삭제하기
+    useEffect(() => {
+        // * 클러스터링 오버레이 삭제
+        clusteredOverlayList.forEach((elem) => elem.overlay.setMap(null));
+        setClusteredContentList([]);
+        setClusteredOverlayList([]);
+    }, [level]);
+
+    // * 클러스터링 데이터를 받아온 후 클러스터링 데이터 정제
+    // *  1. 범위에서 벗어난 마커 데이터 삭제
+    // *  2. 범위에서 벗어난 클러스터링 데이터 삭제
+    useEffect(() => {
+        if (!clusteredMap || !bound) return;
+
+        // * 마커 삭제하기
+        if (markerList.length) {
+            markerList.forEach((elem) => elem.marker.setMap(null));
+            setMarkerList([]);
+            setContentList([]);
+        }
+
+        const queryClusteredList: any[] = clusteredMap.data.clusteredContentList;
+
+        // * 클러스터링 데이터 갱신하기
+        const alreadyExistClusteredCodes = clusteredContentList.map((data) => data.code);
+        setClusteredContentList([
+            // * 범위에 벗어난 클러스러링 데이터 삭제하기
+            ...clusteredContentList.filter((data) => data.lng <= bound.oa && data.lng >= bound.ha && data.lat <= bound.ha && data.lat >= bound.qa),
+            ...queryClusteredList.filter((data) => !alreadyExistClusteredCodes.includes(data.code)),
+        ]);
+    }, [clusteredMap]);
+
+    // * 클러스터링 데이터가 정제된 후
+    useEffect(() => {
+        if (!clusteredContentList || !bound) return;
+
+        const alreadyExistCodeList = clusteredOverlayList.map((elem) => elem.code);
+
+        let addedOverlays: any[] = [];
+        for (const clusteredContent of clusteredContentList) {
+            // * 이미 오버레이로 존재하는 경우 추가하지 않기
+            if (alreadyExistCodeList.includes(clusteredContent.code)) continue;
+
+            const { lng, lat, count } = clusteredContent;
+
+            // * 오버레이 생성
+            const content = `<div style="border: 2px solid black; width: 40px; height: 40px;" />${count}<div>`;
+            const position = new window.kakao.maps.LatLng(lat, lng);
+            const overlay = new window.kakao.maps.CustomOverlay({
+                position: position,
+                content: content,
+            });
+            overlay.setMap(map);
+
+            addedOverlays.push({
+                code: clusteredContent.code,
+                overlay,
+            });
+        }
+        setClusteredOverlayList([...addedOverlays, ...clusteredOverlayList]);
+    }, [clusteredContentList]);
+
     // * 컨텐츠 데이터 받아온 후 컨텐츠 데이터 정제
-    // *  1. 범위에서 벗어난 마커 데이터 정리
-    // *  2. 범위에서 벗어난 컨텐츠 데이터 정리
+    // *  1. 범위에서 벗어난 마커 데이터 삭제
+    // *  2. 범위에서 벗어난 컨텐츠 데이터 삭제
     useEffect(() => {
         if (!contentData || !bound) return;
 
         const queryContentList: any[] = contentData.data.contentList;
-
-        const idxList = contentList.map((content) => content.idx);
 
         // * 범위 벗어난 마커 삭제하기
         markerList
@@ -99,6 +157,7 @@ const KaKaoMap = ({ children }: KaKaoMapProps) => {
         );
 
         // * 보유하고 있는 컨텐츠 목록 갱신하기
+        const idxList = contentList.map((content) => content.idx);
         setContentList([
             // * 범위에 벗어난 컨텐츠 삭제하기
             ...contentList.filter(
@@ -139,46 +198,6 @@ const KaKaoMap = ({ children }: KaKaoMapProps) => {
         }
         setMarkerList([...markerList, ...addedMarkers]);
     }, [contentList]);
-
-    useEffect(() => {
-        // * 기존 오버레이 전부 지우기
-        // * 오버레이란 클러스터링된 데이터를 표시하기 위해서 카카오 맵 위에 [동그라미 + 숫자]를 띄운 것을 의미합니다.
-        for (const prevOverlay of prevClusteredOverlays) {
-            prevOverlay.setMap(null);
-        }
-        setPrevClusteredOverlays([]);
-
-        if (!clusteredMap) return;
-
-        // * 기존 마커 전부 지우기
-        for (const marker of prevMarkers) {
-            marker.setMap(null);
-        }
-        setPrevMarkers([]);
-
-        // * 현재 오버레이들 목록을 담을 배열 -> 기존 오버레이를 지우는 것에 사용됨
-        const overlays: any[] = [];
-
-        // * 클러스터 숫자 표시할 오버레이 출력
-        for (const clusteredContent of clusteredMap.data.clusteredContentList) {
-            const { lng, lat, count } = clusteredContent;
-
-            // * 오버레이 생성
-            const content = `<div style="border: 2px solid black; width: 40px; height: 40px;" />${count}<div>`;
-            const position = new window.kakao.maps.LatLng(lat, lng);
-            const overlay = new window.kakao.maps.CustomOverlay({
-                position: position,
-                content: content,
-            });
-
-            overlays.push(overlay);
-
-            overlay.setMap(map);
-        }
-
-        // * 다음 드래그 또는 확대 시 기존 오버레이를 지우기 위해서 저장해놓는 코드
-        setPrevClusteredOverlays(overlays);
-    }, [clusteredMap]);
 
     useEffect(() => {
         const $mapScript = document.createElement('script');
