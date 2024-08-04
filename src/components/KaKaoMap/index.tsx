@@ -195,17 +195,47 @@ const KaKaoMap = ({ children }: KaKaoMapProps) => {
             // * 이미 마커로 존재하는 경우 마커로 추가하지 않기
             if (markerIdxs.includes(content.idx)) continue;
 
+            const markerLayout = `
+            <div style="
+                position: absolute;
+                width: 80px; 
+                text-align: center; 
+                word-wrap: break-word; 
+                white-space: normal; 
+                top: 8px;
+                font-size: 12px; 
+                line-height: 14.4px; 
+                font-weight: 700; 
+                color: black; 
+                transform: translateX(-50%);
+                text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+            ">${content.title}</div>`;
+
+            const position = new window.kakao.maps.LatLng(content.location.positionY, content.location.positionX);
+
             const imageSize = new window.kakao.maps.Size(40, 50);
             const markerImage = new window.kakao.maps.MarkerImage(imgUrl, imageSize);
             const marker = new window.kakao.maps.Marker({
                 map,
-                position: new window.kakao.maps.LatLng(content.location.positionY, content.location.positionX),
+                position,
                 image: markerImage,
+            });
+
+            const overlay = new window.kakao.maps.CustomOverlay({
+                position: position,
+                content: markerLayout,
+            });
+            marker.setMap(map);
+            overlay.setMap(map);
+
+            window.kakao.maps.event.addListener(marker, 'mouseover', (e: any) => {
+                console.log(e);
             });
 
             addedMarkers.push({
                 idx: content.idx,
                 marker,
+                overlay,
             });
         }
         setMarkerList([...markerList, ...addedMarkers]);
