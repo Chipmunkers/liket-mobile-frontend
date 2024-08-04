@@ -155,7 +155,10 @@ const KaKaoMap = ({ children }: KaKaoMapProps) => {
                         elem.marker.getPosition().La <= bound.oa
                     )
             )
-            .forEach((elem) => elem.marker.setMap(null));
+            .forEach((elem) => {
+                elem.marker.setMap(null);
+                elem.overlay.setMap(null);
+            });
 
         // * 범위에 들어온 마커로만 다시 마커 설정하기
         setMarkerList(
@@ -186,8 +189,6 @@ const KaKaoMap = ({ children }: KaKaoMapProps) => {
     // * 컨텐츠 데이터 정제한 후
     // *  1. 마커 데이터 뿌려주기
     useEffect(() => {
-        const imgUrl = 'https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/marker.svg';
-
         const markerIdxs = markerList.map((marker) => marker.idx);
 
         let addedMarkers: any[] = [];
@@ -213,7 +214,10 @@ const KaKaoMap = ({ children }: KaKaoMapProps) => {
 
             const position = new window.kakao.maps.LatLng(content.location.positionY, content.location.positionX);
 
-            const imageSize = new window.kakao.maps.Size(40, 50);
+            const imgUrl = 'https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/marker_default_1_icon.svg';
+            const clickMarkerImageUrl = `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${content.genre.idx}_icon.svg`;
+
+            const imageSize = new window.kakao.maps.Size(40, 40);
             const markerImage = new window.kakao.maps.MarkerImage(imgUrl, imageSize);
             const marker = new window.kakao.maps.Marker({
                 map,
@@ -228,8 +232,10 @@ const KaKaoMap = ({ children }: KaKaoMapProps) => {
             marker.setMap(map);
             overlay.setMap(map);
 
-            window.kakao.maps.event.addListener(marker, 'mouseover', (e: any) => {
-                console.log(e);
+            // 클릭 시 마커 모양 변경
+            window.kakao.maps.event.addListener(marker, 'click', (e: any) => {
+                const markerImage = new window.kakao.maps.MarkerImage(clickMarkerImageUrl, new window.kakao.maps.Size(60, 60));
+                marker.setImage(markerImage);
             });
 
             addedMarkers.push({
