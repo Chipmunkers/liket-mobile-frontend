@@ -108,7 +108,19 @@ const KaKaoMap = ({ children }: KaKaoMapProps) => {
             const { lng, lat, count } = clusteredContent;
 
             // * 오버레이 생성
-            const content = `<div style="border: 2px solid black; width: 40px; height: 40px;" />${count}<div>`;
+            const content = `
+            <div style="
+                border: 2px solid #00C2FF; 
+                background-color: rgb(0,194,255, 0.5);
+                width: 60px; height: 60px; 
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 20px;
+            " />
+                <span>${count}</span>
+            <div>`;
             const position = new window.kakao.maps.LatLng(lat, lng);
             const overlay = new window.kakao.maps.CustomOverlay({
                 position: position,
@@ -199,6 +211,7 @@ const KaKaoMap = ({ children }: KaKaoMapProps) => {
         setMarkerList([...markerList, ...addedMarkers]);
     }, [contentList]);
 
+    // * 제일 처음 맵 초기화
     useEffect(() => {
         const $mapScript = document.createElement('script');
         $mapScript.async = false;
