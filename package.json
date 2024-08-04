@@ -33,6 +33,7 @@
     "react-if": "^4.1.5",
     "react-indiana-drag-scroll": "^2.2.0",
     "react-konva": "^18.2.10",
+    "react-responsive-carousel": "^3.2.23",
     "react-spring-bottom-sheet": "3.5.0-alpha.0",
     "react-textarea-autosize": "^8.5.3",
     "react-timer-hook": "^3.0.7",
