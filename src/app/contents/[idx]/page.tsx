@@ -20,6 +20,7 @@ import dayjs from "dayjs";
 import KaKaoMap from "@/components/KaKaoMap";
 import Carousel from "@/components/Carousel";
 import { getStatus } from "@/utils/helpers";
+import ContentCarousel from "@/components/Carousel/ContentCarousel";
 interface PageProps {
   params: {
     idx: string;
@@ -77,7 +78,7 @@ export default async function Page({ params: { idx } }: PageProps) {
         /> */}
       </Header>
       <main className="mb-[24px]">
-        <Carousel list={imgList} />
+        <ContentCarousel list={imgList} />
         <div className="px-[24px] py-[24px]">
           <div className="flex items-center">
             <Badge

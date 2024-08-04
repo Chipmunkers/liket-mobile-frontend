@@ -1,6 +1,4 @@
-import Carousel from "@/components/Carousel";
-import { ContentCard, ContentCardProps } from "@/components/Card/ContentCard";
-// import ReviewCard, { REVIEW_CARDS_DUMMY } from "@/components/Card/ReviewCard";
+import { ContentCard } from "@/components/Card/ContentCard";
 import Divider from "@/components/Divider";
 import Header from "@/components/Header";
 import LinkableTab from "@/components/LinkableTab";
@@ -18,6 +16,7 @@ import {
 import { Else, If, Then } from "react-if";
 import HotPlaceListItem from "@/components/HotplaceListItem";
 import { getBannerList } from "@/apis/banner";
+import MainCarousel from "@/components/Carousel/MainCarousel";
 
 export default async function Home() {
   const { contentList: soonOpenContents } = await getSoonOpenContents();
@@ -34,7 +33,9 @@ export default async function Home() {
         {/* <Header.RightOption option={{ search: true, like: true }} /> */}
       </Header>
       <main>
-        <Carousel list={bannerList.map(({ imgPath }) => imgPath)} />
+        <MainCarousel list={bannerList.map(({ imgPath }) => imgPath)} />
+
+        {/* <Carousel list={bannerList.map(({ imgPath }) => imgPath)} /> */}
         <section className="mb-[48px] mt-[24px]">
           <h2 className="pl-[24px] mb-[8px]">
             선선한 가을 날씨에{" "}
