@@ -113,3 +113,14 @@ div[data-rsbs-backdrop] {
 div[data-rsbs-header] {
   padding-bottom: 12px;
 }
+
+/* carousel */
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.dot.selected {
+  background-color: #00c2ff !important;
+}
