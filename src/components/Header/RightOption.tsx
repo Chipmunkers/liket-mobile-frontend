@@ -42,7 +42,14 @@ const RightOption = ({ text, option }: RightOptionProps) => {
       </Link>
     );
     const Create = create && (
-      <button key="button">
+      <button
+        key="button"
+        onClick={() => {
+          if (typeof create === "object") {
+            create.onClick && create.onClick();
+          }
+        }}
+      >
         <CreateIcon />
       </button>
     );
