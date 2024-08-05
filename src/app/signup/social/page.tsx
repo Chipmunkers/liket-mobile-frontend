@@ -1,11 +1,7 @@
 "use client";
 
-import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
-import Button from "@/components/Button";
 import Control from "@/components/Control";
 import Header from "@/components/Header";
-import EmailForm from "@/components/SignupForm/EmailForm";
-import PasswordForm from "@/components/SignupForm/PasswordForm";
 import ProfileForm from "@/components/SignupForm/ProfileForm";
 import { useSocialSignup } from "@/service/signup/hooks";
 import { ProfileFormData } from "@/types/signup";
