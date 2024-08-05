@@ -42,8 +42,8 @@ export const useMyPage = ({
     queryKey: ["mypage"],
     queryFn: async () => {
       const { data } = await axiosInstance.get("/apis/user/my");
-      const { gender, nickname, birth, email, profileImgPath } = data;
-      onSuccess({ gender, nickname, birth, email, profileImgPath });
+      const { gender, nickname, birth, email, profileImgPath, provider } = data;
+      onSuccess({ gender, nickname, birth, email, profileImgPath, provider });
       return data;
     },
   });
