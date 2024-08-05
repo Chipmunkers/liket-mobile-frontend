@@ -37,7 +37,7 @@ export default function Page() {
       </Header>
       <main>
         <PasswordChangeForm
-          nextButtonText="로그인"
+          nextButtonText="변경하기"
           onClickNextButton={handleClickNextButton}
         />
       </main>
