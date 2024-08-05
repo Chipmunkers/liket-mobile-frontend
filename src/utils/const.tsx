@@ -1,3 +1,8 @@
+import KaKao from "@/icons/logins/kakao.svg";
+import Naver from "@/icons/logins/naver.svg";
+import Apple from "@/icons/logins/apple.svg";
+import { ReactNode } from "react";
+
 export const GENRES = [
   "팝업스토어",
   "전시회",
@@ -46,3 +51,12 @@ export const STYLES = [
 ] as const;
 
 export const ORDERS = ["최신순", "인기순"] as const;
+
+export const PROVIDER_ICON: {
+  [key: string]: ReactNode;
+} = {
+  kakao: <KaKao />,
+  naver: <Naver />,
+  apple: <Apple />,
+  local: <></>,
+};
