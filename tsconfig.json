@@ -25,7 +25,8 @@
       "@/components/*": ["./src/components/*"],
       "@/stores/*": ["./src/stores/*"],
       "@/icons/*": ["./public/icons/*"]
-    }
+    },
+    "types": ["kakao.maps.d.ts"]
   },
   "include": [
     "next-env.d.ts",
