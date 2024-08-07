@@ -18,6 +18,7 @@ import ButtonGroup from "@/components/ButtonGroup";
 import { AGES, GENRES, STYLES } from "@/utils/const";
 import Chip from "@/components/Chip";
 import { AgeType, CityType, GenreType, StyleType } from "@/types/const";
+import KakaoMapV2 from "@/components/KakaoMapV2";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -176,7 +177,7 @@ export default function MapPage() {
         <Header.RightOption option={{ search: true, like: true }} />
       </Header>
       <main>
-        <KaKaoMap>
+        <KakaoMapV2>
           <button
             className="absolute top-0 left-0 z-[2]"
             onClick={onClickFilter}
@@ -187,7 +188,7 @@ export default function MapPage() {
               <Filter />
             )}
           </button>
-        </KaKaoMap>
+        </KakaoMapV2>
         <CustomBottomSheet
           open={true}
           defaultSnap={20}
