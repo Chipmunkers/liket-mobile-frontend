@@ -8,7 +8,7 @@ import StarRating from "@/components/StarRating";
 import { colors } from "@/utils/style";
 import { DateCalendar, MultiSectionDigitalClock } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import SearchIcon from "@/icons/search.svg";
 import CreateIcon from "@/icons/create.svg";
 import Image from "next/image";
@@ -16,6 +16,11 @@ import { getRefValue } from "@/utils/helpers";
 import ClockIcon from "@/icons/clock.svg";
 import CalendarIcon from "@/icons/calendar.svg";
 import customToast from "@/utils/customToast";
+import SearchHeader from "@/components/SearchHeader";
+import { useSearchContent } from "@/service/searchContent";
+import axiosInstance from "@/utils/axios";
+import { skipToken } from "@tanstack/react-query";
+import { ContentCard } from "@/components/Card/ContentCard";
 
 const MAX_IMAGES_COUNT = 10;
 
@@ -25,6 +30,20 @@ interface DateAndTime {
 }
 
 export default function Page() {
+  const [searchText, setSearchText] = useState("");
+  const { data } = useSearchContent({
+    queryKey: ["search", searchText],
+    queryFn: async () => {
+      return searchText.length > 0
+        ? (
+            await axiosInstance.get(
+              `/apis/culture-content/all?accept=true&search=${searchText}`
+            )
+          ).data
+        : skipToken;
+    },
+  });
+
   const [isYearSelectionDrawerOpen, setIsYearSelectionDrawerOpen] =
     useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
@@ -84,6 +103,13 @@ export default function Page() {
     uploadedImages.length > 0 &&
     dateInfo.selected &&
     dateInfo.selected;
+
+  useEffect(() => {
+    const $mapScript = document.createElement("script");
+    $mapScript.async = false;
+    $mapScript.src = `//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js`;
+    document.head.appendChild($mapScript);
+  }, []);
 
   return (
     <>
@@ -263,6 +289,27 @@ export default function Page() {
           </div>
         </CustomDrawer>
       </main>
+      <div
+        className="full-modal transform translate-y-full"
+        style={{
+          transform: !!isSearchModalOpen ? "translateY(0)" : "translateY(100%)",
+        }}
+      >
+        <SearchHeader
+          searchText={searchText}
+          placeholder="검색어를 입력해주세요."
+          onSearch={(text) => {
+            setSearchText(text);
+          }}
+        />
+        <div className="full-modal-main">
+          <div className="flex grow h-[100%] mx-[24px] mt-[24px]">
+            {data?.contentList?.map((data, index) => {
+              return <ContentCard key={index} {...data} status="willActive" />;
+            })}
+          </div>
+        </div>
+      </div>
     </>
   );
 }
