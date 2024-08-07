@@ -22,6 +22,7 @@ import axiosInstance from "@/utils/axios";
 import { skipToken } from "@tanstack/react-query";
 import { ContentCard } from "@/components/Card/ContentCard";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { ContentListItem } from "@/types/content";
 
 const MAX_IMAGES_COUNT = 10;
 
@@ -48,6 +49,8 @@ export default function Page() {
     },
   });
 
+  const [targetContent, setTargetContent] =
+    useState<Pick<ContentListItem, "idx" | "title" | "thumbnail">>();
   const isSearchContentModalOpen = searchParams.get("isSearchContentModalOpen");
   const [isYearSelectionDrawerOpen, setIsYearSelectionDrawerOpen] =
     useState(false);
@@ -56,7 +59,6 @@ export default function Page() {
   const [rate, setRate] = useState(0);
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const [review, setReview] = useState("");
-  const [targetContent, setTargetContent] = useState("");
   const [dateInfo, setDateInfo] = useState<DateAndTime>({
     before: dayjs(new Date()),
     selected: undefined,
@@ -102,6 +104,13 @@ export default function Page() {
 
       setUploadedImages([...uploadedImages, ...imagesArray]);
     }
+  };
+
+  const handleClickSearchedContent = (
+    targetContent: Pick<ContentListItem, "title" | "thumbnail" | "idx">
+  ) => {
+    router.back();
+    setTargetContent(targetContent);
   };
 
   const enabledToSubmit =
@@ -315,7 +324,15 @@ export default function Page() {
         <div className="full-modal-main">
           <div className="flex grow h-[100%] mx-[24px] mt-[24px]">
             {data?.contentList?.map((data, index) => {
-              return <ContentCard key={index} {...data} status="willActive" />;
+              return (
+                <ContentCard
+                  key={index}
+                  {...data}
+                  status="willActive"
+                  isButton
+                  onClick={handleClickSearchedContent}
+                />
+              );
             })}
           </div>
         </div>
