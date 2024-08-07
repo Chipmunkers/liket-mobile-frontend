@@ -21,6 +21,7 @@ import { useSearchContent } from "@/service/searchContent";
 import axiosInstance from "@/utils/axios";
 import { skipToken } from "@tanstack/react-query";
 import { ContentCard } from "@/components/Card/ContentCard";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const MAX_IMAGES_COUNT = 10;
 
@@ -30,6 +31,9 @@ interface DateAndTime {
 }
 
 export default function Page() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [searchText, setSearchText] = useState("");
   const { data } = useSearchContent({
     queryKey: ["search", searchText],
@@ -44,9 +48,9 @@ export default function Page() {
     },
   });
 
+  const isSearchContentModalOpen = searchParams.get("isSearchContentModalOpen");
   const [isYearSelectionDrawerOpen, setIsYearSelectionDrawerOpen] =
     useState(false);
-  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isTimePickerDrawerOpen, setIsTimePickerDrawerOpen] = useState(false);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [rate, setRate] = useState(0);
@@ -72,6 +76,10 @@ export default function Page() {
 
   const handleClickUploadImage = () => {
     getRefValue(uploadInputRef).click();
+  };
+
+  const handleClickSearchContent = () => {
+    router.push(`${pathname}?isSearchContentModalOpen=true`);
   };
 
   const handleUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -136,7 +144,7 @@ export default function Page() {
           <div className="text-grey-04 text-caption">컨텐츠</div>
           <button
             className="flex items-center mt-[8px]"
-            onClick={() => setIsSearchModalOpen(true)}
+            onClick={handleClickSearchContent}
           >
             <div className="bg-grey-01 w-[48px] h-[48px] center">
               <SearchIcon fill={"white"} />
@@ -292,7 +300,9 @@ export default function Page() {
       <div
         className="full-modal transform translate-y-full"
         style={{
-          transform: !!isSearchModalOpen ? "translateY(0)" : "translateY(100%)",
+          transform: !!isSearchContentModalOpen
+            ? "translateY(0)"
+            : "translateY(100%)",
         }}
       >
         <SearchHeader
