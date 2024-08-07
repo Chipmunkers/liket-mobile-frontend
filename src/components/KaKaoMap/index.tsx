@@ -317,9 +317,11 @@ const KaKaoMap = ({ children }: KaKaoMapProps) => {
   }, []);
 
   return (
-    <div id="map" className="grow relative w-[100%]">
-      {children}
-    </div>
+    <>
+    </>
+    // <div id="map" className="grow relative w-[100%]">
+    //   {children}
+    // </div>
   );
 };
 
