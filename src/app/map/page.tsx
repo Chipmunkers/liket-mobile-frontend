@@ -28,7 +28,6 @@ import { styles } from "../../../public/data/style";
 import customToast from "../../utils/customToast";
 
 export default function MapPage() {
-  // ! 레거시 영역
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -36,6 +35,7 @@ export default function MapPage() {
   const isTownSelectionModalOpen = searchParams.get("isTownSelectionModalOpen");
   const isFilterModalOpen = searchParams.get("isFilterModalOpen");
 
+  // ! 레거시 영역
   const [cityAndGuSelection, setCityAndGuSelection] = useState(
     INITIAL_CITY_AND_GU_SELECTION
   );
@@ -75,6 +75,7 @@ export default function MapPage() {
       currentSelectedCity: cityAndGuSelection.newSelectedCity,
       currentSelectedGu: cityAndGuSelection.newSelectedGu,
     });
+  // ! 레거시 영역
 
   // * 현재 보여지고 있는 컨텐츠 목록
   const [contentList, setContentList] = useState<Content[]>([]);
