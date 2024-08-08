@@ -12,6 +12,8 @@ import axiosInstance from "../../utils/axios";
 import { ClusteredContent } from "./interface/ClusteredContent";
 import { getMapInfo } from "./util/getMapInfo";
 import { Content } from "./interface/Content";
+import { Age, Genre, Style } from "@/types/content";
+import { generateMapFilterQuerystring } from "./util/generateMapFilterQuerystring";
 
 const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_API_KEY}&autoload=false`;
 
@@ -21,12 +23,18 @@ const KakaoMapV2 = ({
   setContentList,
   clickedContent,
   setClickedContent,
+  mapFilter,
 }: {
   children?: ReactNode;
   contentList: Content[];
   setContentList: Dispatch<SetStateAction<Content[]>>;
   clickedContent: Content | undefined;
   setClickedContent: Dispatch<SetStateAction<Content | undefined>>;
+  mapFilter: {
+    genre: Genre | undefined;
+    age: Age | undefined;
+    styles: Style[];
+  };
 }) => {
   const [mapInfo, setMapInfo] = useState<{
     bound: {
@@ -52,7 +60,7 @@ const KakaoMapV2 = ({
   >([]);
 
   const { data: clusteredApiResult } = useQuery({
-    queryKey: ["clustered-map", mapInfo],
+    queryKey: ["clustered-map", mapInfo, mapFilter],
     queryFn: async () => {
       if (mapInfo.level <= 5) return null;
 
@@ -64,14 +72,15 @@ const KakaoMapV2 = ({
           `top-y=${mapInfo.bound.top.y}&` +
           `bottom-x=${mapInfo.bound.bottom.x}&` +
           `bottom-y=${mapInfo.bound.bottom.y}&` +
-          `level=${mapInfo.level}`
+          `level=${mapInfo.level}&` +
+          generateMapFilterQuerystring(mapFilter)
       );
       return data;
     },
   });
 
   const { data: contentApiResult } = useQuery<{ contentList: Content[] }>({
-    queryKey: ["map-contents", mapInfo],
+    queryKey: ["map-contents", mapInfo, mapFilter],
     queryFn: async () => {
       if (mapInfo.level > 5) return;
 
@@ -80,7 +89,8 @@ const KakaoMapV2 = ({
           `top-x=${mapInfo.bound.top.x}&` +
           `top-y=${mapInfo.bound.top.y}&` +
           `bottom-x=${mapInfo.bound.bottom.x}&` +
-          `bottom-y=${mapInfo.bound.bottom.y}&`
+          `bottom-y=${mapInfo.bound.bottom.y}&` +
+          generateMapFilterQuerystring(mapFilter)
       );
 
       return data;
@@ -91,7 +101,8 @@ const KakaoMapV2 = ({
   useEffect(() => {
     setClusteredContentList([]);
     setContentList([]);
-  }, [level]);
+    setClickedContent(undefined);
+  }, [level, mapFilter]);
 
   useEffect(() => {
     if (!contentApiResult) return;

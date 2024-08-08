@@ -118,6 +118,7 @@ export default function MapPage() {
           setContentList={setContentList}
           clickedContent={clickedContent}
           setClickedContent={setClickedContent}
+          mapFilter={mapFilter}
         >
           <div className="absolute top-12 left-0 z-[2] flex w-100">
             <button
