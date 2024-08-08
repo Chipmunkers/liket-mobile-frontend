@@ -20,6 +20,7 @@ import Chip from "@/components/Chip";
 import { AgeType, CityType, GenreType, StyleType } from "@/types/const";
 import KakaoMapV2 from "@/components/KakaoMapV2";
 import { Content } from "../../components/KakaoMapV2/interface/Content";
+import MapContentInfo from "../../components/MapContentInfo/MapContentInfo";
 
 export default function MapPage() {
   // ! 레거시 영역
@@ -172,6 +173,9 @@ export default function MapPage() {
   // * 현재 보여지고 있는 컨텐츠 목록
   const [contentList, setContentList] = useState<Content[]>([]);
 
+  // * 선택된 컨텐츠
+  const [clickedContent, setClickedContent] = useState<Content>();
+
   return (
     <>
       <Header>
@@ -182,7 +186,12 @@ export default function MapPage() {
         <Header.RightOption option={{ search: true, like: true }} />
       </Header>
       <main>
-        <KakaoMapV2 contentList={contentList} setContentList={setContentList}>
+        <KakaoMapV2
+          contentList={contentList}
+          setContentList={setContentList}
+          clickedContent={clickedContent}
+          setClickedContent={setClickedContent}
+        >
           <button
             className="absolute top-12 left-0 z-[2]"
             onClick={onClickFilter}
@@ -194,7 +203,8 @@ export default function MapPage() {
             )}
           </button>
         </KakaoMapV2>
-        {contentList.length !== 0 ? (
+        {clickedContent ? <MapContentInfo content={clickedContent} /> : null}
+        {!clickedContent && contentList.length !== 0 ? (
           <CustomBottomSheet
             open={true}
             defaultSnap={20}

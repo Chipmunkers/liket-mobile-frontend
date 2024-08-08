@@ -19,10 +19,14 @@ const KakaoMapV2 = ({
   children,
   contentList,
   setContentList,
+  clickedContent,
+  setClickedContent,
 }: {
   children?: ReactNode;
   contentList: Content[];
   setContentList: Dispatch<SetStateAction<Content[]>>;
+  clickedContent: Content | undefined;
+  setClickedContent: Dispatch<SetStateAction<Content | undefined>>;
 }) => {
   const [mapInfo, setMapInfo] = useState<{
     bound: {
@@ -41,7 +45,6 @@ const KakaoMapV2 = ({
     level: 4,
   });
   const [level, setLevel] = useState(4);
-  const [clickedContent, setClickedContent] = useState<Content>();
 
   // * 현재 맵에 표시되고 있는 클러스터링 컨텐츠 목록
   const [clusteredContentList, setClusteredContentList] = useState<
@@ -152,10 +155,16 @@ const KakaoMapV2 = ({
         isPanto={false}
         className="grow relative w-[100%]"
         level={4}
-        onDragEnd={(map) => setMapInfo(getMapInfo(map))}
+        onDragEnd={(map) => {
+          setMapInfo(getMapInfo(map));
+        }}
         onZoomChanged={(map) => {
           setLevel(map.getLevel());
           setMapInfo(getMapInfo(map));
+          setClickedContent(undefined);
+        }}
+        onClick={() => {
+          setClickedContent(undefined);
         }}
       >
         {children}
@@ -177,13 +186,7 @@ const KakaoMapV2 = ({
             }}
           >
             <div
-              style={{
-                display: "flex",
-                alignItems: "end",
-                justifyContent: "center",
-                height: "50px",
-                userSelect: "none",
-              }}
+              className="flex items-end justify-center h-[50px] select-none cursor-pointer"
               onClick={() => {
                 if (clickedContent?.idx === content.idx)
                   return setClickedContent(undefined);
@@ -193,53 +196,26 @@ const KakaoMapV2 = ({
             >
               {clickedContent?.idx === content.idx ? (
                 <img
-                  width={"50px"}
+                  className="w-[50px]"
                   src={`https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${content.genre.idx}_icon.svg`}
                 />
               ) : (
                 <img
-                  width={"30px"}
+                  className="w-[30px]"
                   src={`https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/default-marker-${content.genre.idx}.svg`}
                 />
               )}
             </div>
             <div
+              className="w-[100px] mt-[4px] text-base text-center text-wrap whitespace-nowrap leading-[14.4px] text-white p-[8px] rounded-[16px]"
               style={{
-                width: "100px",
-                textAlign: "center",
-                wordWrap: "break-word",
-                whiteSpace: "normal",
-                marginTop: "4px",
-                fontSize: "14px",
-                lineHeight: "14.4px",
-                color: "white",
                 textShadow:
                   "-1px -1px 0 #222, 1px -1px 0 #222, -1px 1px 0 #222, 1px 1px 0 #222",
-                padding: "8px",
                 backgroundColor: "rgba(0, 0, 0, 0.6)",
-                borderRadius: "12px",
               }}
             >
               {content.title}
             </div>
-            {/* <div
-              onClick={() => {
-                if (clickedContent?.idx === content.idx)
-                  return setClickedContent(undefined);
-
-                setClickedContent(content);
-              }}
-              style={{
-                position: "absolute",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                right: "50%",
-                transform: "translate(50%, -50%)",
-              }}
-            >
-              
-            </div> */}
           </CustomOverlayMap>
         ))}
       </Map>
