@@ -204,7 +204,7 @@ export default function MapPage() {
           ]}
         >
           <ul>
-            {contentList.map((content, index) => {
+            {contentList.map((content) => {
               return (
                 <li key={content.idx}>
                   <MapBottomSheetCard content={content} />
