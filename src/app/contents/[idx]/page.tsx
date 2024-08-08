@@ -2,8 +2,6 @@ import Badge, { variantToText } from "@/components/Badge/Badge";
 import CategoryTab from "@/components/CategoryTab";
 import Divider from "@/components/Divider";
 import Header from "@/components/Header";
-import Like from "@/icons/like.svg";
-import FilledLike from "@/icons/like-filled.svg";
 import { colors } from "@/utils/style";
 import Link from "next/link";
 import ParkingIcon from "@/icons/parking.svg";

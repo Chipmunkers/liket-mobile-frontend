@@ -6,45 +6,10 @@ import Like from "@/icons/like.svg";
 import ActiveLike from "@/icons/like-filled.svg";
 import { Content } from "../KakaoMapV2/interface/Content";
 import dayjs from "dayjs";
-import useLikeContent from "./api/useLikeContent";
-import { useState } from "react";
-import { AxiosError } from "axios";
-import customToast from "../../utils/customToast";
-import useCancelLikeContent from "./api/useCancelLikeContent";
+import ContentLikeBtn from "../ContentLikeBtn";
 
 const MapBottomSheetCard = (props: { content: Content }) => {
   const { content } = props;
-  const [likeState, setLikeState] = useState(content.likeState);
-
-  const { mutate: likeContentApi } = useLikeContent(content, {
-    onSuccess: () => {
-      setLikeState(true);
-    },
-    onError: (err) => {
-      if (err instanceof AxiosError) {
-        if (err.response?.status === 409) return;
-
-        if (err.response?.status === 404) return;
-      }
-
-      customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
-    },
-  });
-
-  const { mutate: cancelLikeContentApi } = useCancelLikeContent(content, {
-    onSuccess: () => {
-      setLikeState(false);
-    },
-    onError: (err) => {
-      if (err instanceof AxiosError) {
-        if (err.response?.status === 409) return;
-
-        if (err.response?.status === 404) return;
-      }
-
-      customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
-    },
-  });
 
   return (
     <Link
@@ -70,23 +35,7 @@ const MapBottomSheetCard = (props: { content: Content }) => {
           {dayjs(content.endDate).format("MM.DD")}
         </div>
       </div>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          if (!likeState) {
-            return likeContentApi();
-          }
-
-          return cancelLikeContentApi();
-        }}
-        className="absolute top-0 right-0"
-      >
-        {likeState ? (
-          <ActiveLike color={colors.skyblue["01"]} />
-        ) : (
-          <Like color={colors.grey["02"]} />
-        )}
-      </button>
+      <ContentLikeBtn likeState={content.likeState} idx={content.idx} />
     </Link>
   );
 };

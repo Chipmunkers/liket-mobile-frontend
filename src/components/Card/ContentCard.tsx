@@ -7,15 +7,11 @@ import Badge, { variantToText } from "../Badge/Badge";
 import { colors } from "@/utils/style";
 import Link from "next/link";
 import { ContentListItem } from "@/types/content";
-import { ContentStateType, GenreType } from "@/types/const";
 import CustomImage from "../CustomImage";
 import dayjs from "dayjs";
 import FallbackContentImg from "../FallbackContentImg";
 import { getStatus } from "@/utils/helpers";
-import { useState } from "react";
-import { useCancelLikeContent, useLikeContent } from "../../apis/content";
-import { AxiosError } from "axios";
-import customToast from "../../utils/customToast";
+import ContentLikeBtn from "../ContentLikeBtn";
 
 type ContentCardProps = ContentListItem & {
   isButton?: boolean;
@@ -37,38 +33,6 @@ export const ContentCard = ({
   onClick,
 }: ContentCardProps) => {
   const { region1Depth, region2Depth } = location;
-
-  const [like, setLike] = useState(likeState);
-
-  const { mutate: likeContentApi } = useLikeContent(idx, {
-    onSuccess: () => {
-      setLike(true);
-    },
-    onError: (err) => {
-      if (err instanceof AxiosError) {
-        if (err.response?.status === 401)
-          return customToast("로그인 후 이용 가능합니다.");
-        if (err.response?.status === 404) return;
-        if (err.response?.status === 409) return setLike(true);
-      }
-      customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
-    },
-  });
-
-  const { mutate: cancelLikeContentApi } = useCancelLikeContent(idx, {
-    onSuccess: () => {
-      setLike(false);
-    },
-    onError: (err) => {
-      if (err instanceof AxiosError) {
-        if (err.response?.status === 401)
-          return customToast("로그인 후 이용 가능합니다.");
-        if (err.response?.status === 409) return setLike(false);
-        if (err.response?.status === 404) return;
-      }
-      customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
-    },
-  });
 
   if (isButton) {
     return (
@@ -164,23 +128,11 @@ export const ContentCard = ({
           >
             {variantToText[getStatus(startDate, endDate)]}
           </Badge>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              if (!like) {
-                return likeContentApi();
-              }
-
-              return cancelLikeContentApi();
-            }}
+          <ContentLikeBtn
+            idx={idx}
             className="absolute bottom-[8px] right-[8px]"
-          >
-            {like ? (
-              <ActiveLike color={colors.skyblue["01"]} />
-            ) : (
-              <Like color={colors.grey["02"]} />
-            )}
-          </button>
+            likeState={likeState}
+          />
         </div>
         <div className="flex flex-col gap-[4px]">
           <div className="text-body4 text-skyblue-01">{genre.name}</div>

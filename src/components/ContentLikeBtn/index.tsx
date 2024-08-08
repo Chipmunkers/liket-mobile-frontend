@@ -8,15 +8,16 @@ import FilledLike from "@/icons/like-filled.svg";
 import Like from "@/icons/like.svg";
 import { colors } from "../../utils/style";
 
-const ContentLikeBtn = (content: {
+const ContentLikeBtn = (props: {
   likeState: boolean;
   idx: number | string;
   likeCount?: number;
+  className?: string;
 }) => {
-  const [like, setLike] = useState(content.likeState);
-  const [likeCount, setLikeCount] = useState(content.likeCount || 0);
+  const [like, setLike] = useState(props.likeState);
+  const [likeCount, setLikeCount] = useState(props.likeCount || 0);
 
-  const { mutate: likeContentApi } = useLikeContent(content.idx, {
+  const { mutate: likeContentApi } = useLikeContent(props.idx, {
     onSuccess: () => {
       setLike(true);
       setLikeCount(likeCount + 1);
@@ -31,7 +32,7 @@ const ContentLikeBtn = (content: {
     },
   });
 
-  const { mutate: cancelLikeContentApi } = useCancelLikeContent(content.idx, {
+  const { mutate: cancelLikeContentApi } = useCancelLikeContent(props.idx, {
     onSuccess: () => {
       setLike(false);
       setLikeCount(likeCount - 1);
@@ -48,7 +49,7 @@ const ContentLikeBtn = (content: {
 
   return (
     <button
-      className="cursor-pointer"
+      className={`cursor-pointer ${props.className}`}
       onClick={(e) => {
         e.preventDefault();
 
@@ -64,7 +65,7 @@ const ContentLikeBtn = (content: {
       ) : (
         <Like fill={colors["grey"]["02"]} />
       )}
-      {content.likeCount !== undefined ? (
+      {props.likeCount !== undefined ? (
         <div className="text-skyblue-01 text-numbering2">{likeCount}</div>
       ) : null}
     </button>
