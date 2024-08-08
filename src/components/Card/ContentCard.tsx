@@ -41,7 +41,6 @@ export const ContentCard = ({
   const [like, setLike] = useState(likeState);
 
   const { mutate: likeContentApi } = useLikeContent(idx, {
-    mutationKey: ["like-content-mutation-key"],
     onSuccess: () => {
       setLike(true);
     },
@@ -57,7 +56,6 @@ export const ContentCard = ({
   });
 
   const { mutate: cancelLikeContentApi } = useCancelLikeContent(idx, {
-    mutationKey: ["cancel-like-content-mutation-key"],
     onSuccess: () => {
       setLike(false);
     },
