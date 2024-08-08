@@ -1,4 +1,6 @@
-export const ages = [
+import { Age } from "../../src/types/content";
+
+export const ages: Age[] = [
   {
     idx: 1,
     name: "전체",

@@ -30,7 +30,7 @@ export const AGES = [
   "10대",
   "20대",
   "30대",
-  "4050대",
+  "40-50대",
 ] as const;
 
 export const STYLES = [

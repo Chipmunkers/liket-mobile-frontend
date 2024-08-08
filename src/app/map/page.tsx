@@ -19,8 +19,14 @@ import { AGES, GENRES, STYLES } from "@/utils/const";
 import Chip from "@/components/Chip";
 import { AgeType, CityType, GenreType, StyleType } from "@/types/const";
 import KakaoMapV2 from "@/components/KakaoMapV2";
-import { Content } from "../../components/KakaoMapV2/interface/Content";
-import MapContentInfo from "../../components/MapContentInfo/MapContentInfo";
+import { Content } from "@/components/KakaoMapV2/interface/Content";
+import MapContentInfo from "@/components/MapContentInfo/MapContentInfo";
+import { genres } from "../../../public/data/genre";
+import { Age, Genre, Style } from "@/types/content";
+import { Region1, region1s } from "../../../public/data/region1";
+import { ages } from "../../../public/data/age";
+import { styles } from "../../../public/data/style";
+import customToast from "../../utils/customToast";
 
 export default function MapPage() {
   // ! 레거시 영역
@@ -176,6 +182,18 @@ export default function MapPage() {
   // * 선택된 컨텐츠
   const [clickedContent, setClickedContent] = useState<Content>();
 
+  // * 선택된 장르
+  const [selectedGenre, setSelectedGenre] = useState<Genre>();
+
+  // * 선택된 지역
+  const [selectedRegion, setSelectedRegion] = useState<Region1>();
+
+  // * 선택된 연령대
+  const [selectedAge, setSelectedAge] = useState<Age>();
+
+  // * 선택된 스타일들
+  const [selectedStyles, setSelectedStyles] = useState<Style[]>([]);
+
   return (
     <>
       <Header>
@@ -244,7 +262,122 @@ export default function MapPage() {
           <Header.MiddleText text="필터" />
         </Header>
         <div className="full-modal-main px-[24px] py-[16px] gap-[48px]">
-          {(["장르", "지역", "연령대", "스타일"] as const).map((option) => {
+          {/* 장르 선택 */}
+          <div key={"genre_filter"}>
+            <div className="text-h2 mb-[15px]">장르</div>
+            <ul
+              onClick={(e) => onClickOption(e, "장르")}
+              className="flex flex-wrap gap-[8px]"
+            >
+              {genres.map((genre) => (
+                <li key={genre.idx}>
+                  <Chip
+                    isSelected={selectedGenre?.idx === genre.idx}
+                    onClick={() => {
+                      if (selectedGenre?.idx === genre.idx)
+                        return setSelectedGenre(undefined);
+                      setSelectedGenre(genre);
+                    }}
+                  >
+                    {genre.name}
+                  </Chip>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* 지역 선택 */}
+          <div key={"region_filter"}>
+            <div className="text-h2 mb-[15px]">지역</div>
+            <ul
+              onClick={(e) => onClickOption(e, "지역")}
+              className="flex flex-wrap gap-[8px]"
+            >
+              {region1s.map((region) => (
+                <li key={region.code}>
+                  <Chip
+                    isSelected={selectedRegion?.code === region.code}
+                    onClick={() => {
+                      if (selectedRegion?.code === region.code)
+                        return setSelectedRegion(undefined);
+                      setSelectedRegion(region);
+                    }}
+                  >
+                    {region.name}
+                  </Chip>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* 연령대 선택 */}
+          <div key={"age_filter"}>
+            <div className="text-h2 mb-[15px]">연령대</div>
+            <ul
+              onClick={(e) => onClickOption(e, "연령대")}
+              className="flex flex-wrap gap-[8px]"
+            >
+              {ages.map((age) => (
+                <li key={age.idx}>
+                  <Chip
+                    isSelected={selectedAge?.idx === age.idx}
+                    onClick={() => {
+                      if (selectedAge?.idx === age.idx)
+                        return setSelectedAge(undefined);
+                      setSelectedAge(age);
+                    }}
+                  >
+                    {age.name}
+                  </Chip>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* 스타일 */}
+          <div key={"age_filter"}>
+            <div className="text-h2 mb-[15px]">스타일</div>
+            <ul
+              onClick={(e) => onClickOption(e, "스타일")}
+              className="flex flex-wrap gap-[8px]"
+            >
+              {styles.map((style) => (
+                <li key={style.idx}>
+                  <Chip
+                    isSelected={selectedStyles
+                      .map((style) => style.idx)
+                      .includes(style.idx)}
+                    onClick={() => {
+                      const alreadyExistStyleIdxs = selectedStyles.map(
+                        (style) => style.idx
+                      );
+
+                      if (alreadyExistStyleIdxs.includes(style.idx)) {
+                        // * 이미 선택된 스타일의 경우 선택되지 않은 것으로 표시
+                        return setSelectedStyles([
+                          ...selectedStyles.filter(
+                            (selectedStyle) => selectedStyle.idx !== style.idx
+                          ),
+                        ]);
+                      }
+
+                      if (alreadyExistStyleIdxs.length >= 3) {
+                        return customToast(
+                          "스타일은 최대 3개까지 선택할 수 있습니다."
+                        );
+                      }
+
+                      setSelectedStyles([...selectedStyles, style]);
+                    }}
+                  >
+                    {style.name}
+                  </Chip>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* {(["장르", "지역", "연령대", "스타일"] as const).map((option) => {
             return (
               <div key={option}>
                 <div className="text-h2 mb-[15px]">{option}</div>
@@ -278,7 +411,7 @@ export default function MapPage() {
                 </ul>
               </div>
             );
-          })}
+          })} */}
         </div>
         <BottomButtonTabWrapper>
           <ButtonGroup gap={16}>

@@ -1,4 +1,6 @@
-export const genres = [
+import { Genre } from "../../src/types/content";
+
+export const genres: Genre[] = [
   {
     idx: 1,
     name: "팝업스토어",
