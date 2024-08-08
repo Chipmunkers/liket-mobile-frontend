@@ -71,6 +71,12 @@ const KakaoMapV2 = ({ children }: { children?: ReactNode }) => {
     },
   });
 
+  // * Zoon Level이 변경되면 이전 데이터 초기화
+  useEffect(() => {
+    setClusteredContentList([]);
+    setContentList([]);
+  }, [level]);
+
   useEffect(() => {
     if (!contentApiResult) return;
 
@@ -93,10 +99,6 @@ const KakaoMapV2 = ({ children }: { children?: ReactNode }) => {
       ),
     ]);
   }, [contentApiResult]);
-
-  useEffect(() => {
-    setClusteredContentList([]);
-  }, [level]);
 
   useEffect(() => {
     if (!clusteredApiResult) return;
