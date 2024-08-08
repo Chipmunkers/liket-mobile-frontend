@@ -6,16 +6,15 @@ import Like from "@/icons/like.svg";
 import ActiveLike from "@/icons/like-filled.svg";
 import { Content } from "../KakaoMapV2/interface/Content";
 import dayjs from "dayjs";
-import useLikeContent from "./api/useLikeContent";
 import { useEffect, useState } from "react";
-import useCancelLikeContent from "./api/useCancelLikeContent";
 import { AxiosError } from "axios";
 import customToast from "../../utils/customToast";
+import { useCancelLikeContent, useLikeContent } from "../../apis/content";
 
 const MapContentInfo = ({ content }: { content: Content }) => {
   const [likeState, setLikeState] = useState(content.likeState);
 
-  const { mutate: likeContentApi } = useLikeContent(content, {
+  const { mutate: likeContentApi } = useLikeContent(content.idx, {
     onSuccess: () => {
       setLikeState(true);
     },
@@ -30,7 +29,7 @@ const MapContentInfo = ({ content }: { content: Content }) => {
     },
   });
 
-  const { mutate: cancelLikeContentApi } = useCancelLikeContent(content, {
+  const { mutate: cancelLikeContentApi } = useCancelLikeContent(content.idx, {
     onSuccess: () => {
       setLikeState(false);
     },
