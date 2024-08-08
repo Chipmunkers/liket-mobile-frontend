@@ -194,6 +194,19 @@ export default function MapPage() {
   // * 필터링: 선택된 스타일들
   const [selectedStyles, setSelectedStyles] = useState<Style[]>([]);
 
+  // * 최종적으로 필터링 목록
+  const [mapFilter, setMapFilter] = useState<{
+    genre: Genre | undefined;
+    region: Region1 | undefined;
+    age: Age | undefined;
+    styles: Style[];
+  }>({
+    genre: undefined,
+    region: undefined,
+    age: undefined,
+    styles: [],
+  });
+
   return (
     <>
       <Header>
@@ -255,7 +268,13 @@ export default function MapPage() {
           <Header.LeftOption
             option={{
               close: {
-                onClick: onCloseFilterSelectionModal,
+                onClick: () => {
+                  setSelectedGenre(mapFilter.genre);
+                  setSelectedRegion(mapFilter.region);
+                  setSelectedAge(mapFilter.age);
+                  setSelectedStyles(mapFilter.styles);
+                  router.back();
+                },
               },
             }}
           />
@@ -417,13 +436,37 @@ export default function MapPage() {
           <ButtonGroup gap={16}>
             <Button
               height={48}
-              onClick={onClickInitialize}
+              onClick={() => {
+                setSelectedGenre(undefined);
+                setSelectedRegion(undefined);
+                setSelectedAge(undefined);
+                setSelectedStyles([]);
+                setMapFilter({
+                  genre: undefined,
+                  region: undefined,
+                  age: undefined,
+                  styles: [],
+                });
+                router.back();
+              }}
               variant="ghost"
               fullWidth
             >
               초기화
             </Button>
-            <Button height={48} onClick={onClickSettingFilter} fullWidth>
+            <Button
+              height={48}
+              onClick={() => {
+                setMapFilter({
+                  genre: selectedGenre,
+                  region: selectedRegion,
+                  age: selectedAge,
+                  styles: selectedStyles,
+                });
+                router.back();
+              }}
+              fullWidth
+            >
               적용하기
             </Button>
           </ButtonGroup>
