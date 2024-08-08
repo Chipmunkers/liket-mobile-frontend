@@ -145,9 +145,6 @@ export default function MapPage() {
   // * 필터링: 선택된 장르
   const [selectedGenre, setSelectedGenre] = useState<Genre>();
 
-  // * 필터링: 선택된 지역
-  const [selectedRegion, setSelectedRegion] = useState<Region1>();
-
   // * 필터링: 선택된 연령대
   const [selectedAge, setSelectedAge] = useState<Age>();
 
@@ -157,12 +154,10 @@ export default function MapPage() {
   // * 최종적으로 필터링 목록
   const [mapFilter, setMapFilter] = useState<{
     genre: Genre | undefined;
-    region: Region1 | undefined;
     age: Age | undefined;
     styles: Style[];
   }>({
     genre: undefined,
-    region: undefined,
     age: undefined,
     styles: [],
   });
@@ -183,16 +178,42 @@ export default function MapPage() {
           clickedContent={clickedContent}
           setClickedContent={setClickedContent}
         >
-          <button
-            className="absolute top-12 left-0 z-[2]"
-            onClick={() => router.push(`${pathname}?isFilterModalOpen=true`)}
-          >
-            {isAppliedFilterExist(appliedFilters) ? (
-              <FilterFilled />
-            ) : (
-              <Filter />
-            )}
-          </button>
+          <div className="absolute top-12 left-0 z-[2] flex w-100">
+            <button
+              onClick={() => router.push(`${pathname}?isFilterModalOpen=true`)}
+            >
+              {mapFilter.genre || mapFilter.age || mapFilter.styles.length ? (
+                <FilterFilled />
+              ) : (
+                <Filter />
+              )}
+            </button>
+            {mapFilter.genre || mapFilter.age || mapFilter.styles.length ? (
+              <div className="flex items-center">
+                {mapFilter.genre ? (
+                  <div className="mr-[8px]">
+                    <Chip isSelected={true} onClick={() => {}}>
+                      {mapFilter.genre.name}
+                    </Chip>
+                  </div>
+                ) : null}
+                {mapFilter.age ? (
+                  <div className="mr-[8px]">
+                    <Chip isSelected={true} onClick={() => {}}>
+                      {mapFilter.age.name}
+                    </Chip>
+                  </div>
+                ) : null}
+                {mapFilter.styles.map((style) => (
+                  <div className="mr-[8px]">
+                    <Chip isSelected={true} onClick={() => {}}>
+                      {style.name}
+                    </Chip>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </KakaoMapV2>
         {clickedContent ? <MapContentInfo content={clickedContent} /> : null}
         {!clickedContent && contentList.length !== 0 ? (
@@ -230,7 +251,6 @@ export default function MapPage() {
               close: {
                 onClick: () => {
                   setSelectedGenre(mapFilter.genre);
-                  setSelectedRegion(mapFilter.region);
                   setSelectedAge(mapFilter.age);
                   setSelectedStyles(mapFilter.styles);
                   router.back();
@@ -259,30 +279,6 @@ export default function MapPage() {
                     }}
                   >
                     {genre.name}
-                  </Chip>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* 지역 선택 */}
-          <div key={"region_filter"}>
-            <div className="text-h2 mb-[15px]">지역</div>
-            <ul
-              onClick={(e) => onClickOption(e, "지역")}
-              className="flex flex-wrap gap-[8px]"
-            >
-              {region1s.map((region) => (
-                <li key={region.code}>
-                  <Chip
-                    isSelected={selectedRegion?.code === region.code}
-                    onClick={() => {
-                      if (selectedRegion?.code === region.code)
-                        return setSelectedRegion(undefined);
-                      setSelectedRegion(region);
-                    }}
-                  >
-                    {region.name}
                   </Chip>
                 </li>
               ))}
@@ -362,12 +358,10 @@ export default function MapPage() {
               height={48}
               onClick={() => {
                 setSelectedGenre(undefined);
-                setSelectedRegion(undefined);
                 setSelectedAge(undefined);
                 setSelectedStyles([]);
                 setMapFilter({
                   genre: undefined,
-                  region: undefined,
                   age: undefined,
                   styles: [],
                 });
@@ -383,7 +377,6 @@ export default function MapPage() {
               onClick={() => {
                 setMapFilter({
                   genre: selectedGenre,
-                  region: selectedRegion,
                   age: selectedAge,
                   styles: selectedStyles,
                 });
