@@ -37,7 +37,7 @@ const KaKaoMap = ({ children }: KaKaoMapProps) => {
     queryFn: async () => {
       if (level <= 5) return null;
 
-      const { data } = await axiosInstance.get(
+      return await axiosInstance.get(
         `/apis/map/culture-content/clustered/all?` +
           `top-x=${bound?.ha}&` +
           `top-y=${bound?.pa}&` +
@@ -45,9 +45,10 @@ const KaKaoMap = ({ children }: KaKaoMapProps) => {
           `bottom-y=${bound?.qa}&` +
           `level=${level}`
       );
-      return { data };
     },
     enabled: () => {
+      if (level <= 5) return false;
+
       return !!bound && !!level;
     },
   });
@@ -55,8 +56,6 @@ const KaKaoMap = ({ children }: KaKaoMapProps) => {
   const { data: contentData } = useQuery({
     queryKey: ["map-contents", bound, level],
     queryFn: async () => {
-      if (level > 5) return null;
-
       const { data } = await axiosInstance.get(
         `/apis/map/culture-content/all?` +
           `top-x=${bound?.ha}&` +
@@ -67,6 +66,8 @@ const KaKaoMap = ({ children }: KaKaoMapProps) => {
       return { data };
     },
     enabled: () => {
+      if (level > 5) return false;
+
       return !!bound && !!level;
     },
   });
