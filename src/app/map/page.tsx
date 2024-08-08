@@ -31,18 +31,11 @@ import customToast from "../../utils/customToast";
 export default function MapPage() {
   // ! 레거시 영역
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
   const isTownSelectionModalOpen = searchParams.get("isTownSelectionModalOpen");
   const isFilterModalOpen = searchParams.get("isFilterModalOpen");
-  const [appliedFilters, setAppliedFilters] = useState<AppliedFiltersType>({
-    currentAges: [],
-    currentGenres: [],
-    currentStyles: [],
-    currentCities: [],
-    newGenres: [],
-    newCities: [],
-    newAges: [],
-    newStyles: [],
-  });
 
   const [cityAndGuSelection, setCityAndGuSelection] = useState(
     INITIAL_CITY_AND_GU_SELECTION
@@ -50,9 +43,6 @@ export default function MapPage() {
 
   const { currentSelectedGu, newSelectedCity, newSelectedGu } =
     cityAndGuSelection;
-
-  const router = useRouter();
-  const pathname = usePathname();
 
   const onClickTownSelection = () => {
     router.push(`${pathname}?isTownSelectionModalOpen=true`);
