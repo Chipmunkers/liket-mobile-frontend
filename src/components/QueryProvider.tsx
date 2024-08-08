@@ -4,6 +4,7 @@ import authStore from "@/stores/authStore";
 import axios, { setAuthToken } from "@/utils/axios";
 import {
   isServer,
+  MutationCache,
   QueryCache,
   QueryClient,
   QueryClientProvider,
@@ -39,6 +40,42 @@ function makeQueryClient({
         },
       },
     },
+    mutationCache: new MutationCache({
+      onError: async (error) => {
+        if (error) {
+          const { response, config } = error as AxiosError;
+
+          if (response?.status === 401 && config) {
+            try {
+              const { data } = await axios.post("/apis/auth/access-token");
+              setAuthToken(data);
+              setToken(data);
+
+              // TODO: 요청이 실패한 쿼리키에 한해서만 invalidate 하기
+              queryClient.invalidateQueries();
+            } catch (error: unknown) {
+              if (error instanceof AxiosError) {
+                const { response } = error as AxiosError<{
+                  type: "NO_TOKEN" | "INVALID_TOKEN";
+                }>;
+
+                if (response?.data?.type === "NO_TOKEN") {
+                  handleUnauthorizedAccess();
+                  return;
+                }
+
+                if (response?.data?.type === "INVALID_TOKEN") {
+                  handleExpiredToken();
+                  return;
+                }
+              }
+
+              return;
+            }
+          }
+        }
+      },
+    }),
     queryCache: new QueryCache({
       onError: async (error) => {
         if (error) {
