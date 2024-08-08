@@ -57,9 +57,6 @@ export default function MapPage() {
   const onClickTownSelection = () => {
     router.push(`${pathname}?isTownSelectionModalOpen=true`);
   };
-  const onClickFilter = () => {
-    router.push(`${pathname}?isFilterModalOpen=true`);
-  };
 
   const onCloseTownSelectionModal = () => {
     router.back();
@@ -90,43 +87,6 @@ export default function MapPage() {
       currentSelectedGu: cityAndGuSelection.newSelectedGu,
     });
 
-  const onClickInitialize = () =>
-    setAppliedFilters({
-      ...appliedFilters,
-      newAges: [],
-      newCities: [],
-      newGenres: [],
-      newStyles: [],
-    });
-
-  const onClickSettingFilter = () => {
-    router.back();
-    const { currentAges, currentCities, currentGenres, currentStyles } =
-      appliedFilters;
-
-    setAppliedFilters({
-      ...appliedFilters,
-      newAges: currentAges,
-      newCities: currentCities,
-      newGenres: currentGenres,
-      newStyles: currentStyles,
-    });
-  };
-
-  const onCloseFilterSelectionModal = () => {
-    router.back();
-
-    const { currentAges, currentCities, currentGenres, currentStyles } =
-      appliedFilters;
-
-    setAppliedFilters({
-      ...appliedFilters,
-      newAges: currentAges,
-      newCities: currentCities,
-      newGenres: currentGenres,
-      newStyles: currentStyles,
-    });
-  };
   const onClickOption = (
     e: MouseEvent<HTMLUListElement>,
     option: "장르" | "스타일" | "연령대" | "지역"
@@ -225,7 +185,7 @@ export default function MapPage() {
         >
           <button
             className="absolute top-12 left-0 z-[2]"
-            onClick={onClickFilter}
+            onClick={() => router.push(`${pathname}?isFilterModalOpen=true`)}
           >
             {isAppliedFilterExist(appliedFilters) ? (
               <FilterFilled />
