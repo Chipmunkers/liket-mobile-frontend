@@ -12,6 +12,10 @@ import CustomImage from "../CustomImage";
 import dayjs from "dayjs";
 import FallbackContentImg from "../FallbackContentImg";
 import { getStatus } from "@/utils/helpers";
+import { useState } from "react";
+import { useCancelLikeContent, useLikeContent } from "../../apis/content";
+import { AxiosError } from "axios";
+import customToast from "../../utils/customToast";
 
 type ContentCardProps = ContentListItem & {
   isButton?: boolean;
@@ -33,6 +37,40 @@ export const ContentCard = ({
   onClick,
 }: ContentCardProps) => {
   const { region1Depth, region2Depth } = location;
+
+  //const [like, setLike] = useState(likeState);
+
+  const { mutate: likeContentApi } = useLikeContent(idx, {
+    // onSuccess: () => {
+    //   setLike(true);
+    // },
+    // onError: (err) => {
+    //   if (err instanceof AxiosError) {
+    //     if (err.response?.status === 409) {
+    //       return setLike(true);
+    //     }
+    //     if (err.response?.status === 401)
+    //       return customToast("로그인 후 이용 가능합니다.");
+    //     if (err.response?.status === 404) return;
+    //   }
+    //   customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
+    // },
+  });
+
+  const { mutate: cancelLikeContentApi } = useCancelLikeContent(idx, {
+    // onSuccess: () => {
+    //   setLike(false);
+    // },
+    // onError: (err) => {
+    //   if (err instanceof AxiosError) {
+    //     if (err.response?.status === 409) return setLike(false);
+    //     if (err.response?.status === 404) return;
+    //     if (err.response?.status === 401)
+    //       return customToast("로그인 후 이용 가능합니다.");
+    //   }
+    //   customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
+    // },
+  });
 
   if (isButton) {
     return (
@@ -131,6 +169,11 @@ export const ContentCard = ({
           <button
             onClick={(e) => {
               e.preventDefault();
+              if (!likeState) {
+                return likeContentApi();
+              }
+
+              return cancelLikeContentApi();
             }}
             className="absolute bottom-[8px] right-[8px]"
           >
