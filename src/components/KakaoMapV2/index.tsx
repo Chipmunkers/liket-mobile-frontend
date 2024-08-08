@@ -48,9 +48,6 @@ const KakaoMapV2 = ({
     ClusteredContent[]
   >([]);
 
-  // * 현재 맵에 표시되고 있는 컨텐츠 목록
-  //const [contentList, setContentList] = useState<Content[]>([]);
-
   const { data: clusteredApiResult } = useQuery({
     queryKey: ["clustered-map", mapInfo],
     queryFn: async () => {
