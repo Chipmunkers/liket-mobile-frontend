@@ -14,6 +14,7 @@ const ResponsiveCarousel = ({ list }: CarouselProps) => {
 
   return (
     <Carousel
+      infiniteLoop
       showArrows={false}
       showStatus={false}
       showThumbs={false}
