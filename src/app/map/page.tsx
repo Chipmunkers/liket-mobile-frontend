@@ -194,25 +194,27 @@ export default function MapPage() {
             )}
           </button>
         </KakaoMapV2>
-        <CustomBottomSheet
-          open={true}
-          defaultSnap={20}
-          snapPoints={({ maxHeight }) => [
-            20,
-            maxHeight / 2 - 45,
-            maxHeight - 68 - 48 - 74,
-          ]}
-        >
-          <ul>
-            {contentList.map((content) => {
-              return (
-                <li key={content.idx}>
-                  <MapBottomSheetCard content={content} />
-                </li>
-              );
-            })}
-          </ul>
-        </CustomBottomSheet>
+        {contentList.length !== 0 ? (
+          <CustomBottomSheet
+            open={true}
+            defaultSnap={20}
+            snapPoints={({ maxHeight }) => [
+              20,
+              maxHeight / 2 - 45,
+              maxHeight - 68 - 48 - 74,
+            ]}
+          >
+            <ul>
+              {contentList.map((content) => {
+                return (
+                  <li key={content.idx}>
+                    <MapBottomSheetCard content={content} />
+                  </li>
+                );
+              })}
+            </ul>
+          </CustomBottomSheet>
+        ) : null}
       </main>
       <LinkableTab />
       <div
