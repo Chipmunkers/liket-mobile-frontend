@@ -62,6 +62,7 @@ const KakaoMapV2 = ({ children }: { children?: ReactNode }) => {
         (clusteredContent) =>
           !alreadyExistClusteredCodes.includes(clusteredContent.code)
       ),
+      // * 현재 보고 있는 bound를 벗어난 경우 삭제하기
       ...clusteredContentList.filter(
         (clusteredContent) =>
           clusteredContent.lng <= mapInfo.bound.bottom.x &&
