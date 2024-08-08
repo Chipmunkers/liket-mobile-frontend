@@ -18,9 +18,9 @@ import ThumbIcon from "@/icons/thumb.svg";
 import { getContentDetailInformation } from "@/apis/content";
 import dayjs from "dayjs";
 import KaKaoMap from "@/components/KaKaoMap";
-import Carousel from "@/components/Carousel";
 import { getStatus } from "@/utils/helpers";
 import ContentCarousel from "@/components/Carousel/ContentCarousel";
+import ContentLikeBtn from "../../../components/ContentLikeBtn";
 interface PageProps {
   params: {
     idx: string;
@@ -99,16 +99,11 @@ export default async function Page({ params: { idx } }: PageProps) {
                     .join("")}`}</div>
                 </div>
               </div>
-              <button>
-                {likeState ? (
-                  <FilledLike fill={colors["skyblue"]["01"]} />
-                ) : (
-                  <Like fill={colors["grey"]["02"]} />
-                )}
-                <div className="text-skyblue-01 text-numbering2">
-                  {likeCount}
-                </div>
-              </button>
+              <ContentLikeBtn
+                likeState={likeState}
+                idx={idx}
+                likeCount={likeCount}
+              />
             </div>
             <div className="mt-[16px]">
               <div className="text-body3">
