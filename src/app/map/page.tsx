@@ -19,8 +19,10 @@ import { AGES, GENRES, STYLES } from "@/utils/const";
 import Chip from "@/components/Chip";
 import { AgeType, CityType, GenreType, StyleType } from "@/types/const";
 import KakaoMapV2 from "@/components/KakaoMapV2";
+import { Content } from "../../components/KakaoMapV2/interface/Content";
 
 export default function MapPage() {
+  // ! 레거시 영역
   const searchParams = useSearchParams();
   const isTownSelectionModalOpen = searchParams.get("isTownSelectionModalOpen");
   const isFilterModalOpen = searchParams.get("isFilterModalOpen");
@@ -167,6 +169,9 @@ export default function MapPage() {
     }
   };
 
+  // * 현재 보여지고 있는 컨텐츠 목록
+  const [contentList, setContentList] = useState<Content[]>([]);
+
   return (
     <>
       <Header>
@@ -177,7 +182,7 @@ export default function MapPage() {
         <Header.RightOption option={{ search: true, like: true }} />
       </Header>
       <main>
-        <KakaoMapV2>
+        <KakaoMapV2 contentList={contentList} setContentList={setContentList}>
           <button
             className="absolute top-0 left-0 z-[2]"
             onClick={onClickFilter}
@@ -199,10 +204,10 @@ export default function MapPage() {
           ]}
         >
           <ul>
-            {CONTENT_CARDS_DUMMY.map((cardItem, index) => {
+            {contentList.map((content, index) => {
               return (
-                <li key={index}>
-                  <MapBottomSheetCard {...cardItem} />
+                <li key={content.idx}>
+                  <MapBottomSheetCard content={content} />
                 </li>
               );
             })}

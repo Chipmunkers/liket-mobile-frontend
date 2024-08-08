@@ -1,6 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import Script from "next/script";
-import { ReactNode, useEffect, useState } from "react";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { CustomOverlayMap, Map } from "react-kakao-maps-sdk";
 import axiosInstance from "../../utils/axios";
 import { ClusteredContent } from "./interface/ClusteredContent";
@@ -9,7 +15,15 @@ import { Content } from "./interface/Content";
 
 const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_API_KEY}&autoload=false`;
 
-const KakaoMapV2 = ({ children }: { children?: ReactNode }) => {
+const KakaoMapV2 = ({
+  children,
+  contentList,
+  setContentList,
+}: {
+  children?: ReactNode;
+  contentList: Content[];
+  setContentList: Dispatch<SetStateAction<Content[]>>;
+}) => {
   const [mapInfo, setMapInfo] = useState<{
     bound: {
       top: { x: number; y: number };
@@ -35,7 +49,7 @@ const KakaoMapV2 = ({ children }: { children?: ReactNode }) => {
   >([]);
 
   // * 현재 맵에 표시되고 있는 컨텐츠 목록
-  const [contentList, setContentList] = useState<Content[]>([]);
+  //const [contentList, setContentList] = useState<Content[]>([]);
 
   const { data: clusteredApiResult } = useQuery({
     queryKey: ["clustered-map", mapInfo],

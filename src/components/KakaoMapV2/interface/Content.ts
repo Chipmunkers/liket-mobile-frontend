@@ -4,7 +4,7 @@ export interface Content {
   idx: number;
   title: string;
   genre: Genre;
-  starDate: Date;
+  startDate: Date;
   endDate: Date;
   location: Location;
   likeState: boolean;

@@ -5,6 +5,8 @@ import { colors } from "@/utils/style";
 import Like from "@/icons/like.svg";
 import ActiveLike from "@/icons/like-filled.svg";
 import { ContentStateType, GenreType } from "@/types/const";
+import { Content } from "../KakaoMapV2/interface/Content";
+import dayjs from "dayjs";
 
 interface MapBottomSheetCardProps {
   idx: number;
@@ -142,32 +144,30 @@ export const CONTENT_CARDS_DUMMY: MapBottomSheetCardProps[] = [
   },
 ];
 
-const MapBottomSheetCard = ({
-  idx,
-  status,
-  title,
-  thumbnail,
-  genre,
-  startDate,
-  endDate,
-  likeState,
-  location,
-}: MapBottomSheetCardProps) => {
+const MapBottomSheetCard = (props: { content: Content }) => {
+  const { content } = props;
   return (
     <Link
-      href={`/contents/${idx}`}
+      href={`/contents/${content.idx}`}
       className="relative flex mx-[24px] mt-[24px]"
     >
       <div className="relative w-[72px] h-[100px] mr-[16px]">
-        <Image src={thumbnail} fill alt={`${title} 썸네일 이미지`} />
+        <Image
+          src={process.env.NEXT_PUBLIC_IMAGE_SERVER + content.imgList[0]}
+          fill
+          alt={`${content.title} 썸네일 이미지`}
+        />
       </div>
       <div>
-        <Badge variant={status}>진행중</Badge>
-        <div className="text-body4 text-skyblue-01">{genre}</div>
-        <h2 className="text-body2">{title}</h2>
-        <div className="text-body5 text-grey-04">{location}</div>
+        <Badge variant={"active"}>진행중</Badge>
+        <div className="text-body4 text-skyblue-01">{content.genre.name}</div>
+        <h2 className="text-body2">{content.title}</h2>
         <div className="text-body5 text-grey-04">
-          {startDate} ~ {endDate}
+          {content.location.region1Depth + " " + content.location.region2Depth}
+        </div>
+        <div className="text-body5 text-grey-04">
+          {dayjs(content.startDate).format("YYYY.MM.DD")} ~{" "}
+          {dayjs(content.endDate).format("MM.DD")}
         </div>
       </div>
       <button
@@ -176,7 +176,7 @@ const MapBottomSheetCard = ({
         }}
         className="absolute top-0 right-0"
       >
-        {likeState ? (
+        {content.likeState ? (
           <ActiveLike color={colors.skyblue["01"]} />
         ) : (
           <Like color={colors.grey["02"]} />
