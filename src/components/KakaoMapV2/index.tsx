@@ -27,6 +27,7 @@ const KakaoMapV2 = ({ children }: { children?: ReactNode }) => {
     level: 4,
   });
   const [level, setLevel] = useState(4);
+  const [clickedContent, setClickedContent] = useState<Content>();
 
   // * 현재 맵에 표시되고 있는 클러스터링 컨텐츠 목록
   const [clusteredContentList, setClusteredContentList] = useState<
@@ -164,16 +165,33 @@ const KakaoMapV2 = ({ children }: { children?: ReactNode }) => {
             }}
           >
             <div
+              onClick={() => {
+                if (clickedContent?.idx === content.idx)
+                  return setClickedContent(undefined);
+
+                setClickedContent(content);
+              }}
               style={{
+                position: "absolute",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                bottom: "0px",
+                right: "50%",
+                transform: "translateX(50%)",
               }}
             >
-              <img
-                width={"24px"}
-                src={`https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/default-marker-${content.genre.idx}.svg`}
-              />
+              {clickedContent?.idx === content.idx ? (
+                <img
+                  width={"50px"}
+                  src={`https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${content.genre.idx}_icon.svg`}
+                />
+              ) : (
+                <img
+                  width={"30px"}
+                  src={`https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/default-marker-${content.genre.idx}.svg`}
+                />
+              )}
               <div
                 style={{
                   width: "80px",
@@ -181,7 +199,7 @@ const KakaoMapV2 = ({ children }: { children?: ReactNode }) => {
                   wordWrap: "break-word",
                   whiteSpace: "normal",
                   marginTop: "4px",
-                  fontSize: "12px",
+                  fontSize: "14px",
                   lineHeight: "14.4px",
                   color: "#222",
                   textShadow:
