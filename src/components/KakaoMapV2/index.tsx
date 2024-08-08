@@ -28,9 +28,13 @@ const KakaoMapV2 = ({ children }: { children?: ReactNode }) => {
   });
   const [level, setLevel] = useState(4);
 
+  // * 현재 맵에 표시되고 있는 클러스터링 컨텐츠 목록
   const [clusteredContentList, setClusteredContentList] = useState<
     ClusteredContent[]
   >([]);
+
+  // * 현재 맵에 표시되고 있는 컨텐츠 목록
+  const [contentList, setContentList] = useState<Content[]>([]);
 
   const { data: clusteredApiResult } = useQuery({
     queryKey: ["clustered-map", mapInfo],
@@ -50,9 +54,6 @@ const KakaoMapV2 = ({ children }: { children?: ReactNode }) => {
       return data;
     },
   });
-
-  // * 현재 맵에 표시되고 있는 컨텐츠 목록
-  const [contentList, setContentList] = useState<Content[]>([]);
 
   const { data: contentApiResult } = useQuery<{ contentList: Content[] }>({
     queryKey: ["map-contents", mapInfo],
