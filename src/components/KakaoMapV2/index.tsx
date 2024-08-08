@@ -175,7 +175,9 @@ const KakaoMapV2 = ({
               lng: clusteredContent.lng,
             }}
           >
-            <div>{clusteredContent.count}</div>
+            <div className="rounded-full border-solid border-skyblue-02 border w-[48px] h-[48px] -translate-y-2/4 -translate-x-2/4 flex justify-center items-center bg-skyblue-02 bg-opacity-80 text-white font-bold">
+              <span>{clusteredContent.count}</span>
+            </div>
           </CustomOverlayMap>
         ))}
         {contentList.map((content) => (
