@@ -158,6 +158,7 @@ const KakaoMapV2 = ({
           setMapInfo(getMapInfo(map));
         }}
       >
+        {children}
         {clusteredContentList.map((clusteredContent) => (
           <CustomOverlayMap
             position={{

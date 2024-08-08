@@ -184,7 +184,7 @@ export default function MapPage() {
       <main>
         <KakaoMapV2 contentList={contentList} setContentList={setContentList}>
           <button
-            className="absolute top-0 left-0 z-[2]"
+            className="absolute top-12 left-0 z-[2]"
             onClick={onClickFilter}
           >
             {isAppliedFilterExist(appliedFilters) ? (
