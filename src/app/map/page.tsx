@@ -355,42 +355,6 @@ export default function MapPage() {
               ))}
             </ul>
           </div>
-
-          {/* {(["장르", "지역", "연령대", "스타일"] as const).map((option) => {
-            return (
-              <div key={option}>
-                <div className="text-h2 mb-[15px]">{option}</div>
-                <ul
-                  onClick={(e) => onClickOption(e, option)}
-                  className="flex flex-wrap gap-[8px]"
-                >
-                  {FILTER_OPTIONS[option].map((item) => {
-                    const { newGenres, newCities, newAges, newStyles } =
-                      appliedFilters;
-
-                    let isSelected = false;
-                    if (option === "장르") {
-                      isSelected = newGenres.includes(item as GenreType);
-                    } else if (option === "스타일") {
-                      isSelected = newStyles.includes(item as StyleType);
-                    } else if (option === "연령대") {
-                      isSelected = newAges.includes(item as AgeType);
-                    } else if (option === "지역") {
-                      isSelected = newCities.includes(item as CityType);
-                    }
-
-                    return (
-                      <li key={item}>
-                        <Chip isSelected={isSelected} onClick={() => {}}>
-                          {item}
-                        </Chip>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            );
-          })} */}
         </div>
         <BottomButtonTabWrapper>
           <ButtonGroup gap={16}>
