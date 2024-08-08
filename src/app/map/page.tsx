@@ -87,55 +87,6 @@ export default function MapPage() {
       currentSelectedGu: cityAndGuSelection.newSelectedGu,
     });
 
-  const onClickOption = (
-    e: MouseEvent<HTMLUListElement>,
-    option: "장르" | "스타일" | "연령대" | "지역"
-  ) => {
-    const target = e.target as HTMLUListElement;
-
-    const textContent = target.textContent;
-
-    if (target.tagName !== "BUTTON" || !textContent) {
-      return;
-    }
-
-    const { newGenres, newCities, newAges, newStyles } = appliedFilters;
-
-    if (option === "장르") {
-      setAppliedFilters({
-        ...appliedFilters,
-        newGenres: getAppliedOptionList(
-          newGenres,
-          textContent
-        ) as AppliedFiltersType["newGenres"],
-      });
-    } else if (option === "스타일") {
-      setAppliedFilters({
-        ...appliedFilters,
-        newStyles: getAppliedOptionList(
-          newStyles,
-          textContent
-        ) as AppliedFiltersType["newStyles"],
-      });
-    } else if (option === "연령대") {
-      setAppliedFilters({
-        ...appliedFilters,
-        newAges: getAppliedOptionList(
-          newAges,
-          textContent
-        ) as AppliedFiltersType["newAges"],
-      });
-    } else if (option === "지역") {
-      setAppliedFilters({
-        ...appliedFilters,
-        newCities: getAppliedOptionList(
-          newCities,
-          textContent
-        ) as AppliedFiltersType["newCities"],
-      });
-    }
-  };
-
   // * 현재 보여지고 있는 컨텐츠 목록
   const [contentList, setContentList] = useState<Content[]>([]);
 
@@ -264,10 +215,7 @@ export default function MapPage() {
           {/* 장르 선택 */}
           <div key={"genre_filter"}>
             <div className="text-h2 mb-[15px]">장르</div>
-            <ul
-              onClick={(e) => onClickOption(e, "장르")}
-              className="flex flex-wrap gap-[8px]"
-            >
+            <ul className="flex flex-wrap gap-[8px]">
               {genres.map((genre) => (
                 <li key={genre.idx}>
                   <Chip
@@ -288,10 +236,7 @@ export default function MapPage() {
           {/* 연령대 선택 */}
           <div key={"age_filter"}>
             <div className="text-h2 mb-[15px]">연령대</div>
-            <ul
-              onClick={(e) => onClickOption(e, "연령대")}
-              className="flex flex-wrap gap-[8px]"
-            >
+            <ul className="flex flex-wrap gap-[8px]">
               {ages.map((age) => (
                 <li key={age.idx}>
                   <Chip
@@ -312,10 +257,7 @@ export default function MapPage() {
           {/* 스타일 */}
           <div key={"age_filter"}>
             <div className="text-h2 mb-[15px]">스타일</div>
-            <ul
-              onClick={(e) => onClickOption(e, "스타일")}
-              className="flex flex-wrap gap-[8px]"
-            >
+            <ul className="flex flex-wrap gap-[8px]">
               {styles.map((style) => (
                 <li key={style.idx}>
                   <Chip
