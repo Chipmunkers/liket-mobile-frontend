@@ -48,6 +48,7 @@ const ContentLikeBtn = (content: {
 
   return (
     <button
+      className="cursor-pointer"
       onClick={(e) => {
         e.preventDefault();
 
