@@ -23,7 +23,6 @@ import { Content } from "@/components/KakaoMapV2/interface/Content";
 import MapContentInfo from "@/components/MapContentInfo/MapContentInfo";
 import { genres } from "../../../public/data/genre";
 import { Age, Genre, Style } from "@/types/content";
-import { Region1, region1s } from "../../../public/data/region1";
 import { ages } from "../../../public/data/age";
 import { styles } from "../../../public/data/style";
 import customToast from "../../utils/customToast";
