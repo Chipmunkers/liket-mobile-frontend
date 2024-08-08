@@ -4,148 +4,48 @@ import Badge from "../Badge/Badge";
 import { colors } from "@/utils/style";
 import Like from "@/icons/like.svg";
 import ActiveLike from "@/icons/like-filled.svg";
-import { ContentStateType, GenreType } from "@/types/const";
 import { Content } from "../KakaoMapV2/interface/Content";
 import dayjs from "dayjs";
-
-interface MapBottomSheetCardProps {
-  idx: number;
-  status: ContentStateType;
-  thumbnail: string;
-  title: string;
-  startDate: string;
-  endDate: string;
-  likeState: boolean;
-  location: string;
-  genre: GenreType;
-}
-
-export const CONTENT_CARDS_DUMMY: MapBottomSheetCardProps[] = [
-  {
-    idx: 1,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 2,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 3,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 4,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 5,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 6,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 7,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 8,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 9,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 10,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 11,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-];
+import useLikeContent from "./api/useLikeContent";
+import { useState } from "react";
+import { AxiosError } from "axios";
+import customToast from "../../utils/customToast";
+import useCancelLikeContent from "./api/useCancelLikeContent";
 
 const MapBottomSheetCard = (props: { content: Content }) => {
   const { content } = props;
+  const [likeState, setLikeState] = useState(content.likeState);
+
+  const { mutate: likeContentApi } = useLikeContent(content, {
+    onSuccess: () => {
+      setLikeState(true);
+    },
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 409) return;
+
+        if (err.response?.status === 404) return;
+      }
+
+      customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
+    },
+  });
+
+  const { mutate: cancelLikeContentApi } = useCancelLikeContent(content, {
+    onSuccess: () => {
+      setLikeState(false);
+    },
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 409) return;
+
+        if (err.response?.status === 404) return;
+      }
+
+      customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
+    },
+  });
+
   return (
     <Link
       href={`/contents/${content.idx}`}
@@ -173,10 +73,15 @@ const MapBottomSheetCard = (props: { content: Content }) => {
       <button
         onClick={(e) => {
           e.preventDefault();
+          if (!likeState) {
+            return likeContentApi();
+          }
+
+          return cancelLikeContentApi();
         }}
         className="absolute top-0 right-0"
       >
-        {content.likeState ? (
+        {likeState ? (
           <ActiveLike color={colors.skyblue["01"]} />
         ) : (
           <Like color={colors.grey["02"]} />
