@@ -38,38 +38,40 @@ export const ContentCard = ({
 }: ContentCardProps) => {
   const { region1Depth, region2Depth } = location;
 
-  //const [like, setLike] = useState(likeState);
+  const [like, setLike] = useState(likeState);
 
   const { mutate: likeContentApi } = useLikeContent(idx, {
-    // onSuccess: () => {
-    //   setLike(true);
-    // },
-    // onError: (err) => {
-    //   if (err instanceof AxiosError) {
-    //     if (err.response?.status === 409) {
-    //       return setLike(true);
-    //     }
-    //     if (err.response?.status === 401)
-    //       return customToast("로그인 후 이용 가능합니다.");
-    //     if (err.response?.status === 404) return;
-    //   }
-    //   customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
-    // },
+    mutationKey: ["like-content-mutation-key"],
+    onSuccess: () => {
+      setLike(true);
+    },
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 409) {
+          return setLike(true);
+        }
+        if (err.response?.status === 401)
+          return customToast("로그인 후 이용 가능합니다.");
+        if (err.response?.status === 404) return;
+      }
+      customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
+    },
   });
 
   const { mutate: cancelLikeContentApi } = useCancelLikeContent(idx, {
-    // onSuccess: () => {
-    //   setLike(false);
-    // },
-    // onError: (err) => {
-    //   if (err instanceof AxiosError) {
-    //     if (err.response?.status === 409) return setLike(false);
-    //     if (err.response?.status === 404) return;
-    //     if (err.response?.status === 401)
-    //       return customToast("로그인 후 이용 가능합니다.");
-    //   }
-    //   customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
-    // },
+    mutationKey: ["cancel-like-content-mutation-key"],
+    onSuccess: () => {
+      setLike(false);
+    },
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 409) return setLike(false);
+        if (err.response?.status === 404) return;
+        if (err.response?.status === 401)
+          return customToast("로그인 후 이용 가능합니다.");
+      }
+      customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
+    },
   });
 
   if (isButton) {
@@ -169,7 +171,7 @@ export const ContentCard = ({
           <button
             onClick={(e) => {
               e.preventDefault();
-              if (!likeState) {
+              if (!like) {
                 return likeContentApi();
               }
 
@@ -177,7 +179,7 @@ export const ContentCard = ({
             }}
             className="absolute bottom-[8px] right-[8px]"
           >
-            {likeState ? (
+            {like ? (
               <ActiveLike color={colors.skyblue["01"]} />
             ) : (
               <Like color={colors.grey["02"]} />
