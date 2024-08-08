@@ -1,6 +1,9 @@
 import { AgeType, GenreType, StyleType } from "@/types/const";
 import { ContentDetailInformation, ContentListItem } from "@/types/content";
 import customFetch from "@/utils/fetch";
+import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+import axiosInstance from "../utils/axios";
+import { Content } from "../components/KakaoMapV2/interface/Content";
 
 export const getSoonOpenContents = async (): Promise<{
   contentList: ContentListItem[];
@@ -59,3 +62,21 @@ export const getContentDetailInformation = async (
       },
     })
   ).json();
+
+export const useCancelLikeContent = (
+  idx: string | number,
+  props: UseMutationOptions
+) =>
+  useMutation({
+    mutationFn: () => axiosInstance.delete(`/apis/culture-content/${idx}/like`),
+    ...props,
+  });
+
+export const useLikeContent = (
+  idx: number | string,
+  props: UseMutationOptions
+) =>
+  useMutation({
+    mutationFn: () => axiosInstance.post(`/apis/culture-content/${idx}/like`),
+    ...props,
+  });
