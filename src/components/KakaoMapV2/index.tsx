@@ -176,20 +176,18 @@ const KakaoMapV2 = ({
             }}
           >
             <div
+              style={{
+                display: "flex",
+                alignItems: "end",
+                justifyContent: "center",
+                height: "50px",
+                userSelect: "none",
+              }}
               onClick={() => {
                 if (clickedContent?.idx === content.idx)
                   return setClickedContent(undefined);
 
                 setClickedContent(content);
-              }}
-              style={{
-                position: "absolute",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                bottom: "0px",
-                right: "50%",
-                transform: "translateX(50%)",
               }}
             >
               {clickedContent?.idx === content.idx ? (
@@ -203,23 +201,44 @@ const KakaoMapV2 = ({
                   src={`https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/default-marker-${content.genre.idx}.svg`}
                 />
               )}
-              <div
-                style={{
-                  width: "80px",
-                  textAlign: "center",
-                  wordWrap: "break-word",
-                  whiteSpace: "normal",
-                  marginTop: "4px",
-                  fontSize: "14px",
-                  lineHeight: "14.4px",
-                  color: "#222",
-                  textShadow:
-                    "-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff",
-                }}
-              >
-                {content.title}
-              </div>
             </div>
+            <div
+              style={{
+                width: "100px",
+                textAlign: "center",
+                wordWrap: "break-word",
+                whiteSpace: "normal",
+                marginTop: "4px",
+                fontSize: "14px",
+                lineHeight: "14.4px",
+                color: "white",
+                textShadow:
+                  "-1px -1px 0 #222, 1px -1px 0 #222, -1px 1px 0 #222, 1px 1px 0 #222",
+                padding: "8px",
+                backgroundColor: "rgba(0, 0, 0, 0.6)",
+                borderRadius: "12px",
+              }}
+            >
+              {content.title}
+            </div>
+            {/* <div
+              onClick={() => {
+                if (clickedContent?.idx === content.idx)
+                  return setClickedContent(undefined);
+
+                setClickedContent(content);
+              }}
+              style={{
+                position: "absolute",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                right: "50%",
+                transform: "translate(50%, -50%)",
+              }}
+            >
+              
+            </div> */}
           </CustomOverlayMap>
         ))}
       </Map>
