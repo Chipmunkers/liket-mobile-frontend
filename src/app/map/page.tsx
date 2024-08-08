@@ -182,16 +182,16 @@ export default function MapPage() {
   // * 선택된 컨텐츠
   const [clickedContent, setClickedContent] = useState<Content>();
 
-  // * 선택된 장르
+  // * 필터링: 선택된 장르
   const [selectedGenre, setSelectedGenre] = useState<Genre>();
 
-  // * 선택된 지역
+  // * 필터링: 선택된 지역
   const [selectedRegion, setSelectedRegion] = useState<Region1>();
 
-  // * 선택된 연령대
+  // * 필터링: 선택된 연령대
   const [selectedAge, setSelectedAge] = useState<Age>();
 
-  // * 선택된 스타일들
+  // * 필터링: 선택된 스타일들
   const [selectedStyles, setSelectedStyles] = useState<Style[]>([]);
 
   return (
