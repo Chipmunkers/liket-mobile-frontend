@@ -23,8 +23,10 @@ const ContentLikeBtn = (props: {
       setLikeCount(likeCount + 1);
     },
     onError: (err) => {
+      console.log("좋아요 에러 발생");
       if (err instanceof AxiosError) {
-        if (err.response?.status === 401) return;
+        if (err.response?.status === 401)
+          return customToast("로그인 후 사용할 수 있는 서비스입니다.");
         if (err.response?.status === 404) return;
         if (err.response?.status === 409) return setLike(true);
       }
@@ -38,10 +40,12 @@ const ContentLikeBtn = (props: {
       setLikeCount(likeCount - 1);
     },
     onError: (err) => {
+      console.log("좋아요 췩소 에러 발생");
       if (err instanceof AxiosError) {
-        if (err.response?.status === 401) return;
-        if (err.response?.status === 409) return setLike(false);
+        if (err.response?.status === 401)
+          return customToast("로그인 후 사용할 수 있는 서비스입니다.");
         if (err.response?.status === 404) return;
+        if (err.response?.status === 409) return setLike(false);
       }
       customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
     },

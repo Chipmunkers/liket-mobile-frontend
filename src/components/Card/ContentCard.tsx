@@ -6,17 +6,17 @@ import Badge, { variantToText } from "../Badge/Badge";
 
 import { colors } from "@/utils/style";
 import Link from "next/link";
-import { ContentListItem } from "@/types/content";
 import CustomImage from "../CustomImage";
 import dayjs from "dayjs";
 import FallbackContentImg from "../FallbackContentImg";
 import { getStatus } from "@/utils/helpers";
 import ContentLikeBtn from "../ContentLikeBtn";
+import { SummaryContentEntity } from "../../types/api/culture-content";
 
-type ContentCardProps = ContentListItem & {
+type ContentCardProps = SummaryContentEntity & {
   isButton?: boolean;
   onClick?: (
-    contentListItem: Pick<ContentListItem, "idx" | "title" | "thumbnail">
+    contentListItem: Pick<SummaryContentEntity, "idx" | "title" | "thumbnail">
   ) => void;
 };
 
