@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCancelLikeContent, useLikeContent } from "../../apis/content";
 import { AxiosError } from "axios";
 import customToast from "../../utils/customToast";
@@ -17,13 +17,16 @@ const ContentLikeBtn = (props: {
   const [like, setLike] = useState(props.likeState);
   const [likeCount, setLikeCount] = useState(props.likeCount || 0);
 
+  useEffect(() => {
+    setLike(props.likeState);
+  }, [props.likeState]);
+
   const { mutate: likeContentApi } = useLikeContent(props.idx, {
     onSuccess: () => {
       setLike(true);
       setLikeCount(likeCount + 1);
     },
     onError: (err) => {
-      console.log("좋아요 에러 발생");
       if (err instanceof AxiosError) {
         if (err.response?.status === 401)
           return customToast("로그인 후 사용할 수 있는 서비스입니다.");
@@ -40,7 +43,6 @@ const ContentLikeBtn = (props: {
       setLikeCount(likeCount - 1);
     },
     onError: (err) => {
-      console.log("좋아요 췩소 에러 발생");
       if (err instanceof AxiosError) {
         if (err.response?.status === 401)
           return customToast("로그인 후 사용할 수 있는 서비스입니다.");

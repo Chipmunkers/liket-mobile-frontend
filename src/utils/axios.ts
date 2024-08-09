@@ -20,6 +20,41 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// * 로그인 하지 않아도 접속 가능한 API 목록
+const canAccessApiPathWithoutLogin = ["/apis/culture-content/hot-style/all"];
+
+axiosInstance.interceptors.request.use(async (config) => {
+  const url = config.url;
+
+  if (
+    canAccessApiPathWithoutLogin.includes(url || "") &&
+    !config.headers.Authorization
+  ) {
+    // * 이미 Refresh token을 발급중인 API가 있으면 대기
+    if (isRefresh) {
+      while (true) {
+        await sleep(300);
+
+        if (!isRefresh) break;
+      }
+      return config;
+    }
+
+    isRefresh = true;
+    try {
+      const { data } = await axios.post("/apis/auth/access-token");
+      setAuthToken(data);
+
+      config.headers.Authorization = `Bearer ${data}`;
+    } catch (err) {
+    } finally {
+      isRefresh = false;
+    }
+  }
+
+  return config;
+});
+
 axiosInstance.interceptors.response.use(
   async (config) => {
     return config;
@@ -35,7 +70,6 @@ axiosInstance.interceptors.response.use(
     if (err.response?.status === 401) {
       // * 이미 Refresh token을 발급중인 API가 있으면 대기
       if (isRefresh) {
-        console.log("한 개 대기중");
         while (true) {
           await sleep(300);
 
