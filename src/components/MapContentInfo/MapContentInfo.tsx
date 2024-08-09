@@ -6,8 +6,44 @@ import Like from "@/icons/like.svg";
 import ActiveLike from "@/icons/like-filled.svg";
 import { Content } from "../KakaoMapV2/interface/Content";
 import dayjs from "dayjs";
+import { useEffect, useState } from "react";
+import { AxiosError } from "axios";
+import customToast from "../../utils/customToast";
+import { useCancelLikeContent, useLikeContent } from "../../apis/content";
 
 const MapContentInfo = ({ content }: { content: Content }) => {
+  const [likeState, setLikeState] = useState(content.likeState);
+
+  const { mutate: likeContentApi } = useLikeContent(content.idx, {
+    onSuccess: () => {
+      setLikeState(true);
+    },
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 409) return;
+
+        if (err.response?.status === 404) return;
+      }
+
+      customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
+    },
+  });
+
+  const { mutate: cancelLikeContentApi } = useCancelLikeContent(content.idx, {
+    onSuccess: () => {
+      setLikeState(false);
+    },
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 409) return;
+
+        if (err.response?.status === 404) return;
+      }
+
+      customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
+    },
+  });
+
   return (
     <div className="w-[calc(100%-16px)] bottom-[82px] z-10 absolute left-[8px] bg-white rounded-[24px]">
       <Link href={`/contents/${content.idx}`} className="relative flex m-4">
@@ -35,10 +71,16 @@ const MapContentInfo = ({ content }: { content: Content }) => {
         <button
           onClick={(e) => {
             e.preventDefault();
+
+            if (!likeState) {
+              return likeContentApi();
+            }
+
+            return cancelLikeContentApi();
           }}
           className="absolute top-0 right-0"
         >
-          {content.likeState ? (
+          {likeState ? (
             <ActiveLike color={colors.skyblue["01"]} />
           ) : (
             <Like color={colors.grey["02"]} />

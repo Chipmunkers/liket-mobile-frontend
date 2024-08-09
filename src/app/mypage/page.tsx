@@ -9,14 +9,20 @@ import { useMyPage } from "@/service/profile";
 import profileStore from "@/stores/profileStore";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { If, Then, Else } from "react-if";
 import ScrollContainer from "react-indiana-drag-scroll";
 
 export default function Page() {
+  const router = useRouter();
   const setProfile = profileStore(({ setProfile }) => setProfile);
-  const { data } = useMyPage({
+  const { data, error } = useMyPage({
     onSuccess: (profile) => setProfile(profile),
   });
+
+  if (error?.response?.status === 401) {
+    return router.replace("/login");
+  }
 
   if (!data) {
     return <></>;

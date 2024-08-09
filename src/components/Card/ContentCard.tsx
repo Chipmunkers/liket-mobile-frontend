@@ -6,17 +6,17 @@ import Badge, { variantToText } from "../Badge/Badge";
 
 import { colors } from "@/utils/style";
 import Link from "next/link";
-import { ContentListItem } from "@/types/content";
-import { ContentStateType, GenreType } from "@/types/const";
 import CustomImage from "../CustomImage";
 import dayjs from "dayjs";
 import FallbackContentImg from "../FallbackContentImg";
 import { getStatus } from "@/utils/helpers";
+import ContentLikeBtn from "../ContentLikeBtn";
+import { SummaryContentEntity } from "../../types/api/culture-content";
 
-type ContentCardProps = ContentListItem & {
+type ContentCardProps = SummaryContentEntity & {
   isButton?: boolean;
   onClick?: (
-    contentListItem: Pick<ContentListItem, "idx" | "title" | "thumbnail">
+    contentListItem: Pick<SummaryContentEntity, "idx" | "title" | "thumbnail">
   ) => void;
 };
 
@@ -128,18 +128,11 @@ export const ContentCard = ({
           >
             {variantToText[getStatus(startDate, endDate)]}
           </Badge>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-            }}
+          <ContentLikeBtn
+            idx={idx}
             className="absolute bottom-[8px] right-[8px]"
-          >
-            {likeState ? (
-              <ActiveLike color={colors.skyblue["01"]} />
-            ) : (
-              <Like color={colors.grey["02"]} />
-            )}
-          </button>
+            likeState={likeState}
+          />
         </div>
         <div className="flex flex-col gap-[4px]">
           <div className="text-body4 text-skyblue-01">{genre.name}</div>

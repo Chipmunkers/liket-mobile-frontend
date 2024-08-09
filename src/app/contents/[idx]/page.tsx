@@ -2,8 +2,6 @@ import Badge, { variantToText } from "@/components/Badge/Badge";
 import CategoryTab from "@/components/CategoryTab";
 import Divider from "@/components/Divider";
 import Header from "@/components/Header";
-import Like from "@/icons/like.svg";
-import FilledLike from "@/icons/like-filled.svg";
 import { colors } from "@/utils/style";
 import Link from "next/link";
 import ParkingIcon from "@/icons/parking.svg";
@@ -18,9 +16,9 @@ import ThumbIcon from "@/icons/thumb.svg";
 import { getContentDetailInformation } from "@/apis/content";
 import dayjs from "dayjs";
 import KaKaoMap from "@/components/KaKaoMap";
-import Carousel from "@/components/Carousel";
 import { getStatus } from "@/utils/helpers";
 import ContentCarousel from "@/components/Carousel/ContentCarousel";
+import ContentLikeBtn from "../../../components/ContentLikeBtn";
 interface PageProps {
   params: {
     idx: string;
@@ -99,16 +97,11 @@ export default async function Page({ params: { idx } }: PageProps) {
                     .join("")}`}</div>
                 </div>
               </div>
-              <button>
-                {likeState ? (
-                  <FilledLike fill={colors["skyblue"]["01"]} />
-                ) : (
-                  <Like fill={colors["grey"]["02"]} />
-                )}
-                <div className="text-skyblue-01 text-numbering2">
-                  {likeCount}
-                </div>
-              </button>
+              <ContentLikeBtn
+                likeState={likeState}
+                idx={idx}
+                likeCount={likeCount}
+              />
             </div>
             <div className="mt-[16px]">
               <div className="text-body3">

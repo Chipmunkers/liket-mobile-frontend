@@ -9,9 +9,7 @@ import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
 import Button from "@/components/Button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import CustomBottomSheet from "@/components/BottomSheet";
-import MapBottomSheetCard, {
-  CONTENT_CARDS_DUMMY,
-} from "@/components/Card/MapBottomSheetCard";
+import MapBottomSheetCard from "@/components/Card/MapBottomSheetCard";
 import FilterFilled from "@/icons/filter-filled.svg";
 import Filter from "@/icons/filter.svg";
 import ButtonGroup from "@/components/ButtonGroup";

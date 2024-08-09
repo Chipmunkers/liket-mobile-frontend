@@ -17,6 +17,7 @@ import { Else, If, Then } from "react-if";
 import HotPlaceListItem from "@/components/HotplaceListItem";
 import { getBannerList } from "@/apis/banner";
 import MainCarousel from "@/components/Carousel/MainCarousel";
+import HotStyleSection from "../components/HotStyleSection";
 
 export default async function Home() {
   const { contentList: soonOpenContents } = await getSoonOpenContents();
@@ -34,29 +35,11 @@ export default async function Home() {
       </Header>
       <main>
         <MainCarousel list={bannerList.map(({ imgPath }) => imgPath)} />
-
         {/* <Carousel list={bannerList.map(({ imgPath }) => imgPath)} /> */}
-        <section className="mb-[48px] mt-[24px]">
-          <h2 className="pl-[24px] mb-[8px]">
-            선선한 가을 날씨에{" "}
-            <span className="text-skyblue-01">#{style.name}</span>
-            하기 좋은 곳 🍁
-          </h2>
-          <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] touch-action-none [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-            <If condition={hotStyleContents.length >= 1}>
-              <Then>
-                {hotStyleContents.map((data, idx) => {
-                  return <ContentCard key={idx} {...data} />;
-                })}
-              </Then>
-              <Else>
-                <div className="text-body5 text-grey-04 ml-[24px]">
-                  컨텐츠가 없습니다.
-                </div>
-              </Else>
-            </If>
-          </CustomScrollContainer>
-        </section>
+
+        {/* 인기 스타일 */}
+        <HotStyleSection contentList={hotStyleContents} style={style} />
+
         <section>
           <h2 className="pl-[24px] mb-[8px]">
             요즘 <span className="text-skyblue-01">#{age.name}</span> Z세대가
@@ -135,7 +118,12 @@ export default async function Home() {
               <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
                 {soonOpenContents.map((data, index) => {
                   return (
-                    <ContentCard key={index} {...data} status="willActive" />
+                    <ContentCard
+                      key={index}
+                      {...data}
+                      // TODO: 의미 해석 필요
+                      // status="willActive"
+                    />
                   );
                 })}
               </CustomScrollContainer>

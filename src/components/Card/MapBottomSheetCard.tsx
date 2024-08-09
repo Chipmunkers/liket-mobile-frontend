@@ -4,148 +4,13 @@ import Badge from "../Badge/Badge";
 import { colors } from "@/utils/style";
 import Like from "@/icons/like.svg";
 import ActiveLike from "@/icons/like-filled.svg";
-import { ContentStateType, GenreType } from "@/types/const";
 import { Content } from "../KakaoMapV2/interface/Content";
 import dayjs from "dayjs";
-
-interface MapBottomSheetCardProps {
-  idx: number;
-  status: ContentStateType;
-  thumbnail: string;
-  title: string;
-  startDate: string;
-  endDate: string;
-  likeState: boolean;
-  location: string;
-  genre: GenreType;
-}
-
-export const CONTENT_CARDS_DUMMY: MapBottomSheetCardProps[] = [
-  {
-    idx: 1,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 2,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 3,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 4,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 5,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 6,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 7,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 8,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 9,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 10,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-  {
-    idx: 11,
-    status: "active",
-    genre: "연극",
-    thumbnail: "https://picsum.photos/seed/picsum/390/280",
-    title: "성수 디올 팝업 스토어",
-    location: "서울 성동구",
-    startDate: "2023-01-30",
-    endDate: "2023-02-23",
-    likeState: false,
-  },
-];
+import ContentLikeBtn from "../ContentLikeBtn";
 
 const MapBottomSheetCard = (props: { content: Content }) => {
   const { content } = props;
+
   return (
     <Link
       href={`/contents/${content.idx}`}
@@ -170,18 +35,7 @@ const MapBottomSheetCard = (props: { content: Content }) => {
           {dayjs(content.endDate).format("MM.DD")}
         </div>
       </div>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-        }}
-        className="absolute top-0 right-0"
-      >
-        {content.likeState ? (
-          <ActiveLike color={colors.skyblue["01"]} />
-        ) : (
-          <Like color={colors.grey["02"]} />
-        )}
-      </button>
+      <ContentLikeBtn likeState={content.likeState} idx={content.idx} />
     </Link>
   );
 };
