@@ -179,58 +179,66 @@ const KakaoMapV2 = ({
         }}
       >
         {children}
-        {clusteredContentList.map((clusteredContent) => (
-          <CustomOverlayMap
-            position={{
-              lat: clusteredContent.lat,
-              lng: clusteredContent.lng,
-            }}
-          >
-            <div className="rounded-full border-solid border-skyblue-02 border w-[48px] h-[48px] -translate-y-2/4 -translate-x-2/4 flex justify-center items-center bg-skyblue-02 bg-opacity-80 text-white font-bold">
-              <span>{clusteredContent.count}</span>
-            </div>
-          </CustomOverlayMap>
-        ))}
-        {contentList.map((content) => (
-          <CustomOverlayMap
-            position={{
-              lng: content.location.positionX,
-              lat: content.location.positionY,
-            }}
-          >
-            <div
-              className="flex items-end justify-center h-[50px] select-none cursor-pointer"
-              onClick={() => {
-                if (clickedContent?.idx === content.idx)
-                  return setClickedContent(undefined);
+        {clusteredContentList.map(({ lat, lng, count }) => {
+          return (
+            <CustomOverlayMap
+              position={{
+                lat: lat,
+                lng: lng,
+              }}
+              key={`${lat}-${lng}`}
+            >
+              <div className="rounded-full border-solid border-skyblue-02 border w-[48px] h-[48px] -translate-y-2/4 -translate-x-2/4 flex justify-center items-center bg-skyblue-02 bg-opacity-80 text-white font-bold">
+                <span>{count}</span>
+              </div>
+            </CustomOverlayMap>
+          );
+        })}
+        {contentList.map((content) => {
+          const { idx, genre, title, location } = content;
 
-                setClickedContent(content);
+          return (
+            <CustomOverlayMap
+              position={{
+                lng: location.positionX,
+                lat: location.positionY,
               }}
+              key={idx}
             >
-              {clickedContent?.idx === content.idx ? (
-                <img
-                  className="w-[50px]"
-                  src={`https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${content.genre.idx}_icon.svg`}
-                />
-              ) : (
-                <img
-                  className="w-[30px]"
-                  src={`https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/default-marker-${content.genre.idx}.svg`}
-                />
-              )}
-            </div>
-            <div
-              className="w-[100px] mt-[4px] text-base text-center text-wrap whitespace-nowrap leading-[14.4px] text-white p-[8px] rounded-[16px]"
-              style={{
-                textShadow:
-                  "-1px -1px 0 #222, 1px -1px 0 #222, -1px 1px 0 #222, 1px 1px 0 #222",
-                backgroundColor: "rgba(0, 0, 0, 0.6)",
-              }}
-            >
-              {content.title}
-            </div>
-          </CustomOverlayMap>
-        ))}
+              <div
+                className="flex items-end justify-center h-[50px] select-none cursor-pointer"
+                onClick={() => {
+                  if (clickedContent?.idx === idx)
+                    return setClickedContent(undefined);
+
+                  setClickedContent(content);
+                }}
+              >
+                {clickedContent?.idx === content.idx ? (
+                  <img
+                    className="w-[50px]"
+                    src={`https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${genre.idx}_icon.svg`}
+                  />
+                ) : (
+                  <img
+                    className="w-[30px]"
+                    src={`https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/default-marker-${genre.idx}.svg`}
+                  />
+                )}
+              </div>
+              <div
+                className="w-[100px] mt-[4px] text-base text-center text-wrap whitespace-nowrap leading-[14.4px] text-white p-[8px] rounded-[16px]"
+                style={{
+                  textShadow:
+                    "-1px -1px 0 #222, 1px -1px 0 #222, -1px 1px 0 #222, 1px 1px 0 #222",
+                  backgroundColor: "rgba(0, 0, 0, 0.6)",
+                }}
+              >
+                {title}
+              </div>
+            </CustomOverlayMap>
+          );
+        })}
       </Map>
     </>
   );

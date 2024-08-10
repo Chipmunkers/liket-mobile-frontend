@@ -144,13 +144,15 @@ export default function MapPage() {
                     </Chip>
                   </div>
                 ) : null}
-                {mapFilter.styles.map((style) => (
-                  <div className="mr-[8px]">
-                    <Chip isSelected={true} onClick={() => {}}>
-                      {style.name}
-                    </Chip>
-                  </div>
-                ))}
+                {mapFilter.styles.map(({ name }) => {
+                  return (
+                    <div className="mr-[8px]" key={name}>
+                      <Chip isSelected={true} onClick={() => {}}>
+                        {name}
+                      </Chip>
+                    </div>
+                  );
+                })}
               </div>
             ) : null}
           </div>
