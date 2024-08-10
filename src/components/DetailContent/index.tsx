@@ -22,6 +22,7 @@ import ContentCarousel from "@/components/Carousel/ContentCarousel";
 import ContentLikeBtn from "@/components/ContentLikeBtn";
 import { useState } from "react";
 import { useGetCultureContentByIdx } from "../../service/culture-content/hooks";
+import ContentDetailInformation from "../ContentDetailInformation";
 
 const DetailContent = (props: { content: ContentEntity }) => {
   const [selectedTab, setSelectedTab] = useState<"상세정보" | string>(
@@ -100,26 +101,7 @@ const DetailContent = (props: { content: ContentEntity }) => {
         }}
       />
       {selectedTab === "상세정보" ? (
-        <>
-          <div className="py-[16px] px-[24px] whitespace-pre-wrap w-[100%] text-center text-body3">
-            {content.description}
-          </div>
-          <Divider width="100%" height="8px" />
-          <div className="px-[24px] py-[24px] flex-col relative">
-            <div className="text-h2">위치</div>
-            <div className="text-grey-04 text-body5 mt-[7px] mb-[4px]">
-              {content.location.region1Depth} {content.location.region2Depth}{" "}
-              {content.location.address} {content.location.detailAddress}
-            </div>
-            <div className="h-[171px] w-[100%] bg-grey-02 flex">
-              <KaKaoMap />
-            </div>
-            <button className="center absolute right-[24px] bottom-0 text-button4 text-skyblue-03">
-              카카오맵에서 길찾기
-              <RightArrowIcon fill={colors["skyblue"]["03"]} />
-            </button>
-          </div>
-        </>
+        <ContentDetailInformation content={content} />
       ) : (
         <>
           <div className="flex flex-col items-center mt-[16px] mb-[24px] justify-between">

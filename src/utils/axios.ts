@@ -50,9 +50,6 @@ function isAccessUrlWithoutLogin(url?: string): boolean {
 axiosInstance.interceptors.request.use(async (config) => {
   const url = config.url;
 
-  console.log(url);
-  console.log(isAccessUrlWithoutLogin(url));
-
   if (isAccessUrlWithoutLogin(url) && !config.headers.Authorization) {
     // * 이미 Refresh token을 발급중인 API가 있으면 대기
     if (isRefresh) {
