@@ -15,12 +15,14 @@ const ContentReviewInformation = (props: {
   idx: string;
   content: ContentEntity;
 }) => {
+  // * 리뷰 쿼리 옵션
   const [reviewPagerble, setReviewPagerble] = useState<{
     order?: "desc" | "asc";
     orderby: "time" | "like";
     page: number;
   }>({ page: 1, orderby: "time" });
 
+  // * 리뷰 데이터 무한 쿼리
   const { data, fetchNextPage, hasNextPage, isFetching } =
     useGetReviewAllByContentIdx(props.idx, reviewPagerble);
 
@@ -60,9 +62,9 @@ const ContentReviewInformation = (props: {
           <button
             className="flex text-button3 justify-end w-[100%] pr-[24px]"
             onClick={() => {
-              // const originalPagerble = reviewPagerble;
-              // originalPagerble.orderby =
-              //   originalPagerble.orderby === "like" ? "time" : "like";
+              const originalPagerble = reviewPagerble;
+              originalPagerble.orderby =
+                originalPagerble.orderby === "like" ? "time" : "like";
             }}
           >
             최신순
