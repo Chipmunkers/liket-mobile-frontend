@@ -41,9 +41,11 @@ export default async function Home() {
         <HotAgeSection />
 
         <Divider height="8px" width="100%" margin="24px 0" />
+
+        {/* 핫플 차트 */}
         <section>
           <div className="pl-[24px] flex flex-row mb-[8px]">
-            <h2>핫플차트</h2>
+            <h2 className="text-h2">핫플차트</h2>
             <div className="text-body5 text-grey-04 flex flex-col-reverse ml-[8px]">{`업로드 Date`}</div>
           </div>
           <CustomScrollContainer className="flex flex-row overflow-x-hidden gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
@@ -90,9 +92,12 @@ export default async function Home() {
             })}
           </CustomScrollContainer>
         </section>
+
         <Divider height="8px" width="100%" margin="24px 0" />
+
+        {/* 오픈 예정 컨텐츠 */}
         <section className="mb-[48px]">
-          <h2 className="pl-[24px] mb-[8px]">오픈예정 컨텐츠</h2>
+          <h2 className="pl-[24px] mb-[8px] text-h2">오픈예정 컨텐츠</h2>
           <If condition={soonOpenContents.length > 0}>
             <Then>
               <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
@@ -116,7 +121,7 @@ export default async function Home() {
           </If>
         </section>
         <section className="mb-[18px]">
-          <h2 className="pl-[24px] mb-[8px]">종료예정 컨텐츠</h2>
+          <h2 className="pl-[24px] mb-[8px] text-h2">종료예정 컨텐츠</h2>
           <If condition={soonEndContents.length > 0}>
             <Then>
               <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">

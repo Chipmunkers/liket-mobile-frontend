@@ -11,7 +11,7 @@ const HotStyleSection = () => {
   if (data) {
     return (
       <section className="mb-[48px] mt-[24px]">
-        <h2 className="pl-[24px] mb-[8px] h-[20px]">
+        <h2 className="pl-[24px] mb-[8px] h-[20px] text-h2">
           선선한 가을 날씨에{" "}
           <span className="text-skyblue-01">#{data.style.name}</span>
           하기 좋은 곳 🍁
