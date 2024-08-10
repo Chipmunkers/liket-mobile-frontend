@@ -99,12 +99,7 @@ export const GeneralHeader = {
 export const SearchHeaderIndex = {
   render: () => {
     return (
-      <SearchHeader
-        onInput={() => {}}
-        onSearch={() => {}}
-        onRemove={() => {}}
-        placeholder="검색어를 입력해주세요."
-      />
+      <SearchHeader onSearch={() => {}} placeholder="검색어를 입력해주세요." />
     );
   },
 };

@@ -392,7 +392,6 @@ export default function Page() {
         }}
       >
         <SearchHeader
-          searchText={searchText}
           placeholder="검색어를 입력해주세요."
           onSearch={(text) => {
             setSearchText(text);

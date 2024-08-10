@@ -11,8 +11,6 @@ import CustomDrawer from "@/components/CustomDrawer";
 import Chip from "@/components/Chip";
 import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
-import { CONTENT_CARDS_DUMMY } from "@/components/Card/MapBottomSheetCard";
-// import ContentCard from "@/components/Card/ContentCard";
 
 export default function Page() {
   const [searchText, setSearchText] = useState("");
@@ -36,13 +34,9 @@ export default function Page() {
   return (
     <>
       <SearchHeader
-        onInput={(text) => {
-          setSearchText(text);
-        }}
         onSearch={(text) => {
           setSearchedTexts([...searchedTexts, text]);
         }}
-        onRemove={() => setSearchText("")}
         placeholder="검색어를 입력해주세요."
       />
       <CategoryTab

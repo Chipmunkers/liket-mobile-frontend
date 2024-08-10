@@ -5,10 +5,8 @@ import SearchIcon from "@/icons/search.svg";
 import RemoveIcon from "@/icons/remove.svg";
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { EmptyFunction } from "@/types/common";
 
 interface SearchHeaderProps {
-  searchText: string;
   placeholder: string;
   onSearch: (text: string) => void;
 }
