@@ -95,7 +95,7 @@ const DetailContent = (props: { content: ContentEntity }) => {
         small={false}
         list={["상세정보", `리뷰 ${content.reviewCount}`]}
         selectedTab={selectedTab}
-        onClickTab={() => {}}
+        onClickTab={setSelectedTab}
         wrapperStyle={{
           marginTop: "8px",
         }}
