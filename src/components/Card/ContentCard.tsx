@@ -16,7 +16,10 @@ import { SummaryContentEntity } from "../../types/api/culture-content";
 type ContentCardProps = SummaryContentEntity & {
   isButton?: boolean;
   onClick?: (
-    contentListItem: Pick<SummaryContentEntity, "idx" | "title" | "thumbnail">
+    contentListItem: Pick<
+      SummaryContentEntity,
+      "idx" | "title" | "thumbnail" | "genre"
+    >
   ) => void;
 };
 
@@ -44,6 +47,7 @@ export const ContentCard = ({
             idx,
             title,
             thumbnail,
+            genre,
           })
         }
       >
