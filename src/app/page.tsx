@@ -19,6 +19,7 @@ import { getBannerList } from "@/apis/banner";
 import MainCarousel from "@/components/Carousel/MainCarousel";
 import HotStyleSection from "../components/HotStyleSection";
 import HotAgeSection from "../components/HotAgeSection";
+import SoonOpenContentSection from "../components/SoonOpenContentSection";
 
 export default async function Home() {
   const { contentList: soonOpenContents } = await getSoonOpenContents();
@@ -96,30 +97,8 @@ export default async function Home() {
         <Divider height="8px" width="100%" margin="24px 0" />
 
         {/* 오픈 예정 컨텐츠 */}
-        <section className="mb-[48px]">
-          <h2 className="pl-[24px] mb-[8px] text-h2">오픈예정 컨텐츠</h2>
-          <If condition={soonOpenContents.length > 0}>
-            <Then>
-              <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-                {soonOpenContents.map((data, index) => {
-                  return (
-                    <ContentCard
-                      key={index}
-                      {...data}
-                      // TODO: 의미 해석 필요
-                      // status="willActive"
-                    />
-                  );
-                })}
-              </CustomScrollContainer>
-            </Then>
-            <Else>
-              <div className="text-body5 text-grey-04 ml-[24px]">
-                컨텐츠가 없습니다.
-              </div>
-            </Else>
-          </If>
-        </section>
+        <SoonOpenContentSection contentList={soonOpenContents} />
+
         <section className="mb-[18px]">
           <h2 className="pl-[24px] mb-[8px] text-h2">종료예정 컨텐츠</h2>
           <If condition={soonEndContents.length > 0}>

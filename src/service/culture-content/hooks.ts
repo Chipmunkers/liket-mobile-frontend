@@ -36,3 +36,22 @@ export const useGetHotAgeContent = () =>
       return data;
     },
   });
+
+export const useGetSoonOpenContent = (initialData: {
+  contentList: SummaryContentEntity[];
+}) =>
+  useQuery({
+    queryKey: ["soon-open-content"],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get<{
+        contentList: SummaryContentEntity[];
+      }>("/apis/culture-content/soon-open/all", {
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      });
+
+      return data;
+    },
+    initialData,
+  });

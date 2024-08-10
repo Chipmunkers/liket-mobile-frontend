@@ -27,6 +27,8 @@ function sleep(ms: number) {
 const canAccessApiPathWithoutLogin = [
   "/apis/culture-content/hot-style/all",
   "/apis/culture-content/hot-age/all",
+  "/apis/culture-content/soon-open/all",
+  "/apis/culture-content/soon-end/all",
 ];
 
 axiosInstance.interceptors.request.use(async (config) => {
