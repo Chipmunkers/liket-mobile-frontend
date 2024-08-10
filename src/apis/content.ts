@@ -4,6 +4,7 @@ import customFetch from "@/utils/fetch";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import axiosInstance from "../utils/axios";
 import { ContentEntity } from "../types/api/culture-content";
+import { ReviewEntity } from "../types/api/review";
 
 export const getSoonOpenContents = async (): Promise<{
   contentList: ContentListItem[];
