@@ -1,6 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { AgeEntity, StyleEntity } from "../../types/api/tag";
-import { SummaryContentEntity } from "../../types/api/culture-content";
+import {
+  ContentEntity,
+  SummaryContentEntity,
+} from "../../types/api/culture-content";
 import axiosInstance from "../../utils/axios";
 
 export const useGetHotStyleContent = () =>
@@ -69,6 +72,22 @@ export const useGetSoonEndContent = (initialData: {
           "Cache-Control": "no-cache",
         },
       });
+
+      return data;
+    },
+    initialData,
+  });
+
+export const useGetCultureContentByIdx = (
+  idx: number,
+  initialData: ContentEntity
+) =>
+  useQuery({
+    queryKey: [`culture-content-${idx}`],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get<ContentEntity>(
+        `/apis/culture-content/${idx}`
+      );
 
       return data;
     },

@@ -29,15 +29,31 @@ const canAccessApiPathWithoutLogin = [
   "/apis/culture-content/hot-age/all",
   "/apis/culture-content/soon-open/all",
   "/apis/culture-content/soon-end/all",
+  /^\/apis\/culture-content\/\d+$/,
 ];
+
+// * 로그인 하지 않아도 접근 가능한 API url인지를 검증하는 메서드
+function isAccessUrlWithoutLogin(url?: string): boolean {
+  if (!url) return false;
+
+  const path = url.split("?")[0];
+
+  for (const accessUrl of canAccessApiPathWithoutLogin) {
+    if (new RegExp(accessUrl).test(path)) {
+      return true;
+    }
+  }
+
+  return false;
+}
 
 axiosInstance.interceptors.request.use(async (config) => {
   const url = config.url;
 
-  if (
-    canAccessApiPathWithoutLogin.includes(url || "") &&
-    !config.headers.Authorization
-  ) {
+  console.log(url);
+  console.log(isAccessUrlWithoutLogin(url));
+
+  if (isAccessUrlWithoutLogin(url) && !config.headers.Authorization) {
     // * 이미 Refresh token을 발급중인 API가 있으면 대기
     if (isRefresh) {
       while (true) {
