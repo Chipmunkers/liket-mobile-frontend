@@ -55,3 +55,22 @@ export const useGetSoonOpenContent = (initialData: {
     },
     initialData,
   });
+
+export const useGetSoonEndContent = (initialData: {
+  contentList: SummaryContentEntity[];
+}) =>
+  useQuery({
+    queryKey: ["soon-end-content"],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get<{
+        contentList: SummaryContentEntity[];
+      }>("/apis/culture-content/soon-end/all", {
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      });
+
+      return data;
+    },
+    initialData,
+  });
