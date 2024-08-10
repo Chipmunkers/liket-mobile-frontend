@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import axios, { AxiosError } from "axios";
 
 const axiosInstance = axios.create({
   headers: {
@@ -6,7 +6,10 @@ const axiosInstance = axios.create({
   },
 });
 
+let currentAccessToken = "";
+
 export const setAuthToken = (token: string) => {
+  currentAccessToken = token;
   if (token) {
     axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   } else {
@@ -21,7 +24,10 @@ function sleep(ms: number) {
 }
 
 // * 로그인 하지 않아도 접속 가능한 API 목록
-const canAccessApiPathWithoutLogin = ["/apis/culture-content/hot-style/all"];
+const canAccessApiPathWithoutLogin = [
+  "/apis/culture-content/hot-style/all",
+  "/apis/culture-content/hot-age/all",
+];
 
 axiosInstance.interceptors.request.use(async (config) => {
   const url = config.url;
@@ -37,6 +43,7 @@ axiosInstance.interceptors.request.use(async (config) => {
 
         if (!isRefresh) break;
       }
+      config.headers.Authorization = `Bearer ${currentAccessToken}`;
       return config;
     }
 

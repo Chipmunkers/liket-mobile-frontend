@@ -10,20 +10,20 @@ import { ReactNode } from "react";
 
 function makeQueryClient() {
   const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 60 * 1000,
-        retry: (failureCount, error) => {
-          if (error) {
-            let { response } = error as AxiosError;
-            if (response?.status === 401) {
-              return false;
-            }
-          }
-          return failureCount <= 1;
-        },
-      },
-    },
+    // defaultOptions: {
+    //   queries: {
+    //     staleTime: 60 * 1000,
+    //     retry: (failureCount, error) => {
+    //       if (error) {
+    //         let { response } = error as AxiosError;
+    //         if (response?.status === 401) {
+    //           return false;
+    //         }
+    //       }
+    //       return failureCount <= 1;
+    //     },
+    //   },
+    // },
   });
 
   return queryClient;

@@ -18,6 +18,7 @@ import HotPlaceListItem from "@/components/HotplaceListItem";
 import { getBannerList } from "@/apis/banner";
 import MainCarousel from "@/components/Carousel/MainCarousel";
 import HotStyleSection from "../components/HotStyleSection";
+import HotAgeSection from "../components/HotAgeSection";
 
 export default async function Home() {
   const { contentList: soonOpenContents } = await getSoonOpenContents();
@@ -31,35 +32,16 @@ export default async function Home() {
     <>
       <Header>
         <Header.LeftOption logo />
-        {/* <Header.RightOption option={{ search: true, like: true }} /> */}
       </Header>
       <main>
         <MainCarousel list={bannerList.map(({ imgPath }) => imgPath)} />
-        {/* <Carousel list={bannerList.map(({ imgPath }) => imgPath)} /> */}
 
-        {/* 인기 스타일 */}
+        {/* 인기 스타일  문화생활 컨텐츠*/}
         <HotStyleSection contentList={hotStyleContents} style={style} />
 
-        <section>
-          <h2 className="pl-[24px] mb-[8px]">
-            요즘 <span className="text-skyblue-01">#{age.name}</span> Z세대가
-            주목하는 곳 ✨
-          </h2>
-          <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-            <If condition={hotAgeContents.length >= 1}>
-              <Then>
-                {hotAgeContents.map((data, idx) => {
-                  return <ContentCard key={idx} {...data} />;
-                })}
-              </Then>
-              <Else>
-                <div className="text-body5 text-grey-04 ml-[24px]">
-                  컨텐츠가 없습니다.
-                </div>
-              </Else>
-            </If>
-          </CustomScrollContainer>
-        </section>
+        {/* 인기 연령대 문화생활 컨텐츠 */}
+        <HotAgeSection contentList={hotAgeContents} age={age} />
+
         <Divider height="8px" width="100%" margin="24px 0" />
         <section>
           <div className="pl-[24px] flex flex-row mb-[8px]">
