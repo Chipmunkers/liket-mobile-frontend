@@ -23,8 +23,6 @@ import HotAgeSection from "../components/HotAgeSection";
 export default async function Home() {
   const { contentList: soonOpenContents } = await getSoonOpenContents();
   const { contentList: soonEndContents } = await getSoonEndContents();
-  const { contentList: hotAgeContents, age } = await getHotAgeContents();
-  const { contentList: hotStyleContents, style } = await getHotStyleContents();
   const { bannerList } = await getBannerList();
   const hotPlaces = await getHotPlaces();
 
@@ -37,10 +35,10 @@ export default async function Home() {
         <MainCarousel list={bannerList.map(({ imgPath }) => imgPath)} />
 
         {/* 인기 스타일  문화생활 컨텐츠*/}
-        <HotStyleSection contentList={hotStyleContents} style={style} />
+        <HotStyleSection />
 
         {/* 인기 연령대 문화생활 컨텐츠 */}
-        <HotAgeSection contentList={hotAgeContents} age={age} />
+        <HotAgeSection />
 
         <Divider height="8px" width="100%" margin="24px 0" />
         <section>

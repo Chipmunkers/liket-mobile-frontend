@@ -3,10 +3,7 @@ import { AgeEntity, StyleEntity } from "../../types/api/tag";
 import { SummaryContentEntity } from "../../types/api/culture-content";
 import axiosInstance from "../../utils/axios";
 
-export const useGetHotStyleContent = (initialData: {
-  style: StyleEntity;
-  contentList: SummaryContentEntity[];
-}) =>
+export const useGetHotStyleContent = () =>
   useQuery({
     queryKey: ["hot-style-content"],
     queryFn: async () => {
@@ -21,13 +18,9 @@ export const useGetHotStyleContent = (initialData: {
 
       return data;
     },
-    initialData,
   });
 
-export const useGetHotAgeContent = (initialData: {
-  age: AgeEntity;
-  contentList: SummaryContentEntity[];
-}) =>
+export const useGetHotAgeContent = () =>
   useQuery({
     queryKey: ["hot-age-content"],
     queryFn: async () => {
@@ -42,5 +35,4 @@ export const useGetHotAgeContent = (initialData: {
 
       return data;
     },
-    initialData,
   });
