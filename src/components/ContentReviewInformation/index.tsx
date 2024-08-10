@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import { ContentEntity } from "../../types/api/culture-content";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ContentReviewInformation = (props: {
   idx: string;
@@ -26,6 +27,9 @@ const ContentReviewInformation = (props: {
   const { data, fetchNextPage, hasNextPage, isFetching } =
     useGetReviewAllByContentIdx(props.idx, reviewPagerble);
 
+  // * 옵션 변경 시 리뷰 쿼리 데이터 초기화
+  const queryClient = useQueryClient();
+
   // * 무한 스크롤 타겟
   const [target, setTarget] = useState<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -41,35 +45,45 @@ const ContentReviewInformation = (props: {
     );
 
     observer.observe(target);
-    return () => observer.unobserve(target);
+    return () => {
+      observer.unobserve(target);
+    };
   }, [target, hasNextPage, isFetching]);
 
-  if (data)
-    return (
-      <>
-        <div className="flex flex-col items-center mt-[16px] mb-[24px] justify-between">
-          <div>
-            <StarRating value={props.content.avgStarRating} readOnly />
-          </div>
-          <div className="text-numbering1 mt-[16px]">
-            {props.content.avgStarRating.toFixed(2)}{" "}
-            <span className="text-grey-02">/ 5.0</span>
-          </div>
+  return (
+    <>
+      <div className="flex flex-col items-center mt-[16px] mb-[24px] justify-between">
+        <div>
+          <StarRating value={props.content.avgStarRating} readOnly />
         </div>
-        <Divider width="100%" height="8px" />
+        <div className="text-numbering1 mt-[16px]">
+          {props.content.avgStarRating.toFixed(2)}{" "}
+          <span className="text-grey-02">/ 5.0</span>
+        </div>
+      </div>
+      <Divider width="100%" height="8px" />
 
-        <div className="mt-[8px]">
-          <button
-            className="flex text-button3 justify-end w-[100%] pr-[24px]"
-            onClick={() => {
-              const originalPagerble = reviewPagerble;
-              originalPagerble.orderby =
-                originalPagerble.orderby === "like" ? "time" : "like";
-            }}
-          >
-            최신순
-            <BottomArrowIcon />
-          </button>
+      <div className="mt-[8px]">
+        <button
+          className="flex text-button3 justify-end w-[100%] pr-[24px]"
+          onClick={() => {
+            queryClient.removeQueries({
+              queryKey: [`content-review-${props.idx}`],
+            });
+            queryClient.setQueryData(
+              [`content-review-${props.idx}`, reviewPagerble],
+              { pages: [], pageParams: [] }
+            );
+            setReviewPagerble({
+              ...reviewPagerble,
+              orderby: reviewPagerble.orderby === "like" ? "time" : "like",
+            });
+          }}
+        >
+          {reviewPagerble.orderby === "like" ? "좋아요순" : "최신순"}
+          <BottomArrowIcon />
+        </button>
+        {data && (
           <ul>
             {data.pages.map((page) =>
               page.reviewList.map((review) => (
@@ -145,10 +159,9 @@ const ContentReviewInformation = (props: {
             )}
             <div ref={setTarget}></div>
           </ul>
-        </div>
-      </>
-    );
-
-  return <div></div>;
+        )}
+      </div>
+    </>
+  );
 };
 export default ContentReviewInformation;

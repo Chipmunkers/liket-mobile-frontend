@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import axiosInstance from "../../utils/axios";
 import { ReviewEntity } from "../../types/api/review";
 
