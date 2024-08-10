@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../utils/axios";
 import { ReviewEntity } from "../../types/api/review";
 
@@ -7,19 +7,27 @@ export const useGetReviewAllByContentIdx = (
   option: {
     order?: "desc" | "asc";
     orderby?: "time" | "like";
-    page: number;
   }
 ) =>
-  useQuery({
+  useInfiniteQuery({
     queryKey: [`content-review-${idx}`, option],
-    queryFn: async () => {
+    queryFn: async ({ pageParam = 1 }) => {
       const { data } = await axiosInstance.get<{ reviewList: ReviewEntity[] }>(
         `/apis/review/all?content=${idx}&` +
           (option?.order ? `order=${option.order}&` : ``) +
           (option?.orderby ? `orderby=${option.orderby}&` : ``) +
-          (option?.page ? `page=${option.page}&` : ``)
+          `page=${pageParam}`
       );
 
-      return data;
+      return {
+        reviewList: data.reviewList,
+        nextPage: data.reviewList.length > 0 ? pageParam + 1 : undefined, // 다음 페이지 번호 계산
+        isLastPage: data.reviewList.length === 0, // 마지막 페이지 여부 체크
+      };
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      // 마지막 페이지 여부에 따라 다음 페이지 파라미터를 반환
+      return lastPage.nextPage;
     },
   });

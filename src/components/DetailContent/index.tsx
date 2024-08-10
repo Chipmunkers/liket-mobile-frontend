@@ -9,10 +9,6 @@ import ParkingIcon from "@/icons/parking.svg";
 import ReservationIcon from "@/icons/reservation.svg";
 import PetIcon from "@/icons/pet.svg";
 import EntranceFeeIcon from "@/icons/entrance-fee.svg";
-import BottomArrowIcon from "@/icons/down-arrow-small.svg";
-import StarRating from "@/components/StarRating";
-import Image from "next/image";
-import ThumbIcon from "@/icons/thumb.svg";
 import dayjs from "dayjs";
 import { getStatus } from "@/utils/helpers";
 import ContentCarousel from "@/components/Carousel/ContentCarousel";
@@ -101,7 +97,10 @@ const DetailContent = (props: { content: ContentEntity }) => {
       {selectedTab === "상세정보" ? (
         <ContentDetailInformation content={content} />
       ) : (
-        <ContentReviewInformation idx={content.idx.toString()} />
+        <ContentReviewInformation
+          idx={content.idx.toString()}
+          content={content}
+        />
       )}
     </main>
   );
