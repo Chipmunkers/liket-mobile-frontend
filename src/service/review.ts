@@ -4,7 +4,7 @@ import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 
 export const useUploadReviewImages = (
-  props: UseMutationOptions<AxiosResponse, ResponseError, File[]>
+  props: UseMutationOptions<AxiosResponse, ResponseError, FormData>
 ) =>
   useMutation({
     mutationFn: (files) => {

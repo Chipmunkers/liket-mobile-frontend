@@ -106,7 +106,7 @@ export default function Page() {
         formData.append("files", e.target.files[i]);
       }
 
-      uploadImages(formData as any);
+      uploadImages(formData);
     }
   };
 

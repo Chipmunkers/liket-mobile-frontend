@@ -28,6 +28,11 @@ import Button from "@/components/Button";
 import dayjs from "dayjs";
 import { DateCalendar } from "@mui/x-date-pickers";
 import { AgeType, GenreType } from "@/types/const";
+import { useUploadContentImages } from "@/service/uploadImage";
+import { UploadedFileEntity } from "@/types/upload";
+import customToast from "@/utils/customToast";
+
+const MAX_IMAGES_COUNT = 10;
 
 const schema = z.object({
   title: z.string(),
@@ -45,8 +50,13 @@ const schema = z.object({
 });
 
 export default function Page() {
-  const [uploadedImgs, setUploadedImgs] = useState<string[]>([]);
+  const [uploadedImgs, setUploadedImgs] = useState<UploadedFileEntity[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { mutate: uploadContentImages } = useUploadContentImages({
+    onSuccess: ({ data }) => {
+      setUploadedImgs([...uploadedImgs, ...data]);
+    },
+  });
 
   const router = useRouter();
 
@@ -271,17 +281,20 @@ export default function Page() {
                 multiple
                 className="hidden grow"
                 onChange={(e) => {
-                  const files = e.target.files;
+                  if (uploadedImgs.length > MAX_IMAGES_COUNT) {
+                    customToast("이미지는 최대 10개까지만 업로드 가능합니다.");
 
-                  if (files) {
-                    let newImgs = Array.from(files).map((file) =>
-                      URL.createObjectURL(file)
-                    );
+                    return;
+                  }
 
-                    newImgs = [...uploadedImgs, ...newImgs];
-                    newImgs = newImgs.slice(0, MAX_COUNT_OF_IMGS);
+                  if (e.target.files) {
+                    const formData = new FormData();
 
-                    setUploadedImgs(newImgs);
+                    for (let i = 0; i < e.target.files.length; i++) {
+                      formData.append("files", e.target.files[i]);
+                    }
+
+                    uploadContentImages(formData);
                   }
                 }}
               />
@@ -295,17 +308,20 @@ export default function Page() {
               >
                 <CreateIcon color="#fff" />
               </button>
-              {uploadedImgs.map((url) => {
+              {uploadedImgs.map(({ fullUrl }) => {
                 return (
-                  <li key={url} className="w-[96px] h-[96px] relative shrink-0">
-                    <Image src={url} fill alt="업로드된 이미지" />
+                  <li
+                    key={fullUrl}
+                    className="w-[96px] h-[96px] relative shrink-0"
+                  >
+                    <Image src={fullUrl} fill alt="업로드된 이미지" />
                     <button
                       type="button"
                       aria-label="현재 선택된 이미지 삭제"
                       className="absolute right-[8px] top-[8px]"
                       onClick={() => {
                         const newUrls = uploadedImgs.filter(
-                          (curUrl) => curUrl !== url
+                          ({ fullUrl: targetUrl }) => targetUrl !== fullUrl
                         );
 
                         setUploadedImgs(newUrls);
