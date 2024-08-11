@@ -20,6 +20,7 @@ import { AxiosError } from "axios";
 import useMoveLoginPage from "../../../../hooks/useMoveLoginPage";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import ReviewInfiniteScroll from "./ReviewInfiniteScroll";
 
 const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
   const [isReviewMenuDrawerOpen, setIsReviewMenuDrawerOpen] = useState(false);
@@ -43,6 +44,7 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
 
   // * 무한 스크롤 타겟
   const [target, setTarget] = useState<HTMLDivElement | null>(null);
+
   useEffect(() => {
     if (!target) return;
 
@@ -110,109 +112,39 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
       <Divider width="100%" height="8px" />
 
       <div className="mt-[8px]">
-        <button
-          className="flex text-button3 justify-end w-[100%] pr-[24px]"
-          onClick={() => {
-            resetReview();
-            setReviewPagerble({
-              ...reviewPagerble,
-              orderby: reviewPagerble.orderby === "like" ? "time" : "like",
-            });
-          }}
-        >
-          {reviewPagerble.orderby === "like" ? "좋아요순" : "최신순"}
-          <BottomArrowIcon />
-        </button>
-        {data && (
-          <ul>
-            {data.pages.map((page) =>
-              page.reviewList.map((review) => (
-                <li
-                  key={review.idx}
-                  className="border-solid border-b-[1px] border-grey-01"
-                >
-                  <div className="px-[24px] py-[16px]">
-                    <div className="flex justify-between h-[24px] items-center mb-[4px]">
-                      <div className="flex">
-                        <div className="w-[18px] h-[18px] mr-[4px] rounded-full relative overflow-hidden">
-                          <Image
-                            src={"/icons/default-avatar.svg"}
-                            alt="아바타 이미지"
-                            fill
-                            objectFit="cover"
-                          />
-                        </div>
-                        <div className="text-body2">
-                          {review.author.nickname}
-                        </div>
-                      </div>
-                      <div className="flex items-center">
-                        <ReviewLikeBtn
-                          likeCount={review.likeCount}
-                          likeState={review.likeState}
-                          idx={review.idx}
-                        />
-                        {loginUser?.idx === review.author.idx ? (
-                          <button
-                            className="ml-[8px]"
-                            onClick={() => {
-                              setIsReviewMenuDrawerOpen(true);
-                              setSelectReviewIdx(review.idx);
-                            }}
-                          >
-                            <MenuIcon />
-                          </button>
-                        ) : null}
-                      </div>
-                    </div>
-                    <div className="flex justify-between mb-[9px]">
-                      <div className="w-[90px] h-[16px]">
-                        <StarRating readOnly value={review.starRating} />
-                      </div>
-                      <span className="text-body5 text-grey-04">
-                        {dayjs(review.createdAt).format("YYYY.MM.DD")}
-                      </span>
-                    </div>
-                    {review.imgList.length && (
-                      <div className="review-img">
-                        <Carousel
-                          showArrows={false}
-                          showStatus={false}
-                          showThumbs={false}
-                          emulateTouch={true}
-                        >
-                          {review.imgList.map((imgPath, index) => (
-                            <div
-                              key={imgPath + index}
-                              className="relative"
-                              style={{
-                                width: "100%",
-                                aspectRatio: "1/1",
-                              }}
-                            >
-                              <Image
-                                priority
-                                fill
-                                alt="리뷰 이미지"
-                                src={
-                                  process.env.NEXT_PUBLIC_IMAGE_SERVER + imgPath
-                                }
-                                className="select-none object-cover"
-                              />
-                            </div>
-                          ))}
-                        </Carousel>
-                      </div>
-                    )}
-                    <div className="text-body3 mt-[8px]">
-                      {review.description}
-                    </div>
-                  </div>
-                </li>
-              ))
-            )}
-            <div ref={setTarget}></div>
-          </ul>
+        {data?.pages[0].reviewList.length ? (
+          // * Review를 다시 가져올 때 깜박이지 아래 버튼이 깜박이지 않도록 하기 위함
+          <button
+            className="flex text-button3 justify-end w-[100%] pr-[24px]"
+            onClick={() => {
+              resetReview();
+              setReviewPagerble({
+                ...reviewPagerble,
+                orderby: reviewPagerble.orderby === "like" ? "time" : "like",
+              });
+            }}
+          >
+            {reviewPagerble.orderby === "like" ? "좋아요순" : "최신순"}
+            <BottomArrowIcon />
+          </button>
+        ) : null}
+        {data ? (
+          // * Review가 하나라도 있으면 리뷰 목록
+          data.pages[0].reviewList.length > 0 ? (
+            <ReviewInfiniteScroll
+              reviewList={data.pages.map((page) => page.reviewList).flat()}
+              setIsReviewMenuDrawerOpen={setIsReviewMenuDrawerOpen}
+              setSelectReviewIdx={setSelectReviewIdx}
+              loginUser={loginUser}
+              setTarget={setTarget}
+            />
+          ) : (
+            // * Review가 단 하나도 없을 경우
+            <div>없음</div>
+          )
+        ) : (
+          // * 클릭 시 스크롤 위로 올라가는 것 방지
+          <div className="h-[100vh]"></div>
         )}
       </div>
       <CustomDrawer
