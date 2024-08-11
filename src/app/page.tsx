@@ -28,6 +28,7 @@ export default async function Home() {
         <Header.LeftOption logo />
       </Header>
       <main>
+        {/* 배너 */}
         <MainCarousel list={bannerList.map(({ imgPath }) => imgPath)} />
 
         {/* 인기 스타일  문화생활 컨텐츠*/}
