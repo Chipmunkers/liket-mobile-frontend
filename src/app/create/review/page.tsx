@@ -334,12 +334,12 @@ export default function Page() {
           ref={calendarRef}
           value={dateInfo.before}
           maxDate={dayjs(new Date())}
-          onChange={(date) =>
+          onChange={(date) => {
             setDateInfo({
               ...dateInfo,
               before: date,
-            })
-          }
+            });
+          }}
         />
         <div className="flex h-[98px] px-[24px]">
           <Button
@@ -350,6 +350,12 @@ export default function Page() {
                 ...dateInfo,
                 selected: dateInfo.before,
               });
+
+              setTimeInfo({
+                ...timeInfo,
+                selected: undefined,
+              });
+
               setIsYearSelectionDrawerOpen(false);
             }}
           >
@@ -363,7 +369,11 @@ export default function Page() {
       >
         <MultiSectionDigitalClock
           value={timeInfo.before}
-          maxTime={dayjs(new Date())}
+          maxTime={
+            dateInfo.selected && dayjs().isSame(dayjs(new Date()), "day")
+              ? undefined
+              : dayjs(new Date())
+          }
           onChange={(time) => setTimeInfo({ ...timeInfo, before: time })}
         />
         <div className="flex h-[98px] px-[24px]">
