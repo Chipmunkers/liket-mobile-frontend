@@ -5,12 +5,14 @@ import BottomArrowIcon from "@/icons/down-arrow-small.svg";
 import StarRating from "@/components/StarRating";
 import Image from "next/image";
 import ThumbIcon from "@/icons/thumb.svg";
+import EmptyThumbIcon from "@/icons/empty-thumb.svg";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import { ContentEntity } from "@/types/api/culture-content";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetReviewAllByContentIdx } from "../hooks/useGetReviewAllByContentIdx";
+import ReviewLikeBtn from "./ReviewLikeBtn";
 
 const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
   // * 리뷰 쿼리 옵션
@@ -103,10 +105,11 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
                           {review.author.nickname}
                         </div>
                       </div>
-                      <button className="text-numbering2 text-skyblue-01 flex">
-                        <ThumbIcon />{" "}
-                        <span className="ml-[4px]">{review.likeCount}</span>
-                      </button>
+                      <ReviewLikeBtn
+                        likeCount={review.likeCount}
+                        likeState={review.likeState}
+                        idx={review.idx}
+                      />
                     </div>
                     <div className="flex justify-between mb-[9px]">
                       <div className="w-[90px] h-[16px]">
