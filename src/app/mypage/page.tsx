@@ -2,6 +2,7 @@
 
 import CustomImage from "@/components/CustomImage";
 import Divider from "@/components/Divider";
+import FallbackContentImg from "@/components/FallbackContentImg";
 import LinkItem from "@/components/LinkItem";
 import LinkableTab from "@/components/LinkableTab";
 import RightArrow from "@/icons/right-arrow.svg";
@@ -90,12 +91,19 @@ export default function Page() {
                     return (
                       <Link href={`/likets/${idx}`} key={idx}>
                         <div className="relative w-[112px] h-[178px]">
-                          <Image
+                          <CustomImage
                             src={
                               process.env.NEXT_PUBLIC_IMAGE_SERVER + thumbnail
                             }
-                            fill
-                            alt="라이켓 이미지"
+                            fallbackComponent={<FallbackContentImg />}
+                            width={112}
+                            height={178}
+                            alt={`리뷰 썸네일 이미지`}
+                            style={{
+                              width: 112,
+                              height: 178,
+                              objectFit: "cover",
+                            }}
                           />
                         </div>
                       </Link>
@@ -125,10 +133,17 @@ export default function Page() {
                     return (
                       <Link href={`/likets/${idx}`} key={idx}>
                         <div className="relative w-[112px] h-[178px]">
-                          <Image
+                          <CustomImage
                             src={process.env.NEXT_PUBLIC_IMAGE_SERVER + imgPath}
-                            fill
-                            alt="라이켓 이미지"
+                            fallbackComponent={<FallbackContentImg />}
+                            width={112}
+                            height={178}
+                            alt={`라이켓 이미지`}
+                            style={{
+                              width: 112,
+                              height: 178,
+                              objectFit: "cover",
+                            }}
                           />
                         </div>
                       </Link>
