@@ -8,7 +8,6 @@ import LinkableTab from "@/components/LinkableTab";
 import RightArrow from "@/icons/right-arrow.svg";
 import { useMyPage } from "@/service/profile";
 import profileStore from "@/stores/profileStore";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -26,7 +25,7 @@ export default function Page() {
     if (!error) return;
 
     router.replace("/login");
-  }, [error]);
+  }, [error, router]);
 
   if (!data) {
     return <></>;
@@ -92,7 +91,7 @@ export default function Page() {
                 <ScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] mt-[8px]">
                   {reviewList.map(({ idx, thumbnail }) => {
                     return (
-                      <Link href={`/likets/${idx}`} key={idx}>
+                      <Link href={`/reviews/${idx}`} key={idx}>
                         <div className="relative w-[112px] h-[178px]">
                           <CustomImage
                             src={
