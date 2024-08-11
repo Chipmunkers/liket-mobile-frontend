@@ -17,8 +17,6 @@ import { AxiosError } from "axios";
 import useModalStore from "../../../stores/modalStore";
 import { useRouter } from "next/navigation";
 
-const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_API_KEY}&autoload=false`;
-
 const KakaoMap = ({
   children,
   contentList,
@@ -180,11 +178,6 @@ const KakaoMap = ({
 
   return (
     <>
-      <Script
-        strategy="beforeInteractive"
-        type="text/javascript"
-        src={KAKAO_SDK_URL}
-      />
       <Map
         center={{
           lng: 127.0495556,
