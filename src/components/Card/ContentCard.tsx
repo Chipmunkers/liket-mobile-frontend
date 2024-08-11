@@ -77,7 +77,7 @@ export const ContentCard = ({
             >
               {variantToText[getStatus(startDate, endDate)]}
             </Badge>
-            <button
+            {/* <button
               onClick={(e) => {
                 e.preventDefault();
               }}
@@ -88,9 +88,9 @@ export const ContentCard = ({
               ) : (
                 <Like color={colors.grey["02"]} />
               )}
-            </button>
+            </button> */}
           </div>
-          <div className="flex flex-col gap-[4px]">
+          <div className="flex flex-col gap-[4px] text-left">
             <div className="text-body4 text-skyblue-01">{genre.name}</div>
             <div className="text-body2">{title}</div>
             <div className="text-body5 text-grey-04">{`${region1Depth} ${region2Depth}`}</div>
