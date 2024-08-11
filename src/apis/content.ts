@@ -53,17 +53,6 @@ export const getHotStyleContents = async (): Promise<{
   style: { idx: number; name: StyleType };
 }> => (await customFetch("/culture-content/hot-style/all")).json();
 
-export const getContentDetailInformation = async (
-  idx: string
-): Promise<ContentEntity> =>
-  (
-    await customFetch("/culture-content/" + idx, {
-      next: {
-        revalidate: 0,
-      },
-    })
-  ).json();
-
 export const useCancelLikeContent = (
   idx: string | number,
   props: UseMutationOptions
