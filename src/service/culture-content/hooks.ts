@@ -92,4 +92,6 @@ export const useGetCultureContentByIdx = (
       return data;
     },
     initialData,
+    staleTime: 0,
+    refetchOnWindowFocus: false,
   });
