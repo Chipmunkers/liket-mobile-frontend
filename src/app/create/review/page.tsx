@@ -14,6 +14,7 @@ import CreateIcon from "@/icons/create.svg";
 import Image from "next/image";
 import { getRefValue } from "@/utils/helpers";
 import ClockIcon from "@/icons/clock.svg";
+import DeleteIcon from "@/icons/circle-cross.svg";
 import CalendarIcon from "@/icons/calendar.svg";
 import customToast from "@/utils/customToast";
 import SearchHeader from "@/components/SearchHeader";
@@ -25,6 +26,7 @@ import { useUploadReviewImages, useWriteReview } from "@/service/review";
 import { useMyPage } from "@/service/profile";
 import { UploadedFileEntity } from "@/types/upload";
 import { TextareaAutosize } from "@mui/material";
+import ScrollContainer from "react-indiana-drag-scroll";
 
 const MAX_IMAGES_COUNT = 10;
 const MAX_REVIEW_LENGTH = 1000;
@@ -41,6 +43,7 @@ export default function Page() {
   const [searchText, setSearchText] = useState("");
   const { data, contentListToShow } = useSearchContent(searchText);
   const { error } = useMyPage();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const { mutate: uploadImages } = useUploadReviewImages({
     onSuccess: ({ data }) => {
@@ -121,7 +124,7 @@ export default function Page() {
   };
 
   const enabledToSubmit =
-    review.length > 10 &&
+    review.length > 1 &&
     rate > 0 &&
     targetContent &&
     uploadedImages.length > 0 &&
@@ -273,44 +276,65 @@ export default function Page() {
                 {uploadedImages.length} / 10
               </div>
             </div>
-            <div className="flex w-[100%] overflow-x-scroll mt-[8px]">
-              <div className="flex gap-[8px]">
-                <button
-                  type="button"
-                  className="bg-grey-01 w-[96px] h-[96px] center grow"
-                  onClick={handleClickUploadImage}
-                >
-                  <CreateIcon fill="white" />
-                </button>
-                <input
-                  ref={uploadInputRef}
-                  onChange={handleUploadImage}
-                  type="file"
-                  className="hidden"
-                  accept="image/jpeg, image/png, image/gif"
-                  multiple
-                />
-                {uploadedImages.map(({ fullUrl }) => {
-                  return (
-                    <div className="relative w-[98px] h-[98px]" key={fullUrl}>
-                      <button
-                        type="button"
-                        className="absolute right-0 mt-[8px] mr-[8px] z-[1]"
-                        onClick={() => handleClickRemoveImage(fullUrl)}
-                      >
-                        <Image
-                          width={24}
-                          height={24}
-                          src={"/icons/circle-cross.svg"}
-                          alt="업로드된 이미지"
-                        />
-                      </button>
-                      <Image fill src={fullUrl} alt="업로드된 이미지" />
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+            <ScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] mt-[8px]">
+              <input
+                ref={inputRef}
+                type="file"
+                multiple
+                className="hidden grow"
+                onChange={(e) => {
+                  if (uploadedImages.length > MAX_IMAGES_COUNT) {
+                    customToast("이미지는 최대 10개까지만 업로드 가능합니다.");
+
+                    return;
+                  }
+
+                  if (e.target.files) {
+                    const formData = new FormData();
+
+                    for (let i = 0; i < e.target.files.length; i++) {
+                      formData.append("files", e.target.files[i]);
+                    }
+
+                    uploadImages(formData);
+                  }
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  inputRef.current && inputRef.current.click();
+                }}
+                className="center w-[96px] h-[96px] bg-grey-01 shrink-0"
+                aria-label="이미지 업로드 버튼"
+              >
+                <CreateIcon color="#fff" />
+              </button>
+              {uploadedImages.map(({ fullUrl }) => {
+                return (
+                  <li
+                    key={fullUrl}
+                    className="w-[96px] h-[96px] relative shrink-0"
+                  >
+                    <Image src={fullUrl} fill alt="업로드된 이미지" />
+                    <button
+                      type="button"
+                      aria-label="현재 선택된 이미지 삭제"
+                      className="absolute right-[8px] top-[8px]"
+                      onClick={() => {
+                        const newUrls = uploadedImages.filter(
+                          ({ fullUrl: targetUrl }) => targetUrl !== fullUrl
+                        );
+
+                        setUploadedImages(newUrls);
+                      }}
+                    >
+                      <DeleteIcon width="24px" height="24px" />
+                    </button>
+                  </li>
+                );
+              })}
+            </ScrollContainer>
           </div>
           <div className="mt-[34px]">
             <div className={`flex flex-row`}>
