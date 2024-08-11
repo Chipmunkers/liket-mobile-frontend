@@ -15,14 +15,14 @@ import ButtonGroup from "@/components/ButtonGroup";
 import { AGES, GENRES, STYLES } from "@/utils/const";
 import Chip from "@/components/Chip";
 import { AgeType, CityType, GenreType, StyleType } from "@/types/const";
-import MapContentInfo from "@/components/MapContentInfo/MapContentInfo";
 import { genres } from "../../../public/data/genre";
 import { Age, Genre, Style } from "@/types/content";
 import { ages } from "../../../public/data/age";
 import { styles } from "../../../public/data/style";
-import customToast from "../../utils/customToast";
+import customToast from "@/utils/customToast";
 import KakaoMap from "./components/KakaoMap";
-import { MapContentEntity } from "../../types/api/map";
+import { MapContentEntity } from "@/types/api/map";
+import MapContentInfo from "./components/ContentInfo";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
