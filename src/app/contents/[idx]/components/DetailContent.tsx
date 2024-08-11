@@ -14,9 +14,9 @@ import { getStatus } from "@/utils/helpers";
 import ContentCarousel from "@/components/Carousel/ContentCarousel";
 import ContentLikeBtn from "@/components/ContentLikeBtn";
 import { useState } from "react";
-import { useGetCultureContentByIdx } from "@/service/culture-content/hooks";
 import ContentDetailInfo from "./ContentDetailInfo";
 import ContentReviewInfo from "./ContentReviewInfo";
+import { useGetCultureContentByIdx } from "../hooks/useGetContentByIdx";
 
 const DetailContent = (props: { content: ContentEntity }) => {
   const [selectedTab, setSelectedTab] = useState<"상세정보" | string>(

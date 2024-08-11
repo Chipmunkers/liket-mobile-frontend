@@ -5,12 +5,12 @@ import BottomArrowIcon from "@/icons/down-arrow-small.svg";
 import StarRating from "@/components/StarRating";
 import Image from "next/image";
 import ThumbIcon from "@/icons/thumb.svg";
-import { useGetReviewAllByContentIdx } from "@/service/review/hooks";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import { ContentEntity } from "@/types/api/culture-content";
 import { useQueryClient } from "@tanstack/react-query";
+import { useGetReviewAllByContentIdx } from "../hooks/useGetReviewAllByContentIdx";
 
 const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
   // * 리뷰 쿼리 옵션
