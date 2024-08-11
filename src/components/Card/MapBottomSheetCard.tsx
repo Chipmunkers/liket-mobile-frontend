@@ -1,14 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import Badge from "../Badge/Badge";
-import { colors } from "@/utils/style";
-import Like from "@/icons/like.svg";
-import ActiveLike from "@/icons/like-filled.svg";
-import { Content } from "../KakaoMapV2/interface/Content";
 import dayjs from "dayjs";
 import ContentLikeBtn from "../ContentLikeBtn";
+import { MapContentEntity } from "../../types/api/map";
 
-const MapBottomSheetCard = (props: { content: Content }) => {
+const MapBottomSheetCard = (props: { content: MapContentEntity }) => {
   const { content } = props;
 
   return (

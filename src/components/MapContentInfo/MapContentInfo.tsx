@@ -4,13 +4,11 @@ import Badge from "../Badge/Badge";
 import { colors } from "@/utils/style";
 import Like from "@/icons/like.svg";
 import ActiveLike from "@/icons/like-filled.svg";
-import { Content } from "../KakaoMapV2/interface/Content";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
-import { AxiosError } from "axios";
-import customToast from "../../utils/customToast";
+import { MapContentEntity } from "@/types/api/map";
+import { useState } from "react";
 
-const MapContentInfo = ({ content }: { content: Content }) => {
+const MapContentInfo = ({ content }: { content: MapContentEntity }) => {
   const [likeState, setLikeState] = useState(content.likeState);
 
   // const { mutate: likeContentApi } = useLikeContent(content.idx, {
