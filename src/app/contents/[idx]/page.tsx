@@ -1,8 +1,8 @@
 import Header from "@/components/Header";
-import DetailContent from "../../../components/DetailContent";
-import customFetch from "../../../utils/fetch";
+import customFetch from "@/utils/fetch";
 import { notFound } from "next/navigation";
 import ErrorPage from "../../error";
+import DetailContent from "./components/DetailContent";
 
 interface PageProps {
   params: {

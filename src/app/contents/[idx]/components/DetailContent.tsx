@@ -1,6 +1,6 @@
 "use client";
 
-import { ContentEntity } from "../../types/api/culture-content";
+import { ContentEntity } from "@/types/api/culture-content";
 import Badge, { variantToText } from "@/components/Badge/Badge";
 import CategoryTab from "@/components/CategoryTab";
 import Divider from "@/components/Divider";
@@ -14,9 +14,9 @@ import { getStatus } from "@/utils/helpers";
 import ContentCarousel from "@/components/Carousel/ContentCarousel";
 import ContentLikeBtn from "@/components/ContentLikeBtn";
 import { useState } from "react";
-import { useGetCultureContentByIdx } from "../../service/culture-content/hooks";
-import ContentDetailInformation from "../ContentDetailInformation";
-import ContentReviewInformation from "../ContentReviewInformation";
+import { useGetCultureContentByIdx } from "@/service/culture-content/hooks";
+import ContentDetailInfo from "./ContentDetailInfo";
+import ContentReviewInfo from "./ContentReviewInfo";
 
 const DetailContent = (props: { content: ContentEntity }) => {
   const [selectedTab, setSelectedTab] = useState<"상세정보" | string>(
@@ -95,12 +95,9 @@ const DetailContent = (props: { content: ContentEntity }) => {
         }}
       />
       {selectedTab === "상세정보" ? (
-        <ContentDetailInformation content={content} />
+        <ContentDetailInfo content={content} />
       ) : (
-        <ContentReviewInformation
-          idx={content.idx.toString()}
-          content={content}
-        />
+        <ContentReviewInfo idx={content.idx.toString()} content={content} />
       )}
     </main>
   );

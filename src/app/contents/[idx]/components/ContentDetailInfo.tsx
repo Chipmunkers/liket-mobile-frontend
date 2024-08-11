@@ -2,10 +2,9 @@ import Divider from "@/components/Divider";
 import { colors } from "@/utils/style";
 import RightArrowIcon from "@/icons/right-arrow.svg";
 import KaKaoMap from "@/components/KaKaoMap";
-import { ContentEntity } from "../../types/api/culture-content";
-import { useGetCultureContentByIdx } from "../../service/culture-content/hooks";
+import { ContentEntity } from "@/types/api/culture-content";
 
-const ContentDetailInformation = (props: { content: ContentEntity }) => {
+const ContentDetailInfo = (props: { content: ContentEntity }) => {
   const { content } = props;
 
   return (
@@ -32,4 +31,4 @@ const ContentDetailInformation = (props: { content: ContentEntity }) => {
   );
 };
 
-export default ContentDetailInformation;
+export default ContentDetailInfo;
