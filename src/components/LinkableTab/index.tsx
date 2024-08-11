@@ -18,6 +18,7 @@ import CreateRoute from "@/icons/create-route.svg";
 import useModalStore from "@/stores/modalStore";
 import { classNames } from "@/utils/helpers";
 import CustomDrawer from "../CustomDrawer";
+import customToast from "@/utils/customToast";
 
 interface LinkTabProps {
   isSelected: boolean;
@@ -94,7 +95,16 @@ const LinkableTab = ({ shadow = false }: Props) => {
             )}
           </li>
           <li className="bottom-sheet-list">
-            {isLoggedIn ? (
+            <button
+              onClick={() => {
+                customToast("모바일 앱에서만 사용이 가능해요.");
+              }}
+              className="bottom-sheet-button"
+            >
+              <CreateLiket className="mr-[8px]" />
+              라이켓 제작
+            </button>
+            {/* {isLoggedIn ? (
               <Link href="/create/liket" className="bottom-sheet-button">
                 <CreateLiket className="mr-[8px]" />
                 라이켓 제작
@@ -113,10 +123,19 @@ const LinkableTab = ({ shadow = false }: Props) => {
                 <CreateLiket className="mr-[8px]" />
                 라이켓 제작
               </button>
-            )}
+            )} */}
           </li>
           <li className="bottom-sheet-list">
-            {isLoggedIn ? (
+            <button
+              onClick={() => {
+                customToast("추후에 출시 예정인 기능이에요.");
+              }}
+              className="bottom-sheet-button"
+            >
+              <CreateRoute className="mr-[8px]" />
+              루트 짜기
+            </button>
+            {/* {isLoggedIn ? (
               <Link href="/create/route" className="bottom-sheet-button">
                 <CreateRoute className="mr-[8px]" />
                 루트 짜기
@@ -135,7 +154,7 @@ const LinkableTab = ({ shadow = false }: Props) => {
                 <CreateRoute className="mr-[8px]" />
                 루트 짜기
               </button>
-            )}
+            )} */}
           </li>
         </ul>
       </CustomDrawer>
