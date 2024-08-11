@@ -3,22 +3,16 @@
 import Divider from "@/components/Divider";
 import BottomArrowIcon from "@/icons/down-arrow-small.svg";
 import StarRating from "@/components/StarRating";
-import Image from "next/image";
-import MenuIcon from "../icon/menu.svg";
-import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { Carousel } from "react-responsive-carousel";
 import { ContentEntity } from "@/types/api/culture-content";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetReviewAllByContentIdx } from "../hooks/useGetReviewAllByContentIdx";
-import ReviewLikeBtn from "./ReviewLikeBtn";
 import { useGetMyInfo } from "../../../../hooks/useGetMyInfo";
 import CustomDrawer from "@/components/CustomDrawer";
 import { useDeleteReview } from "../hooks/useDeleteReview";
 import customToast from "../../../../utils/customToast";
 import { AxiosError } from "axios";
 import useMoveLoginPage from "../../../../hooks/useMoveLoginPage";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import ReviewInfiniteScroll from "./ReviewInfiniteScroll";
 import EmptyReview from "./EmptyReview";
@@ -105,7 +99,7 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
         <div>
           <StarRating value={props.content.avgStarRating} readOnly />
         </div>
-        {data?.pages[0].reviewList.length ? (
+        {props.content.reviewCount ? (
           <div className="text-numbering1 mt-[16px]">
             {props.content.avgStarRating.toFixed(2)}{" "}
             <span className="text-grey-02">/ 5.0</span>
@@ -115,7 +109,7 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
       <Divider width="100%" height="8px" />
 
       <div className="mt-[8px]">
-        {data?.pages[0].reviewList.length ? (
+        {data?.pages[0]?.reviewList.length ? (
           // * Review를 다시 가져올 때 깜박이지 아래 버튼이 깜박이지 않도록 하기 위함
           <button
             className="flex text-button3 justify-end w-[100%] pr-[24px]"
@@ -133,7 +127,7 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
         ) : null}
         {data ? (
           // * Review가 하나라도 있으면 리뷰 목록
-          data.pages[0].reviewList.length > 0 ? (
+          data.pages[0]?.reviewList.length > 0 ? (
             <ReviewInfiniteScroll
               reviewList={data.pages.map((page) => page.reviewList).flat()}
               setIsReviewMenuDrawerOpen={setIsReviewMenuDrawerOpen}

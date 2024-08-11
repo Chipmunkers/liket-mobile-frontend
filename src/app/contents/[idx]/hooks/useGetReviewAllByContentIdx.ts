@@ -30,4 +30,5 @@ export const useGetReviewAllByContentIdx = (
       // 마지막 페이지 여부에 따라 다음 페이지 파라미터를 반환
       return lastPage.nextPage;
     },
+    staleTime: 0,
   });
