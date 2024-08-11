@@ -1,4 +1,3 @@
-import { ContentCard } from "@/components/Card/ContentCard";
 import Divider from "@/components/Divider";
 import Header from "@/components/Header";
 import LinkableTab from "@/components/LinkableTab";
@@ -6,24 +5,22 @@ import RightArrow from "@/icons/right-arrow.svg";
 import { colors } from "@/utils/style";
 import Link from "next/link";
 import CustomScrollContainer from "@/components/CustomScrollContainer";
-import {
-  getHotPlaces,
-  getSoonEndContents,
-  getSoonOpenContents,
-} from "@/apis/content";
 import HotPlaceListItem from "@/components/HotplaceListItem";
-import { getBannerList } from "@/apis/banner";
 import MainCarousel from "@/components/Carousel/MainCarousel";
 import SoonOpenContentSection from "./_components/SoonOpenContentSection";
 import SoonEndContentSection from "./_components/SoonEndContentSection";
 import HotStyleSection from "./_components/HotStyleSection";
 import HotAgeSection from "./_components/HotAgeSection";
+import { getSoonOpenContents } from "./_hooks/getSoonOpenContents";
+import { getSoonEndContents } from "./_hooks/getSoonEndContent";
+import { getBanners } from "./_hooks/getBanners";
+import { getHotContents } from "./_hooks/getHotContents";
 
 export default async function Home() {
   const { contentList: soonOpenContents } = await getSoonOpenContents();
   const { contentList: soonEndContents } = await getSoonEndContents();
-  const { bannerList } = await getBannerList();
-  const hotPlaces = await getHotPlaces();
+  const { bannerList } = await getBanners();
+  const hotContent = await getHotContents();
 
   return (
     <>
@@ -48,7 +45,7 @@ export default async function Home() {
             <div className="text-body5 text-grey-04 flex flex-col-reverse ml-[8px]">{`업로드 Date`}</div>
           </div>
           <CustomScrollContainer className="flex flex-row overflow-x-hidden gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-            {hotPlaces.map(({ idx, name, contentList }) => {
+            {hotContent.map(({ idx, name, contentList }) => {
               return (
                 <div key={idx}>
                   <Link
