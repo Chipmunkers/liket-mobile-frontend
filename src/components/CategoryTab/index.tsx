@@ -32,7 +32,7 @@ const index = ({
               "grow h-[100%]",
               selectedTab === tab
                 ? "text-skyblue-01 border-b-[2px] border-skyblue-01 text-button3"
-                : "text-button4 text-grey-03",
+                : "text-button4 text-grey-03 pb-[2px]",
               small ? "text-button4" : "text-button3"
             )}
           >
