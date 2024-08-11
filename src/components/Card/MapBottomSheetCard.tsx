@@ -32,7 +32,9 @@ const MapBottomSheetCard = (props: { content: MapContentEntity }) => {
           {dayjs(content.endDate).format("MM.DD")}
         </div>
       </div>
-      <ContentLikeBtn likeState={content.likeState} idx={content.idx} />
+      <div className="absolute right-0">
+        <ContentLikeBtn likeState={content.likeState} idx={content.idx} />
+      </div>
     </Link>
   );
 };
