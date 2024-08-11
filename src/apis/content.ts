@@ -1,9 +1,10 @@
 import { AgeType, GenreType, StyleType } from "@/types/const";
-import { ContentDetailInformation, ContentListItem } from "@/types/content";
+import { ContentListItem } from "@/types/content";
 import customFetch from "@/utils/fetch";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import axiosInstance from "../utils/axios";
-import { Content } from "../components/KakaoMapV2/interface/Content";
+import { ContentEntity } from "../types/api/culture-content";
+import { ReviewEntity } from "../types/api/review";
 
 export const getSoonOpenContents = async (): Promise<{
   contentList: ContentListItem[];
@@ -54,7 +55,7 @@ export const getHotStyleContents = async (): Promise<{
 
 export const getContentDetailInformation = async (
   idx: string
-): Promise<ContentDetailInformation> =>
+): Promise<ContentEntity> =>
   (
     await customFetch("/culture-content/" + idx, {
       next: {

@@ -5,29 +5,20 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import { AxiosError } from "axios";
 import { ReactNode } from "react";
 
-function makeQueryClient() {
-  const queryClient = new QueryClient({
+const makeQueryClient = () =>
+  new QueryClient({
     defaultOptions: {
       queries: {
         staleTime: 60 * 1000,
-        retry: (failureCount, error) => {
-          if (error) {
-            let { response } = error as AxiosError;
-            if (response?.status === 401) {
-              return false;
-            }
-          }
-          return failureCount <= 1;
+        retry: () => {
+          // * 재시도 없음
+          return false;
         },
       },
     },
   });
-
-  return queryClient;
-}
 
 let browserQueryClient: QueryClient | undefined = undefined;
 
@@ -35,6 +26,7 @@ function getQueryClient() {
   if (isServer) {
     return makeQueryClient();
   } else {
+    // * query client를 싱글톤으로 유지
     if (!browserQueryClient) browserQueryClient = makeQueryClient();
     return browserQueryClient;
   }

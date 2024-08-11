@@ -18,12 +18,13 @@ import HotPlaceListItem from "@/components/HotplaceListItem";
 import { getBannerList } from "@/apis/banner";
 import MainCarousel from "@/components/Carousel/MainCarousel";
 import HotStyleSection from "../components/HotStyleSection";
+import HotAgeSection from "../components/HotAgeSection";
+import SoonOpenContentSection from "../components/SoonOpenContentSection";
+import SoonEndContentSection from "../components/SoonEndContentSection";
 
 export default async function Home() {
   const { contentList: soonOpenContents } = await getSoonOpenContents();
   const { contentList: soonEndContents } = await getSoonEndContents();
-  const { contentList: hotAgeContents, age } = await getHotAgeContents();
-  const { contentList: hotStyleContents, style } = await getHotStyleContents();
   const { bannerList } = await getBannerList();
   const hotPlaces = await getHotPlaces();
 
@@ -31,39 +32,22 @@ export default async function Home() {
     <>
       <Header>
         <Header.LeftOption logo />
-        {/* <Header.RightOption option={{ search: true, like: true }} /> */}
       </Header>
       <main>
         <MainCarousel list={bannerList.map(({ imgPath }) => imgPath)} />
-        {/* <Carousel list={bannerList.map(({ imgPath }) => imgPath)} /> */}
 
-        {/* 인기 스타일 */}
-        <HotStyleSection contentList={hotStyleContents} style={style} />
+        {/* 인기 스타일  문화생활 컨텐츠*/}
+        <HotStyleSection />
 
-        <section>
-          <h2 className="pl-[24px] mb-[8px]">
-            요즘 <span className="text-skyblue-01">#{age.name}</span> Z세대가
-            주목하는 곳 ✨
-          </h2>
-          <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-            <If condition={hotAgeContents.length >= 1}>
-              <Then>
-                {hotAgeContents.map((data, idx) => {
-                  return <ContentCard key={idx} {...data} />;
-                })}
-              </Then>
-              <Else>
-                <div className="text-body5 text-grey-04 ml-[24px]">
-                  컨텐츠가 없습니다.
-                </div>
-              </Else>
-            </If>
-          </CustomScrollContainer>
-        </section>
+        {/* 인기 연령대 문화생활 컨텐츠 */}
+        <HotAgeSection />
+
         <Divider height="8px" width="100%" margin="24px 0" />
+
+        {/* 핫플 차트 */}
         <section>
           <div className="pl-[24px] flex flex-row mb-[8px]">
-            <h2>핫플차트</h2>
+            <h2 className="text-h2">핫플차트</h2>
             <div className="text-body5 text-grey-04 flex flex-col-reverse ml-[8px]">{`업로드 Date`}</div>
           </div>
           <CustomScrollContainer className="flex flex-row overflow-x-hidden gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
@@ -110,50 +94,18 @@ export default async function Home() {
             })}
           </CustomScrollContainer>
         </section>
+
         <Divider height="8px" width="100%" margin="24px 0" />
-        <section className="mb-[48px]">
-          <h2 className="pl-[24px] mb-[8px]">오픈예정 컨텐츠</h2>
-          <If condition={soonOpenContents.length > 0}>
-            <Then>
-              <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-                {soonOpenContents.map((data, index) => {
-                  return (
-                    <ContentCard
-                      key={index}
-                      {...data}
-                      // TODO: 의미 해석 필요
-                      // status="willActive"
-                    />
-                  );
-                })}
-              </CustomScrollContainer>
-            </Then>
-            <Else>
-              <div className="text-body5 text-grey-04 ml-[24px]">
-                컨텐츠가 없습니다.
-              </div>
-            </Else>
-          </If>
-        </section>
-        <section className="mb-[18px]">
-          <h2 className="pl-[24px] mb-[8px]">종료예정 컨텐츠</h2>
-          <If condition={soonEndContents.length > 0}>
-            <Then>
-              <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-                {soonEndContents.map((data, index) => {
-                  return <ContentCard key={index} {...data} />;
-                })}
-              </CustomScrollContainer>
-            </Then>
-            <Else>
-              <div className="text-body5 text-grey-04 ml-[24px]">
-                컨텐츠가 없습니다.
-              </div>
-            </Else>
-          </If>
-        </section>
-        {/* <Divider height="8px" width="100%" margin="24px 0" />
-        <section className="mb-[24px]">
+
+        {/* 오픈 예정 컨텐츠 */}
+        <SoonOpenContentSection contentList={soonOpenContents} />
+
+        {/* 종료 예정 컨텐츠 */}
+        <SoonEndContentSection contentList={soonEndContents} />
+
+        <Divider height="8px" width="100%" margin="24px 0" />
+
+        {/* <section className="mb-[24px]">
           <h2 className="pl-[24px] mb-[8px]">최근 인기 리뷰</h2>
           <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
             {REVIEW_CARDS_DUMMY.map((data, index) => {

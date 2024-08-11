@@ -3,18 +3,17 @@
 import CustomScrollContainer from "@/components/CustomScrollContainer";
 import { Else, If, Then } from "react-if";
 import { ContentCard } from "../Card/ContentCard";
-import { useGetHotStyleContent } from "../../service/culture-content/hooks";
+import { useGetHotAgeContent } from "../../service/culture-content/hooks";
 
-const HotStyleSection = () => {
-  const { data } = useGetHotStyleContent();
+const HotAgeSection = () => {
+  const { data } = useGetHotAgeContent();
 
   if (data) {
     return (
-      <section className="mb-[48px] mt-[24px]">
+      <section>
         <h2 className="pl-[24px] mb-[8px] h-[20px] text-h2">
-          선선한 가을 날씨에{" "}
-          <span className="text-skyblue-01">#{data.style.name}</span>
-          하기 좋은 곳 🍁
+          요즘 <span className="text-skyblue-01">#{data.age.name}</span>
+          연령대가 주목하는 곳 ✨
         </h2>
         <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] touch-action-none [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
           <If condition={data.contentList.length >= 1}>
@@ -35,9 +34,9 @@ const HotStyleSection = () => {
   }
 
   return (
-    <section className="mb-[48px] mt-[24px]">
-      <h2 className="pl-[24px] mb-[8px] h-[24px]">
-        <div className="bg-grey-01 rounded-[4px] w-[258px] h-[20px]"></div>
+    <section>
+      <h2 className="pl-[24px] mb-[8px]">
+        <div className="bg-grey-01 rounded-[4px] w-[258px]"></div>
       </h2>
       <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] touch-action-none [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
         {Array(5)
@@ -60,4 +59,4 @@ const HotStyleSection = () => {
   );
 };
 
-export default HotStyleSection;
+export default HotAgeSection;

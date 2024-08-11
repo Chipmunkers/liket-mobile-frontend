@@ -11,6 +11,7 @@ import profileStore from "@/stores/profileStore";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { If, Then, Else } from "react-if";
 import ScrollContainer from "react-indiana-drag-scroll";
 
@@ -21,9 +22,11 @@ export default function Page() {
     onSuccess: (profile) => setProfile(profile),
   });
 
-  if (error?.response?.status === 401) {
-    return router.replace("/login");
-  }
+  useEffect(() => {
+    if (!error) return;
+
+    router.replace("/login");
+  }, [error]);
 
   if (!data) {
     return <></>;
