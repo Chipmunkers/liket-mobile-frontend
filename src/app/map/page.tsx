@@ -23,6 +23,7 @@ import customToast from "@/utils/customToast";
 import KakaoMap from "./components/KakaoMap";
 import { MapContentEntity } from "@/types/api/map";
 import MapContentInfo from "./components/ContentInfo";
+import { useGetMyInfo } from "../../hooks/useGetMyInfo";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -102,7 +103,7 @@ export default function MapPage() {
 
   return (
     <>
-      <Header>
+      <Header key={"header"}>
         <Header.LeftOption
           townName={currentSelectedGu}
           onClickTownSelection={onClickTownSelection}
@@ -186,8 +187,9 @@ export default function MapPage() {
           transform: !!isFilterModalOpen ? "translateY(0)" : "translateY(100%)",
         }}
       >
-        <Header>
+        <Header key={"filter-header"}>
           <Header.LeftOption
+            key={"filter-option"}
             option={{
               close: {
                 onClick: () => {
@@ -245,7 +247,7 @@ export default function MapPage() {
           </div>
 
           {/* 스타일 */}
-          <div key={"age_filter"}>
+          <div key={"style_filter"}>
             <div className="text-h2 mb-[15px]">스타일</div>
             <ul className="flex flex-wrap gap-[8px]">
               {styles.map((style) => (
@@ -329,7 +331,7 @@ export default function MapPage() {
             : "translateY(100%)",
         }}
       >
-        <Header>
+        <Header key={"town-filter-header"}>
           <Header.LeftOption
             option={{
               close: {
@@ -346,7 +348,7 @@ export default function MapPage() {
                 {CITIES.map((CITY, index) => {
                   return (
                     <li
-                      key={index}
+                      key={`city_${index}`}
                       className={classNames(
                         "center h-[48px]",
                         newSelectedCity === CITY

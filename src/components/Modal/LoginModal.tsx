@@ -25,6 +25,7 @@ const LoginModal = ({ isOpen, onClose, meta }: LoginModalProps) => {
       ariaLabel="로그인 모달"
       isOpen={isOpen}
       onClose={handleCloseModal}
+      isCloseOnTop={false}
       footer={
         <ButtonGroup gap={8}>
           <Button

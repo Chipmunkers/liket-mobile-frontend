@@ -13,6 +13,9 @@ import { getMapInfo } from "../util/getMapInfo";
 import { Age, Genre, Style } from "@/types/content";
 import { generateMapFilterQuerystring } from "../util/generateMapFilterQuerystring";
 import { ClusteredContentEntity, MapContentEntity } from "@/types/api/map";
+import { AxiosError } from "axios";
+import useModalStore from "../../../stores/modalStore";
+import { useRouter } from "next/navigation";
 
 const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_API_KEY}&autoload=false`;
 
@@ -58,7 +61,7 @@ const KakaoMap = ({
     ClusteredContentEntity[]
   >([]);
 
-  const { data: clusteredApiResult } = useQuery({
+  const { data: clusteredApiResult, error: clusteredError } = useQuery({
     queryKey: ["clustered-map", mapInfo, mapFilter],
     queryFn: async () => {
       if (mapInfo.level <= 5) return null;
@@ -78,7 +81,7 @@ const KakaoMap = ({
     },
   });
 
-  const { data: contentApiResult } = useQuery<{
+  const { data: contentApiResult, error: contentError } = useQuery<{
     contentList: MapContentEntity[];
   }>({
     queryKey: ["map-contents", mapInfo, mapFilter],
@@ -104,6 +107,29 @@ const KakaoMap = ({
     setContentList([]);
     setClickedContent(undefined);
   }, [level, mapFilter]);
+
+  const openModal = useModalStore(({ openModal }) => openModal);
+
+  const router = useRouter();
+
+  // * 데이터를 불러오다가 에러가 난 경우
+  useEffect(() => {
+    if (!contentError && !clusteredError) return;
+
+    const error = clusteredError || contentError;
+
+    if (error instanceof AxiosError) {
+      if (error.response?.status === 401)
+        openModal("LoginModal", {
+          onClickPositive: () => {
+            router.replace("/login");
+          },
+          onClickNegative: () => {
+            router.back();
+          },
+        });
+    }
+  }, [clusteredError, contentError]);
 
   useEffect(() => {
     if (!contentApiResult) return;
