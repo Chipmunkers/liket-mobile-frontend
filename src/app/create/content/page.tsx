@@ -102,6 +102,8 @@ export default function Page() {
   const [tempStartDate, setTempStartDate] = useState<string>();
   const [tempEndDate, setTempEndDate] = useState<string>();
 
+  console.log(formState.errors);
+
   const thisYear = new Date().getFullYear() - 1;
 
   return (
@@ -130,7 +132,7 @@ export default function Page() {
                 htmlFor="title"
                 currentLength={watch("title").length}
               >
-                컨텐츠명
+                컨텐츠명<span className="text-top">*</span>
               </Label>
               <Input
                 field="title"
@@ -144,7 +146,9 @@ export default function Page() {
           <Divider width="100%" height="8px" margin="16px 0" />
           <div className="mx-[24px]">
             <InputWrapper margin="0 0 34px 0">
-              <Label htmlFor="genre">장르</Label>
+              <Label htmlFor="genre">
+                장르<span className="text-top">*</span>
+              </Label>
               <InputLikeButton
                 text={watch("genre")}
                 placeholder="장르를 선택해주세요."
@@ -152,7 +156,9 @@ export default function Page() {
               />
             </InputWrapper>
             <InputWrapper>
-              <Label htmlFor="address">주소</Label>
+              <Label htmlFor="address">
+                주소<span className="text-top">*</span>
+              </Label>
               <InputLikeButton
                 text={detailAddress}
                 placeholder="주소를 검색해주세요."
@@ -194,9 +200,10 @@ export default function Page() {
                 formState={formState}
               />
             </InputWrapper>
-
             <InputWrapper margin="34px 0 0 0">
-              <Label htmlFor="age">연령대</Label>
+              <Label htmlFor="age">
+                연령대<span className="text-top">*</span>
+              </Label>
               <InputLikeButton
                 text={watch("age")}
                 placeholder="연령대를 선택해주세요."
@@ -204,7 +211,9 @@ export default function Page() {
               />
             </InputWrapper>
             <InputWrapper margin="34px 0 0 0">
-              <Label htmlFor="style">스타일</Label>
+              <Label htmlFor="style">
+                스타일<span className="text-top">*</span>
+              </Label>
               <InputLikeButton
                 text={watch("style").join(", ")}
                 placeholder="스타일을 선택해주세요."
@@ -216,7 +225,9 @@ export default function Page() {
           <div className="mx-[24px]">
             <div className="flex justify-between mb-[34px]">
               <div>
-                <Label htmlFor="open-date">오픈날짜</Label>
+                <Label htmlFor="open-date">
+                  오픈날짜<span className="text-top">*</span>
+                </Label>
                 <div className="mt-[12px]">
                   <MediumSelectButton
                     text={getValues("start-date")}
@@ -227,7 +238,9 @@ export default function Page() {
                 </div>
               </div>
               <div>
-                <Label htmlFor="close-date">종료날짜</Label>
+                <Label htmlFor="close-date">
+                  종료날짜<span className="text-top">*</span>
+                </Label>
                 <div className="mt-[12px]">
                   <MediumSelectButton
                     text={getValues("end-date")}
@@ -244,7 +257,7 @@ export default function Page() {
                 maxLength={40}
                 currentLength={watch("open-time").length}
               >
-                오픈시간
+                오픈시간<span className="text-top">*</span>
               </Label>
               <Input
                 field="open-time"
@@ -254,13 +267,13 @@ export default function Page() {
                 placeholder="요일별 오픈시간을 입력해주세요."
               />
             </InputWrapper>
-            <InputWrapper margin="34px 0 34px 0">
+            <InputWrapper margin="34px 0">
               <Label
                 htmlFor="website"
                 maxLength={2000}
                 currentLength={watch("website").length}
               >
-                웹사이트
+                웹사이트<span className="text-top">*</span>
               </Label>
               <Input
                 field="website"
@@ -308,7 +321,7 @@ export default function Page() {
               maxLength={10}
               currentLength={uploadedImgs.length}
             >
-              사진
+              사진<span className="text-top">*</span>
             </Label>
             <ScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] mt-[8px]">
               <input
@@ -378,7 +391,7 @@ export default function Page() {
                 maxLength={200}
                 currentLength={watch("detail-info").length}
               >
-                상세정보
+                상세정보<span className="text-top">*</span>
               </Label>
               <TextareaAutosize
                 maxLength={200}
