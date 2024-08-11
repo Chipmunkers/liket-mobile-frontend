@@ -31,4 +31,7 @@ export const useGetReviewAllByContentIdx = (
       return lastPage.nextPage;
     },
     staleTime: 0,
+    retry: 0,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });

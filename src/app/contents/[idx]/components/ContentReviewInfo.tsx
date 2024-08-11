@@ -13,6 +13,7 @@ import { useDeleteReview } from "../hooks/useDeleteReview";
 import customToast from "../../../../utils/customToast";
 import { AxiosError } from "axios";
 import useMoveLoginPage from "../../../../hooks/useMoveLoginPage";
+import ReloadIcon from "../icon/review-reload.svg";
 import Link from "next/link";
 import ReviewInfiniteScroll from "./ReviewInfiniteScroll";
 import EmptyReview from "./EmptyReview";
@@ -29,7 +30,7 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
   }>({ page: 1, orderby: "time" });
 
   // * 리뷰 데이터 무한 쿼리
-  const { data, fetchNextPage, hasNextPage, isFetching } =
+  const { data, fetchNextPage, hasNextPage, isFetching, refetch, error } =
     useGetReviewAllByContentIdx(props.idx, reviewPagerble);
 
   const { data: loginUser } = useGetMyInfo();
@@ -45,7 +46,7 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !isFetching) {
+        if (entry.isIntersecting && !isFetching && !error) {
           fetchNextPage();
         }
       },
@@ -57,6 +58,17 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
       observer.unobserve(target);
     };
   }, [target, hasNextPage, isFetching]);
+
+  useEffect(() => {
+    if (!error) return;
+
+    customToast("리뷰를 불러오는 중 에러가 발생했습니다.");
+  }, [error]);
+
+  useEffect(() => {
+    // 컴포넌트를 벗어나면 Review 불러온 데이터 초기화
+    return () => resetReview();
+  }, []);
 
   // * 리뷰 무한 스크롤 초기화
   const resetReview = () => {
@@ -144,6 +156,21 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
           <div className="h-[100vh]"></div>
         )}
       </div>
+      {error && (
+        <div className="flex justify-center mt-[24px]">
+          <button
+            className="flex justify-center items-center rounded-[16px] bg-white shadow-[0_0_8px_0_rgba(0,0,0,0.16)] w-[105px] h-[32px]"
+            onClick={() => {
+              refetch();
+            }}
+          >
+            <div className="mr-[8px]">
+              <ReloadIcon />
+            </div>
+            <span className="text-button4">새로 고침</span>
+          </button>
+        </div>
+      )}
       <CustomDrawer
         open={isReviewMenuDrawerOpen}
         onClose={() => setIsReviewMenuDrawerOpen(false)}
