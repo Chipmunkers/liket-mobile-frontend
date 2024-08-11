@@ -11,7 +11,7 @@ const ReviewInfiniteScroll = (props: {
   reviewList: ReviewEntity[];
   setIsReviewMenuDrawerOpen: (data: boolean) => void;
   setSelectReviewIdx: (idx: number) => void;
-  loginUser: UserEntity;
+  loginUser?: UserEntity;
   setTarget: (target: HTMLDivElement | null) => void;
 }) => {
   const {

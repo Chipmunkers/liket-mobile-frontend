@@ -21,6 +21,7 @@ import useMoveLoginPage from "../../../../hooks/useMoveLoginPage";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import ReviewInfiniteScroll from "./ReviewInfiniteScroll";
+import EmptyReview from "./EmptyReview";
 
 const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
   const [isReviewMenuDrawerOpen, setIsReviewMenuDrawerOpen] = useState(false);
@@ -104,10 +105,12 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
         <div>
           <StarRating value={props.content.avgStarRating} readOnly />
         </div>
-        <div className="text-numbering1 mt-[16px]">
-          {props.content.avgStarRating.toFixed(2)}{" "}
-          <span className="text-grey-02">/ 5.0</span>
-        </div>
+        {data?.pages[0].reviewList.length ? (
+          <div className="text-numbering1 mt-[16px]">
+            {props.content.avgStarRating.toFixed(2)}{" "}
+            <span className="text-grey-02">/ 5.0</span>
+          </div>
+        ) : null}
       </div>
       <Divider width="100%" height="8px" />
 
@@ -140,7 +143,7 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
             />
           ) : (
             // * Review가 단 하나도 없을 경우
-            <div>없음</div>
+            <EmptyReview idx={props.content.idx} />
           )
         ) : (
           // * 클릭 시 스크롤 위로 올라가는 것 방지
