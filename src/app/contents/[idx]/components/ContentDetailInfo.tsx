@@ -1,7 +1,6 @@
 import Divider from "@/components/Divider";
 import { colors } from "@/utils/style";
 import RightArrowIcon from "@/icons/right-arrow.svg";
-import KaKaoMap from "@/components/KaKaoMap";
 import { ContentEntity } from "@/types/api/culture-content";
 
 const ContentDetailInfo = (props: { content: ContentEntity }) => {
@@ -20,7 +19,7 @@ const ContentDetailInfo = (props: { content: ContentEntity }) => {
           {content.location.address} {content.location.detailAddress}
         </div>
         <div className="h-[171px] w-[100%] bg-grey-02 flex">
-          <KaKaoMap />
+          {/* TODO: 맵 추가 */}
         </div>
         <button className="center absolute right-[24px] bottom-0 text-button4 text-skyblue-03">
           카카오맵에서 길찾기
