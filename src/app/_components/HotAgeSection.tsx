@@ -2,8 +2,8 @@
 
 import CustomScrollContainer from "@/components/CustomScrollContainer";
 import { Else, If, Then } from "react-if";
-import { ContentCard } from "../Card/ContentCard";
-import { useGetHotAgeContent } from "../../service/culture-content/hooks";
+import { useGetHotAgeContent } from "@/service/culture-content/hooks";
+import { ContentCard } from "@/components/Card/ContentCard";
 
 const HotAgeSection = () => {
   const { data } = useGetHotAgeContent();

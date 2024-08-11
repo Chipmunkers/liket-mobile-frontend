@@ -7,20 +7,17 @@ import { colors } from "@/utils/style";
 import Link from "next/link";
 import CustomScrollContainer from "@/components/CustomScrollContainer";
 import {
-  getHotAgeContents,
   getHotPlaces,
-  getHotStyleContents,
   getSoonEndContents,
   getSoonOpenContents,
 } from "@/apis/content";
-import { Else, If, Then } from "react-if";
 import HotPlaceListItem from "@/components/HotplaceListItem";
 import { getBannerList } from "@/apis/banner";
 import MainCarousel from "@/components/Carousel/MainCarousel";
-import HotStyleSection from "../components/HotStyleSection";
-import HotAgeSection from "../components/HotAgeSection";
-import SoonOpenContentSection from "../components/SoonOpenContentSection";
-import SoonEndContentSection from "../components/SoonEndContentSection";
+import SoonOpenContentSection from "./_components/SoonOpenContentSection";
+import SoonEndContentSection from "./_components/SoonEndContentSection";
+import HotStyleSection from "./_components/HotStyleSection";
+import HotAgeSection from "./_components/HotAgeSection";
 
 export default async function Home() {
   const { contentList: soonOpenContents } = await getSoonOpenContents();
