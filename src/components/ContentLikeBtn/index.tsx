@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useCancelLikeContent, useLikeContent } from "../../apis/content";
 import { AxiosError } from "axios";
-import customToast from "../../utils/customToast";
+import customToast from "@/utils/customToast";
 import FilledLike from "@/icons/like-filled.svg";
 import Like from "@/icons/like.svg";
-import { colors } from "../../utils/style";
+import { colors } from "@/utils/style";
+import { useLikeContent } from "./hooks/useLikeContent";
+import { useCancelLikeContent } from "./hooks/useCancelLikeContent";
 
 const ContentLikeBtn = (props: {
   likeState: boolean;
