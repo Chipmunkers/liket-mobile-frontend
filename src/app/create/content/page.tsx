@@ -10,7 +10,7 @@ import {
   Label,
 } from "@/components/newInput";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { z } from "zod";
@@ -31,6 +31,8 @@ import { AgeType, GenreType } from "@/types/const";
 import { useUploadContentImages } from "@/service/uploadImage";
 import { UploadedFileEntity } from "@/types/upload";
 import customToast from "@/utils/customToast";
+import Script from "next/script";
+import { classNames } from "@/utils/helpers";
 
 const MAX_IMAGES_COUNT = 10;
 
@@ -57,8 +59,10 @@ export default function Page() {
       setUploadedImgs([...uploadedImgs, ...data]);
     },
   });
-
+  const pathname = usePathname();
   const router = useRouter();
+  const [detailAddress, setDetailAddress] = useState("");
+  const [currentScroll, setCurrentScroll] = useState(0);
 
   const methods = useForm({
     mode: "onBlur",
@@ -79,7 +83,10 @@ export default function Page() {
     resolver: zodResolver(schema),
   });
 
+  const searchParam = useSearchParams();
   const { formState, watch, register, setValue, getValues } = methods;
+  const isSearchModalOpen = searchParam.get("isSearchModalOpen");
+
   const [isStyleSelectionDrawerOpen, setIsStyleSelectionDrawerOpen] =
     useState(false);
   const [isAgeRangeSelectionDrawerOpen, setIsAgeRangeSelectionDrawerOpen] =
@@ -99,19 +106,23 @@ export default function Page() {
 
   return (
     <>
+      <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" />
       <Header>
         <Header.LeftOption option={{ back: true }} />
         <Header.MiddleText text="컨텐츠 등록 요청" />
         <Header.RightOption
           option={{
             check: {
+              disabled: true,
               onClick: () => router.replace(`/requested-contents/${1}`),
             },
           }}
         />
       </Header>
       <main>
-        <form className="mt-[16px]">
+        <form
+          className={classNames(`mt-[16px]`, !!isSearchModalOpen && "hidden")}
+        >
           <div className="mx-[24px]">
             <InputWrapper>
               <Label
@@ -143,10 +154,35 @@ export default function Page() {
             <InputWrapper>
               <Label htmlFor="address">주소</Label>
               <InputLikeButton
+                text={detailAddress}
                 placeholder="주소를 검색해주세요."
                 subButtonText="주소 검색"
                 onClick={() => {
-                  alert("주소 검색 모달 띄우기");
+                  setCurrentScroll(
+                    Math.max(
+                      document.body.scrollTop,
+                      document.documentElement.scrollTop
+                    )
+                  );
+                  new (window as any).daum.Postcode({
+                    oncomplete: function (address: SelectedAddress) {
+                      var addr = ""; // 주소 변수
+
+                      if (address.userSelectedType === "R") {
+                        addr = address.roadAddress;
+                      } else {
+                        addr = address.jibunAddress;
+                      }
+
+                      setDetailAddress(addr);
+                      document.body.scrollTop = currentScroll;
+                      router.back();
+                      router.back();
+                    },
+                    width: "100%",
+                    height: "100%",
+                  }).embed("search-list");
+                  router.push(`${pathname}?isSearchModalOpen=true`);
                 }}
               />
             </InputWrapper>
@@ -515,8 +551,26 @@ export default function Page() {
           </Button>
         </div>
       </CustomDrawer>
+      <div
+        className="full-modal transform translate-y-full"
+        style={{
+          transform: !!isSearchModalOpen ? "translateY(0)" : "translateY(100%)",
+        }}
+      >
+        <Header>
+          <Header.LeftOption
+            option={{
+              back: {
+                onClick: () => router.back(),
+              },
+            }}
+          />
+          <Header.MiddleText text="주소 검색" />
+        </Header>
+        <div className="full-modal-main">
+          <div id="search-list" className="flex grow h-[100%] mx-[24px]"></div>
+        </div>
+      </div>
     </>
   );
 }
-
-const MAX_COUNT_OF_IMGS = 10;
