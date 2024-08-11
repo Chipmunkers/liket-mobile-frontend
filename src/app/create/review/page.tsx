@@ -282,23 +282,7 @@ export default function Page() {
                 type="file"
                 multiple
                 className="hidden grow"
-                onChange={(e) => {
-                  if (uploadedImages.length > MAX_IMAGES_COUNT) {
-                    customToast("이미지는 최대 10개까지만 업로드 가능합니다.");
-
-                    return;
-                  }
-
-                  if (e.target.files) {
-                    const formData = new FormData();
-
-                    for (let i = 0; i < e.target.files.length; i++) {
-                      formData.append("files", e.target.files[i]);
-                    }
-
-                    uploadImages(formData);
-                  }
-                }}
+                onChange={handleUploadImage}
               />
               <button
                 type="button"
