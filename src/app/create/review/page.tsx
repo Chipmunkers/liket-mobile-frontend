@@ -181,7 +181,9 @@ export default function Page() {
       <main className="px-[24px] py-[16px]">
         <form>
           <div className="h-[70px]">
-            <div className="text-grey-04 text-caption">컨텐츠</div>
+            <div className="text-grey-04 text-caption">
+              컨텐츠<span className="text-top">*</span>
+            </div>
             <button
               type="button"
               className="flex items-center mt-[8px]"
@@ -219,7 +221,9 @@ export default function Page() {
             </button>
           </div>
           <div className="h-[62px] mt-[34px]">
-            <div className="text-grey-04 text-caption">평점</div>
+            <div className="text-grey-04 text-caption">
+              평점<span className="text-top">*</span>
+            </div>
             <div className="center">
               <StarRating
                 value={rate}
@@ -231,7 +235,7 @@ export default function Page() {
           <div className="flex mt-[34px]">
             <div>
               <div className="text-grey-04 text-caption mb-[12px]">
-                방문 날짜
+                방문 날짜<span className="text-top">*</span>
               </div>
               <MediumSelectButton
                 text={
@@ -246,7 +250,7 @@ export default function Page() {
             </div>
             <div className="ml-[16px]">
               <div className="text-grey-04 text-caption mb-[12px]">
-                방문 시간
+                방문 시간<span className="text-top">*</span>
               </div>
               <MediumSelectButton
                 text={
@@ -262,7 +266,9 @@ export default function Page() {
           </div>
           <div className="mt-[34px]">
             <div className="flex justify-between">
-              <div className="text-grey-04 text-caption">사진</div>
+              <div className="text-grey-04 text-caption">
+                사진<span className="text-top">*</span>
+              </div>
               <div className="text-numbering3 text-grey-04">
                 {uploadedImages.length} / 10
               </div>
@@ -309,7 +315,7 @@ export default function Page() {
           <div className="mt-[34px]">
             <div className={`flex flex-row`}>
               <label className="flex-1 text-grey-04 text-caption mb-[8px]">
-                리뷰
+                리뷰<span className="text-top">*</span>
               </label>
               <div className="text-numbering3 text-grey-04">
                 {review.length} / {MAX_REVIEW_LENGTH}
