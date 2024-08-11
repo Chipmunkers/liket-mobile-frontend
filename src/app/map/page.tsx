@@ -15,7 +15,6 @@ import ButtonGroup from "@/components/ButtonGroup";
 import { AGES, GENRES, STYLES } from "@/utils/const";
 import Chip from "@/components/Chip";
 import { AgeType, CityType, GenreType, StyleType } from "@/types/const";
-import { Content } from "@/components/KakaoMapV2/interface/Content";
 import MapContentInfo from "@/components/MapContentInfo/MapContentInfo";
 import { genres } from "../../../public/data/genre";
 import { Age, Genre, Style } from "@/types/content";
@@ -23,7 +22,6 @@ import { ages } from "../../../public/data/age";
 import { styles } from "../../../public/data/style";
 import customToast from "../../utils/customToast";
 import KakaoMap from "./components/KakaoMap";
-import { SummaryContentEntity } from "../../types/api/culture-content";
 import { MapContentEntity } from "../../types/api/map";
 
 export default function MapPage() {
