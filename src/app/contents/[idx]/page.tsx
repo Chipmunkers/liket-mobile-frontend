@@ -15,8 +15,6 @@ export default async function Page({ params: { idx } }: PageProps) {
     next: { revalidate: 0 },
   });
 
-  console.log(res.status);
-
   if (res.ok) {
     const content = await res.json();
 
