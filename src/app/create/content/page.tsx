@@ -17,38 +17,48 @@ import { z } from "zod";
 import DeleteIcon from "@/icons/circle-cross.svg";
 import CreateIcon from "@/icons/create.svg";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CalendarIcon from "@/icons/calendar.svg";
 import MediumSelectButton from "@/components/SelectButton/MediumSelectButton";
 import { TextareaAutosize } from "@mui/material";
 import CustomDrawer from "@/components/CustomDrawer";
-import { AGES, GENRES, STYLES } from "@/utils/const";
 import Chip from "@/components/Chip";
 import Button from "@/components/Button";
 import dayjs from "dayjs";
 import { DateCalendar } from "@mui/x-date-pickers";
-import { AgeType, GenreType } from "@/types/const";
+import { GenreType } from "@/types/const";
 import { useUploadContentImages } from "@/service/uploadImage";
 import { UploadedFileEntity } from "@/types/upload";
 import customToast from "@/utils/customToast";
 import Script from "next/script";
 import { classNames } from "@/utils/helpers";
+import { ages } from "../../../../public/data/age";
+import { styles } from "../../../../public/data/style";
+import { useCreateContent } from "./hooks/useCreateContent";
+import { genres } from "../../../../public/data/genre";
+
+enum AnalyzeType {
+  SIMILAR = "SIMILAR",
+  EXACT = "EXACT",
+}
 
 const MAX_IMAGES_COUNT = 10;
+const CONDITIONS = ["입장료", "예약", "반려동물", "주차"];
 
 const schema = z.object({
-  title: z.string(),
-  genre: z.string(),
-  address: z.string(),
-  age: z.string(),
+  title: z.string().min(1, "필수로 입력돼야합니다."),
+  genre: z.string().min(1, "필수로 입력돼야합니다."),
+  address: z.string().min(1, "필수로 입력돼야합니다."),
+  age: z.string().min(1, "필수로 입력돼야합니다."),
   style: z.array(z.string()),
-  "detail-address": z.string(),
-  "open-time": z.string(),
-  website: z.string(),
+  detailAddress: z.string(),
+  openTime: z.string().min(1, "필수로 입력돼야합니다."),
+  websiteLink: z.string().min(1, "필수로 입력돼야합니다."),
   condition: z.array(z.string()),
-  "detail-info": z.string(),
-  "start-date": z.number(),
-  "end-date": z.number(),
+  description: z.string().min(1, "필수로 입력돼야합니다."),
+  startDate: z.string().min(1, "필수로 입력돼야합니다."),
+  endDate: z.string().min(1, "필수로 입력돼야합니다."),
+  imgList: z.array(z.string()).min(1, "이미지가 최소 하나 이상 필요합니다."),
 });
 
 export default function Page() {
@@ -57,35 +67,68 @@ export default function Page() {
   const { mutate: uploadContentImages } = useUploadContentImages({
     onSuccess: ({ data }) => {
       setUploadedImgs([...uploadedImgs, ...data]);
+      setValue("imgList", [...uploadedImgs, ...data]);
+      trigger("imgList");
     },
   });
   const pathname = usePathname();
   const router = useRouter();
   const [detailAddress, setDetailAddress] = useState("");
   const [currentScroll, setCurrentScroll] = useState(0);
+  const [addressInformation, setAddressInformation] = useState<{
+    detailAddress: string;
+    address: string;
+    region1Depth: string;
+    region2Depth: string;
+    positionX: number;
+    positionY: number;
+    hCode: string;
+    bCode: string;
+  }>();
+  const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder>();
 
-  const methods = useForm({
+  const methods = useForm<{
+    title: string;
+    genre: string;
+    address: string;
+    age: string;
+    style: string[];
+    detailAddress: string;
+    openTime: string;
+    websiteLink: string;
+    condition: string[];
+    description: string;
+    startDate: string;
+    endDate: string;
+    imgList: UploadedFileEntity[];
+  }>({
     mode: "onBlur",
     defaultValues: {
       title: "",
       genre: "",
       address: "",
       age: "",
-      style: [""], // TODO: Zod TypeError 발생으로 임시로 "" 삽입. 제거 필요
-      "detail-address": "",
-      "open-time": "",
-      website: "",
-      condition: [""], // TODO: Zod TypeError 발생으로 임시로 "" 삽입. 제거 필요
-      "detail-info": "",
-      "start-date": "",
-      "end-date": "",
+      style: [],
+      detailAddress: "",
+      openTime: "",
+      websiteLink: "",
+      condition: [],
+      description: "",
+      startDate: "",
+      endDate: "",
+      imgList: [],
     },
     resolver: zodResolver(schema),
   });
 
   const searchParam = useSearchParams();
-  const { formState, watch, register, setValue, getValues } = methods;
+  const { formState, watch, register, setValue, getValues, trigger } = methods;
   const isSearchModalOpen = searchParam.get("isSearchModalOpen");
+  const { mutate: createContent } = useCreateContent({
+    onSuccess: ({ data }) => {
+      console.log(data.idx);
+    },
+  });
 
   const [isStyleSelectionDrawerOpen, setIsStyleSelectionDrawerOpen] =
     useState(false);
@@ -102,21 +145,157 @@ export default function Page() {
   const [tempStartDate, setTempStartDate] = useState<string>();
   const [tempEndDate, setTempEndDate] = useState<string>();
 
-  console.log(formState.errors);
-
   const thisYear = new Date().getFullYear() - 1;
+
+  const handleClickSearchAddress = () => {
+    setCurrentScroll(
+      Math.max(document.body.scrollTop, document.documentElement.scrollTop)
+    );
+
+    new (window as any).daum.Postcode({
+      oncomplete: function ({ address }: SelectedAddress) {
+        document.body.scrollTop = currentScroll;
+
+        if (geocoder) {
+          geocoder.addressSearch(
+            address,
+            (res, status) => {
+              if (status === kakao.maps.services.Status.OK) {
+                const {
+                  address_name,
+                  b_code,
+                  h_code,
+                  region_1depth_name,
+                  region_2depth_name,
+                  x,
+                  y,
+                } = res[0].address;
+
+                setDetailAddress(address);
+                setValue("address", address);
+                setAddressInformation({
+                  detailAddress: "",
+                  address: address_name,
+                  bCode: b_code,
+                  hCode: h_code,
+                  region1Depth: region_1depth_name,
+                  region2Depth: region_2depth_name,
+                  positionX: +x,
+                  positionY: +y,
+                });
+              } else {
+                customToast("알 수 없는 에러가 발생했습니다.");
+              }
+            },
+            {
+              page: 1,
+              size: 1,
+              analyze_type: AnalyzeType.EXACT,
+            }
+          );
+        }
+
+        router.back();
+        router.back();
+      },
+      width: "100%",
+      height: "100%",
+    }).embed("search-list");
+
+    router.push(`${pathname}?isSearchModalOpen=true`);
+  };
+
+  useEffect(() => {
+    const $mapScript = document.createElement("script");
+    $mapScript.async = false;
+    $mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_API_KEY}&autoload=false&libraries=services`;
+    document.head.appendChild($mapScript);
+
+    const onLoadMap = () => {
+      window.kakao.maps.load(() => {
+        const geocoder = new window.kakao.maps.services.Geocoder();
+        setGeocoder(geocoder);
+      });
+    };
+
+    $mapScript.addEventListener("load", onLoadMap);
+  }, []);
 
   return (
     <>
-      <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" />
       <Header>
         <Header.LeftOption option={{ back: true }} />
         <Header.MiddleText text="컨텐츠 등록 요청" />
         <Header.RightOption
           option={{
             check: {
-              disabled: true,
-              onClick: () => router.replace(`/requested-contents/${1}`),
+              disabled: !formState.isValid,
+              onClick: () => {
+                const {
+                  age,
+                  style,
+                  genre,
+                  condition,
+                  detailAddress,
+                  title,
+                  openTime,
+                  websiteLink,
+                  description,
+                  startDate,
+                  endDate,
+                  imgList,
+                } = getValues();
+                const genreIdx = findIdxByName(genres, genre);
+                const ageIdx = findIdxByName(ages, age);
+                const styleIdxList = findIdxsByNames(styles, style);
+
+                if (addressInformation && genreIdx && ageIdx && styleIdxList) {
+                  createContent({
+                    isPet: condition.includes("반려동물"),
+                    isFee: condition.includes("입장료"),
+                    isParking: condition.includes("주차"),
+                    isReservation: condition.includes("예약"),
+                    genreIdx,
+                    ageIdx,
+                    styleIdxList: styleIdxList as number[],
+                    title,
+                    openTime,
+                    websiteLink,
+                    description,
+                    startDate,
+                    endDate,
+                    imgList: imgList.map(({ filePath }) => filePath),
+                    location: {
+                      ...addressInformation,
+                      detailAddress,
+                    },
+                    // imgList: ["abc"],
+                    // genreIdx: 5,
+                    // ageIdx: 4,
+                    // styleIdxList: [1, 4, 5],
+                    // location: {
+                    //   detailAddress: "LH아파트 1205호",
+                    //   address: "전북 익산시 부송동 100",
+                    //   region1Depth: "서울",
+                    //   region2Depth: "강동구",
+                    //   positionX: 126.99597295767953,
+                    //   positionY: 35.97664845766847,
+                    //   hCode: "4514069000",
+                    //   bCode: "4514013400",
+                    // },
+                    // title: "string",
+                    // description: "200글자가 안되는 description",
+                    // websiteLink: "https://google.com",
+                    // startDate: "2024-05-07T00:00:00.000Z",
+                    // endDate: "2024-05-07T00:00:00.000Z",
+                    // openTime: "월-금 12:00-20:00",
+                    // isFee: true,
+                    // isReservation: false,
+                    // isPet: true,
+                    // isParking: true,
+                  });
+                }
+              },
             },
           }}
         />
@@ -163,38 +342,12 @@ export default function Page() {
                 text={detailAddress}
                 placeholder="주소를 검색해주세요."
                 subButtonText="주소 검색"
-                onClick={() => {
-                  setCurrentScroll(
-                    Math.max(
-                      document.body.scrollTop,
-                      document.documentElement.scrollTop
-                    )
-                  );
-                  new (window as any).daum.Postcode({
-                    oncomplete: function (address: SelectedAddress) {
-                      var addr = ""; // 주소 변수
-
-                      if (address.userSelectedType === "R") {
-                        addr = address.roadAddress;
-                      } else {
-                        addr = address.jibunAddress;
-                      }
-
-                      setDetailAddress(addr);
-                      document.body.scrollTop = currentScroll;
-                      router.back();
-                      router.back();
-                    },
-                    width: "100%",
-                    height: "100%",
-                  }).embed("search-list");
-                  router.push(`${pathname}?isSearchModalOpen=true`);
-                }}
+                onClick={handleClickSearchAddress}
               />
             </InputWrapper>
             <InputWrapper margin="8px 0 0 0">
               <Input
-                field="detail-address"
+                field="detailAddress"
                 placeholder="상세주소를 입력해주세요."
                 register={register}
                 formState={formState}
@@ -230,7 +383,7 @@ export default function Page() {
                 </Label>
                 <div className="mt-[12px]">
                   <MediumSelectButton
-                    text={getValues("start-date")}
+                    text={getValues("startDate")}
                     placeholder="날짜 선택"
                     onClick={() => setIsStartDateSelectionDrawerOpen(true)}
                     Icon={<CalendarIcon />}
@@ -243,7 +396,7 @@ export default function Page() {
                 </Label>
                 <div className="mt-[12px]">
                   <MediumSelectButton
-                    text={getValues("end-date")}
+                    text={getValues("endDate")}
                     placeholder="날짜 선택"
                     onClick={() => setIsEndDateSelectionDrawerOpen(true)}
                     Icon={<CalendarIcon />}
@@ -253,14 +406,14 @@ export default function Page() {
             </div>
             <InputWrapper>
               <Label
-                htmlFor="open-time"
+                htmlFor="openTime"
                 maxLength={40}
-                currentLength={watch("open-time").length}
+                currentLength={watch("openTime").length}
               >
                 오픈시간<span className="text-top">*</span>
               </Label>
               <Input
-                field="open-time"
+                field="openTime"
                 formState={formState}
                 maxLength={40}
                 register={register}
@@ -269,14 +422,14 @@ export default function Page() {
             </InputWrapper>
             <InputWrapper margin="34px 0">
               <Label
-                htmlFor="website"
+                htmlFor="websiteLink"
                 maxLength={2000}
-                currentLength={watch("website").length}
+                currentLength={watch("websiteLink").length}
               >
                 웹사이트<span className="text-top">*</span>
               </Label>
               <Input
-                field="website"
+                field="websiteLink"
                 maxLength={2000}
                 placeholder="URL을 입력해주세요."
                 register={register}
@@ -284,7 +437,7 @@ export default function Page() {
               />
             </InputWrapper>
             <div className="flex justify-between">
-              {["입장료", "예약", "반려동물", "주차"].map((item) => {
+              {CONDITIONS.map((item) => {
                 const isChecked = watch("condition").some(
                   (condition) => condition === item
                 );
@@ -369,11 +522,13 @@ export default function Page() {
                       aria-label="현재 선택된 이미지 삭제"
                       className="absolute right-[8px] top-[8px]"
                       onClick={() => {
-                        const newUrls = uploadedImgs.filter(
+                        const newImgList = uploadedImgs.filter(
                           ({ fullUrl: targetUrl }) => targetUrl !== fullUrl
                         );
 
-                        setUploadedImgs(newUrls);
+                        setUploadedImgs(newImgList);
+                        setValue("imgList", newImgList);
+                        trigger("imgList");
                       }}
                     >
                       <DeleteIcon width="24px" height="24px" />
@@ -387,17 +542,17 @@ export default function Page() {
           <div className="px-[24px]">
             <InputWrapper>
               <Label
-                htmlFor="detail-info"
-                maxLength={200}
-                currentLength={watch("detail-info").length}
+                htmlFor="description"
+                maxLength={1000}
+                currentLength={watch("description").length}
               >
                 상세정보<span className="text-top">*</span>
               </Label>
               <TextareaAutosize
-                maxLength={200}
-                onChange={(e) => setValue("detail-info", e.target.value)}
+                maxLength={1000}
                 placeholder="컨텐츠 소개나 이벤트 등에 대해 작성해주세요."
                 className="w-[100%] mb-[34px] min-h-[132px] h-[auto] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0"
+                {...register("description")}
               />
             </InputWrapper>
           </div>
@@ -412,11 +567,11 @@ export default function Page() {
       >
         <div className="center text-h2">스타일</div>
         <ul className="my-[16px] w-[100%] flex px-[34px] flex-wrap gap-[8px]">
-          {STYLES.map((STYLE) => {
+          {styles.map(({ name, idx }) => {
             return (
-              <li key={STYLE} className="">
+              <li key={idx} className="">
                 <Chip
-                  isSelected={tempStyles.some((style) => style === STYLE)}
+                  isSelected={tempStyles.some((style) => style === name)}
                   onClick={() => {
                     let newStyles = null;
 
@@ -424,16 +579,16 @@ export default function Page() {
                       tempStyles.pop();
                     }
 
-                    if (tempStyles.some((style) => style === STYLE)) {
-                      newStyles = tempStyles.filter((style) => style !== STYLE);
+                    if (tempStyles.some((style) => style === name)) {
+                      newStyles = tempStyles.filter((style) => style !== name);
                     } else {
-                      newStyles = [...tempStyles, STYLE];
+                      newStyles = [...tempStyles, name];
                     }
 
                     setTempStyles(newStyles);
                   }}
                 >
-                  {STYLE}
+                  {name}
                 </Chip>
               </li>
             );
@@ -457,23 +612,19 @@ export default function Page() {
         onClose={() => setIsAgeRangeSelectionDrawerOpen(false)}
       >
         <div className="center text-h2">연령대</div>
-        <ul
-          className="mb-[48px]"
-          onClick={(e) => {
-            const target = e.target as HTMLElement;
-
-            if (target.tagName === "BUTTON") {
-              const targetGenre = target.textContent as AgeType;
-              setValue("age", targetGenre);
-            }
-
-            setIsAgeRangeSelectionDrawerOpen(false);
-          }}
-        >
-          {AGES.map((AGE) => {
+        <ul className="mb-[48px]" onClick={(e) => {}}>
+          {ages.map(({ idx, name }) => {
             return (
-              <li key={AGE} className="bottom-sheet-list">
-                <button className="bottom-sheet-button">{AGE}</button>
+              <li key={idx} className="bottom-sheet-list">
+                <button
+                  className="bottom-sheet-button"
+                  onClick={() => {
+                    setValue("age", name);
+                    setIsAgeRangeSelectionDrawerOpen(false);
+                  }}
+                >
+                  {name}
+                </button>
               </li>
             );
           })}
@@ -497,10 +648,10 @@ export default function Page() {
             setIsGenreSelectionDrawerOpen(false);
           }}
         >
-          {GENRES.map((GENRE) => {
+          {genres.map(({ idx, name }) => {
             return (
-              <li key={GENRE} className="bottom-sheet-list">
-                <button className="bottom-sheet-button">{GENRE}</button>
+              <li key={idx} className="bottom-sheet-list">
+                <button className="bottom-sheet-button">{name}</button>
               </li>
             );
           })}
@@ -509,7 +660,7 @@ export default function Page() {
       <CustomDrawer
         open={isStartDateSelectionDrawerOpen}
         onClose={() => {
-          setTempStartDate(getValues("start-date"));
+          setTempStartDate(getValues("startDate"));
           setIsStartDateSelectionDrawerOpen(false);
         }}
       >
@@ -526,7 +677,7 @@ export default function Page() {
             height={48}
             fullWidth
             onClick={() => {
-              tempStartDate && setValue("start-date", tempStartDate.toString());
+              tempStartDate && setValue("startDate", tempStartDate.toString());
               setIsStartDateSelectionDrawerOpen(false);
             }}
           >
@@ -537,7 +688,7 @@ export default function Page() {
       <CustomDrawer
         open={isEndDateSelectionDrawerOpen}
         onClose={() => {
-          setTempEndDate(getValues("end-date"));
+          setTempEndDate(getValues("endDate"));
           setIsEndDateSelectionDrawerOpen(false);
         }}
       >
@@ -556,7 +707,7 @@ export default function Page() {
             height={48}
             fullWidth
             onClick={() => {
-              tempEndDate && setValue("end-date", tempEndDate);
+              tempEndDate && setValue("endDate", tempEndDate);
               setIsEndDateSelectionDrawerOpen(false);
             }}
           >
@@ -584,6 +735,18 @@ export default function Page() {
           <div id="search-list" className="flex grow h-[100%] mx-[24px]"></div>
         </div>
       </div>
+      <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" />
     </>
   );
 }
+
+const findIdxsByNames = (
+  list: { idx: number; name: string }[],
+  names: string[]
+): (number | undefined)[] =>
+  names.map((name) => list.find((item) => item.name === name)?.idx);
+
+const findIdxByName = (
+  list: { idx: number; name: string }[],
+  name: string
+): number | undefined => list.find((item) => item.name === name)?.idx;
