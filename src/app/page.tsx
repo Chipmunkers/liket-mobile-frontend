@@ -11,14 +11,15 @@ import SoonOpenContentSection from "./_components/SoonOpenContentSection";
 import SoonEndContentSection from "./_components/SoonEndContentSection";
 import HotStyleSection from "./_components/HotStyleSection";
 import HotAgeSection from "./_components/HotAgeSection";
-import { getSoonOpenContents } from "./_hooks/getSoonOpenContents";
-import { getSoonEndContents } from "./_hooks/getSoonEndContent";
+import { getSoonOpenContentsForServer } from "./_hooks/getSoonOpenContents";
+import { getSoonEndContentsForServer } from "./_hooks/getSoonEndContents";
 import { getBanners } from "./_hooks/getBanners";
 import { getHotContents } from "./_hooks/getHotContents";
 
 export default async function Home() {
-  const { contentList: soonOpenContents } = await getSoonOpenContents();
-  const { contentList: soonEndContents } = await getSoonEndContents();
+  const { contentList: soonOpenContents } =
+    await getSoonOpenContentsForServer();
+  const { contentList: soonEndContents } = await getSoonEndContentsForServer();
   const { bannerList } = await getBanners();
   const hotContent = await getHotContents();
 

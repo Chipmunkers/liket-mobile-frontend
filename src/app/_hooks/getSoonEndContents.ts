@@ -3,26 +3,26 @@ import customFetch from "@/utils/fetch";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/utils/axios";
 
-export const getSoonOpenContentsForServer = async (): Promise<{
+export const getSoonEndContentsForServer = async (): Promise<{
   contentList: SummaryContentEntity[];
 }> =>
   (
-    await customFetch(`/culture-content/soon-open/all`, {
+    await customFetch(`/culture-content/soon-end/all`, {
       next: {
         revalidate: 0,
       },
     })
   ).json();
 
-export const useGetSoonOpenContent = (initialData: {
+export const useGetSoonEndContent = (initialData: {
   contentList: SummaryContentEntity[];
 }) =>
   useQuery({
-    queryKey: ["soon-open-content"],
+    queryKey: ["soon-end-content"],
     queryFn: async () => {
       const { data } = await axiosInstance.get<{
         contentList: SummaryContentEntity[];
-      }>("/apis/culture-content/soon-open/all", {
+      }>("/apis/culture-content/soon-end/all", {
         headers: {
           "Cache-Control": "no-cache",
         },

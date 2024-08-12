@@ -3,8 +3,8 @@
 import CustomScrollContainer from "@/components/CustomScrollContainer";
 import { Else, If, Then } from "react-if";
 import { SummaryContentEntity } from "@/types/api/culture-content";
-import { useGetSoonOpenContent } from "@/service/culture-content/hooks";
 import { ContentCard } from "@/components/Card/ContentCard";
+import { useGetSoonOpenContent } from "../_hooks/getSoonOpenContents";
 
 const SoonOpenContentSection = (props: {
   contentList: SummaryContentEntity[];
