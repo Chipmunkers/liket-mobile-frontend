@@ -25,8 +25,6 @@ import { MapContentEntity } from "@/types/api/map";
 import MapContentInfo from "./components/ContentInfo";
 import Script from "next/script";
 
-const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_API_KEY}&autoload=false`;
-
 export default function MapPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -105,11 +103,6 @@ export default function MapPage() {
 
   return (
     <>
-      <Script
-        strategy="beforeInteractive"
-        type="text/javascript"
-        src={KAKAO_SDK_URL}
-      />
       <Header key={"header"}>
         <Header.LeftOption
           townName={currentSelectedGu}

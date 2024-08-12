@@ -23,11 +23,6 @@ const ContentDetailInfo = (props: { content: ContentEntity }) => {
           {content.location.address} {content.location.detailAddress}
         </div>
         <div className="h-[171px] w-[100%] bg-grey-02 flex">
-          <Script
-            strategy="beforeInteractive"
-            type="text/javascript"
-            src={KAKAO_SDK_URL}
-          />
           <Map
             className="w-[100%] h-[100%]"
             center={{
