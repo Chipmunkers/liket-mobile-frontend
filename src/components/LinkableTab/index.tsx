@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import HomeIcon from "@/icons/home.svg";
 import FilledHomeIcon from "@/icons/home-filled.svg";
 import MapIcon from "@/icons/map.svg";
@@ -66,6 +66,29 @@ const LinkableTab = ({ shadow = false }: Props) => {
   const openModal = useModalStore(({ openModal }) => openModal);
 
   const { data: loginUser } = useGetMyInfo();
+
+  const [translateY, setTranslateY] = useState(0);
+  const [lastScrollTop, setLastScrollTop] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+      if (scrollTop > lastScrollTop) {
+        setTranslateY(100); // 스크롤 내릴 때 아래로 사라지게
+      } else {
+        setTranslateY(0); // 스크롤 올릴 때 다시 제자리로
+      }
+
+      setLastScrollTop(scrollTop <= 0 ? 0 : scrollTop);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lastScrollTop]);
 
   return (
     <>
@@ -167,9 +190,13 @@ const LinkableTab = ({ shadow = false }: Props) => {
       <div
         role="tablist"
         className={classNames(
-          "bottom-tab justify-around h-[var(--bottom-tab-height)] pt-[8px] z-[5]",
+          "bottom-tab justify-around h-[40px] pt-[8px] z-[5]",
           shadow && "shadow-[0px_-8px_16px_0px_rgba(0,0,0,0.04)]"
         )}
+        style={{
+          transform: `translateY(${translateY}%)`,
+          transition: "transform 0.3s ease-in-out",
+        }}
       >
         <LinkTab
           href="/"
