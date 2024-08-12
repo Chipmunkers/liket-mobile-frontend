@@ -15,6 +15,8 @@ import { getSoonOpenContentsForServer } from "./_hooks/getSoonOpenContents";
 import { getSoonEndContentsForServer } from "./_hooks/getSoonEndContents";
 import { getBanners } from "./_hooks/getBanners";
 import { getHotContentsForServer } from "./_hooks/getHotContents";
+import ReviewCard from "../components/Card/ReviewCard";
+import { getHotReview } from "./_hooks/getHotReviews";
 
 export default async function Home() {
   const { contentList: soonOpenContents } =
@@ -22,6 +24,7 @@ export default async function Home() {
   const { contentList: soonEndContents } = await getSoonEndContentsForServer();
   const { bannerList } = await getBanners();
   const hotContent = await getHotContentsForServer();
+  const reviews = await getHotReview();
 
   return (
     <>
@@ -101,14 +104,14 @@ export default async function Home() {
 
         <Divider height="8px" width="100%" margin="24px 0" />
 
-        {/* <section className="mb-[24px]">
+        <section className="mb-[24px] text-h2">
           <h2 className="pl-[24px] mb-[8px]">최근 인기 리뷰</h2>
           <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-            {REVIEW_CARDS_DUMMY.map((data, index) => {
-              return <ReviewCard key={index} {...data} />;
-            })}
+            {reviews.map((review, index) => (
+              <ReviewCard key={index} review={review} />
+            ))}
           </CustomScrollContainer>
-        </section> */}
+        </section>
       </main>
       <LinkableTab shadow />
     </>
