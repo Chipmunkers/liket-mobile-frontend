@@ -71,7 +71,7 @@
   }
 
   .bottom-tab {
-    @apply flex sticky bottom-0 bg-white w-[100%] h-[74px] min-h-[74px];
+    @apply fixed bottom-0 w-[100%] max-w-[600px];
   }
 
   .bottom-sheet-list {

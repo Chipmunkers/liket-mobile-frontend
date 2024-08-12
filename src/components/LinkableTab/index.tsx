@@ -26,6 +26,7 @@ interface LinkTabProps {
   href: string;
   icon: ReactNode;
   selectedIcon: ReactNode;
+  className?: string;
   onClickLink: (href: string) => void;
 }
 
@@ -34,6 +35,7 @@ const LinkTab = ({
   href,
   icon,
   selectedIcon,
+  className,
   onClickLink,
 }: LinkTabProps) => {
   return (
@@ -41,6 +43,7 @@ const LinkTab = ({
       role="tab"
       href={href}
       aria-selected={isSelected}
+      className={className}
       onClick={() => onClickLink(href)}
     >
       {isSelected ? selectedIcon : icon}
@@ -89,6 +92,8 @@ const LinkableTab = ({ shadow = false }: Props) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [lastScrollTop]);
+
+  const touchSpace = "20%";
 
   return (
     <>
@@ -187,74 +192,55 @@ const LinkableTab = ({ shadow = false }: Props) => {
           </li>
         </ul>
       </CustomDrawer>
-      <div
-        role="tablist"
-        className={classNames(
-          "bottom-tab justify-around h-[40px] pt-[8px] z-[5]",
-          shadow && "shadow-[0px_-8px_16px_0px_rgba(0,0,0,0.04)]"
-        )}
-        style={{
-          transform: `translateY(${translateY}%)`,
-          transition: "transform 0.3s ease-in-out",
-        }}
-      >
-        <LinkTab
-          href="/"
-          isSelected={pathname === "/" && !isWriteModalOpen}
-          icon={<HomeIcon color={colors.grey["02"]} />}
-          selectedIcon={<FilledHomeIcon color={colors.skyblue["01"]} />}
-          onClickLink={onClickLink}
-        />
-        <LinkTab
-          href="/map"
-          isSelected={pathname === "/map" && !isWriteModalOpen}
-          icon={<MapIcon color={colors.grey["02"]} />}
-          selectedIcon={<FilledMapIcon color={colors.skyblue["01"]} />}
-          onClickLink={onClickLink}
-        />
-        <button
-          role="tab"
-          aria-selected={isWriteModalOpen}
-          className="h-fit"
-          onClick={() => setIsWriteModalOpen(true)}
-        >
-          {isWriteModalOpen ? (
-            <FilledCreateIcon color={colors.skyblue["01"]} />
-          ) : (
-            <CreateIcon color={colors.grey["02"]} />
+      <div className="bottom-tab">
+        <div
+          role="tablist"
+          className={classNames(
+            "flex w-[100%] justify-around h-[48px] z-[5] items-center bg-white",
+            shadow && "shadow-[0px_-8px_16px_0px_rgba(0,0,0,0.04)]"
           )}
-        </button>
-        <LinkTab
-          href="/mypage"
-          isSelected={pathname === "/mypage" && !isWriteModalOpen}
-          icon={<MyPageIcon color={colors.grey["02"]} />}
-          onClickLink={onClickLink}
-          selectedIcon={<FilledMyPageIcon color={colors.skyblue["01"]} />}
-        />
-        {/* {isLoggedIn ? (
+          style={{
+            transform: `translateY(${translateY}%)`,
+            transition: "transform 0.3s ease-in-out",
+          }}
+        >
+          <LinkTab
+            href="/"
+            isSelected={pathname === "/" && !isWriteModalOpen}
+            icon={<HomeIcon color={colors.grey["02"]} />}
+            selectedIcon={<FilledHomeIcon color={colors.skyblue["01"]} />}
+            onClickLink={onClickLink}
+            className={`w-[${touchSpace}] flex justify-center`}
+          />
+          <LinkTab
+            href="/map"
+            isSelected={pathname === "/map" && !isWriteModalOpen}
+            icon={<MapIcon color={colors.grey["02"]} />}
+            selectedIcon={<FilledMapIcon color={colors.skyblue["01"]} />}
+            onClickLink={onClickLink}
+            className={`w-[${touchSpace}] flex justify-center`}
+          />
+          <button
+            role="tab"
+            aria-selected={isWriteModalOpen}
+            className={`h-fit w-[${touchSpace}] flex justify-center`}
+            onClick={() => setIsWriteModalOpen(true)}
+          >
+            {isWriteModalOpen ? (
+              <FilledCreateIcon color={colors.skyblue["01"]} />
+            ) : (
+              <CreateIcon color={colors.grey["02"]} />
+            )}
+          </button>
           <LinkTab
             href="/mypage"
             isSelected={pathname === "/mypage" && !isWriteModalOpen}
             icon={<MyPageIcon color={colors.grey["02"]} />}
             onClickLink={onClickLink}
             selectedIcon={<FilledMyPageIcon color={colors.skyblue["01"]} />}
+            className={`w-[${touchSpace}] flex justify-center`}
           />
-        ) : (
-          <button
-            role="tab"
-            aria-selected={isWriteModalOpen}
-            className="h-fit"
-            onClick={() => {
-              openModal("LoginModal", {
-                onClickPositive: () => {
-                  router.push("/login");
-                },
-              });
-            }}
-          >
-            <MyPageIcon color={colors.grey["02"]} />
-          </button>
-        )} */}
+        </div>
       </div>
     </>
   );
