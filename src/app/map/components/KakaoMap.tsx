@@ -248,11 +248,11 @@ const KakaoMap = ({
                 )}
               </div>
               <div
-                className="w-[100px] mt-[4px] text-base text-center text-wrap leading-[16px] pt-[1px] pb-[1px] whitespace-nowrap text-[12px] text-grey-black pl-[4px] pr-[4px] rounded-[8px]"
+                className="w-[100px] mt-[4px] text-base text-center text-wrap test-[12px] whitespace-nowrap leading-[14.4px] text-white p-[8px] rounded-[8px]"
                 style={{
                   textShadow:
-                    "-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff",
-                  background: "rgba(0, 0, 0, 0.16)",
+                    "-1px -1px 0 #222, 1px -1px 0 #222, -1px 1px 0 #222, 1px 1px 0 #222",
+                  backgroundColor: "rgba(0, 0, 0, 0.6)",
                 }}
               >
                 {title}
