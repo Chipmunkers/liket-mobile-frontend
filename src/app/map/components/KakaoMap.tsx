@@ -84,7 +84,7 @@ const KakaoMap = ({
   }>({
     queryKey: ["map-contents", mapInfo, mapFilter],
     queryFn: async () => {
-      if (mapInfo.level > 5) return;
+      if (mapInfo.level > 5) return null;
 
       const { data } = await axiosInstance.get(
         `/apis/map/culture-content/all?` +
@@ -185,6 +185,7 @@ const KakaoMap = ({
         }}
         isPanto={false}
         className="grow relative w-[100%]"
+        minLevel={11}
         level={4}
         onDragEnd={(map) => {
           setMapInfo(getMapInfo(map));
@@ -247,7 +248,7 @@ const KakaoMap = ({
                 )}
               </div>
               <div
-                className="w-[100px] mt-[4px] text-base text-center text-wrap whitespace-nowrap leading-[14.4px] text-white p-[8px] rounded-[16px]"
+                className="w-[100px] mt-[4px] text-base text-center text-wrap test-[12px] whitespace-nowrap leading-[14px] text-white pr-[8px] pl-[8px] pt-[4px] pb-[4px] rounded-[8px]"
                 style={{
                   textShadow:
                     "-1px -1px 0 #222, 1px -1px 0 #222, -1px 1px 0 #222, 1px 1px 0 #222",
