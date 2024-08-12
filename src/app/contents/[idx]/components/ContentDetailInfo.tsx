@@ -46,7 +46,7 @@ const ContentDetailInfo = (props: { content: ContentEntity }) => {
             >
               <div className="flex items-end justify-center h-[50px] select-none cursor-pointer">
                 <img
-                  className="w-[30px]"
+                  className="w-[40px]"
                   src={`https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${content.genre.idx}_icon.svg`}
                 />
               </div>
@@ -55,14 +55,10 @@ const ContentDetailInfo = (props: { content: ContentEntity }) => {
                 style={{
                   textShadow:
                     "-1px -1px 0 #222, 1px -1px 0 #222, -1px 1px 0 #222, 1px 1px 0 #222",
-                  backgroundColor: "rgba(0, 0, 0, 0.6)",
                 }}
-              >
-                {content.title}
-              </div>
+              ></div>
             </CustomOverlayMap>
           </Map>
-          {/* TODO: 맵 추가 */}
         </div>
         <button className="center absolute right-[24px] bottom-0 text-button4 text-skyblue-03">
           카카오맵에서 길찾기

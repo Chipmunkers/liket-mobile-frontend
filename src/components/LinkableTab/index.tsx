@@ -19,6 +19,7 @@ import useModalStore from "@/stores/modalStore";
 import { classNames } from "@/utils/helpers";
 import CustomDrawer from "../CustomDrawer";
 import customToast from "@/utils/customToast";
+import { useGetMyInfo } from "../../hooks/useGetMyInfo";
 
 interface LinkTabProps {
   isSelected: boolean;
@@ -64,6 +65,8 @@ const LinkableTab = ({ shadow = false }: Props) => {
   const isLoggedIn = false;
   const openModal = useModalStore(({ openModal }) => openModal);
 
+  const { data: loginUser } = useGetMyInfo();
+
   return (
     <>
       <CustomDrawer
@@ -81,11 +84,14 @@ const LinkableTab = ({ shadow = false }: Props) => {
             ) : (
               <button
                 onClick={() => {
-                  openModal("LoginModal", {
-                    onClickPositive: () => {
-                      router.push("/create/review");
-                    },
-                  });
+                  if (!loginUser) {
+                    openModal("LoginModal", {
+                      onClickPositive: () => {
+                        router.push("/login");
+                      },
+                    });
+                  }
+                  router.push("/create/review");
                 }}
                 className="bottom-sheet-button"
               >

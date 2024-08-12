@@ -11,6 +11,7 @@ import CustomDrawer from "@/components/CustomDrawer";
 import Chip from "@/components/Chip";
 import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
+import DevIng from "../../components/DevIng";
 
 export default function Page() {
   const [searchText, setSearchText] = useState("");
@@ -30,6 +31,9 @@ export default function Page() {
     useState(false);
   const [isOrderTypeSelectionDrawerOpen, setIsOrderTypeSelectionDrawerOpen] =
     useState(false);
+
+  // TODO: 개발 필요
+  return <DevIng />;
 
   return (
     <>
