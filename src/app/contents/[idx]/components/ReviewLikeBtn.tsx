@@ -1,28 +1,24 @@
-"use client";
-
+import ThumbIcon from "@/icons/thumb.svg";
+import EmptyThumbIcon from "@/icons/empty-thumb.svg";
 import { useEffect, useState } from "react";
+import { useLikeReview } from "../hooks/useLikeReview";
+import { useCancelLikeReview } from "../hooks/useCancelLikeReview";
 import { AxiosError } from "axios";
-import customToast from "@/utils/customToast";
-import FilledLike from "@/icons/like-filled.svg";
-import Like from "@/icons/like.svg";
-import { colors } from "@/utils/style";
-import { useLikeContent } from "./hooks/useLikeContent";
-import { useCancelLikeContent } from "./hooks/useCancelLikeContent";
+import customToast from "../../../../utils/customToast";
 
-const ContentLikeBtn = (props: {
+const ReviewLikeBtn = (props: {
   likeState: boolean;
-  idx: number | string;
-  likeCount?: number;
-  className?: string;
+  likeCount: number;
+  idx: number;
 }) => {
   const [like, setLike] = useState(props.likeState);
-  const [likeCount, setLikeCount] = useState(props.likeCount || 0);
+  const [likeCount, setLikeCount] = useState(props.likeCount);
 
   useEffect(() => {
     setLike(props.likeState);
   }, [props.likeState]);
 
-  const { mutate: likeContentApi } = useLikeContent(props.idx, {
+  const { mutate: likeReviewApi } = useLikeReview(props.idx, {
     onSuccess: () => {
       setLike(true);
       setLikeCount(likeCount + 1);
@@ -37,8 +33,7 @@ const ContentLikeBtn = (props: {
       customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
     },
   });
-
-  const { mutate: cancelLikeContentApi } = useCancelLikeContent(props.idx, {
+  const { mutate: cancelLikeReviewApi } = useCancelLikeReview(props.idx, {
     onSuccess: () => {
       setLike(false);
       setLikeCount(likeCount - 1);
@@ -55,28 +50,24 @@ const ContentLikeBtn = (props: {
   });
 
   return (
-    <button
-      className={`cursor-pointer ${props.className}`}
-      onClick={(e) => {
-        e.preventDefault();
+    <>
+      <button
+        className="text-numbering2 text-skyblue-01 flex"
+        onClick={(e) => {
+          e.preventDefault();
 
-        if (!like) {
-          return likeContentApi();
-        }
+          if (!like) {
+            return likeReviewApi();
+          }
 
-        return cancelLikeContentApi();
-      }}
-    >
-      {like ? (
-        <FilledLike fill={colors["skyblue"]["01"]} />
-      ) : (
-        <Like fill={colors["grey"]["02"]} />
-      )}
-      {props.likeCount !== undefined ? (
-        <div className="text-skyblue-01 text-numbering2">{likeCount}</div>
-      ) : null}
-    </button>
+          return cancelLikeReviewApi();
+        }}
+      >
+        {like ? <ThumbIcon /> : <EmptyThumbIcon />}{" "}
+        <span className="ml-[4px]">{likeCount}</span>
+      </button>
+    </>
   );
 };
 
-export default ContentLikeBtn;
+export default ReviewLikeBtn;

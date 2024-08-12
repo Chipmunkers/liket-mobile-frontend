@@ -42,3 +42,10 @@ export interface SummaryContentEntity
     | "createdAt"
     | "acceptedAt"
   > {}
+
+export interface HotContentEntity extends GenreEntity {
+  contentList: Pick<
+    ContentEntity,
+    "idx" | "title" | "startDate" | "endDate" | "thumbnail"
+  >[];
+}

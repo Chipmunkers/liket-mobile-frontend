@@ -1,6 +1,11 @@
 import Header from "@/components/Header";
-import { getContentDetailInformation } from "@/apis/content";
-import DetailContent from "../../../components/DetailContent";
+import customFetch from "@/utils/fetch";
+import { notFound } from "next/navigation";
+import ErrorPage from "../../error";
+import DetailContent from "./components/DetailContent";
+import ContentNotFound from "./components/ContentNotFound";
+import customToast from "../../../utils/customToast";
+
 interface PageProps {
   params: {
     idx: string;
@@ -8,25 +13,51 @@ interface PageProps {
 }
 
 export default async function Page({ params: { idx } }: PageProps) {
-  const content = await getContentDetailInformation(idx);
+  const res = await customFetch("/culture-content/" + idx, {
+    next: { revalidate: 0 },
+  });
 
-  return (
-    <>
-      <Header>
-        <Header.LeftOption
-          option={{
-            back: true,
-          }}
-        />
-        {/* <Header.RightOption
-          option={{
-            search: {
-              // onClick: () => {},
-            },
-          }}
-        /> */}
-      </Header>
-      <DetailContent content={content} />
-    </>
-  );
+  if (res.ok) {
+    const content = await res.json();
+
+    return (
+      <>
+        <Header>
+          <Header.LeftOption
+            option={{
+              back: true,
+            }}
+          />
+          <Header.RightOption
+            option={{
+              search: {},
+            }}
+          />
+        </Header>
+        <DetailContent content={content} />
+      </>
+    );
+  }
+
+  if ([403, 404].includes(res.status)) {
+    return (
+      <>
+        <Header>
+          <Header.LeftOption
+            option={{
+              back: true,
+            }}
+          />
+          <Header.RightOption
+            option={{
+              search: {},
+            }}
+          />
+        </Header>
+        <ContentNotFound />
+      </>
+    );
+  }
+
+  return <ErrorPage />;
 }

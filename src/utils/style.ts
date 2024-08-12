@@ -56,7 +56,7 @@ const TypographyScale: FontSize = {
       fontWeight: 700,
     },
   ],
-  body5: ["12px", { lineHeight: "16px", fontWeight: 400 }],
+  body5: ["12px", { lineHeight: "18px", fontWeight: 400 }],
   caption: [
     "12px",
     {

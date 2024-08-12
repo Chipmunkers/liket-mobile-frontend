@@ -2,8 +2,7 @@
 
 import Header from "@/components/Header";
 import LinkableTab from "@/components/LinkableTab";
-import KaKaoMap from "@/components/KaKaoMap";
-import { useState, MouseEvent } from "react";
+import { useState } from "react";
 import { classNames } from "@/utils/helpers";
 import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
 import Button from "@/components/Button";
@@ -16,14 +15,17 @@ import ButtonGroup from "@/components/ButtonGroup";
 import { AGES, GENRES, STYLES } from "@/utils/const";
 import Chip from "@/components/Chip";
 import { AgeType, CityType, GenreType, StyleType } from "@/types/const";
-import KakaoMapV2 from "@/components/KakaoMapV2";
-import { Content } from "@/components/KakaoMapV2/interface/Content";
-import MapContentInfo from "@/components/MapContentInfo/MapContentInfo";
 import { genres } from "../../../public/data/genre";
 import { Age, Genre, Style } from "@/types/content";
 import { ages } from "../../../public/data/age";
 import { styles } from "../../../public/data/style";
-import customToast from "../../utils/customToast";
+import customToast from "@/utils/customToast";
+import KakaoMap from "./components/KakaoMap";
+import { MapContentEntity } from "@/types/api/map";
+import MapContentInfo from "./components/ContentInfo";
+import Script from "next/script";
+
+const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_API_KEY}&autoload=false`;
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -76,10 +78,10 @@ export default function MapPage() {
   // ! 레거시 영역
 
   // * 현재 보여지고 있는 컨텐츠 목록
-  const [contentList, setContentList] = useState<Content[]>([]);
+  const [contentList, setContentList] = useState<MapContentEntity[]>([]);
 
   // * 선택된 컨텐츠
-  const [clickedContent, setClickedContent] = useState<Content>();
+  const [clickedContent, setClickedContent] = useState<MapContentEntity>();
 
   // * 필터링: 선택된 장르
   const [selectedGenre, setSelectedGenre] = useState<Genre>();
@@ -103,7 +105,12 @@ export default function MapPage() {
 
   return (
     <>
-      <Header>
+      <Script
+        strategy="beforeInteractive"
+        type="text/javascript"
+        src={KAKAO_SDK_URL}
+      />
+      <Header key={"header"}>
         <Header.LeftOption
           townName={currentSelectedGu}
           onClickTownSelection={onClickTownSelection}
@@ -111,7 +118,7 @@ export default function MapPage() {
         <Header.RightOption option={{ search: true, like: true }} />
       </Header>
       <main>
-        <KakaoMapV2
+        <KakaoMap
           contentList={contentList}
           setContentList={setContentList}
           clickedContent={clickedContent}
@@ -156,7 +163,7 @@ export default function MapPage() {
               </div>
             ) : null}
           </div>
-        </KakaoMapV2>
+        </KakaoMap>
         {clickedContent ? <MapContentInfo content={clickedContent} /> : null}
         {!clickedContent && contentList.length !== 0 ? (
           <CustomBottomSheet
@@ -187,8 +194,9 @@ export default function MapPage() {
           transform: !!isFilterModalOpen ? "translateY(0)" : "translateY(100%)",
         }}
       >
-        <Header>
+        <Header key={"filter-header"}>
           <Header.LeftOption
+            key={"filter-option"}
             option={{
               close: {
                 onClick: () => {
@@ -246,7 +254,7 @@ export default function MapPage() {
           </div>
 
           {/* 스타일 */}
-          <div key={"age_filter"}>
+          <div key={"style_filter"}>
             <div className="text-h2 mb-[15px]">스타일</div>
             <ul className="flex flex-wrap gap-[8px]">
               {styles.map((style) => (
@@ -330,7 +338,7 @@ export default function MapPage() {
             : "translateY(100%)",
         }}
       >
-        <Header>
+        <Header key={"town-filter-header"}>
           <Header.LeftOption
             option={{
               close: {
@@ -347,7 +355,7 @@ export default function MapPage() {
                 {CITIES.map((CITY, index) => {
                   return (
                     <li
-                      key={index}
+                      key={`city_${index}`}
                       className={classNames(
                         "center h-[48px]",
                         newSelectedCity === CITY

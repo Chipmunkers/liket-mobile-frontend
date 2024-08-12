@@ -14,14 +14,14 @@ export const variantToText = {
 };
 
 const variantToStyleMap = {
-  active: "bg-skyblue-01 text-white leading-[21px]",
-  inactive: "bg-grey-01 text-grey-02 leading-[21px]",
-  closed: "bg-grey-04 text-white leading-[21px]",
-  waiting: "bg-grey-01 text-grey-03 leading-[21px]",
-  willActive: "bg-grey-01 text-grey-04 leading-[21px]",
-  willClosed: "bg-rosepink-01 text-white leading-[21px]",
+  active: "bg-skyblue-01 text-white leading-[23px]",
+  inactive: "bg-grey-01 text-grey-02 leading-[23px]",
+  closed: "bg-grey-04 text-white leading-[23px]",
+  waiting: "bg-grey-01 text-grey-03 leading-[23px]",
+  willActive: "bg-grey-01 text-grey-04 leading-[23px]",
+  willClosed: "bg-rosepink-01 text-white leading-[23px]",
   hotplace:
-    "bg-white text-rosepink-01 border-solid border-[2px] border-rosepink-01 rounded-[4px] leading-[-21px]",
+    "bg-white text-rosepink-01 border-solid border-[2px] border-rosepink-01 rounded-[4px] leading-[19px]",
 } as {
   [key in ContentStateType]: string;
 };

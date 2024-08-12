@@ -1,4 +1,3 @@
-import { ContentCard } from "@/components/Card/ContentCard";
 import Divider from "@/components/Divider";
 import Header from "@/components/Header";
 import LinkableTab from "@/components/LinkableTab";
@@ -6,27 +5,26 @@ import RightArrow from "@/icons/right-arrow.svg";
 import { colors } from "@/utils/style";
 import Link from "next/link";
 import CustomScrollContainer from "@/components/CustomScrollContainer";
-import {
-  getHotAgeContents,
-  getHotPlaces,
-  getHotStyleContents,
-  getSoonEndContents,
-  getSoonOpenContents,
-} from "@/apis/content";
-import { Else, If, Then } from "react-if";
 import HotPlaceListItem from "@/components/HotplaceListItem";
-import { getBannerList } from "@/apis/banner";
 import MainCarousel from "@/components/Carousel/MainCarousel";
-import HotStyleSection from "../components/HotStyleSection";
-import HotAgeSection from "../components/HotAgeSection";
-import SoonOpenContentSection from "../components/SoonOpenContentSection";
-import SoonEndContentSection from "../components/SoonEndContentSection";
+import SoonOpenContentSection from "./_components/SoonOpenContentSection";
+import SoonEndContentSection from "./_components/SoonEndContentSection";
+import HotStyleSection from "./_components/HotStyleSection";
+import HotAgeSection from "./_components/HotAgeSection";
+import { getSoonOpenContentsForServer } from "./_hooks/getSoonOpenContents";
+import { getSoonEndContentsForServer } from "./_hooks/getSoonEndContents";
+import { getBanners } from "./_hooks/getBanners";
+import { getHotContentsForServer } from "./_hooks/getHotContents";
+import ReviewCard from "../components/Card/ReviewCard";
+import { getHotReview } from "./_hooks/getHotReviews";
 
 export default async function Home() {
-  const { contentList: soonOpenContents } = await getSoonOpenContents();
-  const { contentList: soonEndContents } = await getSoonEndContents();
-  const { bannerList } = await getBannerList();
-  const hotPlaces = await getHotPlaces();
+  const { contentList: soonOpenContents } =
+    await getSoonOpenContentsForServer();
+  const { contentList: soonEndContents } = await getSoonEndContentsForServer();
+  const { bannerList } = await getBanners();
+  const hotContent = await getHotContentsForServer();
+  const reviews = await getHotReview();
 
   return (
     <>
@@ -34,6 +32,7 @@ export default async function Home() {
         <Header.LeftOption logo />
       </Header>
       <main>
+        {/* 배너 */}
         <MainCarousel list={bannerList.map(({ imgPath }) => imgPath)} />
 
         {/* 인기 스타일  문화생활 컨텐츠*/}
@@ -51,7 +50,7 @@ export default async function Home() {
             <div className="text-body5 text-grey-04 flex flex-col-reverse ml-[8px]">{`업로드 Date`}</div>
           </div>
           <CustomScrollContainer className="flex flex-row overflow-x-hidden gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-            {hotPlaces.map(({ idx, name, contentList }) => {
+            {hotContent.map(({ idx, name, contentList }) => {
               return (
                 <div key={idx}>
                   <Link
@@ -105,14 +104,14 @@ export default async function Home() {
 
         <Divider height="8px" width="100%" margin="24px 0" />
 
-        {/* <section className="mb-[24px]">
+        <section className="mb-[24px] text-h2">
           <h2 className="pl-[24px] mb-[8px]">최근 인기 리뷰</h2>
           <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-            {REVIEW_CARDS_DUMMY.map((data, index) => {
-              return <ReviewCard key={index} {...data} />;
-            })}
+            {reviews.map((review, index) => (
+              <ReviewCard key={index} review={review} />
+            ))}
           </CustomScrollContainer>
-        </section> */}
+        </section>
       </main>
       <LinkableTab shadow />
     </>

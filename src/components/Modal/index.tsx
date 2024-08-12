@@ -28,7 +28,11 @@ const Modal = ({
       className={classNames(
         `center fixed top-0 bottom-0 left-0 right-0 z-[9999] bg-[rgba(0,0,0,0.6)]`
       )}
-      onClick={onClose}
+      onClick={() => {
+        if (isCloseOnTop) {
+          onClose();
+        }
+      }}
     >
       <div
         className="flex flex-col p-[16px] w-[280px] border-solid rounded-[24px] bg-white"

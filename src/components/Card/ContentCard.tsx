@@ -1,10 +1,6 @@
 "use client";
 
-import Like from "@/icons/like.svg";
-import ActiveLike from "@/icons/like-filled.svg";
 import Badge, { variantToText } from "../Badge/Badge";
-
-import { colors } from "@/utils/style";
 import Link from "next/link";
 import CustomImage from "../CustomImage";
 import dayjs from "dayjs";
@@ -90,7 +86,7 @@ export const ContentCard = ({
               )}
             </button> */}
           </div>
-          <div className="flex flex-col gap-[4px] text-left">
+          <div className="flex flex-col text-left">
             <div className="text-body4 text-skyblue-01">{genre.name}</div>
             <div className="text-body2">{title}</div>
             <div className="text-body5 text-grey-04">{`${region1Depth} ${region2Depth}`}</div>
@@ -138,13 +134,13 @@ export const ContentCard = ({
             likeState={likeState}
           />
         </div>
-        <div className="flex flex-col gap-[4px]">
-          <div className="text-body4 h-[14px] text-skyblue-01">
+        <div className="flex flex-col">
+          <div className="text-body4 text-skyblue-01 mb-[4px]">
             {genre.name}
           </div>
-          <div className="text-body2 min-h-[17px]">{title}</div>
-          <div className="text-body5 h-[14px] text-grey-04">{`${region1Depth} ${region2Depth}`}</div>
-          <div className="text-body5 h-[14px] text-grey-04">
+          <div className="text-body2 min-h-[17px] mb-[4px]">{title}</div>
+          <div className="text-body5 text-grey-04">{`${region1Depth} ${region2Depth}`}</div>
+          <div className="text-body5 text-grey-04">
             {dayjs(startDate).format("YYYY-MM-DD")} -{" "}
             {dayjs(endDate).format("MM.DD")}
           </div>

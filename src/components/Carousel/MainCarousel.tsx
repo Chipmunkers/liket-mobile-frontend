@@ -2,7 +2,6 @@
 
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
-import { useEffect, useState } from "react";
 import Image from "next/image";
 
 interface CarouselProps {
@@ -10,8 +9,6 @@ interface CarouselProps {
 }
 
 const ResponsiveCarousel = ({ list }: CarouselProps) => {
-  const { width } = useScreenDetector();
-
   return (
     <Carousel
       autoPlay
@@ -28,8 +25,8 @@ const ResponsiveCarousel = ({ list }: CarouselProps) => {
             className="relative"
             style={{
               objectFit: "cover",
-              width: width || "100%",
-              height: width || "336px",
+              width: "100%",
+              aspectRatio: `390 / 336`,
             }}
           >
             <Image
@@ -47,25 +44,3 @@ const ResponsiveCarousel = ({ list }: CarouselProps) => {
 };
 
 export default ResponsiveCarousel;
-
-const useScreenDetector = () => {
-  const [width, setWidth] = useState(0);
-
-  const handleWindowSizeChange = () => {
-    if (window.innerWidth <= 336) {
-      setWidth(window.innerWidth);
-    } else {
-      setWidth(0);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", handleWindowSizeChange);
-
-    return () => {
-      window.removeEventListener("resize", handleWindowSizeChange);
-    };
-  }, []);
-
-  return { width };
-};
