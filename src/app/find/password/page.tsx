@@ -2,7 +2,7 @@
 
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
-import EmailForm from "@/components/SignupForm/EmailForm";
+import { PasswordResetEmailForm } from "@/components/SignupForm/EmailForm";
 import { useState } from "react";
 import PasswordForm from "@/components/SignupForm/PasswordForm";
 import { useResetPassword } from "@/service/reset/hooks";
@@ -21,6 +21,7 @@ export default function Page() {
       router.replace("/login/email");
     },
   });
+
   const handleClickNextButtonInPasswordForm = (pw: string) =>
     mutate({
       pw,
@@ -39,7 +40,7 @@ export default function Page() {
         />
         <Header.MiddleText text="비밀번호 재설정" />
       </Header>
-      {formIndex === 0 && <EmailForm updateForm={updateForm} />}
+      {formIndex === 0 && <PasswordResetEmailForm updateForm={updateForm} />}
       {formIndex === 1 && (
         <PasswordForm
           isResetForm

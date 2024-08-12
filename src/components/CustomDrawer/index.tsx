@@ -26,6 +26,12 @@ const Wrapper = styled(Drawer)(
       "button.MuiPickersYear-yearButton.Mui-selected": {
         backgroundColor: colors.skyblue["01"],
       },
+      // Digital Clock
+      ".MuiMultiSectionDigitalClock-root": {
+        marginBottom: "12px",
+        justifyContent: "center",
+        borderBottom: 0,
+      },
       // Date Calendar
       ".MuiDateCalendar-root": { width: "100%" },
       ".MuiDayCalendar-header": {

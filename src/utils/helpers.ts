@@ -44,9 +44,7 @@ export const getStatus = (startDate: string, endDate: string) => {
   const start = dayjs(startDate);
   const end = dayjs(endDate);
 
-  if (today.isBefore(start) && today.isAfter(start.subtract(7, "day"))) {
-    return "willActive";
-  } else if (today.isBefore(end) && today.isAfter(end.subtract(7, "day"))) {
+  if (today.isBefore(end) && today.isAfter(end.subtract(3, "day"))) {
     return "willClosed";
   } else if (
     (today.isAfter(start) && today.isBefore(end)) ||

@@ -33,17 +33,24 @@ export interface LiketListItem {
   imgPath: string;
 }
 
-export const useMyPage = ({
-  onSuccess,
-}: {
+export const useMyPage = (props?: {
   onSuccess: (profile: ProfileStoreState) => void;
 }) =>
   useQuery<AxiosResponse<MyPageInformation>, AxiosError, MyPageInformation>({
     queryKey: ["mypage"],
     queryFn: async () => {
+      const { onSuccess } = props || {};
       const { data } = await axiosInstance.get("/apis/user/my");
-      const { gender, nickname, birth, email, profileImgPath } = data;
-      onSuccess({ gender, nickname, birth, email, profileImgPath });
+      const { gender, nickname, birth, email, profileImgPath, provider } = data;
+      onSuccess &&
+        onSuccess({
+          gender,
+          nickname,
+          birth,
+          email,
+          profileImgPath,
+          provider,
+        });
       return data;
     },
   });

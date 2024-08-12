@@ -23,17 +23,6 @@ const index = ({
         "flex w-[100%] px-[24px] border-b-[1px] border-grey-01",
         small ? "h-[32px]" : "h-[40px]"
       )}
-      // onClick={(e: MouseEvent<HTMLUListElement>) => {
-      //   const target = e.target as HTMLUListElement;
-
-      //   const textContent = target.textContent;
-
-      //   if (target.tagName !== "BUTTON" || !textContent) {
-      //     return;
-      //   }
-
-      //   onClickTab(textContent);
-      // }}
     >
       {list.map((tab) => {
         return (
@@ -43,11 +32,16 @@ const index = ({
               "grow h-[100%]",
               selectedTab === tab
                 ? "text-skyblue-01 border-b-[2px] border-skyblue-01 text-button3"
-                : "text-button4 text-grey-03",
+                : "text-button4 text-grey-03 pb-[2px]",
               small ? "text-button4" : "text-button3"
             )}
           >
-            <button className="w-[100%] h-[100%] center">{tab}</button>
+            <button
+              className="w-[100%] h-[100%] center"
+              onClick={() => onClickTab(tab)}
+            >
+              {tab}
+            </button>
           </li>
         );
       })}

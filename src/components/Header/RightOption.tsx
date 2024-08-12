@@ -32,22 +32,29 @@ const RightOption = ({ text, option }: RightOptionProps) => {
     const { search, like, create, menu, check } = option;
 
     const Search = search && (
-      <Link href="/search">
+      <Link href="/search" key={"search_button"}>
         <SearchIcon />
       </Link>
     );
     const Like = like && (
-      <Link href="/like">
+      <Link href="/like" key={"like_button"}>
         <LikeIcon />
       </Link>
     );
     const Create = create && (
-      <button key="button">
+      <button
+        key="create_button"
+        onClick={() => {
+          if (typeof create === "object") {
+            create.onClick && create.onClick();
+          }
+        }}
+      >
         <CreateIcon />
       </button>
     );
     const Menu = menu && (
-      <button key="menu">
+      <button key="menu_button">
         <MenuIcon />
       </button>
     );
@@ -56,7 +63,7 @@ const RightOption = ({ text, option }: RightOptionProps) => {
       check && typeof check !== "boolean" && !!check.disabled;
     const Check = check && typeof check === "object" && (
       <button
-        key="check"
+        key="check_button"
         disabled={checkDisabled}
         onClick={() => check.onClick && check.onClick()}
       >

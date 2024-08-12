@@ -4,11 +4,14 @@ import Header from "@/components/Header";
 import { PasswordChangeForm } from "@/components/SignupForm/PasswordForm";
 import { useChangePassword } from "@/service/changePassword";
 import customToast from "@/utils/customToast";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const router = useRouter();
   const { mutate } = useChangePassword({
     onSuccess: () => {
       customToast("비밀번호가 변경됐습니다.");
+      router.replace("/mypage");
     },
     onError: ({ response }) => {
       if (response?.status === 400) {
@@ -37,7 +40,7 @@ export default function Page() {
       </Header>
       <main>
         <PasswordChangeForm
-          nextButtonText="로그인"
+          nextButtonText="변경하기"
           onClickNextButton={handleClickNextButton}
         />
       </main>

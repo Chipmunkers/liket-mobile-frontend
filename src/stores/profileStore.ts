@@ -3,7 +3,7 @@ import { create } from "zustand";
 
 export type ProfileStoreState = Pick<
   MyPageInformation,
-  "gender" | "nickname" | "birth" | "email" | "profileImgPath"
+  "gender" | "nickname" | "birth" | "email" | "profileImgPath" | "provider"
 >;
 
 interface Action {
@@ -16,6 +16,7 @@ const profileStore = create<ProfileStoreState & Action>((set) => ({
   birth: 0,
   email: "",
   profileImgPath: "",
+  provider: "",
   setProfile: (profile) => set(() => profile),
 }));
 

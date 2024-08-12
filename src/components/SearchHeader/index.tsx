@@ -3,23 +3,15 @@
 import BackIcon from "@/icons/back.svg";
 import SearchIcon from "@/icons/search.svg";
 import RemoveIcon from "@/icons/remove.svg";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { EmptyFunction } from "@/types/common";
 
 interface SearchHeaderProps {
-  placeholder: "검색어를 입력해주세요." | "원하는 컨텐츠를 검색해보세요.";
+  placeholder: string;
   onSearch: (text: string) => void;
-  onInput: (text: string) => void;
-  onRemove: EmptyFunction;
 }
 
-const SearchHeader = ({
-  placeholder,
-  onInput,
-  onRemove,
-  onSearch,
-}: SearchHeaderProps) => {
+const SearchHeader = ({ placeholder, onSearch }: SearchHeaderProps) => {
   const [searchText, setSearchText] = useState("");
   const router = useRouter();
 
@@ -29,12 +21,10 @@ const SearchHeader = ({
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
-    onInput(e.target.value);
   };
 
   const handleClickRemoveButton = () => {
     setSearchText("");
-    onRemove();
   };
 
   const handleSubmitForm = (e: FormEvent<HTMLFormElement>) => {
@@ -56,12 +46,12 @@ const SearchHeader = ({
         <form className="flex" role="search" onSubmit={handleSubmitForm}>
           <input
             type="search"
+            value={searchText}
             autoComplete="off"
             autoCorrect="off"
             spellCheck={false}
             placeholder={placeholder}
             className="w-[100%] text-body3 placeholder:text-body3 placeholder-grey-02"
-            value={searchText}
             onChange={handleChangeInput}
           />
           {searchText.length >= 1 ? (

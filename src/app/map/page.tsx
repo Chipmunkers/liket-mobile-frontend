@@ -2,38 +2,40 @@
 
 import Header from "@/components/Header";
 import LinkableTab from "@/components/LinkableTab";
-import KaKaoMap from "@/components/KaKaoMap";
-import { useState, MouseEvent } from "react";
+import { useState } from "react";
 import { classNames } from "@/utils/helpers";
 import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
 import Button from "@/components/Button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import CustomBottomSheet from "@/components/BottomSheet";
-import MapBottomSheetCard, {
-  CONTENT_CARDS_DUMMY,
-} from "@/components/Card/MapBottomSheetCard";
+import MapBottomSheetCard from "@/components/Card/MapBottomSheetCard";
 import FilterFilled from "@/icons/filter-filled.svg";
 import Filter from "@/icons/filter.svg";
 import ButtonGroup from "@/components/ButtonGroup";
 import { AGES, GENRES, STYLES } from "@/utils/const";
 import Chip from "@/components/Chip";
 import { AgeType, CityType, GenreType, StyleType } from "@/types/const";
+import { genres } from "../../../public/data/genre";
+import { Age, Genre, Style } from "@/types/content";
+import { ages } from "../../../public/data/age";
+import { styles } from "../../../public/data/style";
+import customToast from "@/utils/customToast";
+import KakaoMap from "./components/KakaoMap";
+import { MapContentEntity } from "@/types/api/map";
+import MapContentInfo from "./components/ContentInfo";
+import Script from "next/script";
+
+const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_API_KEY}&autoload=false`;
 
 export default function MapPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
   const isTownSelectionModalOpen = searchParams.get("isTownSelectionModalOpen");
   const isFilterModalOpen = searchParams.get("isFilterModalOpen");
-  const [appliedFilters, setAppliedFilters] = useState<AppliedFiltersType>({
-    currentAges: [],
-    currentGenres: [],
-    currentStyles: [],
-    currentCities: [],
-    newGenres: [],
-    newCities: [],
-    newAges: [],
-    newStyles: [],
-  });
 
+  // ! 레거시 영역
   const [cityAndGuSelection, setCityAndGuSelection] = useState(
     INITIAL_CITY_AND_GU_SELECTION
   );
@@ -41,14 +43,8 @@ export default function MapPage() {
   const { currentSelectedGu, newSelectedCity, newSelectedGu } =
     cityAndGuSelection;
 
-  const router = useRouter();
-  const pathname = usePathname();
-
   const onClickTownSelection = () => {
     router.push(`${pathname}?isTownSelectionModalOpen=true`);
-  };
-  const onClickFilter = () => {
-    router.push(`${pathname}?isFilterModalOpen=true`);
   };
 
   const onCloseTownSelectionModal = () => {
@@ -79,96 +75,42 @@ export default function MapPage() {
       currentSelectedCity: cityAndGuSelection.newSelectedCity,
       currentSelectedGu: cityAndGuSelection.newSelectedGu,
     });
+  // ! 레거시 영역
 
-  const onClickInitialize = () =>
-    setAppliedFilters({
-      ...appliedFilters,
-      newAges: [],
-      newCities: [],
-      newGenres: [],
-      newStyles: [],
-    });
+  // * 현재 보여지고 있는 컨텐츠 목록
+  const [contentList, setContentList] = useState<MapContentEntity[]>([]);
 
-  const onClickSettingFilter = () => {
-    router.back();
-    const { currentAges, currentCities, currentGenres, currentStyles } =
-      appliedFilters;
+  // * 선택된 컨텐츠
+  const [clickedContent, setClickedContent] = useState<MapContentEntity>();
 
-    setAppliedFilters({
-      ...appliedFilters,
-      newAges: currentAges,
-      newCities: currentCities,
-      newGenres: currentGenres,
-      newStyles: currentStyles,
-    });
-  };
+  // * 필터링: 선택된 장르
+  const [selectedGenre, setSelectedGenre] = useState<Genre>();
 
-  const onCloseFilterSelectionModal = () => {
-    router.back();
+  // * 필터링: 선택된 연령대
+  const [selectedAge, setSelectedAge] = useState<Age>();
 
-    const { currentAges, currentCities, currentGenres, currentStyles } =
-      appliedFilters;
+  // * 필터링: 선택된 스타일들
+  const [selectedStyles, setSelectedStyles] = useState<Style[]>([]);
 
-    setAppliedFilters({
-      ...appliedFilters,
-      newAges: currentAges,
-      newCities: currentCities,
-      newGenres: currentGenres,
-      newStyles: currentStyles,
-    });
-  };
-  const onClickOption = (
-    e: MouseEvent<HTMLUListElement>,
-    option: "장르" | "스타일" | "연령대" | "지역"
-  ) => {
-    const target = e.target as HTMLUListElement;
-
-    const textContent = target.textContent;
-
-    if (target.tagName !== "BUTTON" || !textContent) {
-      return;
-    }
-
-    const { newGenres, newCities, newAges, newStyles } = appliedFilters;
-
-    if (option === "장르") {
-      setAppliedFilters({
-        ...appliedFilters,
-        newGenres: getAppliedOptionList(
-          newGenres,
-          textContent
-        ) as AppliedFiltersType["newGenres"],
-      });
-    } else if (option === "스타일") {
-      setAppliedFilters({
-        ...appliedFilters,
-        newStyles: getAppliedOptionList(
-          newStyles,
-          textContent
-        ) as AppliedFiltersType["newStyles"],
-      });
-    } else if (option === "연령대") {
-      setAppliedFilters({
-        ...appliedFilters,
-        newAges: getAppliedOptionList(
-          newAges,
-          textContent
-        ) as AppliedFiltersType["newAges"],
-      });
-    } else if (option === "지역") {
-      setAppliedFilters({
-        ...appliedFilters,
-        newCities: getAppliedOptionList(
-          newCities,
-          textContent
-        ) as AppliedFiltersType["newCities"],
-      });
-    }
-  };
+  // * 최종적으로 필터링 목록
+  const [mapFilter, setMapFilter] = useState<{
+    genre: Genre | undefined;
+    age: Age | undefined;
+    styles: Style[];
+  }>({
+    genre: undefined,
+    age: undefined,
+    styles: [],
+  });
 
   return (
     <>
-      <Header>
+      <Script
+        strategy="beforeInteractive"
+        type="text/javascript"
+        src={KAKAO_SDK_URL}
+      />
+      <Header key={"header"}>
         <Header.LeftOption
           townName={currentSelectedGu}
           onClickTownSelection={onClickTownSelection}
@@ -176,37 +118,74 @@ export default function MapPage() {
         <Header.RightOption option={{ search: true, like: true }} />
       </Header>
       <main>
-        <KaKaoMap>
-          <button
-            className="absolute top-0 left-0 z-[2]"
-            onClick={onClickFilter}
-          >
-            {isAppliedFilterExist(appliedFilters) ? (
-              <FilterFilled />
-            ) : (
-              <Filter />
-            )}
-          </button>
-        </KaKaoMap>
-        <CustomBottomSheet
-          open={true}
-          defaultSnap={20}
-          snapPoints={({ maxHeight }) => [
-            20,
-            maxHeight / 2 - 45,
-            maxHeight - 68 - 48 - 74,
-          ]}
+        <KakaoMap
+          contentList={contentList}
+          setContentList={setContentList}
+          clickedContent={clickedContent}
+          setClickedContent={setClickedContent}
+          mapFilter={mapFilter}
         >
-          <ul>
-            {CONTENT_CARDS_DUMMY.map((cardItem, index) => {
-              return (
-                <li key={index}>
-                  <MapBottomSheetCard {...cardItem} />
-                </li>
-              );
-            })}
-          </ul>
-        </CustomBottomSheet>
+          <div className="absolute top-12 left-0 z-[2] flex w-100">
+            <button
+              onClick={() => router.push(`${pathname}?isFilterModalOpen=true`)}
+            >
+              {mapFilter.genre || mapFilter.age || mapFilter.styles.length ? (
+                <FilterFilled />
+              ) : (
+                <Filter />
+              )}
+            </button>
+            {mapFilter.genre || mapFilter.age || mapFilter.styles.length ? (
+              <div className="flex items-center">
+                {mapFilter.genre ? (
+                  <div className="mr-[8px]">
+                    <Chip isSelected={true} onClick={() => {}}>
+                      {mapFilter.genre.name}
+                    </Chip>
+                  </div>
+                ) : null}
+                {mapFilter.age ? (
+                  <div className="mr-[8px]">
+                    <Chip isSelected={true} onClick={() => {}}>
+                      {mapFilter.age.name}
+                    </Chip>
+                  </div>
+                ) : null}
+                {mapFilter.styles.map(({ name }) => {
+                  return (
+                    <div className="mr-[8px]" key={name}>
+                      <Chip isSelected={true} onClick={() => {}}>
+                        {name}
+                      </Chip>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
+        </KakaoMap>
+        {clickedContent ? <MapContentInfo content={clickedContent} /> : null}
+        {!clickedContent && contentList.length !== 0 ? (
+          <CustomBottomSheet
+            open={true}
+            defaultSnap={20}
+            snapPoints={({ maxHeight }) => [
+              20,
+              maxHeight / 2 - 45,
+              maxHeight - 68 - 48 - 74,
+            ]}
+          >
+            <ul>
+              {contentList.map((content) => {
+                return (
+                  <li key={content.idx}>
+                    <MapBottomSheetCard content={content} />
+                  </li>
+                );
+              })}
+            </ul>
+          </CustomBottomSheet>
+        ) : null}
       </main>
       <LinkableTab />
       <div
@@ -215,64 +194,137 @@ export default function MapPage() {
           transform: !!isFilterModalOpen ? "translateY(0)" : "translateY(100%)",
         }}
       >
-        <Header>
+        <Header key={"filter-header"}>
           <Header.LeftOption
+            key={"filter-option"}
             option={{
               close: {
-                onClick: onCloseFilterSelectionModal,
+                onClick: () => {
+                  setSelectedGenre(mapFilter.genre);
+                  setSelectedAge(mapFilter.age);
+                  setSelectedStyles(mapFilter.styles);
+                  router.back();
+                },
               },
             }}
           />
           <Header.MiddleText text="필터" />
         </Header>
         <div className="full-modal-main px-[24px] py-[16px] gap-[48px]">
-          {(["장르", "지역", "연령대", "스타일"] as const).map((option) => {
-            return (
-              <div key={option}>
-                <div className="text-h2 mb-[15px]">{option}</div>
-                <ul
-                  onClick={(e) => onClickOption(e, option)}
-                  className="flex flex-wrap gap-[8px]"
-                >
-                  {FILTER_OPTIONS[option].map((item) => {
-                    const { newGenres, newCities, newAges, newStyles } =
-                      appliedFilters;
+          {/* 장르 선택 */}
+          <div key={"genre_filter"}>
+            <div className="text-h2 mb-[15px]">장르</div>
+            <ul className="flex flex-wrap gap-[8px]">
+              {genres.map((genre) => (
+                <li key={genre.idx}>
+                  <Chip
+                    isSelected={selectedGenre?.idx === genre.idx}
+                    onClick={() => {
+                      if (selectedGenre?.idx === genre.idx)
+                        return setSelectedGenre(undefined);
+                      setSelectedGenre(genre);
+                    }}
+                  >
+                    {genre.name}
+                  </Chip>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-                    let isSelected = false;
-                    if (option === "장르") {
-                      isSelected = newGenres.includes(item as GenreType);
-                    } else if (option === "스타일") {
-                      isSelected = newStyles.includes(item as StyleType);
-                    } else if (option === "연령대") {
-                      isSelected = newAges.includes(item as AgeType);
-                    } else if (option === "지역") {
-                      isSelected = newCities.includes(item as CityType);
-                    }
+          {/* 연령대 선택 */}
+          <div key={"age_filter"}>
+            <div className="text-h2 mb-[15px]">연령대</div>
+            <ul className="flex flex-wrap gap-[8px]">
+              {ages.map((age) => (
+                <li key={age.idx}>
+                  <Chip
+                    isSelected={selectedAge?.idx === age.idx}
+                    onClick={() => {
+                      if (selectedAge?.idx === age.idx)
+                        return setSelectedAge(undefined);
+                      setSelectedAge(age);
+                    }}
+                  >
+                    {age.name}
+                  </Chip>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-                    return (
-                      <li key={item}>
-                        <Chip isSelected={isSelected} onClick={() => {}}>
-                          {item}
-                        </Chip>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            );
-          })}
+          {/* 스타일 */}
+          <div key={"style_filter"}>
+            <div className="text-h2 mb-[15px]">스타일</div>
+            <ul className="flex flex-wrap gap-[8px]">
+              {styles.map((style) => (
+                <li key={style.idx}>
+                  <Chip
+                    isSelected={selectedStyles
+                      .map((style) => style.idx)
+                      .includes(style.idx)}
+                    onClick={() => {
+                      const alreadyExistStyleIdxs = selectedStyles.map(
+                        (style) => style.idx
+                      );
+
+                      if (alreadyExistStyleIdxs.includes(style.idx)) {
+                        // * 이미 선택된 스타일의 경우 선택되지 않은 것으로 표시
+                        return setSelectedStyles([
+                          ...selectedStyles.filter(
+                            (selectedStyle) => selectedStyle.idx !== style.idx
+                          ),
+                        ]);
+                      }
+
+                      if (alreadyExistStyleIdxs.length >= 3) {
+                        return customToast(
+                          "스타일은 최대 3개까지 선택할 수 있습니다."
+                        );
+                      }
+
+                      setSelectedStyles([...selectedStyles, style]);
+                    }}
+                  >
+                    {style.name}
+                  </Chip>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
         <BottomButtonTabWrapper>
           <ButtonGroup gap={16}>
             <Button
               height={48}
-              onClick={onClickInitialize}
+              onClick={() => {
+                setSelectedGenre(undefined);
+                setSelectedAge(undefined);
+                setSelectedStyles([]);
+                setMapFilter({
+                  genre: undefined,
+                  age: undefined,
+                  styles: [],
+                });
+                router.back();
+              }}
               variant="ghost"
               fullWidth
             >
               초기화
             </Button>
-            <Button height={48} onClick={onClickSettingFilter} fullWidth>
+            <Button
+              height={48}
+              onClick={() => {
+                setMapFilter({
+                  genre: selectedGenre,
+                  age: selectedAge,
+                  styles: selectedStyles,
+                });
+                router.back();
+              }}
+              fullWidth
+            >
               적용하기
             </Button>
           </ButtonGroup>
@@ -286,7 +338,7 @@ export default function MapPage() {
             : "translateY(100%)",
         }}
       >
-        <Header>
+        <Header key={"town-filter-header"}>
           <Header.LeftOption
             option={{
               close: {
@@ -303,7 +355,7 @@ export default function MapPage() {
                 {CITIES.map((CITY, index) => {
                   return (
                     <li
-                      key={index}
+                      key={`city_${index}`}
                       className={classNames(
                         "center h-[48px]",
                         newSelectedCity === CITY

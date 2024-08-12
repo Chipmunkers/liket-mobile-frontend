@@ -71,6 +71,7 @@ export default function RootLayout({
                 position="bottom-center"
                 containerStyle={{
                   inset: "16px 16px 114px 16px",
+                  zIndex: 99999,
                 }}
               />
               {children}

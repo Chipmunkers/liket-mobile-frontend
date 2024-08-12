@@ -10,66 +10,126 @@ import {
   Label,
 } from "@/components/newInput";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { z } from "zod";
 import DeleteIcon from "@/icons/circle-cross.svg";
 import CreateIcon from "@/icons/create.svg";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CalendarIcon from "@/icons/calendar.svg";
 import MediumSelectButton from "@/components/SelectButton/MediumSelectButton";
 import { TextareaAutosize } from "@mui/material";
 import CustomDrawer from "@/components/CustomDrawer";
-import { AGES, GENRES, STYLES } from "@/utils/const";
 import Chip from "@/components/Chip";
 import Button from "@/components/Button";
 import dayjs from "dayjs";
 import { DateCalendar } from "@mui/x-date-pickers";
-import { AgeType, GenreType } from "@/types/const";
+import { GenreType } from "@/types/const";
+import { useUploadContentImages } from "@/service/uploadImage";
+import { UploadedFileEntity } from "@/types/upload";
+import customToast from "@/utils/customToast";
+import Script from "next/script";
+import { classNames } from "@/utils/helpers";
+import { ages } from "../../../../public/data/age";
+import { styles } from "../../../../public/data/style";
+import { useCreateContent } from "./hooks/useCreateContent";
+import { genres } from "../../../../public/data/genre";
+
+enum AnalyzeType {
+  SIMILAR = "SIMILAR",
+  EXACT = "EXACT",
+}
+
+const MAX_IMAGES_COUNT = 10;
+const CONDITIONS = ["입장료", "예약", "반려동물", "주차"];
 
 const schema = z.object({
-  title: z.string(),
-  genre: z.string(),
-  address: z.string(),
-  age: z.string(),
+  title: z.string().min(1, "필수로 입력돼야합니다."),
+  genre: z.string().min(1, "필수로 입력돼야합니다."),
+  address: z.string().min(1, "필수로 입력돼야합니다."),
+  age: z.string().min(1, "필수로 입력돼야합니다."),
   style: z.array(z.string()),
-  "detail-address": z.string(),
-  "open-time": z.string(),
-  website: z.string(),
+  detailAddress: z.string(),
+  openTime: z.string().min(1, "필수로 입력돼야합니다."),
+  websiteLink: z.string().min(1, "필수로 입력돼야합니다."),
   condition: z.array(z.string()),
-  "detail-info": z.string(),
-  "start-date": z.number(),
-  "end-date": z.number(),
+  description: z.string().min(1, "필수로 입력돼야합니다."),
+  startDate: z.string().min(1, "필수로 입력돼야합니다."),
+  endDate: z.string().min(1, "필수로 입력돼야합니다."),
+  imgList: z.array(z.string()).min(1, "이미지가 최소 하나 이상 필요합니다."),
 });
 
 export default function Page() {
-  const [uploadedImgs, setUploadedImgs] = useState<string[]>([]);
+  const [uploadedImgs, setUploadedImgs] = useState<UploadedFileEntity[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-
+  const { mutate: uploadContentImages } = useUploadContentImages({
+    onSuccess: ({ data }) => {
+      setUploadedImgs([...uploadedImgs, ...data]);
+      setValue("imgList", [...uploadedImgs, ...data]);
+      trigger("imgList");
+    },
+  });
+  const pathname = usePathname();
   const router = useRouter();
+  const [detailAddress, setDetailAddress] = useState("");
+  const [currentScroll, setCurrentScroll] = useState(0);
+  const [addressInformation, setAddressInformation] = useState<{
+    detailAddress: string;
+    address: string;
+    region1Depth: string;
+    region2Depth: string;
+    positionX: number;
+    positionY: number;
+    hCode: string;
+    bCode: string;
+  }>();
+  const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder>();
 
-  const methods = useForm({
+  const methods = useForm<{
+    title: string;
+    genre: string;
+    address: string;
+    age: string;
+    style: string[];
+    detailAddress: string;
+    openTime: string;
+    websiteLink: string;
+    condition: string[];
+    description: string;
+    startDate: string;
+    endDate: string;
+    imgList: UploadedFileEntity[];
+  }>({
     mode: "onBlur",
     defaultValues: {
       title: "",
       genre: "",
       address: "",
       age: "",
-      style: [""], // TODO: Zod TypeError 발생으로 임시로 "" 삽입. 제거 필요
-      "detail-address": "",
-      "open-time": "",
-      website: "",
-      condition: [""], // TODO: Zod TypeError 발생으로 임시로 "" 삽입. 제거 필요
-      "detail-info": "",
-      "start-date": "",
-      "end-date": "",
+      style: [],
+      detailAddress: "",
+      openTime: "",
+      websiteLink: "",
+      condition: [],
+      description: "",
+      startDate: "",
+      endDate: "",
+      imgList: [],
     },
     resolver: zodResolver(schema),
   });
 
-  const { formState, watch, register, setValue, getValues } = methods;
+  const searchParam = useSearchParams();
+  const { formState, watch, register, setValue, getValues, trigger } = methods;
+  const isSearchModalOpen = searchParam.get("isSearchModalOpen");
+  const { mutate: createContent } = useCreateContent({
+    onSuccess: ({ data }) => {
+      console.log(data.idx);
+    },
+  });
+
   const [isStyleSelectionDrawerOpen, setIsStyleSelectionDrawerOpen] =
     useState(false);
   const [isAgeRangeSelectionDrawerOpen, setIsAgeRangeSelectionDrawerOpen] =
@@ -87,6 +147,80 @@ export default function Page() {
 
   const thisYear = new Date().getFullYear() - 1;
 
+  const handleClickSearchAddress = () => {
+    setCurrentScroll(
+      Math.max(document.body.scrollTop, document.documentElement.scrollTop)
+    );
+
+    new (window as any).daum.Postcode({
+      oncomplete: function ({ address }: SelectedAddress) {
+        document.body.scrollTop = currentScroll;
+
+        if (geocoder) {
+          geocoder.addressSearch(
+            address,
+            (res, status) => {
+              if (status === kakao.maps.services.Status.OK) {
+                const {
+                  address_name,
+                  b_code,
+                  h_code,
+                  region_1depth_name,
+                  region_2depth_name,
+                  x,
+                  y,
+                } = res[0].address;
+
+                setDetailAddress(address);
+                setValue("address", address);
+                setAddressInformation({
+                  detailAddress: "",
+                  address: address_name,
+                  bCode: b_code,
+                  hCode: h_code,
+                  region1Depth: region_1depth_name,
+                  region2Depth: region_2depth_name,
+                  positionX: +x,
+                  positionY: +y,
+                });
+              } else {
+                customToast("알 수 없는 에러가 발생했습니다.");
+              }
+            },
+            {
+              page: 1,
+              size: 1,
+              analyze_type: AnalyzeType.EXACT,
+            }
+          );
+        }
+
+        router.back();
+        router.back();
+      },
+      width: "100%",
+      height: "100%",
+    }).embed("search-list");
+
+    router.push(`${pathname}?isSearchModalOpen=true`);
+  };
+
+  useEffect(() => {
+    const $mapScript = document.createElement("script");
+    $mapScript.async = false;
+    $mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_API_KEY}&autoload=false&libraries=services`;
+    document.head.appendChild($mapScript);
+
+    const onLoadMap = () => {
+      window.kakao.maps.load(() => {
+        const geocoder = new window.kakao.maps.services.Geocoder();
+        setGeocoder(geocoder);
+      });
+    };
+
+    $mapScript.addEventListener("load", onLoadMap);
+  }, []);
+
   return (
     <>
       <Header>
@@ -95,13 +229,81 @@ export default function Page() {
         <Header.RightOption
           option={{
             check: {
-              onClick: () => router.replace(`/requested-contents/${1}`),
+              disabled: !formState.isValid,
+              onClick: () => {
+                const {
+                  age,
+                  style,
+                  genre,
+                  condition,
+                  detailAddress,
+                  title,
+                  openTime,
+                  websiteLink,
+                  description,
+                  startDate,
+                  endDate,
+                  imgList,
+                } = getValues();
+                const genreIdx = findIdxByName(genres, genre);
+                const ageIdx = findIdxByName(ages, age);
+                const styleIdxList = findIdxsByNames(styles, style);
+
+                if (addressInformation && genreIdx && ageIdx && styleIdxList) {
+                  createContent({
+                    isPet: condition.includes("반려동물"),
+                    isFee: condition.includes("입장료"),
+                    isParking: condition.includes("주차"),
+                    isReservation: condition.includes("예약"),
+                    genreIdx,
+                    ageIdx,
+                    styleIdxList: styleIdxList as number[],
+                    title,
+                    openTime,
+                    websiteLink,
+                    description,
+                    startDate,
+                    endDate,
+                    imgList: imgList.map(({ filePath }) => filePath),
+                    location: {
+                      ...addressInformation,
+                      detailAddress,
+                    },
+                    // imgList: ["abc"],
+                    // genreIdx: 5,
+                    // ageIdx: 4,
+                    // styleIdxList: [1, 4, 5],
+                    // location: {
+                    //   detailAddress: "LH아파트 1205호",
+                    //   address: "전북 익산시 부송동 100",
+                    //   region1Depth: "서울",
+                    //   region2Depth: "강동구",
+                    //   positionX: 126.99597295767953,
+                    //   positionY: 35.97664845766847,
+                    //   hCode: "4514069000",
+                    //   bCode: "4514013400",
+                    // },
+                    // title: "string",
+                    // description: "200글자가 안되는 description",
+                    // websiteLink: "https://google.com",
+                    // startDate: "2024-05-07T00:00:00.000Z",
+                    // endDate: "2024-05-07T00:00:00.000Z",
+                    // openTime: "월-금 12:00-20:00",
+                    // isFee: true,
+                    // isReservation: false,
+                    // isPet: true,
+                    // isParking: true,
+                  });
+                }
+              },
             },
           }}
         />
       </Header>
       <main>
-        <form className="mt-[16px]">
+        <form
+          className={classNames(`mt-[16px]`, !!isSearchModalOpen && "hidden")}
+        >
           <div className="mx-[24px]">
             <InputWrapper>
               <Label
@@ -109,7 +311,7 @@ export default function Page() {
                 htmlFor="title"
                 currentLength={watch("title").length}
               >
-                컨텐츠명
+                컨텐츠명<span className="text-top">*</span>
               </Label>
               <Input
                 field="title"
@@ -123,7 +325,9 @@ export default function Page() {
           <Divider width="100%" height="8px" margin="16px 0" />
           <div className="mx-[24px]">
             <InputWrapper margin="0 0 34px 0">
-              <Label htmlFor="genre">장르</Label>
+              <Label htmlFor="genre">
+                장르<span className="text-top">*</span>
+              </Label>
               <InputLikeButton
                 text={watch("genre")}
                 placeholder="장르를 선택해주세요."
@@ -131,26 +335,28 @@ export default function Page() {
               />
             </InputWrapper>
             <InputWrapper>
-              <Label htmlFor="address">주소</Label>
+              <Label htmlFor="address">
+                주소<span className="text-top">*</span>
+              </Label>
               <InputLikeButton
+                text={detailAddress}
                 placeholder="주소를 검색해주세요."
                 subButtonText="주소 검색"
-                onClick={() => {
-                  alert("주소 검색 모달 띄우기");
-                }}
+                onClick={handleClickSearchAddress}
               />
             </InputWrapper>
             <InputWrapper margin="8px 0 0 0">
               <Input
-                field="detail-address"
+                field="detailAddress"
                 placeholder="상세주소를 입력해주세요."
                 register={register}
                 formState={formState}
               />
             </InputWrapper>
-
             <InputWrapper margin="34px 0 0 0">
-              <Label htmlFor="age">연령대</Label>
+              <Label htmlFor="age">
+                연령대<span className="text-top">*</span>
+              </Label>
               <InputLikeButton
                 text={watch("age")}
                 placeholder="연령대를 선택해주세요."
@@ -158,7 +364,9 @@ export default function Page() {
               />
             </InputWrapper>
             <InputWrapper margin="34px 0 0 0">
-              <Label htmlFor="style">스타일</Label>
+              <Label htmlFor="style">
+                스타일<span className="text-top">*</span>
+              </Label>
               <InputLikeButton
                 text={watch("style").join(", ")}
                 placeholder="스타일을 선택해주세요."
@@ -170,10 +378,12 @@ export default function Page() {
           <div className="mx-[24px]">
             <div className="flex justify-between mb-[34px]">
               <div>
-                <Label htmlFor="open-date">오픈날짜</Label>
+                <Label htmlFor="open-date">
+                  오픈날짜<span className="text-top">*</span>
+                </Label>
                 <div className="mt-[12px]">
                   <MediumSelectButton
-                    text={getValues("start-date")}
+                    text={getValues("startDate")}
                     placeholder="날짜 선택"
                     onClick={() => setIsStartDateSelectionDrawerOpen(true)}
                     Icon={<CalendarIcon />}
@@ -181,10 +391,12 @@ export default function Page() {
                 </div>
               </div>
               <div>
-                <Label htmlFor="close-date">종료날짜</Label>
+                <Label htmlFor="close-date">
+                  종료날짜<span className="text-top">*</span>
+                </Label>
                 <div className="mt-[12px]">
                   <MediumSelectButton
-                    text={getValues("end-date")}
+                    text={getValues("endDate")}
                     placeholder="날짜 선택"
                     onClick={() => setIsEndDateSelectionDrawerOpen(true)}
                     Icon={<CalendarIcon />}
@@ -194,30 +406,30 @@ export default function Page() {
             </div>
             <InputWrapper>
               <Label
-                htmlFor="open-time"
+                htmlFor="openTime"
                 maxLength={40}
-                currentLength={watch("open-time").length}
+                currentLength={watch("openTime").length}
               >
-                오픈시간
+                오픈시간<span className="text-top">*</span>
               </Label>
               <Input
-                field="open-time"
+                field="openTime"
                 formState={formState}
                 maxLength={40}
                 register={register}
                 placeholder="요일별 오픈시간을 입력해주세요."
               />
             </InputWrapper>
-            <InputWrapper margin="34px 0 34px 0">
+            <InputWrapper margin="34px 0">
               <Label
-                htmlFor="website"
+                htmlFor="websiteLink"
                 maxLength={2000}
-                currentLength={watch("website").length}
+                currentLength={watch("websiteLink").length}
               >
-                웹사이트
+                웹사이트<span className="text-top">*</span>
               </Label>
               <Input
-                field="website"
+                field="websiteLink"
                 maxLength={2000}
                 placeholder="URL을 입력해주세요."
                 register={register}
@@ -225,7 +437,7 @@ export default function Page() {
               />
             </InputWrapper>
             <div className="flex justify-between">
-              {["입장료", "예약", "반려동물", "주차"].map((item) => {
+              {CONDITIONS.map((item) => {
                 const isChecked = watch("condition").some(
                   (condition) => condition === item
                 );
@@ -262,7 +474,7 @@ export default function Page() {
               maxLength={10}
               currentLength={uploadedImgs.length}
             >
-              사진
+              사진<span className="text-top">*</span>
             </Label>
             <ScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] mt-[8px]">
               <input
@@ -271,17 +483,20 @@ export default function Page() {
                 multiple
                 className="hidden grow"
                 onChange={(e) => {
-                  const files = e.target.files;
+                  if (uploadedImgs.length > MAX_IMAGES_COUNT) {
+                    customToast("이미지는 최대 10개까지만 업로드 가능합니다.");
 
-                  if (files) {
-                    let newImgs = Array.from(files).map((file) =>
-                      URL.createObjectURL(file)
-                    );
+                    return;
+                  }
 
-                    newImgs = [...uploadedImgs, ...newImgs];
-                    newImgs = newImgs.slice(0, MAX_COUNT_OF_IMGS);
+                  if (e.target.files) {
+                    const formData = new FormData();
 
-                    setUploadedImgs(newImgs);
+                    for (let i = 0; i < e.target.files.length; i++) {
+                      formData.append("files", e.target.files[i]);
+                    }
+
+                    uploadContentImages(formData);
                   }
                 }}
               />
@@ -295,20 +510,25 @@ export default function Page() {
               >
                 <CreateIcon color="#fff" />
               </button>
-              {uploadedImgs.map((url) => {
+              {uploadedImgs.map(({ fullUrl }) => {
                 return (
-                  <li key={url} className="w-[96px] h-[96px] relative shrink-0">
-                    <Image src={url} fill alt="업로드된 이미지" />
+                  <li
+                    key={fullUrl}
+                    className="w-[96px] h-[96px] relative shrink-0"
+                  >
+                    <Image src={fullUrl} fill alt="업로드된 이미지" />
                     <button
                       type="button"
                       aria-label="현재 선택된 이미지 삭제"
                       className="absolute right-[8px] top-[8px]"
                       onClick={() => {
-                        const newUrls = uploadedImgs.filter(
-                          (curUrl) => curUrl !== url
+                        const newImgList = uploadedImgs.filter(
+                          ({ fullUrl: targetUrl }) => targetUrl !== fullUrl
                         );
 
-                        setUploadedImgs(newUrls);
+                        setUploadedImgs(newImgList);
+                        setValue("imgList", newImgList);
+                        trigger("imgList");
                       }}
                     >
                       <DeleteIcon width="24px" height="24px" />
@@ -322,17 +542,17 @@ export default function Page() {
           <div className="px-[24px]">
             <InputWrapper>
               <Label
-                htmlFor="detail-info"
-                maxLength={200}
-                currentLength={watch("detail-info").length}
+                htmlFor="description"
+                maxLength={1000}
+                currentLength={watch("description").length}
               >
-                상세정보
+                상세정보<span className="text-top">*</span>
               </Label>
               <TextareaAutosize
-                maxLength={200}
-                onChange={(e) => setValue("detail-info", e.target.value)}
+                maxLength={1000}
                 placeholder="컨텐츠 소개나 이벤트 등에 대해 작성해주세요."
                 className="w-[100%] mb-[34px] min-h-[132px] h-[auto] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0"
+                {...register("description")}
               />
             </InputWrapper>
           </div>
@@ -347,11 +567,11 @@ export default function Page() {
       >
         <div className="center text-h2">스타일</div>
         <ul className="my-[16px] w-[100%] flex px-[34px] flex-wrap gap-[8px]">
-          {STYLES.map((STYLE) => {
+          {styles.map(({ name, idx }) => {
             return (
-              <li key={STYLE} className="">
+              <li key={idx} className="">
                 <Chip
-                  isSelected={tempStyles.some((style) => style === STYLE)}
+                  isSelected={tempStyles.some((style) => style === name)}
                   onClick={() => {
                     let newStyles = null;
 
@@ -359,16 +579,16 @@ export default function Page() {
                       tempStyles.pop();
                     }
 
-                    if (tempStyles.some((style) => style === STYLE)) {
-                      newStyles = tempStyles.filter((style) => style !== STYLE);
+                    if (tempStyles.some((style) => style === name)) {
+                      newStyles = tempStyles.filter((style) => style !== name);
                     } else {
-                      newStyles = [...tempStyles, STYLE];
+                      newStyles = [...tempStyles, name];
                     }
 
                     setTempStyles(newStyles);
                   }}
                 >
-                  {STYLE}
+                  {name}
                 </Chip>
               </li>
             );
@@ -392,23 +612,19 @@ export default function Page() {
         onClose={() => setIsAgeRangeSelectionDrawerOpen(false)}
       >
         <div className="center text-h2">연령대</div>
-        <ul
-          className="mb-[48px]"
-          onClick={(e) => {
-            const target = e.target as HTMLElement;
-
-            if (target.tagName === "BUTTON") {
-              const targetGenre = target.textContent as AgeType;
-              setValue("age", targetGenre);
-            }
-
-            setIsAgeRangeSelectionDrawerOpen(false);
-          }}
-        >
-          {AGES.map((AGE) => {
+        <ul className="mb-[48px]" onClick={(e) => {}}>
+          {ages.map(({ idx, name }) => {
             return (
-              <li key={AGE} className="bottom-sheet-list">
-                <button className="bottom-sheet-button">{AGE}</button>
+              <li key={idx} className="bottom-sheet-list">
+                <button
+                  className="bottom-sheet-button"
+                  onClick={() => {
+                    setValue("age", name);
+                    setIsAgeRangeSelectionDrawerOpen(false);
+                  }}
+                >
+                  {name}
+                </button>
               </li>
             );
           })}
@@ -432,10 +648,10 @@ export default function Page() {
             setIsGenreSelectionDrawerOpen(false);
           }}
         >
-          {GENRES.map((GENRE) => {
+          {genres.map(({ idx, name }) => {
             return (
-              <li key={GENRE} className="bottom-sheet-list">
-                <button className="bottom-sheet-button">{GENRE}</button>
+              <li key={idx} className="bottom-sheet-list">
+                <button className="bottom-sheet-button">{name}</button>
               </li>
             );
           })}
@@ -444,7 +660,7 @@ export default function Page() {
       <CustomDrawer
         open={isStartDateSelectionDrawerOpen}
         onClose={() => {
-          setTempStartDate(getValues("start-date"));
+          setTempStartDate(getValues("startDate"));
           setIsStartDateSelectionDrawerOpen(false);
         }}
       >
@@ -461,7 +677,7 @@ export default function Page() {
             height={48}
             fullWidth
             onClick={() => {
-              tempStartDate && setValue("start-date", tempStartDate.toString());
+              tempStartDate && setValue("startDate", tempStartDate.toString());
               setIsStartDateSelectionDrawerOpen(false);
             }}
           >
@@ -472,7 +688,7 @@ export default function Page() {
       <CustomDrawer
         open={isEndDateSelectionDrawerOpen}
         onClose={() => {
-          setTempEndDate(getValues("end-date"));
+          setTempEndDate(getValues("endDate"));
           setIsEndDateSelectionDrawerOpen(false);
         }}
       >
@@ -491,7 +707,7 @@ export default function Page() {
             height={48}
             fullWidth
             onClick={() => {
-              tempEndDate && setValue("end-date", tempEndDate);
+              tempEndDate && setValue("endDate", tempEndDate);
               setIsEndDateSelectionDrawerOpen(false);
             }}
           >
@@ -499,8 +715,38 @@ export default function Page() {
           </Button>
         </div>
       </CustomDrawer>
+      <div
+        className="full-modal transform translate-y-full"
+        style={{
+          transform: !!isSearchModalOpen ? "translateY(0)" : "translateY(100%)",
+        }}
+      >
+        <Header>
+          <Header.LeftOption
+            option={{
+              back: {
+                onClick: () => router.back(),
+              },
+            }}
+          />
+          <Header.MiddleText text="주소 검색" />
+        </Header>
+        <div className="full-modal-main">
+          <div id="search-list" className="flex grow h-[100%] mx-[24px]"></div>
+        </div>
+      </div>
+      <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" />
     </>
   );
 }
 
-const MAX_COUNT_OF_IMGS = 10;
+const findIdxsByNames = (
+  list: { idx: number; name: string }[],
+  names: string[]
+): (number | undefined)[] =>
+  names.map((name) => list.find((item) => item.name === name)?.idx);
+
+const findIdxByName = (
+  list: { idx: number; name: string }[],
+  name: string
+): number | undefined => list.find((item) => item.name === name)?.idx;

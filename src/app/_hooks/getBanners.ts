@@ -1,7 +1,7 @@
 import { BannerListItem } from "@/types/banner";
 import customFetch from "@/utils/fetch";
 
-export const getBannerList = async (): Promise<{
+export const getBanners = async (): Promise<{
   bannerList: BannerListItem[];
 }> =>
   (

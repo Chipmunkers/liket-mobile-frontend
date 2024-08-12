@@ -2,21 +2,30 @@
 
 import CustomImage from "@/components/CustomImage";
 import Divider from "@/components/Divider";
+import FallbackContentImg from "@/components/FallbackContentImg";
 import LinkItem from "@/components/LinkItem";
 import LinkableTab from "@/components/LinkableTab";
 import RightArrow from "@/icons/right-arrow.svg";
 import { useMyPage } from "@/service/profile";
 import profileStore from "@/stores/profileStore";
-import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { If, Then, Else } from "react-if";
 import ScrollContainer from "react-indiana-drag-scroll";
 
 export default function Page() {
+  const router = useRouter();
   const setProfile = profileStore(({ setProfile }) => setProfile);
-  const { data } = useMyPage({
+  const { data, error } = useMyPage({
     onSuccess: (profile) => setProfile(profile),
   });
+
+  useEffect(() => {
+    if (!error) return;
+
+    router.replace("/login");
+  }, [error, router]);
 
   if (!data) {
     return <></>;
@@ -82,14 +91,21 @@ export default function Page() {
                 <ScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] mt-[8px]">
                   {reviewList.map(({ idx, thumbnail }) => {
                     return (
-                      <Link href={`/likets/${idx}`} key={idx}>
+                      <Link href={`/reviews/${idx}`} key={idx}>
                         <div className="relative w-[112px] h-[178px]">
-                          <Image
+                          <CustomImage
                             src={
                               process.env.NEXT_PUBLIC_IMAGE_SERVER + thumbnail
                             }
-                            fill
-                            alt="라이켓 이미지"
+                            fallbackComponent={<FallbackContentImg />}
+                            width={112}
+                            height={178}
+                            alt={`리뷰 썸네일 이미지`}
+                            style={{
+                              width: 112,
+                              height: 178,
+                              objectFit: "cover",
+                            }}
                           />
                         </div>
                       </Link>
@@ -119,10 +135,17 @@ export default function Page() {
                     return (
                       <Link href={`/likets/${idx}`} key={idx}>
                         <div className="relative w-[112px] h-[178px]">
-                          <Image
+                          <CustomImage
                             src={process.env.NEXT_PUBLIC_IMAGE_SERVER + imgPath}
-                            fill
-                            alt="라이켓 이미지"
+                            fallbackComponent={<FallbackContentImg />}
+                            width={112}
+                            height={178}
+                            alt={`라이켓 이미지`}
+                            style={{
+                              width: 112,
+                              height: 178,
+                              objectFit: "cover",
+                            }}
                           />
                         </div>
                       </Link>
