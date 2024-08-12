@@ -26,9 +26,8 @@ const ResponsiveCarousel = ({ list }: CarouselProps) => {
             key={imgPath + index}
             className="relative"
             style={{
-              objectFit: "cover",
-              width: width || "100%",
-              height: width || "390px",
+              width: "100%",
+              aspectRatio: "1 / 1",
             }}
           >
             <Image
