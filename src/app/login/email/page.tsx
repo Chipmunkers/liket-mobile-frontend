@@ -72,7 +72,7 @@ export default function Page() {
       <Header>
         <Header.LeftOption
           option={{
-            close: {
+            back: {
               onClick: () => router.back(),
             },
           }}

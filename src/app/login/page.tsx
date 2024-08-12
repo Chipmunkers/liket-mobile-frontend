@@ -26,7 +26,7 @@ export default function Page() {
       <Header>
         <Header.LeftOption
           option={{
-            back: true,
+            close: true,
           }}
         />
       </Header>
