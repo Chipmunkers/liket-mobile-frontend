@@ -14,14 +14,14 @@ import HotAgeSection from "./_components/HotAgeSection";
 import { getSoonOpenContentsForServer } from "./_hooks/getSoonOpenContents";
 import { getSoonEndContentsForServer } from "./_hooks/getSoonEndContents";
 import { getBanners } from "./_hooks/getBanners";
-import { getHotContents } from "./_hooks/getHotContents";
+import { getHotContentsForServer } from "./_hooks/getHotContents";
 
 export default async function Home() {
   const { contentList: soonOpenContents } =
     await getSoonOpenContentsForServer();
   const { contentList: soonEndContents } = await getSoonEndContentsForServer();
   const { bannerList } = await getBanners();
-  const hotContent = await getHotContents();
+  const hotContent = await getHotContentsForServer();
 
   return (
     <>

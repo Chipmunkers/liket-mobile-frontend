@@ -2,11 +2,11 @@
 
 import CustomScrollContainer from "@/components/CustomScrollContainer";
 import { Else, If, Then } from "react-if";
-import { useGetHotAgeContent } from "@/service/culture-content/hooks";
 import { ContentCard } from "@/components/Card/ContentCard";
+import { useGetHotAgeContents } from "../_hooks/getHotContents";
 
 const HotAgeSection = () => {
-  const { data } = useGetHotAgeContent();
+  const { data } = useGetHotAgeContents();
 
   if (data) {
     return (
