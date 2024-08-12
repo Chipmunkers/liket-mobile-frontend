@@ -1,10 +1,6 @@
 "use client";
 
-import Like from "@/icons/like.svg";
-import ActiveLike from "@/icons/like-filled.svg";
 import Badge, { variantToText } from "../Badge/Badge";
-
-import { colors } from "@/utils/style";
 import Link from "next/link";
 import CustomImage from "../CustomImage";
 import dayjs from "dayjs";
