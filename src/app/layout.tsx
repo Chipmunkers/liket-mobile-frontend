@@ -64,14 +64,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <script
-        type="text/javascript"
-        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_API_KEY}&autoload=false`}
-      ></script>
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, user-scalable=no"
-      />
+      <head>
+        <script
+          type="text/javascript"
+          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_API_KEY}&autoload=false`}
+        ></script>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=0.8, user-scalable=no"
+        />
+      </head>
       <ModalProvider>
         <body className={appleGothic.className}>
           <QueryProvider>
