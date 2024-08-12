@@ -3,6 +3,8 @@ import customFetch from "@/utils/fetch";
 import { notFound } from "next/navigation";
 import ErrorPage from "../../error";
 import DetailContent from "./components/DetailContent";
+import ContentNotFound from "./components/ContentNotFound";
+import customToast from "../../../utils/customToast";
 
 interface PageProps {
   params: {
@@ -26,13 +28,11 @@ export default async function Page({ params: { idx } }: PageProps) {
               back: true,
             }}
           />
-          {/* <Header.RightOption
+          <Header.RightOption
             option={{
-              search: {
-                // onClick: () => {},
-              },
+              search: {},
             }}
-          /> */}
+          />
         </Header>
         <DetailContent content={content} />
       </>
@@ -40,8 +40,23 @@ export default async function Page({ params: { idx } }: PageProps) {
   }
 
   if ([403, 404].includes(res.status)) {
-    // TODO: 컨텐츠 없는 컴포넌트로 변경해야함
-    return notFound();
+    return (
+      <>
+        <Header>
+          <Header.LeftOption
+            option={{
+              back: true,
+            }}
+          />
+          <Header.RightOption
+            option={{
+              search: {},
+            }}
+          />
+        </Header>
+        <ContentNotFound />
+      </>
+    );
   }
 
   return <ErrorPage />;
