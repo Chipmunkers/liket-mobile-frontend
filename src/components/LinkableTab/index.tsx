@@ -20,6 +20,7 @@ import { classNames } from "@/utils/helpers";
 import CustomDrawer from "../CustomDrawer";
 import customToast from "@/utils/customToast";
 import { useGetMyInfo } from "../../hooks/useGetMyInfo";
+import { ButtonBase } from "@mui/material";
 
 interface LinkTabProps {
   isSelected: boolean;
@@ -204,26 +205,30 @@ const LinkableTab = ({ shadow = false }: Props) => {
             transition: "transform 0.3s ease-in-out",
           }}
         >
-          <LinkTab
-            href="/"
-            isSelected={pathname === "/" && !isWriteModalOpen}
-            icon={<HomeIcon color={colors.grey["02"]} />}
-            selectedIcon={<FilledHomeIcon color={colors.skyblue["01"]} />}
-            onClickLink={onClickLink}
-            className={`w-[${touchSpace}] flex justify-center`}
-          />
-          <LinkTab
-            href="/map"
-            isSelected={pathname === "/map" && !isWriteModalOpen}
-            icon={<MapIcon color={colors.grey["02"]} />}
-            selectedIcon={<FilledMapIcon color={colors.skyblue["01"]} />}
-            onClickLink={onClickLink}
-            className={`w-[${touchSpace}] flex justify-center`}
-          />
-          <button
+          <ButtonBase className="w-[20%] h-[44px] flex justify-center items-center">
+            <LinkTab
+              href="/"
+              isSelected={pathname === "/" && !isWriteModalOpen}
+              icon={<HomeIcon color={colors.grey["02"]} />}
+              selectedIcon={<FilledHomeIcon color={colors.skyblue["01"]} />}
+              onClickLink={onClickLink}
+            />
+          </ButtonBase>
+          <ButtonBase className="w-[20%] h-[44px] flex justify-center items-center">
+            <LinkTab
+              href="/map"
+              isSelected={pathname === "/map" && !isWriteModalOpen}
+              icon={<MapIcon color={colors.grey["02"]} />}
+              selectedIcon={<FilledMapIcon color={colors.skyblue["01"]} />}
+              onClickLink={onClickLink}
+            />
+          </ButtonBase>
+          <ButtonBase
             role="tab"
             aria-selected={isWriteModalOpen}
-            className={`h-fit w-[${touchSpace}] flex justify-center`}
+            type="button"
+            data-twe-ripple-init
+            className="w-[20%] h-[44px] flex justify-center items-center"
             onClick={() => setIsWriteModalOpen(true)}
           >
             {isWriteModalOpen ? (
@@ -231,15 +236,18 @@ const LinkableTab = ({ shadow = false }: Props) => {
             ) : (
               <CreateIcon color={colors.grey["02"]} />
             )}
-          </button>
-          <LinkTab
-            href="/mypage"
-            isSelected={pathname === "/mypage" && !isWriteModalOpen}
-            icon={<MyPageIcon color={colors.grey["02"]} />}
-            onClickLink={onClickLink}
-            selectedIcon={<FilledMyPageIcon color={colors.skyblue["01"]} />}
-            className={`w-[${touchSpace}] flex justify-center`}
-          />
+          </ButtonBase>
+          <ButtonBase
+            className={`w-[20%] h-[44px] flex justify-center items-center`}
+          >
+            <LinkTab
+              href="/mypage"
+              isSelected={pathname === "/mypage" && !isWriteModalOpen}
+              icon={<MyPageIcon color={colors.grey["02"]} />}
+              onClickLink={onClickLink}
+              selectedIcon={<FilledMyPageIcon color={colors.skyblue["01"]} />}
+            />
+          </ButtonBase>
         </div>
       </div>
     </>
