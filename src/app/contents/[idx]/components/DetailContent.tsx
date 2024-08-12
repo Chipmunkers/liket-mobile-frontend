@@ -39,7 +39,9 @@ const DetailContent = (props: { content: ContentEntity }) => {
           >
             {variantToText[getStatus(content.startDate, content.endDate)]}
           </Badge>
-          <Badge variant={"hotplace"}>{variantToText["hotplace"]}</Badge>
+          {content.likeCount >= 5 ? (
+            <Badge variant={"hotplace"}>{variantToText["hotplace"]}</Badge>
+          ) : null}
         </div>
         <div className="mt-[16px]">
           <div className="flex justify-between">
