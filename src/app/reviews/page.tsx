@@ -1,5 +1,7 @@
 "use client";
 
+import DevIng from "../../components/DevIng";
+
 export default function Page() {
-  return <div>개발중</div>;
+  return <DevIng />;
 }

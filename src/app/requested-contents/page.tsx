@@ -5,10 +5,13 @@ import Header from "@/components/Header";
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import DevIng from "../../components/DevIng";
 
 export default function Page() {
   const [contents, setContents] = useState([1]);
   const router = useRouter();
+
+  return <DevIng />;
 
   return (
     <>
