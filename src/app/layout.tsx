@@ -7,7 +7,6 @@ import MuiLocalizationProvider from "@/components/MuiLocalizationProvider";
 import QueryProvider from "@/components/QueryProvider";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
-import { Viewport } from "next/dist/lib/metadata/types/extra-types";
 
 dayjs.locale("ko");
 
@@ -65,13 +64,9 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        <script
-          type="text/javascript"
-          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_API_KEY}&autoload=false`}
-        ></script>
         <meta
           name="viewport"
-          content="width=device-width, initial-scale=0.8, user-scalable=no"
+          content="width=device-width, initial-scale=1.0, user-scalable=no"
         />
       </head>
       <ModalProvider>

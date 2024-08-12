@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import Script from "next/script";
 import {
   Dispatch,
   ReactNode,
@@ -7,7 +6,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { CustomOverlayMap, Map } from "react-kakao-maps-sdk";
+import { CustomOverlayMap, Map, useKakaoLoader } from "react-kakao-maps-sdk";
 import axiosInstance from "@/utils/axios";
 import { getMapInfo } from "../util/getMapInfo";
 import { Age, Genre, Style } from "@/types/content";
@@ -36,6 +35,11 @@ const KakaoMap = ({
     styles: Style[];
   };
 }) => {
+  const [loading, error] = useKakaoLoader({
+    appkey: process.env.NEXT_PUBLIC_MAP_API_KEY || "",
+    retries: 2,
+  });
+
   const [mapInfo, setMapInfo] = useState<{
     bound: {
       top: { x: number; y: number };
