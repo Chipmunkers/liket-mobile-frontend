@@ -55,7 +55,8 @@ export default async function Home() {
               return (
                 <div key={idx}>
                   <Link
-                    href="/category?type=팝업스토어&orderby=famous"
+                    // TODO: 검색 페이지 구현 후 연결
+                    href="/search"
                     className="flex item-center"
                   >
                     <div className="text-skyblue-01 text-body4 w-[200px]">

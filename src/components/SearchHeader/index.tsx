@@ -5,6 +5,7 @@ import SearchIcon from "@/icons/search.svg";
 import RemoveIcon from "@/icons/remove.svg";
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ButtonBase } from "@mui/material";
 
 interface SearchHeaderProps {
   placeholder: string;
@@ -39,10 +40,13 @@ const SearchHeader = ({ placeholder, onSearch }: SearchHeaderProps) => {
 
   return (
     <div className="header">
-      <button onClick={handleClickBackButton}>
+      <ButtonBase
+        className="w-[48px] h-[48px] rounded-full"
+        onClick={handleClickBackButton}
+      >
         <BackIcon />
-      </button>
-      <div className="flex-1 border-solid border-b-[1px] ml-[16px] pl-[8px] pb-[12px] pt-[16px]">
+      </ButtonBase>
+      <div className="flex-1 border-solid border-b-[1px] ml-[4px] pb-[12px] mr-[12px] pt-[16px]">
         <form className="flex" role="search" onSubmit={handleSubmitForm}>
           <input
             type="search"

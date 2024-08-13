@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --bottom-tab-height: 74px;
+  --bottom-tab-height: 48px;
 }
 
 @layer base {
@@ -67,15 +67,15 @@
   }
 
   .header {
-    @apply sticky top-0 z-[1] bg-white flex justify-between items-center w-[100%] h-[48px] min-h-[48px] pl-[24px] pr-[24px];
+    @apply sticky top-0 z-[1] bg-white flex justify-between items-center w-[100%] h-[48px] min-h-[48px];
   }
 
   .bottom-tab {
-    @apply flex sticky bottom-0 bg-white w-[100%] h-[74px] min-h-[74px];
+    @apply fixed bottom-0 w-[100%] max-w-[600px];
   }
 
   .bottom-sheet-list {
-    @apply flex text-body3 h-[48px] mx-[24px];
+    @apply flex text-body3 h-[48px];
   }
 
   .bottom-sheet-button {
@@ -124,4 +124,9 @@ div[data-rsbs-header] {
 
 .dot.selected {
   background-color: #00c2ff !important;
+}
+
+input {
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
 }

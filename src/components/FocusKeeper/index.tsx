@@ -56,7 +56,8 @@ const FocusKeeper = ({ children, ariaLabel, onEscape }: FocusKeeperProps) => {
     <div
       onKeyDown={handleKeyDown}
       ref={wrapperRef}
-      tabIndex={-1}
+      // ! 새로고침 시 포커스 되는 버그 있음
+      //tabIndex={-1}
       aria-label={ariaLabel}
       role="dialog"
     >

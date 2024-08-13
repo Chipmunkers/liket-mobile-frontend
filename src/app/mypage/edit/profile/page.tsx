@@ -5,6 +5,7 @@ import ProfileForm from "@/components/SignupForm/ProfileForm";
 import { useEditProfile } from "@/service/profile";
 import profileStore from "@/stores/profileStore";
 import customToast from "@/utils/customToast";
+import DevIng from "../../../../components/DevIng";
 
 export default function Page() {
   const { mutate } = useEditProfile({
@@ -21,6 +22,8 @@ export default function Page() {
       profileImgPath,
     })
   );
+
+  return <DevIng />;
 
   // const handleClickNextButton = ({ file, nickname, gender, birth }) => {
   //   const formData = new FormData();

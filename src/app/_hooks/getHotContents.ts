@@ -9,7 +9,7 @@ export const getHotContentsForServer = async (): Promise<HotContentEntity[]> =>
   (
     await customFetch(`/culture-content/hot/all`, {
       next: {
-        revalidate: 0,
+        revalidate: 60,
       },
     })
   ).json();

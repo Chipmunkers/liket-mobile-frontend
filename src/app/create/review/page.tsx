@@ -53,7 +53,7 @@ export default function Page() {
 
   const { mutate: writeReview } = useWriteReview({
     onSuccess: () => {
-      router.replace("/reviews");
+      router.replace(`/contents/${targetContent?.idx}`);
     },
   });
 
@@ -163,15 +163,13 @@ export default function Page() {
         <Header.LeftOption
           option={{
             back: {
-              onClick: () => {},
+              onClick: () => {
+                router.back();
+              },
             },
           }}
         />
-        <Header.MiddleText
-          text="
-        
-        작성"
-        />
+        <Header.MiddleText text="작성" />
         <Header.RightOption
           option={{
             check: {

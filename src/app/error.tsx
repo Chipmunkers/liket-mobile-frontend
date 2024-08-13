@@ -3,9 +3,12 @@
 import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
 import ButtonGroup from "@/components/ButtonGroup";
 import ExclamationIcon from "@/icons/circle-exclamation.svg";
-import NotFoundBottomButtons from "../components/NotFoundBottomButtons";
+import Button from "@/components/Button";
+import { useRouter } from "next/navigation";
 
-export default function ErrorPage() {
+export default function Page() {
+  const router = useRouter();
+
   return (
     <>
       <main className="center">
@@ -22,7 +25,26 @@ export default function ErrorPage() {
       </main>
       <BottomButtonTabWrapper>
         <ButtonGroup gap={8}>
-          <NotFoundBottomButtons />
+          <Button
+            variant="ghost"
+            height={48}
+            fullWidth
+            onClick={() => {
+              router.back();
+            }}
+          >
+            이전 페이지
+          </Button>
+          <Button
+            variant="primary"
+            fullWidth
+            height={48}
+            onClick={() => {
+              router.replace("/");
+            }}
+          >
+            메인으로 가기
+          </Button>
         </ButtonGroup>
       </BottomButtonTabWrapper>
     </>
