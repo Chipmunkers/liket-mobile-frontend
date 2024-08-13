@@ -7,7 +7,7 @@ import ContentLikeBtn from "../../../components/ContentLikeBtn";
 
 const MapContentInfo = ({ content }: { content: MapContentEntity }) => {
   return (
-    <div className="w-[calc(100%-16px)] bottom-[82px] z-10 absolute left-[8px] bg-white rounded-[24px]">
+    <div className="w-[calc(100%-16px)] bottom-[--bottom-tab-height] mb-[8px] z-10 absolute left-[8px] bg-white rounded-[24px]">
       <Link href={`/contents/${content.idx}`} className="relative flex m-4">
         <div className="relative w-[72px] h-[100px] mr-[16px]">
           <Image
