@@ -1,15 +1,17 @@
 "use client";
 
 import ColoredLogo from "@/icons/logo.svg";
-import KaKaoLogin from "@/icons/logins/kakao-login.svg";
-import AppleLogin from "@/icons/logins/apple-login.svg";
-import NaverLogin from "@/icons/logins/naver-login.svg";
 import Header from "@/components/Header";
 import Divider from "@/components/Divider";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import customToast from "@/utils/customToast";
+import { ButtonBase } from "@mui/material";
+import KakaoLogo from "./icon/kakao-logo.svg";
+import AppleLogo from "./icon/apple-logo.svg";
+import NaverLogo from "./icon/naver-logo.svg";
+import Logo from "./icon/logo.svg";
 
 export default function Page() {
   const router = useRouter();
@@ -34,26 +36,50 @@ export default function Page() {
           }}
         />
       </Header>
-      <div className="flex grow flex-col items-center justify-center">
-        <ColoredLogo />
-        <Link
-          className="mt-[48px] mb-[16px]"
-          href={process.env.NEXT_PUBLIC_API_SERVER + "/auth/kakao"}
-        >
-          <KaKaoLogin />
-        </Link>
-        <Link
-          className="mb-[16px]"
-          href={process.env.NEXT_PUBLIC_API_SERVER + "/auth/apple"}
-        >
-          <AppleLogin />
-        </Link>
-        <Link
-          className="mb-[29px]"
-          href={process.env.NEXT_PUBLIC_API_SERVER + "/auth/naver"}
-        >
-          <NaverLogin />
-        </Link>
+      <div className="flex grow flex-col items-center justify-center px-[24px]">
+        <Logo />
+
+        <div className="flex items-center flex-col w-[100%] mt-[48px] gap-[16px] mb-[29px]">
+          {/* 카카오 로그인 */}
+          <ButtonBase className="h-[48px] bg-[#FEE500] w-[100%] rounded-[24px] max-w-[342px]">
+            <Link
+              href={process.env.NEXT_PUBLIC_API_SERVER + "/auth/kakao"}
+              className="h-[100%] flex justify-center items-center w-[100%]"
+            >
+              <div className="absolute flex justify-center items-center w-[48px] h-[48px] left-[8px]">
+                <KakaoLogo />
+              </div>
+              <div className="text-button1">카카오톡으로 로그인</div>
+            </Link>
+          </ButtonBase>
+
+          {/* 애플 로그인 */}
+          <ButtonBase className="h-[48px] bg-grey-black w-[100%] rounded-[24px] max-w-[342px]">
+            <Link
+              href={process.env.NEXT_PUBLIC_API_SERVER + "/auth/apple"}
+              className="h-[100%] flex justify-center items-center w-[100%]"
+            >
+              <div className="absolute flex justify-center items-center w-[48px] h-[48px] left-[8px]">
+                <AppleLogo />
+              </div>
+              <div className="text-button1 text-white">Apple로 로그인</div>
+            </Link>
+          </ButtonBase>
+
+          {/* 네이버 로그인 */}
+          <ButtonBase className="h-[48px] bg-[#03C75A] w-[100%] rounded-[24px] max-w-[342px]">
+            <Link
+              href={process.env.NEXT_PUBLIC_API_SERVER + "/auth/naver"}
+              className="h-[100%] flex justify-center items-center w-[100%]"
+            >
+              <div className="absolute flex justify-center items-center w-[48px] h-[48px] left-[8px]">
+                <NaverLogo />
+              </div>
+              <div className="text-button1 text-white">네이버로 로그인</div>
+            </Link>
+          </ButtonBase>
+        </div>
+
         <div className="flex items-center mb-[38px]">
           <Divider height="1px" width="48px" />
           <span className="text-body5 text-grey-04 ml-[16px] mr-[16px]">
