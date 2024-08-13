@@ -68,12 +68,14 @@ export default function MapPage() {
     setCityAndGuSelection(newCityAndGuSelection);
   };
 
-  const onClickSettingNeighbor = () =>
+  const onClickSettingNeighbor = () => {
+    customToast("준비중인 기능입니다.");
     setCityAndGuSelection({
       ...cityAndGuSelection,
       currentSelectedCity: cityAndGuSelection.newSelectedCity,
       currentSelectedGu: cityAndGuSelection.newSelectedGu,
     });
+  };
   // ! 레거시 영역
 
   // * 현재 보여지고 있는 컨텐츠 목록
@@ -383,7 +385,7 @@ export default function MapPage() {
             </div>
           </div>
         </div>
-        <BottomButtonTabWrapper shadow>
+        <BottomButtonTabWrapper shadow className="bg-white">
           <Button height={48} onClick={onClickSettingNeighbor} fullWidth>
             설정하기
           </Button>
