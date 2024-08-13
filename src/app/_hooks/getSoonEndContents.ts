@@ -9,7 +9,7 @@ export const getSoonEndContentsForServer = async (): Promise<{
   (
     await customFetch(`/culture-content/soon-end/all`, {
       next: {
-        revalidate: 60,
+        revalidate: 0,
       },
     })
   ).json();
