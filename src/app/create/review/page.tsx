@@ -405,7 +405,7 @@ export default function Page() {
         </div>
       </CustomDrawer>
       <div
-        className="full-modal transform translate-y-full"
+        className="full-modal transform"
         style={{
           visibility: !!isSearchContentModalOpen ? "visible" : "hidden",
           transform: !!isSearchContentModalOpen
