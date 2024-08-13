@@ -1,6 +1,7 @@
 import { StrictPropsWithChildren } from "@/types/common";
 import { classNames } from "@/utils/helpers";
 import { variantToStyleMap, variantWithDisabledStyleMap } from "@/utils/style";
+import { ButtonBase } from "@mui/material";
 import { MouseEvent } from "react";
 
 type ButtonProps = StrictPropsWithChildren<
@@ -24,7 +25,7 @@ const Button = ({
   onClick,
 }: ButtonProps) => {
   return (
-    <button
+    <ButtonBase
       type={type}
       disabled={disabled}
       style={{
@@ -40,7 +41,7 @@ const Button = ({
       onClick={(e) => onClick && onClick(e)}
     >
       {children}
-    </button>
+    </ButtonBase>
   );
 };
 
