@@ -1,10 +1,8 @@
 import Header from "@/components/Header";
 import customFetch from "@/utils/fetch";
-import { notFound } from "next/navigation";
 import ErrorPage from "../../error";
 import DetailContent from "./components/DetailContent";
 import ContentNotFound from "./components/ContentNotFound";
-import customToast from "../../../utils/customToast";
 
 interface PageProps {
   params: {
