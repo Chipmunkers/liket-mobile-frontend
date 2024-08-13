@@ -80,29 +80,31 @@ export default function Page() {
         <Header.MiddleText text="로그인" />
       </Header>
       <form
-        className="flex flex-col grow pt-[16px] px-[24px]"
+        className="flex flex-col grow pt-[16px]"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="grow">
-          <InputWrapper margin="0 0 34px 0">
-            <Label htmlFor="email">이메일</Label>
-            <Input
-              field="email"
-              placeholder="이메일 입력"
-              formState={formState}
-              register={register}
-            />
-          </InputWrapper>
-          <InputWrapper margin="0 0 47px 0">
-            <Label htmlFor="pw">비밀번호</Label>
-            <Input
-              field="pw"
-              type="password"
-              placeholder="비밀번호 입력"
-              register={register}
-              formState={formState}
-            />
-          </InputWrapper>
+        <div className="px-[24px]">
+          <div>
+            <InputWrapper margin="0 0 34px 0">
+              <Label htmlFor="email">이메일</Label>
+              <Input
+                field="email"
+                placeholder="이메일 입력"
+                formState={formState}
+                register={register}
+              />
+            </InputWrapper>
+            <InputWrapper margin="0 0 47px 0">
+              <Label htmlFor="pw">비밀번호</Label>
+              <Input
+                field="pw"
+                type="password"
+                placeholder="비밀번호 입력"
+                register={register}
+                formState={formState}
+              />
+            </InputWrapper>
+          </div>
           <div className="flex flex-row-reverse">
             <Link className="text-button5 text-grey-02" href="/find/password">
               비밀번호 재설정
