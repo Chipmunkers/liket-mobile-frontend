@@ -41,6 +41,7 @@ export default function Page() {
     profileImgPath,
     nickname,
     email,
+    likeCount,
   } = data;
 
   return (
@@ -68,7 +69,7 @@ export default function Page() {
                       customToast("준비중인 기능입니다.");
                     }}
                   >
-                    20
+                    {likeCount}
                   </ButtonBase>
                 </div>
               </div>
