@@ -16,7 +16,7 @@ const SoonOpenContentSection = (props: {
       <h2 className="pl-[24px] mb-[8px] text-h2">오픈예정 컨텐츠</h2>
       <If condition={data?.contentList.length > 0}>
         <Then>
-          <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
+          <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
             {data.contentList.map((content, index) => {
               return <ContentCard key={index} {...content} />;
             })}
