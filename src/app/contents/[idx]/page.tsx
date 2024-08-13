@@ -12,7 +12,7 @@ interface PageProps {
 
 export default async function Page({ params: { idx } }: PageProps) {
   const res = await customFetch("/culture-content/" + idx, {
-    next: { revalidate: 0 },
+    next: { revalidate: 60 },
   });
 
   if (res.ok) {
