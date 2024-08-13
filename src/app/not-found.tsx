@@ -1,9 +1,15 @@
+"use client";
+
 import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
 import ButtonGroup from "@/components/ButtonGroup";
 import ExclamationIcon from "@/icons/circle-exclamation.svg";
-import NotFoundBottomButtons from "../components/NotFoundBottomButtons";
+import { useRouter } from "next/navigation";
+import { variantToStyleMap } from "../utils/style";
+import { classNames } from "../utils/helpers";
 
 export default function Page() {
+  const router = useRouter();
+
   return (
     <>
       <main className="center">
@@ -20,7 +26,47 @@ export default function Page() {
       </main>
       <BottomButtonTabWrapper>
         <ButtonGroup gap={8}>
-          <NotFoundBottomButtons />
+          <button
+            type={"button"}
+            className={classNames(
+              "center text-button1 rounded-[28px] h-[48px] flex-1",
+              variantToStyleMap["ghost"]
+            )}
+            onClick={() => router.back()}
+          >
+            이전 페이지
+          </button>
+          <button
+            type={"button"}
+            className={classNames(
+              "center text-button1 rounded-[28px] h-[48px] flex-1",
+              variantToStyleMap["primary"]
+            )}
+            onClick={() => router.replace("/")}
+          >
+            메인으로 가기
+          </button>
+          {/* // ! not found 페이지 BaseButton 버그 존재 */}
+          {/* <Button
+            variant="ghost"
+            height={48}
+            fullWidth
+            onClick={() => {
+              router.back();
+            }}
+          >
+            이전 페이지
+          </Button>
+          <Button
+            variant="primary"
+            fullWidth
+            height={48}
+            onClick={() => {
+              router.replace("/");
+            }}
+          >
+            메인으로 가기
+          </Button> */}
         </ButtonGroup>
       </BottomButtonTabWrapper>
     </>

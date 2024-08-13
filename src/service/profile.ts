@@ -20,6 +20,7 @@ export interface MyPageInformation {
   gender: number;
   email: string;
   birth: number;
+  likeCount: number;
   createdAt: string;
 }
 

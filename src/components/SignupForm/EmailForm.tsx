@@ -30,7 +30,7 @@ interface EmailFormProps {
 
 const EmailForm = ({ updateForm }: EmailFormProps) => {
   const time = new Date();
-  time.setSeconds(time.getSeconds() + 5);
+  time.setSeconds(time.getSeconds() + 180);
   const { minutes, seconds, isRunning, start, restart } = useTimer({
     expiryTimestamp: time,
     autoStart: false,
@@ -55,14 +55,16 @@ const EmailForm = ({ updateForm }: EmailFormProps) => {
     },
     onError: ({ response }) => {
       if (response?.status === 409) {
-        setError("email", { message: "이미 존재하는 이메일입니다." });
+        setError("email", { message: "이미 가입된 이메일입니다." });
         return;
       }
 
       if (response?.status === 400) {
-        customToast("잘못된 이메일 정보가 전달됐습니다.");
+        customToast("허용하지 않는 이메일 양식입니다.");
         return;
       }
+
+      customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
     },
   });
 
@@ -96,7 +98,15 @@ const EmailForm = ({ updateForm }: EmailFormProps) => {
     });
   };
 
+  const [canResend, setCanResend] = useState(true);
+
   const handleClickResendButton = () => {
+    setCanResend(false);
+
+    setTimeout(() => {
+      setCanResend(true);
+    }, 1000 * 10);
+
     sendAuthenticationNumber({
       email: userEmail,
       type: 0,
@@ -105,6 +115,12 @@ const EmailForm = ({ updateForm }: EmailFormProps) => {
   };
 
   const onClickSendAuthenticationNumber = () => {
+    setCanResend(false);
+
+    setTimeout(() => {
+      setCanResend(true);
+    }, 1000 * 10);
+
     setUserEmail(getValues("email"));
     checkIsMailDuplicated({
       email: getValues("email"),
@@ -131,14 +147,14 @@ const EmailForm = ({ updateForm }: EmailFormProps) => {
             />
             {!isIdle ? (
               <InputButton
-                disabled={isRunning}
+                disabled={!canResend}
                 onClick={handleClickResendButton}
               >
                 재발송
               </InputButton>
             ) : (
               <InputButton
-                disabled={!isSendSuccess && isEmailFormatInvalid}
+                disabled={isEmailFormatInvalid}
                 onClick={onClickSendAuthenticationNumber}
               >
                 인증받기
@@ -151,7 +167,6 @@ const EmailForm = ({ updateForm }: EmailFormProps) => {
               field="token"
               maxLength={6}
               placeholder="인증번호 6자리"
-              type="password"
               formState={formState}
               register={register}
             />
@@ -244,7 +259,7 @@ export const PasswordResetEmailForm = ({
   const onClickNextButton = () => {
     checkAuthenticationNumber({
       email: userEmail,
-      type: 1,
+      type: 0,
       code: getValues("token"),
     });
   };

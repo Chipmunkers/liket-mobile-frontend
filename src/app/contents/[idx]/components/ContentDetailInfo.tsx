@@ -2,12 +2,14 @@ import Divider from "@/components/Divider";
 import { colors } from "@/utils/style";
 import RightArrowIcon from "@/icons/right-arrow.svg";
 import { ContentEntity } from "@/types/api/culture-content";
-import Script from "next/script";
-import { CustomOverlayMap, Map } from "react-kakao-maps-sdk";
-
-const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_API_KEY}&autoload=false`;
+import { CustomOverlayMap, Map, useKakaoLoader } from "react-kakao-maps-sdk";
 
 const ContentDetailInfo = (props: { content: ContentEntity }) => {
+  const [loading, error] = useKakaoLoader({
+    appkey: process.env.NEXT_PUBLIC_MAP_API_KEY || "",
+    retries: 2,
+  });
+
   const { content } = props;
 
   return (

@@ -8,6 +8,7 @@ import BackIcon from "@/icons/back.svg";
 import CloseIcon from "@/icons/close.svg";
 import { useRouter } from "next/navigation";
 import DropDown from "@/icons/dropdown.svg";
+import { ButtonBase } from "@mui/material";
 
 type LeftOptionProps = XOR<
   {
@@ -35,7 +36,7 @@ const LeftOption = ({
 
   if (logo) {
     return (
-      <Link href="/">
+      <Link href="/" className="ml-[24px]">
         <Logo />
       </Link>
     );
@@ -43,10 +44,14 @@ const LeftOption = ({
 
   if (townName) {
     return (
-      <button className="text-h1 flex" onClick={onClickTownSelection}>
+      <ButtonBase
+        className="text-h1 flex ml-[24px]"
+        onClick={onClickTownSelection}
+        disableTouchRipple={true}
+      >
         {townName}
         <DropDown />
-      </button>
+      </ButtonBase>
     );
   }
 
@@ -54,8 +59,9 @@ const LeftOption = ({
     const { back, close } = option;
 
     const Back = back && (
-      <button
+      <ButtonBase
         key={"back"}
+        className="w-[48px] h-[48px] rounded-full ml-[12px]"
         onClick={() => {
           if (typeof back === "object") {
             back.onClick && back.onClick();
@@ -66,12 +72,13 @@ const LeftOption = ({
         }}
       >
         <BackIcon />
-      </button>
+      </ButtonBase>
     );
 
     const Close = close && (
-      <button
+      <ButtonBase
         key={"close"}
+        className="w-[48px] h-[48px] rounded-full ml-[12px]"
         onClick={() => {
           if (typeof close === "object") {
             close.onClick && close.onClick();
@@ -81,7 +88,7 @@ const LeftOption = ({
         <CloseIcon
           fill={(typeof close === "object" && close?.color) || "black"}
         />
-      </button>
+      </ButtonBase>
     );
 
     return <div className="center">{[Back, Close]}</div>;

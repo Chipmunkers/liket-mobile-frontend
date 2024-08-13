@@ -20,12 +20,14 @@ import { classNames } from "@/utils/helpers";
 import CustomDrawer from "../CustomDrawer";
 import customToast from "@/utils/customToast";
 import { useGetMyInfo } from "../../hooks/useGetMyInfo";
+import { ButtonBase } from "@mui/material";
 
 interface LinkTabProps {
   isSelected: boolean;
   href: string;
   icon: ReactNode;
   selectedIcon: ReactNode;
+  className?: string;
   onClickLink: (href: string) => void;
 }
 
@@ -34,6 +36,7 @@ const LinkTab = ({
   href,
   icon,
   selectedIcon,
+  className,
   onClickLink,
 }: LinkTabProps) => {
   return (
@@ -41,6 +44,7 @@ const LinkTab = ({
       role="tab"
       href={href}
       aria-selected={isSelected}
+      className={className}
       onClick={() => onClickLink(href)}
     >
       {isSelected ? selectedIcon : icon}
@@ -71,6 +75,8 @@ const LinkableTab = ({ shadow = false }: Props) => {
   const [lastScrollTop, setLastScrollTop] = useState(0);
 
   useEffect(() => {
+    if (["/map"].includes(pathname)) return;
+
     const handleScroll = () => {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
 
@@ -105,7 +111,7 @@ const LinkableTab = ({ shadow = false }: Props) => {
                 리뷰 작성
               </Link>
             ) : (
-              <button
+              <ButtonBase
                 onClick={() => {
                   if (!loginUser) {
                     openModal("LoginModal", {
@@ -116,23 +122,23 @@ const LinkableTab = ({ shadow = false }: Props) => {
                   }
                   router.push("/create/review");
                 }}
-                className="bottom-sheet-button"
+                className="bottom-sheet-button flex justify-start px-[24px]"
               >
                 <CreateReview className="mr-[8px]" />
                 리뷰 작성
-              </button>
+              </ButtonBase>
             )}
           </li>
           <li className="bottom-sheet-list">
-            <button
+            <ButtonBase
               onClick={() => {
                 customToast("모바일 앱에서만 사용이 가능해요.");
               }}
-              className="bottom-sheet-button"
+              className="bottom-sheet-button flex justify-start px-[24px]"
             >
               <CreateLiket className="mr-[8px]" />
               라이켓 제작
-            </button>
+            </ButtonBase>
             {/* {isLoggedIn ? (
               <Link href="/create/liket" className="bottom-sheet-button">
                 <CreateLiket className="mr-[8px]" />
@@ -155,15 +161,15 @@ const LinkableTab = ({ shadow = false }: Props) => {
             )} */}
           </li>
           <li className="bottom-sheet-list">
-            <button
+            <ButtonBase
               onClick={() => {
                 customToast("추후에 출시 예정인 기능이에요.");
               }}
-              className="bottom-sheet-button"
+              className="bottom-sheet-button flex justify-start px-[24px]"
             >
               <CreateRoute className="mr-[8px]" />
               루트 짜기
-            </button>
+            </ButtonBase>
             {/* {isLoggedIn ? (
               <Link href="/create/route" className="bottom-sheet-button">
                 <CreateRoute className="mr-[8px]" />
@@ -187,74 +193,63 @@ const LinkableTab = ({ shadow = false }: Props) => {
           </li>
         </ul>
       </CustomDrawer>
-      <div
-        role="tablist"
-        className={classNames(
-          "bottom-tab justify-around h-[40px] pt-[8px] z-[5]",
-          shadow && "shadow-[0px_-8px_16px_0px_rgba(0,0,0,0.04)]"
-        )}
-        style={{
-          transform: `translateY(${translateY}%)`,
-          transition: "transform 0.3s ease-in-out",
-        }}
-      >
-        <LinkTab
-          href="/"
-          isSelected={pathname === "/" && !isWriteModalOpen}
-          icon={<HomeIcon color={colors.grey["02"]} />}
-          selectedIcon={<FilledHomeIcon color={colors.skyblue["01"]} />}
-          onClickLink={onClickLink}
-        />
-        <LinkTab
-          href="/map"
-          isSelected={pathname === "/map" && !isWriteModalOpen}
-          icon={<MapIcon color={colors.grey["02"]} />}
-          selectedIcon={<FilledMapIcon color={colors.skyblue["01"]} />}
-          onClickLink={onClickLink}
-        />
-        <button
-          role="tab"
-          aria-selected={isWriteModalOpen}
-          className="h-fit"
-          onClick={() => setIsWriteModalOpen(true)}
-        >
-          {isWriteModalOpen ? (
-            <FilledCreateIcon color={colors.skyblue["01"]} />
-          ) : (
-            <CreateIcon color={colors.grey["02"]} />
+      <div className="bottom-tab z-10">
+        <div
+          role="tablist"
+          className={classNames(
+            "flex w-[100%] justify-around h-[48px] z-[5] items-center bg-white",
+            shadow && "shadow-[0px_-8px_16px_0px_rgba(0,0,0,0.04)]"
           )}
-        </button>
-        <LinkTab
-          href="/mypage"
-          isSelected={pathname === "/mypage" && !isWriteModalOpen}
-          icon={<MyPageIcon color={colors.grey["02"]} />}
-          onClickLink={onClickLink}
-          selectedIcon={<FilledMyPageIcon color={colors.skyblue["01"]} />}
-        />
-        {/* {isLoggedIn ? (
-          <LinkTab
-            href="/mypage"
-            isSelected={pathname === "/mypage" && !isWriteModalOpen}
-            icon={<MyPageIcon color={colors.grey["02"]} />}
-            onClickLink={onClickLink}
-            selectedIcon={<FilledMyPageIcon color={colors.skyblue["01"]} />}
-          />
-        ) : (
-          <button
+          style={{
+            transform: `translateY(${translateY}%)`,
+            transition: "transform 0.3s ease-in-out",
+          }}
+        >
+          <ButtonBase className="w-[20%] h-[44px]">
+            <LinkTab
+              href="/"
+              isSelected={pathname === "/" && !isWriteModalOpen}
+              icon={<HomeIcon color={colors.grey["02"]} />}
+              selectedIcon={<FilledHomeIcon color={colors.skyblue["01"]} />}
+              onClickLink={onClickLink}
+              className="w-[100%] h-[100%] flex justify-center items-center"
+            />
+          </ButtonBase>
+          <ButtonBase className="w-[20%] h-[44px]">
+            <LinkTab
+              href="/map"
+              isSelected={pathname === "/map" && !isWriteModalOpen}
+              icon={<MapIcon color={colors.grey["02"]} />}
+              selectedIcon={<FilledMapIcon color={colors.skyblue["01"]} />}
+              className="w-[100%] h-[100%] flex justify-center items-center"
+              onClickLink={onClickLink}
+            />
+          </ButtonBase>
+          <ButtonBase
             role="tab"
             aria-selected={isWriteModalOpen}
-            className="h-fit"
-            onClick={() => {
-              openModal("LoginModal", {
-                onClickPositive: () => {
-                  router.push("/login");
-                },
-              });
-            }}
+            type="button"
+            data-twe-ripple-init
+            className="w-[20%] h-[44px]"
+            onClick={() => setIsWriteModalOpen(true)}
           >
-            <MyPageIcon color={colors.grey["02"]} />
-          </button>
-        )} */}
+            {isWriteModalOpen ? (
+              <FilledCreateIcon color={colors.skyblue["01"]} />
+            ) : (
+              <CreateIcon color={colors.grey["02"]} />
+            )}
+          </ButtonBase>
+          <ButtonBase className={`w-[20%] h-[44px]`}>
+            <LinkTab
+              href="/mypage"
+              isSelected={pathname === "/mypage" && !isWriteModalOpen}
+              icon={<MyPageIcon color={colors.grey["02"]} />}
+              onClickLink={onClickLink}
+              className="w-[100%] h-[100%] flex justify-center items-center"
+              selectedIcon={<FilledMyPageIcon color={colors.skyblue["01"]} />}
+            />
+          </ButtonBase>
+        </div>
       </div>
     </>
   );

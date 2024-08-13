@@ -1,6 +1,6 @@
 import { getRefValue } from "@/utils/helpers";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CustomImage from "../CustomImage";
 
 interface AvatarUploaderProps {
@@ -17,15 +17,17 @@ const AvatarUploader = ({
 
   return (
     <div className="w-[80px] h-[80px] relative">
-      <div className="w-[100%] h-[100%] rounded-full relative overflow-hidden">
-        <CustomImage
-          src={ImgSrc}
-          fallbackImg={"/icons/default-avatar.svg"}
+      <div
+        className="w-[100%] h-[100%] rounded-full relative overflow-hidden cursor-pointer"
+        onClick={() => {
+          getRefValue(inputRef).click();
+        }}
+      >
+        <Image
+          src={ImgSrc || "/icons/default-avatar.svg"}
           alt="프로필 이미지"
-          fill
-          style={{
-            objectFit: "cover",
-          }}
+          layout="fill"
+          objectFit="cover"
         />
       </div>
       <input

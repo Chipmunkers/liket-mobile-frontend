@@ -24,6 +24,7 @@ import KakaoMap from "./components/KakaoMap";
 import { MapContentEntity } from "@/types/api/map";
 import MapContentInfo from "./components/ContentInfo";
 import Script from "next/script";
+import { ButtonBase } from "@mui/material";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -67,12 +68,14 @@ export default function MapPage() {
     setCityAndGuSelection(newCityAndGuSelection);
   };
 
-  const onClickSettingNeighbor = () =>
+  const onClickSettingNeighbor = () => {
+    customToast("준비중인 기능입니다.");
     setCityAndGuSelection({
       ...cityAndGuSelection,
       currentSelectedCity: cityAndGuSelection.newSelectedCity,
       currentSelectedGu: cityAndGuSelection.newSelectedGu,
     });
+  };
   // ! 레거시 영역
 
   // * 현재 보여지고 있는 컨텐츠 목록
@@ -101,6 +104,10 @@ export default function MapPage() {
     styles: [],
   });
 
+  const isSetMapFilter = (): boolean => {
+    return !!(mapFilter.genre || mapFilter.age || mapFilter.styles.length);
+  };
+
   return (
     <>
       <Header key={"header"}>
@@ -118,38 +125,35 @@ export default function MapPage() {
           setClickedContent={setClickedContent}
           mapFilter={mapFilter}
         >
-          <div className="absolute top-12 left-0 z-[2] flex w-100">
-            <button
+          <div className="absolute z-[2] mt-[16px] ml-[24px] w-100 flex items-center">
+            <ButtonBase
+              className={classNames(
+                "rounded-full w-[36px] h-[36px] shadow-[0_0_8px_0_rgba(0,0,0,0.16)]",
+                isSetMapFilter() ? "bg-skyblue-01" : "bg-white"
+              )}
               onClick={() => router.push(`${pathname}?isFilterModalOpen=true`)}
             >
-              {mapFilter.genre || mapFilter.age || mapFilter.styles.length ? (
-                <FilterFilled />
-              ) : (
-                <Filter />
-              )}
-            </button>
+              <Filter
+                className={!isSetMapFilter() ? "fill-grey-black" : "fill-white"}
+                fill="white"
+              />
+            </ButtonBase>
             {mapFilter.genre || mapFilter.age || mapFilter.styles.length ? (
               <div className="flex items-center">
                 {mapFilter.genre ? (
-                  <div className="mr-[8px]">
-                    <Chip isSelected={true} onClick={() => {}}>
-                      {mapFilter.genre.name}
-                    </Chip>
+                  <div className="ml-[8px]">
+                    <Chip isSelected={true}>{mapFilter.genre.name}</Chip>
                   </div>
                 ) : null}
                 {mapFilter.age ? (
-                  <div className="mr-[8px]">
-                    <Chip isSelected={true} onClick={() => {}}>
-                      {mapFilter.age.name}
-                    </Chip>
+                  <div className="ml-[8px]">
+                    <Chip isSelected={true}>{mapFilter.age.name}</Chip>
                   </div>
                 ) : null}
                 {mapFilter.styles.map(({ name }) => {
                   return (
-                    <div className="mr-[8px]" key={name}>
-                      <Chip isSelected={true} onClick={() => {}}>
-                        {name}
-                      </Chip>
+                    <div className="ml-[8px]" key={name}>
+                      <Chip isSelected={true}>{name}</Chip>
                     </div>
                   );
                 })}
@@ -381,7 +385,7 @@ export default function MapPage() {
             </div>
           </div>
         </div>
-        <BottomButtonTabWrapper shadow>
+        <BottomButtonTabWrapper shadow className="bg-white">
           <Button height={48} onClick={onClickSettingNeighbor} fullWidth>
             설정하기
           </Button>

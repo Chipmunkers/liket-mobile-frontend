@@ -1,3 +1,4 @@
+import { ButtonBase } from "@mui/material";
 import { StrictPropsWithChildren } from "@/types/common";
 import { classNames } from "@/utils/helpers";
 import { variantToStyleMap, variantWithDisabledStyleMap } from "@/utils/style";
@@ -24,14 +25,14 @@ const Button = ({
   onClick,
 }: ButtonProps) => {
   return (
-    <button
+    <ButtonBase
       type={type}
       disabled={disabled}
       style={{
         height,
       }}
       className={classNames(
-        "center text-button4 rounded-[28px]",
+        "center text-button1 rounded-[28px]",
         disabled
           ? `${variantWithDisabledStyleMap[variant]}`
           : `${variantToStyleMap[variant]}`,
@@ -40,7 +41,7 @@ const Button = ({
       onClick={(e) => onClick && onClick(e)}
     >
       {children}
-    </button>
+    </ButtonBase>
   );
 };
 
