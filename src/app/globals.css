@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --bottom-tab-height: 74px;
+  --bottom-tab-height: 48px;
 }
 
 @layer base {

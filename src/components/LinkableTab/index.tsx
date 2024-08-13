@@ -75,6 +75,8 @@ const LinkableTab = ({ shadow = false }: Props) => {
   const [lastScrollTop, setLastScrollTop] = useState(0);
 
   useEffect(() => {
+    if (["/map"].includes(pathname)) return;
+
     const handleScroll = () => {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
 
@@ -191,7 +193,7 @@ const LinkableTab = ({ shadow = false }: Props) => {
           </li>
         </ul>
       </CustomDrawer>
-      <div className="bottom-tab">
+      <div className="bottom-tab z-10">
         <div
           role="tablist"
           className={classNames(
