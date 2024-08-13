@@ -69,7 +69,9 @@ export default function Page() {
                       customToast("준비중인 기능입니다.");
                     }}
                   >
-                    {likeCount}
+                    <div className="text-numbering1 text-skyblue-01 ml-[4px]">
+                      {likeCount}
+                    </div>
                   </ButtonBase>
                 </div>
               </div>
