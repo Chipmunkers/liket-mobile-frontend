@@ -48,7 +48,14 @@ const Index = ({
           <UnFilledCheckbox width="24" height="24" />
         )}
       </p>
-      <div className={classNames(isBoard && "text-body2")}>{label}</div>
+      <div
+        className={classNames(
+          "ml-[4px] text-body3 select-none",
+          isBoard && "text-body2"
+        )}
+      >
+        {label}
+      </div>
     </label>
   );
 };
