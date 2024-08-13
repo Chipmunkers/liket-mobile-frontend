@@ -1,6 +1,5 @@
 "use client";
 
-import ColoredLogo from "@/icons/logo.svg";
 import Header from "@/components/Header";
 import Divider from "@/components/Divider";
 import Link from "next/link";
