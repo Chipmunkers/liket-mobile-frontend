@@ -6,6 +6,7 @@ import ExclamationIcon from "@/icons/circle-exclamation.svg";
 import { useRouter } from "next/navigation";
 import { variantToStyleMap } from "../utils/style";
 import { classNames } from "../utils/helpers";
+import Button from "../components/Button";
 
 export default function Page() {
   const router = useRouter();
@@ -26,28 +27,7 @@ export default function Page() {
       </main>
       <BottomButtonTabWrapper>
         <ButtonGroup gap={8}>
-          <button
-            type={"button"}
-            className={classNames(
-              "center text-button1 rounded-[28px] h-[48px] flex-1",
-              variantToStyleMap["ghost"]
-            )}
-            onClick={() => router.back()}
-          >
-            이전 페이지
-          </button>
-          <button
-            type={"button"}
-            className={classNames(
-              "center text-button1 rounded-[28px] h-[48px] flex-1",
-              variantToStyleMap["primary"]
-            )}
-            onClick={() => router.replace("/")}
-          >
-            메인으로 가기
-          </button>
-          {/* // ! not found 페이지 BaseButton 버그 존재 */}
-          {/* <Button
+          <Button
             variant="ghost"
             height={48}
             fullWidth
@@ -66,7 +46,7 @@ export default function Page() {
             }}
           >
             메인으로 가기
-          </Button> */}
+          </Button>
         </ButtonGroup>
       </BottomButtonTabWrapper>
     </>
