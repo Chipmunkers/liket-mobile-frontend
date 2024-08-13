@@ -94,8 +94,6 @@ const LinkableTab = ({ shadow = false }: Props) => {
     };
   }, [lastScrollTop]);
 
-  const touchSpace = "20%";
-
   return (
     <>
       <CustomDrawer
