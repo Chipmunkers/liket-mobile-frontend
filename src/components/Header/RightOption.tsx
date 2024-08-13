@@ -38,7 +38,10 @@ const RightOption = ({ text, option }: RightOptionProps) => {
         className="w-[48px] h-[48px] rounded-full"
         key="header-search-btn"
       >
-        <Link href="/search">
+        <Link
+          href="/search"
+          className="w-[100%] h-[100%] flex justify-center items-center"
+        >
           <SearchIcon />
         </Link>
       </ButtonBase>
@@ -48,7 +51,11 @@ const RightOption = ({ text, option }: RightOptionProps) => {
         className="w-[48px] h-[48px] rounded-full"
         key="header-like-btn"
       >
-        <Link href="/like" key={"like_button"}>
+        <Link
+          href="/like"
+          key={"like_button"}
+          className="w-[100%] h-[100%] flex justify-center items-center"
+        >
           <LikeIcon />
         </Link>
       </ButtonBase>
@@ -74,15 +81,16 @@ const RightOption = ({ text, option }: RightOptionProps) => {
     const checkDisabled =
       check && typeof check !== "boolean" && !!check.disabled;
     const Check = check && typeof check === "object" && (
-      <button
+      <ButtonBase
         key="check_button"
         disabled={checkDisabled}
         onClick={() => check.onClick && check.onClick()}
+        className="w-[48px] h-[48px] rounded-full"
       >
         <CheckIcon
           fill={checkDisabled ? colors.grey["02"] : colors.skyblue["01"]}
         />
-      </button>
+      </ButtonBase>
     );
 
     return (
