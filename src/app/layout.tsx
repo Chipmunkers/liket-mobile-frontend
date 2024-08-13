@@ -69,8 +69,9 @@ export default function RootLayout({
           content="width=device-width, initial-scale=1.0, user-scalable=no"
         />
       </head>
-      <ModalProvider>
-        <body className={appleGothic.className}>
+
+      <body className={appleGothic.className}>
+        <ModalProvider>
           <QueryProvider>
             <MuiLocalizationProvider>
               <Toaster
@@ -83,8 +84,8 @@ export default function RootLayout({
               {children}
             </MuiLocalizationProvider>
           </QueryProvider>
-        </body>
-      </ModalProvider>
+        </ModalProvider>
+      </body>
     </html>
   );
 }
