@@ -8,11 +8,13 @@ import LinkableTab from "@/components/LinkableTab";
 import RightArrow from "@/icons/right-arrow.svg";
 import { useMyPage } from "@/service/profile";
 import profileStore from "@/stores/profileStore";
+import { ButtonBase } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { If, Then, Else } from "react-if";
 import ScrollContainer from "react-indiana-drag-scroll";
+import customToast from "../../utils/customToast";
 
 export default function Page() {
   const router = useRouter();
@@ -59,7 +61,15 @@ export default function Page() {
                 <div className="text-body5 text-grey-04 mt-[7px]">{email}</div>
                 <div className="flex text-body3 items-center mt-[15px]">
                   좋아요{" "}
-                  <p className="text-numbering1 text-skyblue-01 ml-[4px]">20</p>
+                  <ButtonBase
+                    disableRipple={true}
+                    className="text-numbering1 text-skyblue-01 ml-[4px]"
+                    onClick={() => {
+                      customToast("준비중인 기능입니다.");
+                    }}
+                  >
+                    20
+                  </ButtonBase>
                 </div>
               </div>
             </div>
@@ -162,12 +172,20 @@ export default function Page() {
           </div>
         </div>
         <Divider width="100%" height="8px" margin="24px 0 0 0" />
-        <LinkItem href="/account">계정 관리</LinkItem>
+        <ButtonBase>
+          <LinkItem href="/account">계정 관리</LinkItem>
+        </ButtonBase>
         <Divider width="100%" height="8px" />
-        <LinkItem href="/requested-contents">컨텐츠 등록 요청</LinkItem>
-        <LinkItem href="/inquires">1:1문의</LinkItem>
+        <ButtonBase>
+          <LinkItem href="/requested-contents">컨텐츠 등록 요청</LinkItem>
+        </ButtonBase>
+        <ButtonBase>
+          <LinkItem href="/inquires">1:1문의</LinkItem>
+        </ButtonBase>
         <Divider width="100%" height="8px" />
-        <LinkItem href="/terms">약관/정책</LinkItem>
+        <ButtonBase>
+          <LinkItem href="/terms">약관/정책</LinkItem>
+        </ButtonBase>
         <div className="flex justify-between items-center w-[100%] h-[48px] px-[24px]">
           <div className="text-h2">버전</div>
           <div className="text-body2 text-grey-04">1.0</div>
