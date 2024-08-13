@@ -50,7 +50,7 @@ export default async function Home() {
             <h2 className="text-h2">핫플차트</h2>
             <div className="text-body5 text-grey-04 flex flex-col-reverse ml-[8px]">{`업로드 Date`}</div>
           </div>
-          <CustomScrollContainer className="flex flex-row overflow-x-hidden gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
+          <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
             {hotContent.map(({ idx, name, contentList }) => {
               return (
                 <div key={idx}>
@@ -108,7 +108,7 @@ export default async function Home() {
 
         <section className="mb-[24px] text-h2">
           <h2 className="pl-[24px] mb-[8px]">최근 인기 리뷰</h2>
-          <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
+          <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
             {reviews.map((review, index) => (
               <ReviewCard key={index} review={review} />
             ))}
