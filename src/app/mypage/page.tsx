@@ -78,8 +78,9 @@ export default function Page() {
               <div className="w-[80px] h-[80px] rounded-full relative overflow-hidden">
                 <CustomImage
                   src={
-                    profileImgPath &&
-                    process.env.NEXT_PUBLIC_IMAGE_SERVER + profileImgPath
+                    profileImgPath
+                      ? process.env.NEXT_PUBLIC_IMAGE_SERVER + profileImgPath
+                      : ""
                   }
                   fallbackImg={"/icons/default-avatar.svg"}
                   alt="프로필 이미지"
