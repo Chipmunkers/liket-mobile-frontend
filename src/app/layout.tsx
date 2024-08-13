@@ -54,6 +54,11 @@ export const appleGothic = localFont({
 export const metadata: Metadata = {
   title: "라이켓",
   description: "즐기고 만들자, 라이켓 LIKET",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+  },
 };
 
 export default function RootLayout({
@@ -63,13 +68,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, user-scalable=no"
-        />
-      </head>
-
       <body className={appleGothic.className}>
         <ModalProvider>
           <QueryProvider>

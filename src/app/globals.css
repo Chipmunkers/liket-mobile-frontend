@@ -125,3 +125,8 @@ div[data-rsbs-header] {
 .dot.selected {
   background-color: #00c2ff !important;
 }
+
+input {
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+}
