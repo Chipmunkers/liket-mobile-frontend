@@ -5,7 +5,7 @@ export const getHotReview = async (): Promise<ReviewEntity[]> =>
   (
     await customFetch(`/review/hot/all`, {
       next: {
-        revalidate: 60,
+        revalidate: 0,
       },
     })
   ).json();

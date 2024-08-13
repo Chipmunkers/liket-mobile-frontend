@@ -9,7 +9,7 @@ export const getSoonOpenContentsForServer = async (): Promise<{
   (
     await customFetch(`/culture-content/soon-open/all`, {
       next: {
-        revalidate: 60,
+        revalidate: 0,
       },
     })
   ).json();
