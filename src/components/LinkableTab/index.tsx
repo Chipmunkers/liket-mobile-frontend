@@ -111,7 +111,7 @@ const LinkableTab = ({ shadow = false }: Props) => {
                 리뷰 작성
               </Link>
             ) : (
-              <button
+              <ButtonBase
                 onClick={() => {
                   if (!loginUser) {
                     openModal("LoginModal", {
@@ -122,23 +122,23 @@ const LinkableTab = ({ shadow = false }: Props) => {
                   }
                   router.push("/create/review");
                 }}
-                className="bottom-sheet-button"
+                className="bottom-sheet-button flex justify-start px-[24px]"
               >
                 <CreateReview className="mr-[8px]" />
                 리뷰 작성
-              </button>
+              </ButtonBase>
             )}
           </li>
           <li className="bottom-sheet-list">
-            <button
+            <ButtonBase
               onClick={() => {
                 customToast("모바일 앱에서만 사용이 가능해요.");
               }}
-              className="bottom-sheet-button"
+              className="bottom-sheet-button flex justify-start px-[24px]"
             >
               <CreateLiket className="mr-[8px]" />
               라이켓 제작
-            </button>
+            </ButtonBase>
             {/* {isLoggedIn ? (
               <Link href="/create/liket" className="bottom-sheet-button">
                 <CreateLiket className="mr-[8px]" />
@@ -161,15 +161,15 @@ const LinkableTab = ({ shadow = false }: Props) => {
             )} */}
           </li>
           <li className="bottom-sheet-list">
-            <button
+            <ButtonBase
               onClick={() => {
                 customToast("추후에 출시 예정인 기능이에요.");
               }}
-              className="bottom-sheet-button"
+              className="bottom-sheet-button flex justify-start px-[24px]"
             >
               <CreateRoute className="mr-[8px]" />
               루트 짜기
-            </button>
+            </ButtonBase>
             {/* {isLoggedIn ? (
               <Link href="/create/route" className="bottom-sheet-button">
                 <CreateRoute className="mr-[8px]" />

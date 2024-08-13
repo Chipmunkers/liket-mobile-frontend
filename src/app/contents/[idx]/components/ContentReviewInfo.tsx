@@ -17,6 +17,8 @@ import ReloadIcon from "../icon/review-reload.svg";
 import Link from "next/link";
 import ReviewInfiniteScroll from "./ReviewInfiniteScroll";
 import EmptyReview from "./EmptyReview";
+import { ButtonBase } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
   const [isReviewMenuDrawerOpen, setIsReviewMenuDrawerOpen] = useState(false);
@@ -105,6 +107,8 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
     },
   });
 
+  const router = useRouter();
+
   return (
     <>
       <div className="flex flex-col items-center mt-[16px] mb-[24px] justify-between">
@@ -175,28 +179,30 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
         open={isReviewMenuDrawerOpen}
         onClose={() => setIsReviewMenuDrawerOpen(false)}
       >
-        <div className="flex flex-col">
-          <div className="h-[48px]">
-            <Link
-              className="h-[100%] w-[100%] text-left flex items-center"
-              href={`/edit/review/${selectReviewIdx}`}
-            >
-              <span className="ml-[24px]">수정하기</span>
-            </Link>
-          </div>
-          <div className="h-[48px] mb-[34px]">
-            <button
-              className="h-[100%] w-[100%] text-left"
-              onClick={() => {
-                if (!selectReviewIdx) return;
+        <li className="bottom-sheet-list">
+          <ButtonBase
+            onClick={() => {
+              return customToast("준비중인 기능입니다.");
+              // TODO: 페이지 생성 후 붙여야함
+              router.push(`/edit/review/${selectReviewIdx}`);
+            }}
+            className="bottom-sheet-button flex justify-start px-[24px]"
+          >
+            수정하기
+          </ButtonBase>
+        </li>
+        <li className="bottom-sheet-list">
+          <ButtonBase
+            onClick={() => {
+              if (!selectReviewIdx) return;
 
-                deleteReviewApi(selectReviewIdx);
-              }}
-            >
-              <span className="ml-[24px] text-rosepink-01">삭제</span>
-            </button>
-          </div>
-        </div>
+              deleteReviewApi(selectReviewIdx);
+            }}
+            className="bottom-sheet-button flex justify-start px-[24px] text-rosepink-01"
+          >
+            삭제
+          </ButtonBase>
+        </li>
       </CustomDrawer>
     </>
   );

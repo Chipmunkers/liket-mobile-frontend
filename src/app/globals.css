@@ -75,7 +75,7 @@
   }
 
   .bottom-sheet-list {
-    @apply flex text-body3 h-[48px] mx-[24px];
+    @apply flex text-body3 h-[48px];
   }
 
   .bottom-sheet-button {
