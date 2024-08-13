@@ -36,7 +36,7 @@ const LeftOption = ({
 
   if (logo) {
     return (
-      <Link href="/">
+      <Link href="/" className="ml-[24px]">
         <Logo />
       </Link>
     );
@@ -57,7 +57,7 @@ const LeftOption = ({
     const Back = back && (
       <ButtonBase
         key={"back"}
-        className="w-[48px] h-[48px] rounded-full"
+        className="w-[48px] h-[48px] rounded-full ml-[12px]"
         onClick={() => {
           if (typeof back === "object") {
             back.onClick && back.onClick();
@@ -74,7 +74,7 @@ const LeftOption = ({
     const Close = close && (
       <ButtonBase
         key={"close"}
-        className="w-[48px] h-[48px] rounded-full"
+        className="w-[48px] h-[48px] rounded-full ml-[12px]"
         onClick={() => {
           if (typeof close === "object") {
             close.onClick && close.onClick();

@@ -7,6 +7,7 @@ import MenuIcon from "@/icons/menu.svg";
 import CheckIcon from "@/icons/check.svg";
 import { colors } from "@/utils/style";
 import Link from "next/link";
+import { ButtonBase } from "@mui/material";
 
 type RightOptionProps = XOR<
   {
@@ -24,6 +25,7 @@ type RightOptionProps = XOR<
 >;
 
 const RightOption = ({ text, option }: RightOptionProps) => {
+  // ! 어떤 목적으로 있는 코드인지 분석 필요
   if (text) {
     return <button>{text}</button>;
   }
@@ -32,14 +34,18 @@ const RightOption = ({ text, option }: RightOptionProps) => {
     const { search, like, create, menu, check } = option;
 
     const Search = search && (
-      <Link href="/search" key={"search_button"}>
-        <SearchIcon />
-      </Link>
+      <ButtonBase className="w-[48px] h-[48px] rounded-full">
+        <Link href="/search" key={"search_button"}>
+          <SearchIcon />
+        </Link>
+      </ButtonBase>
     );
     const Like = like && (
-      <Link href="/like" key={"like_button"}>
-        <LikeIcon />
-      </Link>
+      <ButtonBase className="w-[48px] h-[48px] rounded-full">
+        <Link href="/like" key={"like_button"}>
+          <LikeIcon />
+        </Link>
+      </ButtonBase>
     );
     const Create = create && (
       <button
@@ -74,7 +80,7 @@ const RightOption = ({ text, option }: RightOptionProps) => {
     );
 
     return (
-      <div className="flex gap-[18px]">
+      <div className="flex mr-[12px]">
         {[Search, Like, Create, Menu, Check]}
       </div>
     );

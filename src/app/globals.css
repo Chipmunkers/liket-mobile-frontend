@@ -67,7 +67,7 @@
   }
 
   .header {
-    @apply sticky top-0 z-[1] bg-white flex justify-between items-center w-[100%] h-[48px] min-h-[48px] pl-[24px] pr-[24px];
+    @apply sticky top-0 z-[1] bg-white flex justify-between items-center w-[100%] h-[48px] min-h-[48px];
   }
 
   .bottom-tab {
