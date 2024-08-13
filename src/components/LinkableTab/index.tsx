@@ -205,21 +205,23 @@ const LinkableTab = ({ shadow = false }: Props) => {
             transition: "transform 0.3s ease-in-out",
           }}
         >
-          <ButtonBase className="w-[20%] h-[44px] flex justify-center items-center">
+          <ButtonBase className="w-[20%] h-[44px]">
             <LinkTab
               href="/"
               isSelected={pathname === "/" && !isWriteModalOpen}
               icon={<HomeIcon color={colors.grey["02"]} />}
               selectedIcon={<FilledHomeIcon color={colors.skyblue["01"]} />}
               onClickLink={onClickLink}
+              className="w-[100%] h-[100%] flex justify-center items-center"
             />
           </ButtonBase>
-          <ButtonBase className="w-[20%] h-[44px] flex justify-center items-center">
+          <ButtonBase className="w-[20%] h-[44px]">
             <LinkTab
               href="/map"
               isSelected={pathname === "/map" && !isWriteModalOpen}
               icon={<MapIcon color={colors.grey["02"]} />}
               selectedIcon={<FilledMapIcon color={colors.skyblue["01"]} />}
+              className="w-[100%] h-[100%] flex justify-center items-center"
               onClickLink={onClickLink}
             />
           </ButtonBase>
@@ -228,7 +230,7 @@ const LinkableTab = ({ shadow = false }: Props) => {
             aria-selected={isWriteModalOpen}
             type="button"
             data-twe-ripple-init
-            className="w-[20%] h-[44px] flex justify-center items-center"
+            className="w-[20%] h-[44px]"
             onClick={() => setIsWriteModalOpen(true)}
           >
             {isWriteModalOpen ? (
@@ -237,14 +239,13 @@ const LinkableTab = ({ shadow = false }: Props) => {
               <CreateIcon color={colors.grey["02"]} />
             )}
           </ButtonBase>
-          <ButtonBase
-            className={`w-[20%] h-[44px] flex justify-center items-center`}
-          >
+          <ButtonBase className={`w-[20%] h-[44px]`}>
             <LinkTab
               href="/mypage"
               isSelected={pathname === "/mypage" && !isWriteModalOpen}
               icon={<MyPageIcon color={colors.grey["02"]} />}
               onClickLink={onClickLink}
+              className="w-[100%] h-[100%] flex justify-center items-center"
               selectedIcon={<FilledMyPageIcon color={colors.skyblue["01"]} />}
             />
           </ButtonBase>

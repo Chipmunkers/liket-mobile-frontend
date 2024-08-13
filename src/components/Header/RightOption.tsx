@@ -34,14 +34,20 @@ const RightOption = ({ text, option }: RightOptionProps) => {
     const { search, like, create, menu, check } = option;
 
     const Search = search && (
-      <ButtonBase className="w-[48px] h-[48px] rounded-full">
-        <Link href="/search" key={"search_button"}>
+      <ButtonBase
+        className="w-[48px] h-[48px] rounded-full"
+        key="header-search-btn"
+      >
+        <Link href="/search">
           <SearchIcon />
         </Link>
       </ButtonBase>
     );
     const Like = like && (
-      <ButtonBase className="w-[48px] h-[48px] rounded-full">
+      <ButtonBase
+        className="w-[48px] h-[48px] rounded-full"
+        key="header-like-btn"
+      >
         <Link href="/like" key={"like_button"}>
           <LikeIcon />
         </Link>
