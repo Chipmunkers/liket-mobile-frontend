@@ -140,24 +140,18 @@ export default function MapPage() {
               <div className="flex items-center">
                 {mapFilter.genre ? (
                   <div className="ml-[8px]">
-                    <Chip isSelected={true} onClick={() => {}}>
-                      {mapFilter.genre.name}
-                    </Chip>
+                    <Chip isSelected={true}>{mapFilter.genre.name}</Chip>
                   </div>
                 ) : null}
                 {mapFilter.age ? (
                   <div className="ml-[8px]">
-                    <Chip isSelected={true} onClick={() => {}}>
-                      {mapFilter.age.name}
-                    </Chip>
+                    <Chip isSelected={true}>{mapFilter.age.name}</Chip>
                   </div>
                 ) : null}
                 {mapFilter.styles.map(({ name }) => {
                   return (
                     <div className="ml-[8px]" key={name}>
-                      <Chip isSelected={true} onClick={() => {}}>
-                        {name}
-                      </Chip>
+                      <Chip isSelected={true}>{name}</Chip>
                     </div>
                   );
                 })}
