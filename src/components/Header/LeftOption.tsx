@@ -44,10 +44,14 @@ const LeftOption = ({
 
   if (townName) {
     return (
-      <button className="text-h1 flex" onClick={onClickTownSelection}>
+      <ButtonBase
+        className="text-h1 flex ml-[24px]"
+        onClick={onClickTownSelection}
+        disableTouchRipple={true}
+      >
         {townName}
         <DropDown />
-      </button>
+      </ButtonBase>
     );
   }
 
