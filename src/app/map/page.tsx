@@ -186,7 +186,7 @@ export default function MapPage() {
       </main>
       <LinkableTab />
       <div
-        className="full-modal transform translate-y-full"
+        className="full-modal"
         style={{
           transform: !!isFilterModalOpen ? "translateY(0)" : "translateY(100%)",
         }}
@@ -328,7 +328,7 @@ export default function MapPage() {
         </BottomButtonTabWrapper>
       </div>
       <div
-        className="full-modal transform translate-y-full"
+        className="full-modal"
         style={{
           transform: !!isTownSelectionModalOpen
             ? "translateY(0)"
