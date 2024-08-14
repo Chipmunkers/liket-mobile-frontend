@@ -11,15 +11,15 @@ import { ButtonBase } from "@mui/material";
 import { Genre } from "@/types/content";
 import Checkbox from "@/components/Checkbox";
 import { useGetLikeContent } from "./hooks/useGetLikeContent";
-import ContentCardGroup from "../../components/ContentCardGroup";
+import ContentCardGroup from "@/components/ContentCardGroup";
 import { useQueryClient } from "@tanstack/react-query";
-import customToast from "../../utils/customToast";
+import customToast from "@/utils/customToast";
+import ReloadIcon from "@/icons/reload.svg";
+import useMoveLoginPage from "../../hooks/useMoveLoginPage";
+import { AxiosError } from "axios";
 
 export default function Page() {
   const [isGenreDrawerOpen, setIsGenreDrawerOpen] = useState(false);
-
-  const [isOnlyActiveContentShown, setIsOnlyActiveContentShown] =
-    useState(false);
 
   const [contentPagerble, setContentPagerble] = useState<{
     genre?: Genre;
@@ -41,6 +41,8 @@ export default function Page() {
       pageParams: [],
     });
   };
+
+  const moveLoginPage = useMoveLoginPage();
 
   // * 무한 스크롤 타겟
   const [target, setTarget] = useState<HTMLDivElement | null>(null);
@@ -65,6 +67,17 @@ export default function Page() {
 
   useEffect(() => {
     if (!error) return;
+
+    if (error instanceof AxiosError) {
+      if (error.response?.status === 401) {
+        moveLoginPage(
+          error.response.data?.cause?.type === "NO_TOKEN"
+            ? "NO_TOKEN"
+            : "INVALID_TOKEN"
+        );
+        return;
+      }
+    }
 
     customToast("에러가 발생했습니다. 다시 시도해주세요.");
   }, [error]);
@@ -119,6 +132,21 @@ export default function Page() {
             setTarget={setTarget}
           />
         )}
+        {error && (
+          <div className="absolute bottom-[24px] flex justify-center">
+            <ButtonBase
+              className="flex justify-center items-center rounded-[16px] bg-white shadow-[0_0_8px_0_rgba(0,0,0,0.16)] w-[105px] h-[32px]"
+              onClick={() => {
+                refetch();
+              }}
+            >
+              <div className="mr-[8px]">
+                <ReloadIcon />
+              </div>
+              <span className="text-button4">새로 고침</span>
+            </ButtonBase>
+          </div>
+        )}
       </main>
       <CustomDrawer
         open={isGenreDrawerOpen}
@@ -154,5 +182,4 @@ export default function Page() {
       </CustomDrawer>
     </>
   );
-  return <DevIng />;
 }
