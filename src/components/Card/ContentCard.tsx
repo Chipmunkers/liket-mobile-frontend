@@ -5,7 +5,7 @@ import Link from "next/link";
 import CustomImage from "../CustomImage";
 import dayjs from "dayjs";
 import FallbackContentImg from "../FallbackContentImg";
-import { getStatus } from "@/utils/helpers";
+import { classNames, getStatus } from "@/utils/helpers";
 import ContentLikeBtn from "../ContentLikeBtn";
 import { SummaryContentEntity } from "../../types/api/culture-content";
 
@@ -17,6 +17,7 @@ type ContentCardProps = SummaryContentEntity & {
       "idx" | "title" | "thumbnail" | "genre"
     >
   ) => void;
+  width?: string;
 };
 
 export const ContentCard = ({
@@ -29,6 +30,7 @@ export const ContentCard = ({
   location,
   genre,
   isButton = false,
+  width,
   onClick,
 }: ContentCardProps) => {
   const { region1Depth, region2Depth } = location;
@@ -47,9 +49,9 @@ export const ContentCard = ({
           })
         }
       >
-        <article className="w-[164px]">
+        <article className="">
           <div className="relative mb-[8px]">
-            <div className="relative w-[164px] h-[232px]">
+            <div className="relative aspect-[164/232]">
               <CustomImage
                 src={process.env.NEXT_PUBLIC_IMAGE_SERVER + thumbnail}
                 fallbackComponent={<FallbackContentImg />}
@@ -57,9 +59,9 @@ export const ContentCard = ({
                 height={232}
                 alt={`${title}에 대한 포스터`}
                 style={{
-                  width: 164,
-                  height: 232,
                   objectFit: "cover",
+                  width: "100%",
+                  height: "100%",
                 }}
               />
             </div>
@@ -102,9 +104,9 @@ export const ContentCard = ({
 
   return (
     <Link href={`/contents/${idx}`}>
-      <article className="w-[164px]">
+      <article className={classNames(width ? `w-[${width}]` : "w-[164px]")}>
         <div className="relative mb-[8px]">
-          <div className="relative w-[164px] h-[232px]">
+          <div className="relative aspect-[164/232]">
             <CustomImage
               src={process.env.NEXT_PUBLIC_IMAGE_SERVER + thumbnail}
               fallbackComponent={<FallbackContentImg />}
@@ -112,9 +114,9 @@ export const ContentCard = ({
               height={232}
               alt={`${title}에 대한 포스터`}
               style={{
-                width: 164,
-                height: 232,
                 objectFit: "cover",
+                width: "100%",
+                height: "100%",
               }}
             />
           </div>
