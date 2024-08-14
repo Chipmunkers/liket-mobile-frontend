@@ -1,9 +1,12 @@
 import { SummaryContentEntity } from "@/types/api/culture-content";
 import { classNames } from "@/utils/helpers";
 import { ContentCard } from "../Card/ContentCard";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-const ContentCardGroup = (props: { contentList: SummaryContentEntity[] }) => {
+const ContentCardGroup = (props: {
+  contentList: SummaryContentEntity[];
+  setTarget?: Dispatch<SetStateAction<HTMLDivElement | null>>;
+}) => {
   const [isNarrow, setIsNarrow] = useState(false);
 
   useEffect(() => {
@@ -25,22 +28,27 @@ const ContentCardGroup = (props: { contentList: SummaryContentEntity[] }) => {
   }, []);
 
   return (
-    <div className="flex flex-wrap justify-between mt-[4px] px-[24px]">
-      {props.contentList.map((content) => (
-        <div
-          className={classNames(
-            "mb-[14px]",
-            isNarrow ? "w-[calc(50%-7px)]" : "w-[calc(33.33%-4.7px)]"
-          )}
-        >
-          <ContentCard
-            {...content}
-            width="100%"
-            key={`content-card${content.idx}`}
-          />
-        </div>
-      ))}
-    </div>
+    <>
+      <div className="flex flex-wrap w-[100%] gap-[7px] mt-[4px] px-[24px]">
+        {props.contentList.map((content) => (
+          <div
+            className={classNames(
+              "mb-[14px]",
+              isNarrow ? "w-[calc(50%-7px)]" : "w-[calc(33.33%-4.7px)]"
+            )}
+          >
+            <ContentCard
+              {...content}
+              width="100%"
+              key={`content-card${content.idx}`}
+            />
+          </div>
+        ))}
+      </div>
+      {props.setTarget ? (
+        <div className="h-[10px]" ref={props.setTarget}></div>
+      ) : null}
+    </>
   );
 };
 
