@@ -8,7 +8,7 @@ type Props = StrictPropsWithChildren<DrawerProps>;
 const Index = ({ children, ...props }: Props) => {
   return (
     <Wrapper {...props} anchor="bottom" disableScrollLock>
-      <div className="mt-[24px]">{children}</div>
+      <div className="mt-[24px] max-h-[80vh]">{children}</div>
     </Wrapper>
   );
 };

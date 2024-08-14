@@ -17,7 +17,7 @@ const SearchHeader = ({ placeholder, onSearch }: SearchHeaderProps) => {
   const router = useRouter();
 
   const handleClickBackButton = () => {
-    router.back();
+    router.push("/");
   };
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -30,10 +30,6 @@ const SearchHeader = ({ placeholder, onSearch }: SearchHeaderProps) => {
 
   const handleSubmitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!searchText.length) {
-      return;
-    }
 
     onSearch(searchText);
   };
@@ -58,15 +54,9 @@ const SearchHeader = ({ placeholder, onSearch }: SearchHeaderProps) => {
             className="w-[100%] text-body3 placeholder:text-body3 placeholder-grey-02"
             onChange={handleChangeInput}
           />
-          {searchText.length >= 1 ? (
-            <button type="reset" onClick={handleClickRemoveButton}>
-              <RemoveIcon />
-            </button>
-          ) : (
-            <button type="submit">
-              <SearchIcon />
-            </button>
-          )}
+          <button type="submit">
+            <SearchIcon />
+          </button>
         </form>
       </div>
     </div>

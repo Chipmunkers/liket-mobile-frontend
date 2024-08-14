@@ -4,22 +4,27 @@ import CustomScrollContainer from "@/components/CustomScrollContainer";
 import { Else, If, Then } from "react-if";
 import { ContentCard } from "@/components/Card/ContentCard";
 import { useGetHotStyleContents } from "../_hooks/getHotContents";
+import { styles } from "../../../public/data/style";
+import { shuffle } from "../../utils/shuffle";
 
 const HotStyleSection = () => {
   const { data } = useGetHotStyleContents();
 
   if (data) {
+    const style =
+      styles.find((style) => style.idx === data.style.idx) || styles[0];
+
     return (
       <section className="mb-[48px] mt-[24px]">
         <h2 className="pl-[24px] mb-[8px] h-[20px] text-h2">
-          선선한 가을 날씨에{" "}
+          {style.title.split("{style_name}")[0]}
           <span className="text-skyblue-01">#{data.style.name}</span>
-          하기 좋은 곳 🍁
+          {style.title.split("{style_name}")[1]}
         </h2>
         <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] touch-action-none [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
           <If condition={data.contentList.length >= 1}>
             <Then>
-              {data.contentList.map((content, i) => (
+              {shuffle(data.contentList).map((content, i) => (
                 <ContentCard key={i} {...{ ...content }} />
               ))}
             </Then>
