@@ -11,13 +11,7 @@ export const useGetContentAll = (querystring: string) =>
       const { data } = await axiosInstance.get<{
         contentList: SummaryContentEntity[];
       }>(
-        `/apis/culture-content/all?accept=true&page=${pageParam}&` +
-          querystring,
-        {
-          headers: {
-            "Cache-Control": "no-cache, no-store, must-revalidate",
-          },
-        }
+        `/apis/culture-content/all?accept=true&page=${pageParam}&` + querystring
       );
 
       return {
