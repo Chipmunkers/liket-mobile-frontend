@@ -21,7 +21,7 @@ export const useGetHotStyleContents = () =>
       const { data } = await axiosInstance.get<{
         style: StyleEntity;
         contentList: SummaryContentEntity[];
-      }>("/apis/culture-content/hot-style/all", {
+      }>("/apis/culture-content/hot-random-style/all", {
         headers: {
           "Cache-Control": "no-cache",
         },
