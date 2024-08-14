@@ -4,6 +4,7 @@ import CustomScrollContainer from "@/components/CustomScrollContainer";
 import { Else, If, Then } from "react-if";
 import { ContentCard } from "@/components/Card/ContentCard";
 import { useGetHotAgeContents } from "../_hooks/getHotContents";
+import { shuffle } from "../../utils/shuffle";
 
 const HotAgeSection = () => {
   const { data } = useGetHotAgeContents();
@@ -18,7 +19,7 @@ const HotAgeSection = () => {
         <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] touch-action-none [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
           <If condition={data.contentList.length >= 1}>
             <Then>
-              {data.contentList.map((content, i) => (
+              {shuffle(data.contentList).map((content, i) => (
                 <ContentCard key={i} {...{ ...content }} />
               ))}
             </Then>
