@@ -26,6 +26,7 @@ function sleep(ms: number) {
 // * 로그인 하지 않아도 접속 가능한 API 목록
 const canAccessApiPathWithoutLogin = [
   "/apis/culture-content/hot-style/all",
+  "/apis/culture-content/hot-random-style/all",
   "/apis/culture-content/hot-age/all",
   "/apis/culture-content/soon-open/all",
   "/apis/culture-content/soon-end/all",

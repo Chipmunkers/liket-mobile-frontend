@@ -53,6 +53,7 @@ export default function Page() {
             />
           </div>
         </div>
+        <div></div>
       </main>
       <CustomDrawer
         open={isGenreDrawerOpen}

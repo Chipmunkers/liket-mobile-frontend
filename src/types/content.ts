@@ -1,5 +1,6 @@
 import { AgeType, ContentStateType, GenreType, StyleType } from "./const";
 
+// ! 삭제 필요
 export interface ContentListItem {
   idx: number;
   title: string;
@@ -17,6 +18,7 @@ export interface ContentListItem {
   acceptedAt: string;
 }
 
+// ! 삭제 필요
 export interface ContentDetailInformation extends ContentListItem {
   description: string;
   imgList: string[];
@@ -39,6 +41,7 @@ export interface Genre {
 export interface Style {
   idx: number;
   name: StyleType;
+  title: string;
 }
 
 export interface Age {
