@@ -241,7 +241,10 @@ export default function Page() {
           <li className="bottom-sheet-list">
             <ButtonBase
               onClick={() => {
-                setPagerble((pagerble) => ({ ...pagerble, region: sido.cd }));
+                setPagerble((pagerble) => ({
+                  ...pagerble,
+                  region: pagerble.region === sido.cd ? null : sido.cd,
+                }));
                 setIsSidoDrawerOpen(false);
               }}
               className={classNames(
@@ -267,7 +270,10 @@ export default function Page() {
               onClick={() => {
                 setPagerble((pagerble) => ({
                   ...pagerble,
-                  age: age.idx.toString(),
+                  age:
+                    age.idx.toString() === pagerble.age
+                      ? null
+                      : age.idx.toString(),
                 }));
                 setIsAgeDrawerOpen(false);
               }}
