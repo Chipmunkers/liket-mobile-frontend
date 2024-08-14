@@ -90,13 +90,10 @@ export default function Page() {
     return params.toString();
   };
 
-  const [querystring, setQuerystring] = useState<string>("");
   const [pagerble, setPagerble] = useState<Pagerble>(getQueryString());
 
-  useEffect(() => {}, [pagerble]);
-
   const { data, fetchNextPage, isFetching, refetch, error, hasNextPage } =
-    useGetContentAll(querystring);
+    useGetContentAll(createQuerystring(getQueryString()));
 
   // * Drawer
   const [isSidoDrawerOpen, setIsSidoDrawerOpen] = useState(false);
@@ -119,7 +116,7 @@ export default function Page() {
     queryClient.removeQueries({
       queryKey: [GET_CONTENT_ALL_KEY],
     });
-    queryClient.setQueryData([GET_CONTENT_ALL_KEY, pagerble], {
+    queryClient.setQueryData([GET_CONTENT_ALL_KEY], {
       pages: [],
       pageParams: [],
     });
@@ -128,6 +125,7 @@ export default function Page() {
   useEffect(() => {
     if (!pagerble) return;
 
+    // pagerble이 바뀌면 경로 변경
     router.push("/search?" + createQuerystring(pagerble));
   }, [pagerble]);
 
@@ -334,6 +332,9 @@ export default function Page() {
         )}
       </div>
       <main>
+        {data && data.pages[0].contentList.length === 0 ? (
+          <div className="empty">검색 결과가 없습니다.</div>
+        ) : null}
         {data && (
           <ContentCardGroup
             contentList={data.pages.map((page) => page.contentList).flat()}
