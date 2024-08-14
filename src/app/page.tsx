@@ -54,11 +54,7 @@ export default async function Home() {
             {hotContent.map(({ idx, name, contentList }) => {
               return (
                 <div key={idx}>
-                  <Link
-                    // TODO: 검색 페이지 구현 후 연결
-                    href="/search"
-                    className="flex item-center"
-                  >
+                  <Link href="/search" className="flex item-center">
                     <div className="text-skyblue-01 text-body4 w-[200px]">
                       {name}
                     </div>
