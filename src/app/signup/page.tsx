@@ -2,9 +2,9 @@
 
 import Control from "@/components/Control";
 import Header from "@/components/Header";
-import EmailForm from "@/components/SignupForm/EmailForm";
-import PasswordForm from "@/components/SignupForm/PasswordForm";
-import ProfileForm from "@/components/SignupForm/ProfileForm";
+import EmailForm from "./components/EmailForm";
+import PasswordForm from "./components/PasswordForm";
+import ProfileForm from "./components/ProfileForm";
 import { useLocalSignup } from "@/service/signup/hooks";
 import authStore from "@/stores/authStore";
 import { ProfileFormData } from "@/types/signup";

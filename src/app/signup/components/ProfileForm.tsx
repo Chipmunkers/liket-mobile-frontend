@@ -4,13 +4,13 @@ import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import BottomButtonTabWrapper from "../BottomButtonTabWrapper";
-import CustomDrawer from "../CustomDrawer";
-import { Input, InputWrapper, Label } from "../newInput";
-import MediumSelectButton from "../SelectButton/MediumSelectButton";
-import Button from "../Button";
-import AvatarUploader from "../AvatarUploader";
-import Chip from "../Chip";
+import BottomButtonTabWrapper from "../../../components/BottomButtonTabWrapper";
+import CustomDrawer from "../../../components/CustomDrawer";
+import { Input, InputWrapper, Label } from "../../../components/newInput";
+import MediumSelectButton from "../../../components/SelectButton/MediumSelectButton";
+import Button from "../../../components/Button";
+import AvatarUploader from "../../../components/AvatarUploader";
+import Chip from "../../../components/Chip";
 import { ProfileFormData } from "@/types/signup";
 
 const profileScheme = z
