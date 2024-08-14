@@ -50,14 +50,12 @@ export default async function Home() {
             <h2 className="text-h2">핫플차트</h2>
             <div className="text-body5 text-grey-04 flex flex-col-reverse ml-[8px]">{`업로드 Date`}</div>
           </div>
-          <CustomScrollContainer className="flex flex-row overflow-x-hidden gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
+          <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
             {hotContent.map(({ idx, name, contentList }) => {
               return (
                 <div key={idx}>
                   <Link href="/search" className="flex item-center">
-                    <div className="text-skyblue-01 text-body4 w-[200px]">
-                      {name}
-                    </div>
+                    <div className="text-skyblue-01 text-body4">{name}</div>
                     <RightArrow
                       fill={colors.skyblue["01"]}
                       style={{
