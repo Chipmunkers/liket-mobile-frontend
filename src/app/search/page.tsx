@@ -12,8 +12,7 @@ import Chip from "@/components/Chip";
 import Checkbox from "@/components/Checkbox";
 import { ButtonBase } from "@mui/material";
 import { Sido, sidoList } from "../../../public/data/sido";
-import { Genre } from "../../types/content";
-import { Style } from "util";
+import { Genre, Style } from "../../types/content";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ages } from "../../../public/data/age";
 import { styles } from "../../../public/data/style";
@@ -43,20 +42,25 @@ export default function Page() {
   const [isOrderTypeSelectionDrawerOpen, setIsOrderTypeSelectionDrawerOpen] =
     useState(false);
 
+  // * Drawer
   const [isSidoDrawerOpen, setIsSidoDrawerOpen] = useState(false);
   const [isAgeDrawerOpen, setIsAgeDrawerOpen] = useState(false);
   const [isStyleDrawerOpen, setIsStyleDrawerOpen] = useState(false);
 
-  const [contentPagerble, setContentPagerble] = useState<{
-    style: Style[];
-    orderby: "time" | "like";
-    genre?: Genre;
-    sido?: Sido;
-    open?: boolean;
-  }>({
-    style: [],
-    orderby: "time",
-  });
+  // * Style
+  const [selectStyles, setSelectStyles] = useState<Style[]>([]);
+  const [confirmStyles, setConfirmStyles] = useState<number[]>([]);
+
+  // const [contentPagerble, setContentPagerble] = useState<{
+  //   style: Style[];
+  //   orderby: "time" | "like";
+  //   genre?: Genre;
+  //   sido?: Sido;
+  //   open?: boolean;
+  // }>({
+  //   style: [],
+  //   orderby: "time",
+  // });
 
   const router = useRouter();
 
@@ -103,7 +107,7 @@ export default function Page() {
 
     if (data.style && data.style.length > 0) {
       data.style.forEach((style) => {
-        params.append("styles", style);
+        params.append("style", style);
       });
     }
 
@@ -173,11 +177,23 @@ export default function Page() {
         />
         <SmallSelectButton
           placeholder="스타일"
-          text=""
+          text={pagerble.style
+            .map(
+              (styleIdx) =>
+                styles.find((style) => style.idx.toString() === styleIdx)
+                  ?.name || ""
+            )
+            .join("·")}
           onClick={() => {
             setIsStyleDrawerOpen(true);
           }}
-          Icon={<SmallDownArrow />}
+          Icon={
+            <SmallDownArrow
+              className={classNames(
+                pagerble.style.length ? "fill-white" : "fill-grey-black"
+              )}
+            />
+          }
         />
       </div>
       <div className="flex justify-between mx-[24px]">
@@ -258,14 +274,36 @@ export default function Page() {
       {/* 스타일 선택 */}
       <CustomDrawer
         open={isStyleDrawerOpen}
-        onClose={() => setIsStyleDrawerOpen(false)}
+        onClose={() => {
+          setIsStyleDrawerOpen(false);
+        }}
       >
         <div className="center text-h2">스타일</div>
         <ul className="my-[16px] w-[100%] flex px-[34px] flex-wrap gap-[8px]">
           {styles.map((style) => {
             return (
               <li key={style.idx} className="">
-                <Chip isSelected={false} onClick={() => {}}>
+                <Chip
+                  isSelected={
+                    !!selectStyles.find(
+                      (selectStyle) => selectStyle.idx === style.idx
+                    )
+                  }
+                  onClick={() => {
+                    const index = selectStyles.findIndex(
+                      (selectStyle) => selectStyle.idx === style.idx
+                    );
+
+                    if (index !== -1) {
+                      setSelectStyles(
+                        selectStyles.filter((style, i) => i !== index)
+                      );
+                      return;
+                    }
+
+                    setSelectStyles([...selectStyles, style]);
+                  }}
+                >
                   {style.name}
                 </Chip>
               </li>
@@ -276,6 +314,10 @@ export default function Page() {
           <ButtonBase
             className="w-[100%] h-[48px] rounded-[28px] bg-skyblue-01 text-button1 text-white"
             onClick={() => {
+              setPagerble({
+                ...pagerble,
+                style: selectStyles.map((style) => style.idx.toString()),
+              });
               setIsStyleDrawerOpen(false);
             }}
           >
