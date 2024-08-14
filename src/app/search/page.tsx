@@ -47,6 +47,7 @@ export default function Page() {
   const [isSidoDrawerOpen, setIsSidoDrawerOpen] = useState(false);
   const [isAgeDrawerOpen, setIsAgeDrawerOpen] = useState(false);
   const [isStyleDrawerOpen, setIsStyleDrawerOpen] = useState(false);
+  const [isOrderDrawerOpen, setIsOrderDrawerOpen] = useState(false);
 
   // const [contentPagerble, setContentPagerble] = useState<{
   //   style: Style[];
@@ -205,20 +206,39 @@ export default function Page() {
         <Checkbox
           label="진행중인 컨텐츠만 보기"
           size="12px"
-          isChecked={isOnlyActiveContentShown}
+          isChecked={pagerble.open === "true"}
           onChange={() =>
-            setIsOnlyActiveContentShown(!isOnlyActiveContentShown)
+            setPagerble({
+              ...pagerble,
+              open: pagerble.open === "true" ? null : "true",
+            })
           }
         />
-        <SmallSelectButton
-          withBorder={false}
-          placeholder="최신순"
-          text=""
-          onClick={() => {
-            setIsOrderTypeSelectionDrawerOpen(true);
-          }}
-          Icon={<SmallDownArrow />}
-        />
+        {pagerble.orderby === "time" ? (
+          <SmallSelectButton
+            rippleEffect={false}
+            withBorder={false}
+            placeholder="최신순"
+            className="text-button3"
+            text=""
+            onClick={() => {
+              setIsOrderDrawerOpen(true);
+            }}
+            Icon={<SmallDownArrow />}
+          />
+        ) : (
+          <SmallSelectButton
+            rippleEffect={false}
+            withBorder={false}
+            placeholder="인기순"
+            className="text-button3"
+            text=""
+            onClick={() => {
+              setIsOrderDrawerOpen(true);
+            }}
+            Icon={<SmallDownArrow />}
+          />
+        )}
       </div>
       <main>
         {searchText ? (
@@ -350,22 +370,45 @@ export default function Page() {
         </div>
       </CustomDrawer>
 
-      <CustomDrawer open={isOrderTypeSelectionDrawerOpen}>
+      <CustomDrawer
+        open={isOrderDrawerOpen}
+        onClose={() => setIsOrderDrawerOpen(false)}
+      >
         <div className="center text-h2">정렬</div>
-        <ul
-          className="mb-[48px]"
-          onClick={() => {
-            setIsOrderTypeSelectionDrawerOpen(false);
-          }}
-        >
-          {ORDERS.map((order) => {
-            return (
-              <li key={order} className="bottom-sheet-list">
-                <button className="bottom-sheet-button">{order}</button>
-              </li>
-            );
-          })}
-        </ul>
+        <li className="bottom-sheet-list">
+          <ButtonBase
+            onClick={() => {
+              setPagerble({
+                ...pagerble,
+                orderby: "time",
+              });
+              setIsOrderDrawerOpen(false);
+            }}
+            className={classNames(
+              "bottom-sheet-button flex justify-start px-[24px]",
+              pagerble.orderby === "time" ? "text-skyblue-01 text-body1" : ""
+            )}
+          >
+            최신순
+          </ButtonBase>
+        </li>
+        <li className="bottom-sheet-list">
+          <ButtonBase
+            onClick={() => {
+              setPagerble({
+                ...pagerble,
+                orderby: "like",
+              });
+              setIsOrderDrawerOpen(false);
+            }}
+            className={classNames(
+              "bottom-sheet-button flex justify-start px-[24px]",
+              pagerble.orderby === "like" ? "text-skyblue-01 text-body1" : ""
+            )}
+          >
+            인기순
+          </ButtonBase>
+        </li>
       </CustomDrawer>
     </>
   );
