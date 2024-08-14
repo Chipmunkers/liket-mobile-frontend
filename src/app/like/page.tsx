@@ -10,13 +10,22 @@ import { genres } from "@/../public/data/genre";
 import { ButtonBase } from "@mui/material";
 import { Genre } from "@/types/content";
 import Checkbox from "@/components/Checkbox";
+import { useGetLikeContent } from "./hooks/useGetLikeContent";
+import { ContentCard } from "../../components/Card/ContentCard";
 
 export default function Page() {
   const [isGenreDrawerOpen, setIsGenreDrawerOpen] = useState(false);
 
-  const [selectGenre, setSelectGenre] = useState<Genre>(genres[0]);
+  const [selectGenre, setSelectGenre] = useState<Genre>();
   const [isOnlyActiveContentShown, setIsOnlyActiveContentShown] =
     useState(false);
+
+  const [contentPagerble, setContentPagerble] = useState<{
+    genre?: Genre;
+    onlyopen: boolean;
+  }>({ onlyopen: false });
+  const { data, fetchNextPage, isFetching, refetch, error, hasNextPage } =
+    useGetLikeContent(contentPagerble);
 
   return (
     <>
@@ -24,8 +33,8 @@ export default function Page() {
         <Header.LeftOption option={{ back: true }} />
         <Header.MiddleText text="좋아요" />
       </Header>
-      <main>
-        <div className="flex justify-between">
+      <main className="flex flex-col items-center">
+        <div className="flex justify-between h-[40px] w-[100%] items-center px-[24px]">
           {selectGenre ? (
             <SmallSelectButton
               placeholder={selectGenre.name}
@@ -53,7 +62,17 @@ export default function Page() {
             />
           </div>
         </div>
-        <div></div>
+        <div className="flex flex-wrap justify-between mt-[4px] px-[24px] max-w-[390px]">
+          {data &&
+            data.pages
+              .map((page) => page.contentList)
+              .flat()
+              .map((content) => (
+                <div className="mb-[14px]">
+                  <ContentCard {...content} />
+                </div>
+              ))}
+        </div>
       </main>
       <CustomDrawer
         open={isGenreDrawerOpen}
@@ -64,7 +83,14 @@ export default function Page() {
           return (
             <li key={genre.idx} className="bottom-sheet-list">
               <ButtonBase
-                onClick={() => {}}
+                onClick={() => {
+                  setIsGenreDrawerOpen(false);
+                  if (selectGenre?.idx === genre.idx) {
+                    setSelectGenre(undefined);
+                    return;
+                  }
+                  setSelectGenre(genre);
+                }}
                 className="bottom-sheet-button flex justify-start px-[24px] text-body3"
               >
                 {genre.name}
