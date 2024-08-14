@@ -17,6 +17,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ages } from "../../../public/data/age";
 import { styles } from "../../../public/data/style";
 import { classNames } from "../../utils/helpers";
+import customToast from "../../utils/customToast";
 
 interface Pagerble {
   region: string | null;
@@ -46,10 +47,6 @@ export default function Page() {
   const [isSidoDrawerOpen, setIsSidoDrawerOpen] = useState(false);
   const [isAgeDrawerOpen, setIsAgeDrawerOpen] = useState(false);
   const [isStyleDrawerOpen, setIsStyleDrawerOpen] = useState(false);
-
-  // * Style
-  const [selectStyles, setSelectStyles] = useState<Style[]>([]);
-  const [confirmStyles, setConfirmStyles] = useState<number[]>([]);
 
   // const [contentPagerble, setContentPagerble] = useState<{
   //   style: Style[];
@@ -115,6 +112,9 @@ export default function Page() {
   };
 
   const [pagerble, setPagerble] = useState<Pagerble>(getQueryString());
+
+  // * Style
+  const [selectStyles, setSelectStyles] = useState<Style[]>([]);
 
   useEffect(() => {
     router.push("/search?" + createQuerystring(pagerble));
@@ -185,6 +185,11 @@ export default function Page() {
             )
             .join("·")}
           onClick={() => {
+            const findStyles = styles.filter((style) =>
+              pagerble.style.includes(style.idx.toString())
+            );
+
+            setSelectStyles(findStyles);
             setIsStyleDrawerOpen(true);
           }}
           Icon={
@@ -298,6 +303,11 @@ export default function Page() {
                       setSelectStyles(
                         selectStyles.filter((style, i) => i !== index)
                       );
+                      return;
+                    }
+
+                    if (selectStyles.length >= 3) {
+                      customToast("스타일은 최대 3개까지 선택할 수 있습니다.");
                       return;
                     }
 
