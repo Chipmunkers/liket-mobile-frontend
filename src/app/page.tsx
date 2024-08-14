@@ -64,7 +64,7 @@ export default async function Home() {
                     />
                   </Link>
                   {contentList.length === 0 ? (
-                    <div className="text-body5 text-grey-04 mt-[8px]">
+                    <div className="text-body5 text-grey-04 mt-[8px] w-[256px]">
                       컨텐츠가 없습니다.
                     </div>
                   ) : (
