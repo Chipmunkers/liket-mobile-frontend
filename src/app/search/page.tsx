@@ -244,7 +244,10 @@ export default function Page() {
                 setPagerble((pagerble) => ({ ...pagerble, region: sido.cd }));
                 setIsSidoDrawerOpen(false);
               }}
-              className="bottom-sheet-button flex justify-start px-[24px]"
+              className={classNames(
+                "bottom-sheet-button flex justify-start px-[24px]",
+                pagerble.region === sido.cd ? "text-skyblue-01 text-body1" : ""
+              )}
             >
               {sido.fullName}
             </ButtonBase>
@@ -268,7 +271,12 @@ export default function Page() {
                 }));
                 setIsAgeDrawerOpen(false);
               }}
-              className="bottom-sheet-button flex justify-start px-[24px]"
+              className={classNames(
+                "bottom-sheet-button flex justify-start px-[24px]",
+                pagerble.age === age.idx.toString()
+                  ? "text-skyblue-01 text-body1"
+                  : ""
+              )}
             >
               {age.name}
             </ButtonBase>
