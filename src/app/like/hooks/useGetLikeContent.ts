@@ -8,15 +8,15 @@ export const useGetLikeContent = (option: {
   genre?: Genre;
 }) =>
   useInfiniteQuery({
-    queryKey: [`like-review`, option],
+    queryKey: [`like-content-all`, option],
     queryFn: async ({ pageParam = 1 }) => {
       const { data } = await axiosInstance.get<{
         contentList: SummaryContentEntity[];
       }>(
         `/apis/culture-content/like/all?` +
-          (option.onlyopen ? `onlyopen=${option.onlyopen}&` : ``) +
           `page=${pageParam}&` +
-          `onlyopen=${option.onlyopen}&`
+          `onlyopen=${option.onlyopen}&` +
+          (option.genre ? `genre=${option.genre.idx}` : "")
       );
 
       return {

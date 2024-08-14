@@ -12,11 +12,12 @@ import { Genre } from "@/types/content";
 import Checkbox from "@/components/Checkbox";
 import { useGetLikeContent } from "./hooks/useGetLikeContent";
 import ContentCardGroup from "../../components/ContentCardGroup";
+import { useQueryClient } from "@tanstack/react-query";
+import customToast from "../../utils/customToast";
 
 export default function Page() {
   const [isGenreDrawerOpen, setIsGenreDrawerOpen] = useState(false);
 
-  const [selectGenre, setSelectGenre] = useState<Genre>();
   const [isOnlyActiveContentShown, setIsOnlyActiveContentShown] =
     useState(false);
 
@@ -25,8 +26,53 @@ export default function Page() {
     onlyopen: boolean;
   }>({ onlyopen: false });
 
+  // * 좋아요 컨텐츠 무한 쿼리
   const { data, fetchNextPage, isFetching, refetch, error, hasNextPage } =
     useGetLikeContent(contentPagerble);
+
+  // * 옵션 변경 시 리뷰 쿼리 데이터 초기화
+  const queryClient = useQueryClient();
+  const resetLikeContent = () => {
+    queryClient.removeQueries({
+      queryKey: ["like-content-all"],
+    });
+    queryClient.setQueryData(["like-content-all", contentPagerble], {
+      pages: [],
+      pageParams: [],
+    });
+  };
+
+  // * 무한 스크롤 타겟
+  const [target, setTarget] = useState<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isFetching && !error) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 1 }
+    );
+
+    observer.observe(target);
+    return () => {
+      observer.unobserve(target);
+    };
+  }, [target, hasNextPage, isFetching]);
+
+  useEffect(() => {
+    if (!error) return;
+
+    customToast("에러가 발생했습니다. 다시 시도해주세요.");
+  }, [error]);
+
+  // * 컴포넌트를 벗어나면 Like Content 초기화
+  useEffect(() => {
+    return () => resetLikeContent();
+  }, []);
 
   return (
     <>
@@ -36,9 +82,9 @@ export default function Page() {
       </Header>
       <main className="flex flex-col items-center">
         <div className="flex justify-between h-[40px] w-[100%] items-center px-[24px]">
-          {selectGenre ? (
+          {contentPagerble.genre ? (
             <SmallSelectButton
-              placeholder={selectGenre.name}
+              placeholder={contentPagerble.genre.name}
               text=""
               onClick={() => setIsGenreDrawerOpen(true)}
               Icon={<SmallDownArrow className="fill-white" />}
@@ -56,9 +102,12 @@ export default function Page() {
             <Checkbox
               label="진행중인 컨텐츠만 보기"
               size="12px"
-              isChecked={isOnlyActiveContentShown}
+              isChecked={contentPagerble.onlyopen}
               onChange={() =>
-                setIsOnlyActiveContentShown(!isOnlyActiveContentShown)
+                setContentPagerble((pagerble) => ({
+                  ...pagerble,
+                  onlyopen: !pagerble.onlyopen,
+                }))
               }
             />
           </div>
@@ -67,6 +116,7 @@ export default function Page() {
           <ContentCardGroup
             contentList={data.pages.map((page) => page.contentList).flat()}
             key={"content-card-group"}
+            setTarget={setTarget}
           />
         )}
       </main>
@@ -81,11 +131,18 @@ export default function Page() {
               <ButtonBase
                 onClick={() => {
                   setIsGenreDrawerOpen(false);
-                  if (selectGenre?.idx === genre.idx) {
-                    setSelectGenre(undefined);
+                  resetLikeContent();
+                  if (contentPagerble.genre?.idx === genre.idx) {
+                    setContentPagerble({
+                      ...contentPagerble,
+                      genre: undefined,
+                    });
                     return;
                   }
-                  setSelectGenre(genre);
+                  setContentPagerble({
+                    ...contentPagerble,
+                    genre,
+                  });
                 }}
                 className="bottom-sheet-button flex justify-start px-[24px] text-body3"
               >
