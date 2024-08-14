@@ -10,6 +10,7 @@ interface Props {
   placeholder: string;
   onClick: EmptyFunction;
   className?: string;
+  rippleEffect?: boolean;
 }
 
 const SmallSelectButton = ({
@@ -19,16 +20,18 @@ const SmallSelectButton = ({
   placeholder,
   onClick,
   className,
+  rippleEffect = true,
 }: Props) => {
   return (
     <ButtonBase
+      disableRipple={!rippleEffect}
       onClick={onClick}
       className={classNames(
-        "flex justify-between items-center rounded-[20px] text-button4",
+        className || "text-button4",
+        "flex justify-between items-center rounded-[20px]",
         withBorder && "border-solid border-[1px] border-grey-02",
         text && "bg-skyblue-01 text-white",
-        "h-[28px] pl-[8px] pr-[6px]",
-        className || ""
+        "h-[28px] pl-[8px] pr-[6px]"
       )}
     >
       {text || placeholder}
