@@ -1,9 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import BottomButtonTabWrapper from "../BottomButtonTabWrapper";
-import { Input, InputWrapper, Label } from "../newInput";
-import Button from "../Button";
+import BottomButtonTabWrapper from "../../../components/BottomButtonTabWrapper";
+import { Input, InputWrapper, Label } from "../../../components/newInput";
+import Button from "../../../components/Button";
 
 const passwordScheme = z
   .object({

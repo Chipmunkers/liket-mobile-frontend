@@ -2,7 +2,7 @@
 
 import Control from "@/components/Control";
 import Header from "@/components/Header";
-import ProfileForm from "@/components/SignupForm/ProfileForm";
+import ProfileForm from "@/app/signup/components/ProfileForm";
 import { useSocialSignup } from "@/service/signup/hooks";
 import { ProfileFormData } from "@/types/signup";
 import customToast from "@/utils/customToast";

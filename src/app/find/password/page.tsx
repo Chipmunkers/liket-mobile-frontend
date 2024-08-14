@@ -2,9 +2,9 @@
 
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
-import { PasswordResetEmailForm } from "@/components/SignupForm/EmailForm";
+import { PasswordResetEmailForm } from "@/app/signup/components/EmailForm";
 import { useState } from "react";
-import PasswordForm from "@/components/SignupForm/PasswordForm";
+import PasswordForm from "@/app/signup/components/PasswordForm";
 import { useResetPassword } from "@/service/reset/hooks";
 
 export default function Page() {
