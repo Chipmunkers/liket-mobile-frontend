@@ -1,10 +1,7 @@
 "use client";
 
 import SearchHeader from "@/components/SearchHeader";
-import { useStorage } from "@/hooks/useStorage";
 import { useEffect, useState } from "react";
-import CategoryTab from "@/components/CategoryTab";
-import { AGES, CITIES, GENRES, ORDERS, STYLES } from "@/utils/const";
 import SmallSelectButton from "@/components/SelectButton/SmallSelectButton";
 import SmallDownArrow from "@/icons/down-arrow-small.svg";
 import CustomDrawer from "@/components/CustomDrawer";
@@ -16,7 +13,6 @@ import { Genre, Style } from "../../types/content";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ages } from "../../../public/data/age";
 import { styles } from "../../../public/data/style";
-import { classNames } from "../../utils/helpers";
 import customToast from "../../utils/customToast";
 import { genres } from "../../../public/data/genre";
 import CustomScrollContainer from "@/components/CustomScrollContainer";
@@ -26,8 +22,10 @@ import {
   useGetContentAll,
 } from "./hooks/useGetContentAll";
 import { AxiosError } from "axios";
-import useMoveLoginPage from "../../hooks/useMoveLoginPage";
-import ContentCardGroup from "../../components/ContentCardGroup";
+import ContentCardGroup from "@/components/ContentCardGroup";
+import useModalStore from "@/stores/modalStore";
+import { classNames } from "../../utils/helpers";
+import ReloadIcon from "@/icons/reload.svg";
 
 interface Pagerble {
   region: string | null;
@@ -150,18 +148,21 @@ export default function Page() {
     };
   }, [target, hasNextPage, isFetching]);
 
-  const moveLoginPage = useMoveLoginPage();
+  const openModal = useModalStore(({ openModal }) => openModal);
 
   useEffect(() => {
     if (!error) return;
 
     if (error instanceof AxiosError) {
       if (error.response?.status === 401) {
-        moveLoginPage(
-          error.response.data?.cause?.type === "NO_TOKEN"
-            ? "NO_TOKEN"
-            : "INVALID_TOKEN"
-        );
+        openModal("LoginModal", {
+          onClickPositive: () => {
+            router.replace("/login");
+          },
+          onClickNegative: () => {
+            router.back();
+          },
+        });
         return;
       }
     }
@@ -341,6 +342,21 @@ export default function Page() {
             key={"content-card-group"}
             setTarget={setTarget}
           />
+        )}
+        {error && (error as AxiosError).response?.status !== 401 && (
+          <div className="absolute bottom-[24px] flex justify-center w-[100%]">
+            <ButtonBase
+              className="flex justify-center items-center rounded-[16px] bg-white shadow-[0_0_8px_0_rgba(0,0,0,0.16)] w-[105px] h-[32px]"
+              onClick={() => {
+                refetch();
+              }}
+            >
+              <div className="mr-[8px]">
+                <ReloadIcon />
+              </div>
+              <span className="text-button4">새로 고침</span>
+            </ButtonBase>
+          </div>
         )}
       </main>
       {/* 지역 선택 */}
