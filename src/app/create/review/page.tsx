@@ -386,9 +386,9 @@ export default function Page() {
         <MultiSectionDigitalClock
           value={timeInfo.before}
           maxTime={
-            dateInfo.selected && dayjs().isSame(dayjs(new Date()), "day")
-              ? undefined
-              : dayjs(new Date())
+            dateInfo.selected && isToday(dateInfo.selected)
+              ? dayjs(new Date())
+              : undefined
           }
           onChange={(time) => setTimeInfo({ ...timeInfo, before: time })}
         />
@@ -442,3 +442,14 @@ export default function Page() {
     </>
   );
 }
+
+const isToday = (date: Dayjs | undefined) => {
+  if (date) {
+    const todayStr = dayjs().format("YYYY.MM.DD");
+    const dateStr = date.format("YYYY.MM.DD");
+
+    return todayStr === dateStr;
+  }
+
+  return false;
+};
