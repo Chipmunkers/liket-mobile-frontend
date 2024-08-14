@@ -42,6 +42,13 @@ enum AnalyzeType {
   EXACT = "EXACT",
 }
 
+const imgListItemSchema = z.object({
+  fullUrl: z.string(),
+  fileName: z.string(),
+  fileExt: z.string(),
+  filePath: z.string(),
+});
+
 const MAX_IMAGES_COUNT = 10;
 const CONDITIONS = ["입장료", "예약", "반려동물", "주차"];
 
@@ -58,7 +65,9 @@ const schema = z.object({
   description: z.string().min(1, "필수로 입력돼야합니다."),
   startDate: z.string().min(1, "필수로 입력돼야합니다."),
   endDate: z.string().min(1, "필수로 입력돼야합니다."),
-  imgList: z.array(z.string()).min(1, "이미지가 최소 하나 이상 필요합니다."),
+  imgList: z
+    .array(imgListItemSchema)
+    .min(1, "이미지가 최소 하나 이상 필요합니다."),
 });
 
 export default function Page() {
@@ -126,7 +135,7 @@ export default function Page() {
   const isSearchModalOpen = searchParam.get("isSearchModalOpen");
   const { mutate: createContent } = useCreateContent({
     onSuccess: ({ data }) => {
-      console.log(data.idx);
+      router.replace(`/requested-contents/${data.idx}`);
     },
   });
 
@@ -262,37 +271,13 @@ export default function Page() {
                     openTime,
                     websiteLink,
                     description,
-                    startDate,
-                    endDate,
+                    startDate: startDate.replace(/\./g, "-"),
+                    endDate: endDate.replace(/\./g, "-"),
                     imgList: imgList.map(({ filePath }) => filePath),
                     location: {
                       ...addressInformation,
-                      detailAddress,
+                      detailAddress: detailAddress || " ",
                     },
-                    // imgList: ["abc"],
-                    // genreIdx: 5,
-                    // ageIdx: 4,
-                    // styleIdxList: [1, 4, 5],
-                    // location: {
-                    //   detailAddress: "LH아파트 1205호",
-                    //   address: "전북 익산시 부송동 100",
-                    //   region1Depth: "서울",
-                    //   region2Depth: "강동구",
-                    //   positionX: 126.99597295767953,
-                    //   positionY: 35.97664845766847,
-                    //   hCode: "4514069000",
-                    //   bCode: "4514013400",
-                    // },
-                    // title: "string",
-                    // description: "200글자가 안되는 description",
-                    // websiteLink: "https://google.com",
-                    // startDate: "2024-05-07T00:00:00.000Z",
-                    // endDate: "2024-05-07T00:00:00.000Z",
-                    // openTime: "월-금 12:00-20:00",
-                    // isFee: true,
-                    // isReservation: false,
-                    // isPet: true,
-                    // isParking: true,
                   });
                 }
               },
@@ -700,7 +685,7 @@ export default function Page() {
           minDate={
             tempStartDate ? dayjs(tempStartDate) : dayjs(`${thisYear - 100}`)
           }
-          maxDate={dayjs()}
+          maxDate={dayjs(new Date())}
         />
         <div className="flex h-[98px] px-[24px]">
           <Button
