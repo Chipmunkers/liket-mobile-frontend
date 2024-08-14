@@ -2,16 +2,32 @@
 
 import SearchHeader from "@/components/SearchHeader";
 import { useStorage } from "@/hooks/useStorage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CategoryTab from "@/components/CategoryTab";
 import { AGES, CITIES, GENRES, ORDERS, STYLES } from "@/utils/const";
 import SmallSelectButton from "@/components/SelectButton/SmallSelectButton";
-import SamllDownArrow from "@/icons/down-arrow-small.svg";
+import SmallDownArrow from "@/icons/down-arrow-small.svg";
 import CustomDrawer from "@/components/CustomDrawer";
 import Chip from "@/components/Chip";
-import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
-import DevIng from "../../components/DevIng";
+import { ButtonBase } from "@mui/material";
+import { Sido, sidoList } from "../../../public/data/sido";
+import { Genre } from "../../types/content";
+import { Style } from "util";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ages } from "../../../public/data/age";
+import { styles } from "../../../public/data/style";
+import { classNames } from "../../utils/helpers";
+
+interface Pagerble {
+  region: string | null;
+  style: string[];
+  age: string | null;
+  genre: string | null;
+  open: string | null;
+  orderby: string | null;
+  search: string | null;
+}
 
 export default function Page() {
   const [searchText, setSearchText] = useState("");
@@ -23,17 +39,86 @@ export default function Page() {
   const [isOnlyActiveContentShown, setIsOnlyActiveContentShown] =
     useState(false);
   const [selectedTab, setSelectedTab] = useState("전체");
-  const [isCITIESelectionDrawerOpen, setIsCitySelectionDrawerOpen] =
-    useState(false);
-  const [isAgeRangeSelectionDrawerOpen, setIsAgeRangeSelectionDrawerOpen] =
-    useState(false);
-  const [isStyleSelectionDrawerOpen, setIsStyleSelectionDrawerOpen] =
-    useState(false);
+
   const [isOrderTypeSelectionDrawerOpen, setIsOrderTypeSelectionDrawerOpen] =
     useState(false);
 
-  // TODO: 개발 필요
-  return <DevIng />;
+  const [isSidoDrawerOpen, setIsSidoDrawerOpen] = useState(false);
+  const [isAgeDrawerOpen, setIsAgeDrawerOpen] = useState(false);
+  const [isStyleDrawerOpen, setIsStyleDrawerOpen] = useState(false);
+
+  const [contentPagerble, setContentPagerble] = useState<{
+    style: Style[];
+    orderby: "time" | "like";
+    genre?: Genre;
+    sido?: Sido;
+    open?: boolean;
+  }>({
+    style: [],
+    orderby: "time",
+  });
+
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+
+  const getQueryString = (): Pagerble => {
+    return {
+      style: searchParams.getAll("style"),
+      region: searchParams.get("region"),
+      genre: searchParams.get("genre"),
+      age: searchParams.get("age"),
+      open: searchParams.get("open"),
+      orderby: searchParams.get("orderby"),
+      search: searchParams.get("search"),
+    };
+  };
+
+  const createQuerystring = (data: Pagerble): string => {
+    const params = new URLSearchParams();
+
+    if (data.region) {
+      params.set("region", data.region);
+    }
+
+    if (data.genre) {
+      params.set("genre", data.genre);
+    }
+
+    if (data.age) {
+      params.set("age", data.age);
+    }
+
+    if (data.open) {
+      params.set("open", data.open);
+    }
+
+    if (data.orderby) {
+      params.set("orderby", data.orderby);
+    }
+
+    if (data.search) {
+      params.set("search", data.search);
+    }
+
+    if (data.style && data.style.length > 0) {
+      data.style.forEach((style) => {
+        params.append("styles", style);
+      });
+    }
+
+    return params.toString();
+  };
+
+  const [pagerble, setPagerble] = useState<Pagerble>(getQueryString());
+
+  useEffect(() => {
+    router.push("/search?" + createQuerystring(pagerble));
+  }, [pagerble]);
+
+  useEffect(() => {
+    setPagerble(getQueryString());
+  }, [searchParams]);
 
   return (
     <>
@@ -54,27 +139,45 @@ export default function Page() {
       <div className="flex ml-[24px] mt-[8px] mb-[11px] gap-[8px]">
         <SmallSelectButton
           placeholder="지역"
-          text=""
+          text={
+            sidoList.find((sido) => sido.cd === pagerble.region)?.name || ""
+          }
           onClick={() => {
-            setIsCitySelectionDrawerOpen(true);
+            setIsSidoDrawerOpen(true);
           }}
-          Icon={<SamllDownArrow />}
+          Icon={
+            <SmallDownArrow
+              className={classNames(
+                sidoList.find((sido) => sido.cd === pagerble.region)
+                  ? "fill-white"
+                  : "fill-grey-black"
+              )}
+            />
+          }
         />
         <SmallSelectButton
           placeholder="연령대"
-          text=""
-          onClick={() => {
-            setIsAgeRangeSelectionDrawerOpen(true);
-          }}
-          Icon={<SamllDownArrow />}
+          text={
+            ages.find((age) => age.idx.toString() === pagerble.age)?.name || ""
+          }
+          onClick={() => setIsAgeDrawerOpen(true)}
+          Icon={
+            <SmallDownArrow
+              className={classNames(
+                ages.find((age) => age.idx.toString() === pagerble.age)
+                  ? "fill-white"
+                  : "fill-grey-black"
+              )}
+            />
+          }
         />
         <SmallSelectButton
           placeholder="스타일"
           text=""
           onClick={() => {
-            setIsStyleSelectionDrawerOpen(true);
+            setIsStyleDrawerOpen(true);
           }}
-          Icon={<SamllDownArrow />}
+          Icon={<SmallDownArrow />}
         />
       </div>
       <div className="flex justify-between mx-[24px]">
@@ -93,7 +196,7 @@ export default function Page() {
           onClick={() => {
             setIsOrderTypeSelectionDrawerOpen(true);
           }}
-          Icon={<SamllDownArrow />}
+          Icon={<SmallDownArrow />}
         />
       </div>
       <main>
@@ -107,65 +210,80 @@ export default function Page() {
           </div>
         )}
       </main>
-      <CustomDrawer open={isCITIESelectionDrawerOpen}>
+      {/* 지역 선택 */}
+      <CustomDrawer
+        open={isSidoDrawerOpen}
+        onClose={() => setIsSidoDrawerOpen(false)}
+      >
         <div className="center text-h2">지역</div>
-        <ul
-          className="mb-[48px]"
-          onClick={() => {
-            setIsCitySelectionDrawerOpen(false);
-          }}
-        >
-          {CITIES.map((City) => {
-            return (
-              <li key={City} className="bottom-sheet-list">
-                <button className="bottom-sheet-button">{City}</button>
-              </li>
-            );
-          })}
-        </ul>
+        {sidoList.map((sido) => (
+          <li className="bottom-sheet-list">
+            <ButtonBase
+              onClick={() => {
+                setPagerble((pagerble) => ({ ...pagerble, region: sido.cd }));
+                setIsSidoDrawerOpen(false);
+              }}
+              className="bottom-sheet-button flex justify-start px-[24px]"
+            >
+              {sido.fullName}
+            </ButtonBase>
+          </li>
+        ))}
       </CustomDrawer>
-      <CustomDrawer open={isAgeRangeSelectionDrawerOpen}>
+
+      {/* 연령대 선택 */}
+      <CustomDrawer
+        open={isAgeDrawerOpen}
+        onClose={() => setIsAgeDrawerOpen(false)}
+      >
         <div className="center text-h2">연령대</div>
-        <ul
-          className="mb-[48px]"
-          onClick={() => {
-            setIsAgeRangeSelectionDrawerOpen(false);
-          }}
-        >
-          {AGES.map((age) => {
-            return (
-              <li key={age} className="bottom-sheet-list">
-                <button className="bottom-sheet-button">{age}</button>
-              </li>
-            );
-          })}
-        </ul>
+        {ages.map((age) => (
+          <li className="bottom-sheet-list">
+            <ButtonBase
+              onClick={() => {
+                setPagerble((pagerble) => ({
+                  ...pagerble,
+                  age: age.idx.toString(),
+                }));
+                setIsAgeDrawerOpen(false);
+              }}
+              className="bottom-sheet-button flex justify-start px-[24px]"
+            >
+              {age.name}
+            </ButtonBase>
+          </li>
+        ))}
       </CustomDrawer>
-      <CustomDrawer open={isStyleSelectionDrawerOpen}>
+
+      {/* 스타일 선택 */}
+      <CustomDrawer
+        open={isStyleDrawerOpen}
+        onClose={() => setIsStyleDrawerOpen(false)}
+      >
         <div className="center text-h2">스타일</div>
         <ul className="my-[16px] w-[100%] flex px-[34px] flex-wrap gap-[8px]">
-          {STYLES.map((style) => {
+          {styles.map((style) => {
             return (
-              <li key={style} className="">
+              <li key={style.idx} className="">
                 <Chip isSelected={false} onClick={() => {}}>
-                  {style}
+                  {style.name}
                 </Chip>
               </li>
             );
           })}
         </ul>
         <div className="flex h-[98px] px-[24px]">
-          <Button
-            height={48}
-            fullWidth
+          <ButtonBase
+            className="w-[100%] h-[48px] rounded-[28px] bg-skyblue-01 text-button1 text-white"
             onClick={() => {
-              setIsStyleSelectionDrawerOpen(false);
+              setIsStyleDrawerOpen(false);
             }}
           >
             확인
-          </Button>
+          </ButtonBase>
         </div>
       </CustomDrawer>
+
       <CustomDrawer open={isOrderTypeSelectionDrawerOpen}>
         <div className="center text-h2">정렬</div>
         <ul

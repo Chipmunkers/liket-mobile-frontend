@@ -1,4 +1,13 @@
-export const sidoList = [
+export interface Sido {
+  bjd_cd: string;
+  cd: string;
+  lng: string;
+  lat: string;
+  fullName: string;
+  name: string;
+}
+
+export const sidoList: Sido[] = [
   {
     bjd_cd: "1100000000",
     cd: "11",

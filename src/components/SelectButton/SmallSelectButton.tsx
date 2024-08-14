@@ -1,5 +1,6 @@
 import { EmptyFunction } from "@/types/common";
 import { classNames } from "@/utils/helpers";
+import { ButtonBase } from "@mui/material";
 import { ReactNode } from "react";
 
 interface Props {
@@ -20,10 +21,10 @@ const SmallSelectButton = ({
   className,
 }: Props) => {
   return (
-    <button
+    <ButtonBase
       onClick={onClick}
       className={classNames(
-        "flex justify-between items-center rounded-[20px] text-button3",
+        "flex justify-between items-center rounded-[20px] text-button4",
         withBorder && "border-solid border-[1px] border-grey-02",
         text && "bg-skyblue-01 text-white",
         "h-[28px] pl-[8px] pr-[6px]",
@@ -32,7 +33,7 @@ const SmallSelectButton = ({
     >
       {text || placeholder}
       {Icon}
-    </button>
+    </ButtonBase>
   );
 };
 
