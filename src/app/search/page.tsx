@@ -18,6 +18,16 @@ import { ages } from "../../../public/data/age";
 import { styles } from "../../../public/data/style";
 import { classNames } from "../../utils/helpers";
 import customToast from "../../utils/customToast";
+import { genres } from "../../../public/data/genre";
+import CustomScrollContainer from "@/components/CustomScrollContainer";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  GET_CONTENT_ALL_KEY,
+  useGetContentAll,
+} from "./hooks/useGetContentAll";
+import { AxiosError } from "axios";
+import useMoveLoginPage from "../../hooks/useMoveLoginPage";
+import ContentCardGroup from "../../components/ContentCardGroup";
 
 interface Pagerble {
   region: string | null;
@@ -30,38 +40,6 @@ interface Pagerble {
 }
 
 export default function Page() {
-  const [searchText, setSearchText] = useState("");
-  const [searchedTexts, setSearchedTexts] = useStorage(
-    "searchedText",
-    [],
-    "localStorage"
-  );
-  const [isOnlyActiveContentShown, setIsOnlyActiveContentShown] =
-    useState(false);
-  const [selectedTab, setSelectedTab] = useState("전체");
-
-  const [isOrderTypeSelectionDrawerOpen, setIsOrderTypeSelectionDrawerOpen] =
-    useState(false);
-
-  // * Drawer
-  const [isSidoDrawerOpen, setIsSidoDrawerOpen] = useState(false);
-  const [isAgeDrawerOpen, setIsAgeDrawerOpen] = useState(false);
-  const [isStyleDrawerOpen, setIsStyleDrawerOpen] = useState(false);
-  const [isOrderDrawerOpen, setIsOrderDrawerOpen] = useState(false);
-
-  // const [contentPagerble, setContentPagerble] = useState<{
-  //   style: Style[];
-  //   orderby: "time" | "like";
-  //   genre?: Genre;
-  //   sido?: Sido;
-  //   open?: boolean;
-  // }>({
-  //   style: [],
-  //   orderby: "time",
-  // });
-
-  const router = useRouter();
-
   const searchParams = useSearchParams();
 
   const getQueryString = (): Pagerble => {
@@ -112,35 +90,150 @@ export default function Page() {
     return params.toString();
   };
 
+  const [querystring, setQuerystring] = useState<string>("");
   const [pagerble, setPagerble] = useState<Pagerble>(getQueryString());
+
+  useEffect(() => {}, [pagerble]);
+
+  const { data, fetchNextPage, isFetching, refetch, error, hasNextPage } =
+    useGetContentAll(querystring);
+
+  // * Drawer
+  const [isSidoDrawerOpen, setIsSidoDrawerOpen] = useState(false);
+  const [isAgeDrawerOpen, setIsAgeDrawerOpen] = useState(false);
+  const [isStyleDrawerOpen, setIsStyleDrawerOpen] = useState(false);
+  const [isOrderDrawerOpen, setIsOrderDrawerOpen] = useState(false);
+
+  const router = useRouter();
 
   // * Style
   const [selectStyles, setSelectStyles] = useState<Style[]>([]);
 
   useEffect(() => {
+    setPagerble(getQueryString());
+  }, [searchParams]);
+
+  // * 옵션 변경 시 리뷰 쿼리 데이터 초기화
+  const queryClient = useQueryClient();
+  const resetContent = () => {
+    queryClient.removeQueries({
+      queryKey: [GET_CONTENT_ALL_KEY],
+    });
+    queryClient.setQueryData([GET_CONTENT_ALL_KEY, pagerble], {
+      pages: [],
+      pageParams: [],
+    });
+  };
+
+  useEffect(() => {
+    if (!pagerble) return;
+
     router.push("/search?" + createQuerystring(pagerble));
   }, [pagerble]);
 
+  // * 무한 스크롤 타겟
+  const [target, setTarget] = useState<HTMLDivElement | null>(null);
+
   useEffect(() => {
-    setPagerble(getQueryString());
-  }, [searchParams]);
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isFetching && !error) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 1 }
+    );
+
+    observer.observe(target);
+    return () => {
+      observer.unobserve(target);
+    };
+  }, [target, hasNextPage, isFetching]);
+
+  const moveLoginPage = useMoveLoginPage();
+
+  useEffect(() => {
+    if (!error) return;
+
+    if (error instanceof AxiosError) {
+      if (error.response?.status === 401) {
+        moveLoginPage(
+          error.response.data?.cause?.type === "NO_TOKEN"
+            ? "NO_TOKEN"
+            : "INVALID_TOKEN"
+        );
+        return;
+      }
+    }
+
+    customToast("에러가 발생했습니다. 다시 시도해주세요.");
+  }, [error]);
 
   return (
     <>
       <SearchHeader
         onSearch={(text) => {
-          setSearchedTexts([...searchedTexts, text]);
+          setPagerble({
+            ...pagerble,
+            search: text || null,
+          });
         }}
         placeholder="검색어를 입력해주세요."
       />
-      <CategoryTab
-        list={["전체", ...GENRES]}
-        selectedTab={selectedTab}
-        onClickTab={(selectedTab) => setSelectedTab(selectedTab)}
-        wrapperStyle={{
-          marginTop: "8px",
-        }}
-      />
+      <CustomScrollContainer className="flex overflow-x-hidden flex-row mt-[8px] [&>*:first-child]:ml-[24px] border-b-[1px] border-b-grey-01">
+        <ul className="flex h-[32px] ">
+          <li
+            key={"all_category"}
+            className={classNames(
+              "h-[100%] w-[80px]",
+              pagerble.genre === null
+                ? "text-skyblue-01 border-b-[2px] border-skyblue-01 text-button3"
+                : "text-button4 text-grey-03 pb-[2px]"
+            )}
+          >
+            <ButtonBase
+              disableRipple={true}
+              className="w-[100%] h-[100%] center"
+              onClick={() => {
+                setPagerble({
+                  ...pagerble,
+                  genre: null,
+                });
+              }}
+            >
+              전체
+            </ButtonBase>
+          </li>
+          {genres.map((genre) => {
+            return (
+              <li
+                key={genre.idx}
+                className={classNames(
+                  "h-[100%] w-[80px]",
+                  pagerble.genre === genre.idx.toString()
+                    ? "text-skyblue-01 border-b-[2px] border-skyblue-01 text-button3"
+                    : "text-button4 text-grey-03 pb-[2px]"
+                )}
+              >
+                <ButtonBase
+                  disableRipple={true}
+                  className="w-[100%] h-[100%] center"
+                  onClick={() => {
+                    setPagerble({
+                      ...pagerble,
+                      genre: genre.idx.toString(),
+                    });
+                  }}
+                >
+                  {genre.name}
+                </ButtonBase>
+              </li>
+            );
+          })}
+        </ul>
+      </CustomScrollContainer>
       <div className="flex ml-[24px] mt-[8px] mb-[11px] gap-[8px]">
         <SmallSelectButton
           placeholder="지역"
@@ -214,7 +307,7 @@ export default function Page() {
             })
           }
         />
-        {pagerble.orderby === "time" ? (
+        {pagerble.orderby === "time" || !pagerble.orderby ? (
           <SmallSelectButton
             rippleEffect={false}
             withBorder={false}
@@ -241,14 +334,12 @@ export default function Page() {
         )}
       </div>
       <main>
-        {searchText ? (
-          <div className="empty">검색 결과가 없습니다.</div>
-        ) : (
-          <div className="flex flex-wrap mx-[24px] gap-[14px]">
-            {/* {CONTENT_CARDS_DUMMY.map((data, index) => {
-              return <ContentCard key={index} {...data} />;
-            })} */}
-          </div>
+        {data && (
+          <ContentCardGroup
+            contentList={data.pages.map((page) => page.contentList).flat()}
+            key={"content-card-group"}
+            setTarget={setTarget}
+          />
         )}
       </main>
       {/* 지역 선택 */}
