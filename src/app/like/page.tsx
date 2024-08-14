@@ -5,13 +5,13 @@ import Header from "@/components/Header";
 import SmallSelectButton from "@/components/SelectButton/SmallSelectButton";
 import SmallDownArrow from "@/icons/down-arrow-small.svg";
 import CustomDrawer from "@/components/CustomDrawer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { genres } from "@/../public/data/genre";
 import { ButtonBase } from "@mui/material";
 import { Genre } from "@/types/content";
 import Checkbox from "@/components/Checkbox";
 import { useGetLikeContent } from "./hooks/useGetLikeContent";
-import { ContentCard } from "../../components/Card/ContentCard";
+import ContentCardGroup from "../../components/ContentCardGroup";
 
 export default function Page() {
   const [isGenreDrawerOpen, setIsGenreDrawerOpen] = useState(false);
@@ -24,6 +24,7 @@ export default function Page() {
     genre?: Genre;
     onlyopen: boolean;
   }>({ onlyopen: false });
+
   const { data, fetchNextPage, isFetching, refetch, error, hasNextPage } =
     useGetLikeContent(contentPagerble);
 
@@ -62,17 +63,12 @@ export default function Page() {
             />
           </div>
         </div>
-        <div className="flex flex-wrap justify-between mt-[4px] px-[24px] max-w-[390px]">
-          {data &&
-            data.pages
-              .map((page) => page.contentList)
-              .flat()
-              .map((content) => (
-                <div className="mb-[14px]">
-                  <ContentCard {...content} />
-                </div>
-              ))}
-        </div>
+        {data && (
+          <ContentCardGroup
+            contentList={data.pages.map((page) => page.contentList).flat()}
+            key={"content-card-group"}
+          />
+        )}
       </main>
       <CustomDrawer
         open={isGenreDrawerOpen}
