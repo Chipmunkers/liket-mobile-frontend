@@ -2,7 +2,7 @@
 
 import Header from "@/components/Header";
 import LinkableTab from "@/components/LinkableTab";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { classNames } from "@/utils/helpers";
 import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
 import Button from "@/components/Button";
@@ -25,6 +25,8 @@ import { MapContentEntity } from "@/types/api/map";
 import MapContentInfo from "./components/ContentInfo";
 import Script from "next/script";
 import { ButtonBase } from "@mui/material";
+import { Sido, sidoList } from "../../../public/data/sido";
+import { Sigungu, sigunguList } from "../../../public/data/sigungu";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -34,49 +36,9 @@ export default function MapPage() {
   const isTownSelectionModalOpen = searchParams.get("isTownSelectionModalOpen");
   const isFilterModalOpen = searchParams.get("isFilterModalOpen");
 
-  // ! 레거시 영역
-  const [cityAndGuSelection, setCityAndGuSelection] = useState(
-    INITIAL_CITY_AND_GU_SELECTION
-  );
-
-  const { currentSelectedGu, newSelectedCity, newSelectedGu } =
-    cityAndGuSelection;
-
   const onClickTownSelection = () => {
     router.push(`${pathname}?isTownSelectionModalOpen=true`);
   };
-
-  const onCloseTownSelectionModal = () => {
-    router.back();
-    setCityAndGuSelection({
-      ...cityAndGuSelection,
-      newSelectedCity: cityAndGuSelection.currentSelectedCity,
-      newSelectedGu: cityAndGuSelection.currentSelectedGu,
-    });
-  };
-
-  const onClickGu = (gu: string) => {
-    const newCityAndGuSelection = { ...cityAndGuSelection };
-    newCityAndGuSelection.newSelectedGu = gu;
-    setCityAndGuSelection(newCityAndGuSelection);
-  };
-
-  const onClickCity = (city: (typeof CITIES)[number]) => {
-    const newCityAndGuSelection = { ...cityAndGuSelection };
-    newCityAndGuSelection.newSelectedCity = city;
-    newCityAndGuSelection.newSelectedGu = CITY_GU_MAP[city][0];
-    setCityAndGuSelection(newCityAndGuSelection);
-  };
-
-  const onClickSettingNeighbor = () => {
-    customToast("열심히 준비중입니다!");
-    setCityAndGuSelection({
-      ...cityAndGuSelection,
-      currentSelectedCity: cityAndGuSelection.newSelectedCity,
-      currentSelectedGu: cityAndGuSelection.newSelectedGu,
-    });
-  };
-  // ! 레거시 영역
 
   // * 현재 보여지고 있는 컨텐츠 목록
   const [contentList, setContentList] = useState<MapContentEntity[]>([]);
@@ -104,6 +66,14 @@ export default function MapPage() {
     styles: [],
   });
 
+  // * 지역 선택
+  const [selectSido, setSelectSido] = useState<Sido>(sidoList[0]);
+  const [selectSigungu, setSelectSigungu] = useState<Sigungu | null>(null);
+  const [selectLocation, setSelectLocation] = useState<{
+    sido: Sido;
+    sigungu: Sigungu | null;
+  }>({ sido: selectSido, sigungu: selectSigungu });
+
   const isSetMapFilter = (): boolean => {
     return !!(mapFilter.genre || mapFilter.age || mapFilter.styles.length);
   };
@@ -112,7 +82,11 @@ export default function MapPage() {
     <>
       <Header key={"header"}>
         <Header.LeftOption
-          townName={currentSelectedGu}
+          townName={
+            selectLocation.sigungu
+              ? selectLocation.sido.name + " " + selectLocation.sigungu.name
+              : selectLocation.sido.name
+          }
           onClickTownSelection={onClickTownSelection}
         />
         <Header.RightOption option={{ search: true, like: true }} />
@@ -124,6 +98,8 @@ export default function MapPage() {
           clickedContent={clickedContent}
           setClickedContent={setClickedContent}
           mapFilter={mapFilter}
+          lng={Number(selectLocation.sigungu?.lng || selectLocation.sido.lng)}
+          lat={Number(selectLocation.sigungu?.lat || selectLocation.sido.lat)}
         >
           <div className="absolute z-[2] mt-[16px] ml-[24px] w-100 flex items-center">
             <ButtonBase
@@ -339,7 +315,11 @@ export default function MapPage() {
           <Header.LeftOption
             option={{
               close: {
-                onClick: onCloseTownSelectionModal,
+                onClick: () => {
+                  router.back();
+                  setSelectSido(selectLocation.sido);
+                  setSelectSigungu(selectLocation.sigungu);
+                },
               },
             }}
           />
@@ -349,18 +329,23 @@ export default function MapPage() {
           <div className="flex grow h-[100%]">
             <div className="h-[100%] w-[50%] bg-grey-01">
               <ul className="flex flex-col w-[100%]">
-                {CITIES.map((CITY, index) => {
+                {sidoList.map((sido, index) => {
                   return (
                     <li
                       key={`city_${index}`}
                       className={classNames(
                         "center h-[48px]",
-                        newSelectedCity === CITY
+                        selectSido.cd === sido.cd
                           ? "bg-white text-skyblue-01"
                           : "bg-grey-01 text-grey-04"
                       )}
                     >
-                      <button onClick={() => onClickCity(CITY)}>{CITY}</button>
+                      <ButtonBase
+                        className="w-[100%] h-[100%]"
+                        onClick={() => setSelectSido(sido)}
+                      >
+                        {sido.fullName}
+                      </ButtonBase>
                     </li>
                   );
                 })}
@@ -368,25 +353,51 @@ export default function MapPage() {
             </div>
             <div className="w-[50%]">
               <ul className="flex flex-col w-[100%] h-[100%] overflow-y-auto">
-                {CITY_GU_MAP[newSelectedCity].map((GU, index) => {
-                  return (
-                    <li
-                      key={index}
-                      className={classNames(
-                        "center h-[48px] shrink-0",
-                        newSelectedGu === GU && "text-skyblue-01"
-                      )}
-                    >
-                      <button onClick={() => onClickGu(GU)}>{GU}</button>
-                    </li>
-                  );
-                })}
+                {sigunguList
+                  .filter((sigungu) => sigungu.bjd_cd.startsWith(selectSido.cd))
+                  .map((sigungu, index) => {
+                    return (
+                      <li
+                        key={index}
+                        className={classNames(
+                          "center h-[48px] shrink-0",
+                          selectSigungu?.cd === sigungu.cd && "text-skyblue-01"
+                        )}
+                      >
+                        <ButtonBase
+                          className="w-[100%] h-[100%]"
+                          onClick={() => setSelectSigungu(sigungu)}
+                        >
+                          {sigungu.name}
+                        </ButtonBase>
+                      </li>
+                    );
+                  })}
               </ul>
             </div>
           </div>
         </div>
         <BottomButtonTabWrapper shadow className="bg-white">
-          <Button height={48} onClick={onClickSettingNeighbor} fullWidth>
+          <Button
+            height={48}
+            onClick={() => {
+              if (
+                !selectSigungu ||
+                !selectSigungu.bjd_cd.startsWith(selectSido.cd)
+              ) {
+                setSelectSigungu(null);
+                setSelectLocation({
+                  sido: selectSido,
+                  sigungu: null,
+                });
+              } else {
+                setSelectLocation({ sido: selectSido, sigungu: selectSigungu });
+              }
+
+              router.back();
+            }}
+            fullWidth
+          >
             설정하기
           </Button>
         </BottomButtonTabWrapper>
