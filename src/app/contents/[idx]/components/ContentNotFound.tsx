@@ -17,11 +17,11 @@ const ContentNotFound = () => {
       </div>
       <Divider height="8px" width="100%" />
       {data && (
-        <section className="mt-[24px] mb-[24px]">
+        <section className="mt-[24px] mb-[24px] w-[100%]">
           <h2 className="pl-[24px] mb-[8px] text-h2">
             이런 컨텐츠들은 어떠세요?
           </h2>
-          <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
+          <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
             {data.contentList.map((content, index) => {
               return <ContentCard key={index} {...content} />;
             })}
