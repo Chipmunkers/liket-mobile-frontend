@@ -6,6 +6,8 @@ import { Carousel } from "react-responsive-carousel";
 import ReviewLikeBtn from "./ReviewLikeBtn";
 import { ReviewEntity } from "@/types/api/review";
 import { UserEntity } from "@/types/api/user";
+import CustomImage from "../../../../components/CustomImage";
+import EmptyImage from "../../../../components/EmptyImage.tsx";
 
 const ReviewInfiniteScroll = (props: {
   reviewList: ReviewEntity[];
@@ -23,9 +25,9 @@ const ReviewInfiniteScroll = (props: {
 
   return (
     <ul>
-      {props.reviewList.map((review) => (
+      {props.reviewList.map((review, i) => (
         <li
-          key={review.idx}
+          key={`review_infinite_${review.idx}`}
           className="border-solid border-b-[1px] border-grey-01"
         >
           <div className="px-[24px] py-[16px]">
@@ -85,13 +87,22 @@ const ReviewInfiniteScroll = (props: {
                         aspectRatio: "1/1",
                       }}
                     >
-                      <Image
+                      <CustomImage
+                        src={process.env.NEXT_PUBLIC_IMAGE_SERVER + imgPath}
+                        alt="리뷰 이미지"
+                        className="select-none object-cover"
+                        fallbackComponent={
+                          <EmptyImage width="100%" height="100%" />
+                        }
+                        fill
+                      />
+                      {/* <Image
                         priority
                         fill
                         alt="리뷰 이미지"
                         src={process.env.NEXT_PUBLIC_IMAGE_SERVER + imgPath}
                         className="select-none object-cover"
-                      />
+                      /> */}
                     </div>
                   ))}
                 </Carousel>
