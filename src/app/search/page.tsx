@@ -124,7 +124,7 @@ export default function Page() {
     if (!pagerble) return;
 
     // pagerble이 바뀌면 경로 변경
-    router.push("/search?" + createQuerystring(pagerble));
+    router.replace("/search?" + createQuerystring(pagerble));
   }, [pagerble]);
 
   // * 무한 스크롤 타겟
