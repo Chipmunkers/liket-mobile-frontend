@@ -10,14 +10,24 @@ import { ButtonBase } from "@mui/material";
 interface SearchHeaderProps {
   placeholder: string;
   onSearch: (text: string) => void;
+  replacePath?: string;
 }
 
-const SearchHeader = ({ placeholder, onSearch }: SearchHeaderProps) => {
+const SearchHeader = ({
+  placeholder,
+  onSearch,
+  replacePath,
+}: SearchHeaderProps) => {
   const [searchText, setSearchText] = useState("");
   const router = useRouter();
 
   const handleClickBackButton = () => {
-    router.push("/");
+    if (replacePath) {
+      router.push(replacePath);
+      return;
+    }
+
+    router.back();
   };
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -26,6 +36,7 @@ const SearchHeader = ({ placeholder, onSearch }: SearchHeaderProps) => {
 
   const handleClickRemoveButton = () => {
     setSearchText("");
+    onSearch(searchText);
   };
 
   const handleSubmitForm = (e: FormEvent<HTMLFormElement>) => {
@@ -54,9 +65,15 @@ const SearchHeader = ({ placeholder, onSearch }: SearchHeaderProps) => {
             className="w-[100%] text-body3 placeholder:text-body3 placeholder-grey-02"
             onChange={handleChangeInput}
           />
-          <button type="submit">
-            <SearchIcon />
-          </button>
+          {!searchText ? (
+            <button type="submit">
+              <SearchIcon />
+            </button>
+          ) : (
+            <button type="button" onClick={() => handleClickRemoveButton()}>
+              <RemoveIcon />
+            </button>
+          )}
         </form>
       </div>
     </div>
