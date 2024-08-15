@@ -26,6 +26,7 @@ import ContentCardGroup from "@/components/ContentCardGroup";
 import useModalStore from "@/stores/modalStore";
 import { classNames } from "../../utils/helpers";
 import ReloadIcon from "@/icons/reload.svg";
+import DefaultLoading from "../../components/Loading/DefaultLoading";
 
 interface Pagerble {
   region: string | null;
@@ -333,6 +334,7 @@ export default function Page() {
         )}
       </div>
       <main>
+        {isFetching ? <DefaultLoading center={true} /> : null}
         {data && data.pages[0].contentList.length === 0 ? (
           <div className="empty">검색 결과가 없습니다.</div>
         ) : null}
