@@ -71,31 +71,6 @@ const LinkableTab = ({ shadow = false }: Props) => {
 
   const { data: loginUser } = useGetMyInfo();
 
-  const [translateY, setTranslateY] = useState(0);
-  const [lastScrollTop, setLastScrollTop] = useState(0);
-
-  useEffect(() => {
-    if (["/map"].includes(pathname)) return;
-
-    const handleScroll = () => {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-
-      if (scrollTop > lastScrollTop) {
-        setTranslateY(100); // 스크롤 내릴 때 아래로 사라지게
-      } else {
-        setTranslateY(0); // 스크롤 올릴 때 다시 제자리로
-      }
-
-      setLastScrollTop(scrollTop <= 0 ? 0 : scrollTop);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [lastScrollTop]);
-
   return (
     <>
       <CustomDrawer
@@ -200,10 +175,6 @@ const LinkableTab = ({ shadow = false }: Props) => {
             "flex w-[100%] justify-around h-[48px] z-[5] items-center bg-white",
             shadow && "shadow-[0px_-8px_16px_0px_rgba(0,0,0,0.04)]"
           )}
-          style={{
-            transform: `translateY(${translateY}%)`,
-            transition: "transform 0.3s ease-in-out",
-          }}
         >
           <ButtonBase className="w-[20%] h-[44px]">
             <LinkTab
