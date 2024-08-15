@@ -17,6 +17,7 @@ import customToast from "@/utils/customToast";
 import ReloadIcon from "@/icons/reload.svg";
 import useMoveLoginPage from "../../hooks/useMoveLoginPage";
 import { AxiosError } from "axios";
+import EmptyLike from "./components/EmptyLike";
 
 export default function Page() {
   const [isGenreDrawerOpen, setIsGenreDrawerOpen] = useState(false);
@@ -132,6 +133,7 @@ export default function Page() {
             setTarget={setTarget}
           />
         )}
+        {data && data.pages[0]?.contentList.length === 0 ? <EmptyLike /> : null}
         {error && (
           <div className="absolute bottom-[24px] flex justify-center">
             <ButtonBase
