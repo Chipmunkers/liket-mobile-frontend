@@ -334,7 +334,7 @@ export default function Page() {
         )}
       </div>
       <main>
-        {isFetching ? <DefaultLoading center={true} /> : null}
+        {!data ? <DefaultLoading center={true} /> : null}
         {data && data.pages[0].contentList.length === 0 ? (
           <div className="empty">검색 결과가 없습니다.</div>
         ) : null}
