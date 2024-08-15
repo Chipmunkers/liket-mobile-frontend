@@ -3,6 +3,8 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import Image from "next/image";
+import CustomImage from "../CustomImage";
+import EmptyImage from "../EmptyImage.tsx";
 
 interface CarouselProps {
   list: string[];
@@ -27,12 +29,13 @@ const ResponsiveCarousel = ({ list }: CarouselProps) => {
               aspectRatio: "1 / 1",
             }}
           >
-            <Image
+            <CustomImage
               priority
               fill
               alt="배너 이미지"
               src={process.env.NEXT_PUBLIC_IMAGE_SERVER + imgPath}
               className="select-none w-[100%] h-[100%]"
+              fallbackComponent={<EmptyImage width="100%" height="100%" />}
             />
           </div>
         );
