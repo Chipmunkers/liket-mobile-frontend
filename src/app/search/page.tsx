@@ -337,11 +337,13 @@ export default function Page() {
           <div className="empty">검색 결과가 없습니다.</div>
         ) : null}
         {data && (
-          <ContentCardGroup
-            contentList={data.pages.map((page) => page.contentList).flat()}
-            key={"content-card-group"}
-            setTarget={setTarget}
-          />
+          <>
+            <ContentCardGroup
+              contentList={data.pages.map((page) => page.contentList).flat()}
+              key={"content-card-group"}
+              setTarget={setTarget}
+            />
+          </>
         )}
         {error && (error as AxiosError).response?.status !== 401 && (
           <div className="absolute bottom-[24px] flex justify-center w-[100%]">

@@ -46,7 +46,7 @@ const ContentCardGroup = (props: {
         ))}
       </div>
       {props.setTarget ? (
-        <div className="h-[10px]" ref={props.setTarget}></div>
+        <div className="h-[10px] relative bottom-1" ref={props.setTarget}></div>
       ) : null}
     </>
   );
