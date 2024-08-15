@@ -13,6 +13,8 @@ import Link from "next/link";
 import authStore from "@/stores/authStore";
 import { setAuthToken } from "@/utils/axios";
 import customToast from "@/utils/customToast";
+import { useEffect } from "react";
+import DefaultLoading from "../../../components/Loading/DefaultLoading";
 
 const schema = z.object({
   email: z.string().email("올바른 이메일을 입력해주세요."),
@@ -21,7 +23,7 @@ const schema = z.object({
 
 export default function Page() {
   const setToken = authStore(({ setToken }) => setToken);
-  const { mutate } = useLogin({
+  const { mutate, status } = useLogin({
     onSuccess: ({ data }) => {
       setAuthToken(data.token);
       setToken(data.token);
@@ -113,12 +115,12 @@ export default function Page() {
         </div>
         <BottomButtonTabWrapper shadow>
           <Button
-            type="submit"
             fullWidth
-            disabled={!formState.isValid}
+            disabled={!formState.isValid || status === "pending"}
             height={48}
+            onClick={() => onSubmit()}
           >
-            로그인
+            {status === "pending" ? <DefaultLoading dotSize="8px" /> : "로그인"}
           </Button>
         </BottomButtonTabWrapper>
       </form>
