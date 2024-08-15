@@ -14,7 +14,6 @@ import customToast from "../../../../utils/customToast";
 import { AxiosError } from "axios";
 import useMoveLoginPage from "../../../../hooks/useMoveLoginPage";
 import ReloadIcon from "../icon/review-reload.svg";
-import Link from "next/link";
 import ReviewInfiniteScroll from "./ReviewInfiniteScroll";
 import EmptyReview from "./EmptyReview";
 import { ButtonBase } from "@mui/material";
