@@ -17,11 +17,16 @@ import { useState } from "react";
 import ContentDetailInfo from "./ContentDetailInfo";
 import ContentReviewInfo from "./ContentReviewInfo";
 import { useGetCultureContentByIdx } from "../hooks/useGetContentByIdx";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const DetailContent = (props: { content: ContentEntity }) => {
-  const [selectedTab, setSelectedTab] = useState<"상세정보" | string>(
-    "상세정보"
+  const searchParams = useSearchParams();
+
+  const [selectedTab, setSelectedTab] = useState<"content" | "review">(
+    searchParams.get("tab") === "review" ? "review" : "content"
   );
+
+  const router = useRouter();
 
   const { data: content } = useGetCultureContentByIdx(
     props.content.idx,
@@ -89,14 +94,17 @@ const DetailContent = (props: { content: ContentEntity }) => {
       <Divider width="100%" height="8px" />
       <CategoryTab
         small={false}
-        list={["상세정보", `리뷰 ${content.reviewCount}`]}
+        list={["content", `review`]}
         selectedTab={selectedTab}
-        onClickTab={setSelectedTab}
+        customTabNames={["컨텐츠", `리뷰 ${content.reviewCount}`]}
+        onClickTab={(tab) => {
+          setSelectedTab(tab);
+        }}
         wrapperStyle={{
           marginTop: "8px",
         }}
       />
-      {selectedTab === "상세정보" ? (
+      {selectedTab === "content" ? (
         <ContentDetailInfo content={content} />
       ) : (
         <ContentReviewInfo idx={content.idx.toString()} content={content} />
