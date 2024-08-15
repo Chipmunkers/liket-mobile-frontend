@@ -60,6 +60,7 @@ const RightOption = ({ text, option }: RightOptionProps) => {
         </Link>
       </ButtonBase>
     );
+
     const Create = create && (
       <button
         key="create_button"
@@ -72,9 +73,17 @@ const RightOption = ({ text, option }: RightOptionProps) => {
         <CreateIcon />
       </button>
     );
+
     const Menu = menu && (
-      <button key="menu_button">
-        <MenuIcon />
+      <button
+        key="menu_button"
+        onClick={() => {
+          if (typeof menu === "object") {
+            menu.onClick && menu.onClick();
+          }
+        }}
+      >
+        <MenuIcon fill={"#fa23123"} />
       </button>
     );
 
