@@ -35,24 +35,24 @@ export default function Page() {
   //   mutate({ profileImg: file, nickname, gender, birth });
   // };
 
-  return (
-    <>
-      <Header>
-        <Header.LeftOption option={{ back: true }} />
-        <Header.MiddleText text="프로필" />
-      </Header>
-      <main>
-        <ProfileForm
-          currentFormInformation={{
-            nickname,
-            gender: "" + gender,
-            birth: "" + birth,
-            file: profileImgPath,
-          }}
-          nextButtonText="저장하기"
-          onClickNextButton={() => {}}
-        />
-      </main>
-    </>
-  );
+  // return (
+  //   <>
+  //     <Header>
+  //       <Header.LeftOption option={{ back: true }} />
+  //       <Header.MiddleText text="프로필" />
+  //     </Header>
+  //     <main>
+  //       <ProfileForm
+  //         currentFormInformation={{
+  //           nickname,
+  //           gender: "" + gender,
+  //           birth: "" + birth,
+  //           file: profileImgPath,
+  //         }}
+  //         nextButtonText="저장하기"
+  //         onClickNextButton={() => {}}
+  //       />
+  //     </main>
+  //   </>
+  // );
 }
