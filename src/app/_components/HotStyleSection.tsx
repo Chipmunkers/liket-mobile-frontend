@@ -16,7 +16,7 @@ const HotStyleSection = () => {
 
     return (
       <section className="mb-[48px] mt-[24px]">
-        <h2 className="pl-[24px] mb-[8px] h-[20px] text-h2">
+        <h2 className="pl-[24px] mb-[4px] h-[20px] text-h2">
           {style.title.split("{style_name}")[0]}
           <span className="text-skyblue-01">#{data.style.name}</span>
           {style.title.split("{style_name}")[1]}
@@ -41,7 +41,7 @@ const HotStyleSection = () => {
 
   return (
     <section className="mb-[48px] mt-[24px]">
-      <h2 className="pl-[24px] mb-[8px] h-[24px]">
+      <h2 className="pl-[24px] mb-[4px] h-[24px]">
         <div className="bg-grey-01 rounded-[4px] w-[258px] h-[20px]"></div>
       </h2>
       <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] touch-action-none [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">

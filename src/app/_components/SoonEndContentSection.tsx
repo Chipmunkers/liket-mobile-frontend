@@ -13,7 +13,7 @@ const SoonEndContentSection = (props: {
 
   return (
     <section className="mb-[18px]">
-      <h2 className="pl-[24px] mb-[8px] text-h2">종료예정 컨텐츠</h2>
+      <h2 className="pl-[24px] mb-[4px] text-h2">종료예정 컨텐츠</h2>
       <If condition={data.contentList.length > 0}>
         <Then>
           <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
