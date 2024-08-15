@@ -369,25 +369,30 @@ export default function Page() {
         onClose={() => setIsSidoDrawerOpen(false)}
       >
         <div className="center text-h2">지역</div>
-        {sidoList.map((sido) => (
-          <li className="bottom-sheet-list">
-            <ButtonBase
-              onClick={() => {
-                setPagerble((pagerble) => ({
-                  ...pagerble,
-                  region: pagerble.region === sido.cd ? null : sido.cd,
-                }));
-                setIsSidoDrawerOpen(false);
-              }}
-              className={classNames(
-                "bottom-sheet-button flex justify-start px-[24px]",
-                pagerble.region === sido.cd ? "text-skyblue-01 text-body1" : ""
-              )}
-            >
-              {sido.fullName}
-            </ButtonBase>
-          </li>
-        ))}
+        {sidoList.map((sido) => {
+          const { lng, lat } = sido;
+          return (
+            <li className="bottom-sheet-list" key={`${lat}-${lng}`}>
+              <ButtonBase
+                onClick={() => {
+                  setPagerble((pagerble) => ({
+                    ...pagerble,
+                    region: pagerble.region === sido.cd ? null : sido.cd,
+                  }));
+                  setIsSidoDrawerOpen(false);
+                }}
+                className={classNames(
+                  "bottom-sheet-button flex justify-start px-[24px]",
+                  pagerble.region === sido.cd
+                    ? "text-skyblue-01 text-body1"
+                    : ""
+                )}
+              >
+                {sido.fullName}
+              </ButtonBase>
+            </li>
+          );
+        })}
       </CustomDrawer>
 
       {/* 연령대 선택 */}
@@ -396,30 +401,34 @@ export default function Page() {
         onClose={() => setIsAgeDrawerOpen(false)}
       >
         <div className="center text-h2">연령대</div>
-        {ages.map((age) => (
-          <li className="bottom-sheet-list">
-            <ButtonBase
-              onClick={() => {
-                setPagerble((pagerble) => ({
-                  ...pagerble,
-                  age:
-                    age.idx.toString() === pagerble.age
-                      ? null
-                      : age.idx.toString(),
-                }));
-                setIsAgeDrawerOpen(false);
-              }}
-              className={classNames(
-                "bottom-sheet-button flex justify-start px-[24px]",
-                pagerble.age === age.idx.toString()
-                  ? "text-skyblue-01 text-body1"
-                  : ""
-              )}
-            >
-              {age.name}
-            </ButtonBase>
-          </li>
-        ))}
+        {ages.map((age) => {
+          const { idx } = age;
+
+          return (
+            <li className="bottom-sheet-list" key={idx}>
+              <ButtonBase
+                onClick={() => {
+                  setPagerble((pagerble) => ({
+                    ...pagerble,
+                    age:
+                      age.idx.toString() === pagerble.age
+                        ? null
+                        : age.idx.toString(),
+                  }));
+                  setIsAgeDrawerOpen(false);
+                }}
+                className={classNames(
+                  "bottom-sheet-button flex justify-start px-[24px]",
+                  pagerble.age === age.idx.toString()
+                    ? "text-skyblue-01 text-body1"
+                    : ""
+                )}
+              >
+                {age.name}
+              </ButtonBase>
+            </li>
+          );
+        })}
       </CustomDrawer>
 
       {/* 스타일 선택 */}
