@@ -189,7 +189,7 @@ const KakaoMap = ({
         }}
         isPanto={false}
         className="grow relative w-[100%]"
-        minLevel={11}
+        minLevel={10}
         level={4}
         onDragEnd={(map) => {
           setMapInfo(getMapInfo(map));
