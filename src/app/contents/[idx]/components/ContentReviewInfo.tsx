@@ -18,6 +18,8 @@ import ReviewInfiniteScroll from "./ReviewInfiniteScroll";
 import EmptyReview from "./EmptyReview";
 import { ButtonBase } from "@mui/material";
 import { useRouter } from "next/navigation";
+import DefaultLoading from "../../../../components/Loading/DefaultLoading";
+import { classNames } from "../../../../utils/helpers";
 
 const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
   const [isReviewMenuDrawerOpen, setIsReviewMenuDrawerOpen] = useState(false);
@@ -33,7 +35,6 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
   // * 리뷰 데이터 무한 쿼리
   const { data, fetchNextPage, hasNextPage, isFetching, refetch, error } =
     useGetReviewAllByContentIdx(props.idx, reviewPagerble);
-
   const { data: loginUser } = useGetMyInfo();
 
   // * 옵션 변경 시 리뷰 쿼리 데이터 초기화
@@ -108,6 +109,10 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
 
   const router = useRouter();
 
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
   return (
     <>
       <div className="flex flex-col items-center mt-[16px] mb-[24px] justify-between">
@@ -122,8 +127,13 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
         ) : null}
       </div>
       <Divider width="100%" height="8px" />
-
-      <div className="mt-[8px]">
+      {isFetching && !data?.pages[0] && <DefaultLoading center={true} />}
+      <div
+        className={classNames(
+          "mt-[8px] relative",
+          isFetching ? "min-h-[100vh]" : ""
+        )}
+      >
         {data?.pages[0]?.reviewList.length ? (
           // * Review를 다시 가져올 때 깜박이지 아래 버튼이 깜박이지 않도록 하기 위함
           <button
@@ -140,9 +150,10 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
             <BottomArrowIcon />
           </button>
         ) : null}
-        {data ? (
-          // * Review가 하나라도 있으면 리뷰 목록
-          data.pages[0]?.reviewList.length > 0 ? (
+        {data &&
+          (data.pages[0]?.reviewList.length === 0 ? (
+            <EmptyReview idx={props.content.idx} />
+          ) : (
             <ReviewInfiniteScroll
               reviewList={data.pages.map((page) => page.reviewList).flat()}
               setIsReviewMenuDrawerOpen={setIsReviewMenuDrawerOpen}
@@ -150,14 +161,7 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
               loginUser={loginUser}
               setTarget={setTarget}
             />
-          ) : (
-            // * Review가 단 하나도 없을 경우
-            <EmptyReview idx={props.content.idx} />
-          )
-        ) : (
-          // * 클릭 시 스크롤 위로 올라가는 것 방지
-          <div className="h-[100vh]"></div>
-        )}
+          ))}
       </div>
       {error && (
         <div className="flex justify-center mt-[24px]">
