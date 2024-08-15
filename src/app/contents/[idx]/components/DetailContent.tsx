@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 import { getStatus } from "@/utils/helpers";
 import ContentCarousel from "@/components/Carousel/ContentCarousel";
 import ContentLikeBtn from "@/components/ContentLikeBtn";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ContentDetailInfo from "./ContentDetailInfo";
 import ContentReviewInfo from "./ContentReviewInfo";
 import { useGetCultureContentByIdx } from "../hooks/useGetContentByIdx";
@@ -32,6 +32,10 @@ const DetailContent = (props: { content: ContentEntity }) => {
     props.content.idx,
     props.content
   );
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <main className="mb-[24px]">

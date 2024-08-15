@@ -17,7 +17,7 @@ import ReloadIcon from "../icon/review-reload.svg";
 import ReviewInfiniteScroll from "./ReviewInfiniteScroll";
 import EmptyReview from "./EmptyReview";
 import { ButtonBase } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import DefaultLoading from "../../../../components/Loading/DefaultLoading";
 import { classNames } from "../../../../utils/helpers";
 
@@ -25,12 +25,14 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
   const [isReviewMenuDrawerOpen, setIsReviewMenuDrawerOpen] = useState(false);
   const [selectReviewIdx, setSelectReviewIdx] = useState<number>();
 
+  const searchParam = useSearchParams();
+
   // * 리뷰 쿼리 옵션
   const [reviewPagerble, setReviewPagerble] = useState<{
     order?: "desc" | "asc";
     orderby: "time" | "like";
-    page: number;
-  }>({ page: 1, orderby: "like" });
+    review: string | null;
+  }>({ orderby: "like", review: searchParam.get("review") });
 
   // * 리뷰 데이터 무한 쿼리
   const { data, fetchNextPage, hasNextPage, isFetching, refetch, error } =
