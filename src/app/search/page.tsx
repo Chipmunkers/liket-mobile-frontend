@@ -181,7 +181,7 @@ export default function Page() {
         }}
         placeholder="검색어를 입력해주세요."
       />
-      <CustomScrollContainer className="flex overflow-x-hidden flex-row mt-[8px] [&>*:first-child]:ml-[24px] border-b-[1px] border-b-grey-01">
+      <CustomScrollContainer className="flex flex-row mt-[8px] [&>*:first-child]:ml-[24px] border-b-[1px] border-b-grey-01">
         <ul className="flex h-[32px] ">
           <li
             key={"all_category"}
