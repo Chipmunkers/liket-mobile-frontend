@@ -15,7 +15,7 @@ const Chip = ({ children, isSelected, onClick }: ChipProps) => {
     <ButtonBase
       type="button"
       onClick={onClick}
-      disableRipple={onClick === undefined}
+      disableRipple={true}
       className={classNames(
         "rounded-[12px] border-grey-02 border-solid border-[1px] px-[8px] h-[24px]",
         isSelected && "bg-skyblue-01 border-skyblue-01"
