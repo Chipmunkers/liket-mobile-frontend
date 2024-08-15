@@ -18,6 +18,7 @@ import ReloadIcon from "@/icons/reload.svg";
 import useMoveLoginPage from "../../hooks/useMoveLoginPage";
 import { AxiosError } from "axios";
 import EmptyLike from "./components/EmptyLike";
+import DefaultLoading from "../../components/Loading/DefaultLoading";
 
 export default function Page() {
   const [isGenreDrawerOpen, setIsGenreDrawerOpen] = useState(false);
@@ -126,6 +127,7 @@ export default function Page() {
             />
           </div>
         </div>
+        {!data && <DefaultLoading center={true} />}
         {data && (
           <ContentCardGroup
             contentList={data.pages.map((page) => page.contentList).flat()}
