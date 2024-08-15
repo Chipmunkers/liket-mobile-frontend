@@ -1,12 +1,13 @@
-import { CSSProperties, MouseEvent } from "react";
+import { CSSProperties, Dispatch, MouseEvent, SetStateAction } from "react";
 import { classNames } from "@/utils/helpers";
 
-interface Props {
+interface Props<T = any> {
   small?: boolean;
-  list: string[];
+  list: T[];
   selectedTab: string;
   wrapperStyle?: CSSProperties;
-  onClickTab: (tab: string) => void;
+  onClickTab: Dispatch<SetStateAction<T>>;
+  customTabNames?: T[];
 }
 
 const index = ({
@@ -15,6 +16,7 @@ const index = ({
   selectedTab,
   wrapperStyle,
   onClickTab,
+  customTabNames,
 }: Props) => {
   return (
     <ul
@@ -24,7 +26,7 @@ const index = ({
         small ? "h-[32px]" : "h-[40px]"
       )}
     >
-      {list.map((tab) => {
+      {list.map((tab, i) => {
         return (
           <li
             key={tab}
@@ -40,7 +42,7 @@ const index = ({
               className="w-[100%] h-[100%] center"
               onClick={() => onClickTab(tab)}
             >
-              {tab}
+              {customTabNames?.[i] || tab}
             </button>
           </li>
         );
