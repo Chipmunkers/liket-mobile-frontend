@@ -23,6 +23,8 @@ const KakaoMap = ({
   clickedContent,
   setClickedContent,
   mapFilter,
+  lng,
+  lat,
 }: {
   children?: ReactNode;
   contentList: MapContentEntity[];
@@ -34,6 +36,8 @@ const KakaoMap = ({
     age: Age | undefined;
     styles: Style[];
   };
+  lng: number;
+  lat: number;
 }) => {
   const [loading, error] = useKakaoLoader({
     appkey: process.env.NEXT_PUBLIC_MAP_API_KEY || "",
@@ -54,9 +58,9 @@ const KakaoMap = ({
         y: 37.507974075977934,
       },
     },
-    level: 4,
+    level: 8,
   });
-  const [level, setLevel] = useState(4);
+  const [level, setLevel] = useState(8);
 
   // * 현재 맵에 표시되고 있는 클러스터링 컨텐츠 목록
   const [clusteredContentList, setClusteredContentList] = useState<
@@ -184,13 +188,13 @@ const KakaoMap = ({
     <>
       <Map
         center={{
-          lng: 127.0495556,
-          lat: 37.514575,
+          lng,
+          lat,
         }}
         isPanto={false}
         className="grow relative w-[100%]"
         minLevel={10}
-        level={4}
+        level={8}
         onDragEnd={(map) => {
           setMapInfo(getMapInfo(map));
         }}
