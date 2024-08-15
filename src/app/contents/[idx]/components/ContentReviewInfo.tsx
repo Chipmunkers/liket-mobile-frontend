@@ -28,7 +28,7 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
     order?: "desc" | "asc";
     orderby: "time" | "like";
     page: number;
-  }>({ page: 1, orderby: "time" });
+  }>({ page: 1, orderby: "like" });
 
   // * 리뷰 데이터 무한 쿼리
   const { data, fetchNextPage, hasNextPage, isFetching, refetch, error } =
@@ -136,7 +136,7 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
               });
             }}
           >
-            {reviewPagerble.orderby === "like" ? "좋아요순" : "최신순"}
+            {reviewPagerble.orderby === "like" ? "인기순" : "최신순"}
             <BottomArrowIcon />
           </button>
         ) : null}
