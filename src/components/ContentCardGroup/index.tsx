@@ -29,12 +29,12 @@ const ContentCardGroup = (props: {
 
   return (
     <>
-      <div className="flex flex-wrap w-[100%] gap-[7px] mt-[4px] px-[24px]">
+      <div className="flex flex-wrap w-[100%] gap-[14px] mt-[4px] px-[24px]">
         {props.contentList.map((content) => (
           <div
             className={classNames(
               "mb-[14px]",
-              isNarrow ? "w-[calc(50%-7px)]" : "w-[calc(33.33%-4.7px)]"
+              isNarrow ? "w-[calc(50%-7px)]" : "w-[calc(33.33%-9.33334px)]"
             )}
           >
             <ContentCard
