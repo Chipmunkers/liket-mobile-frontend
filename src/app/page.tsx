@@ -17,6 +17,7 @@ import { getBanners } from "./_hooks/getBanners";
 import { getHotContentsForServer } from "./_hooks/getHotContents";
 import ReviewCard from "../components/Card/ReviewCard";
 import { getHotReview } from "./_hooks/getHotReviews";
+import dayjs from "dayjs";
 
 export default async function Home() {
   const { contentList: soonOpenContents } =
@@ -48,7 +49,9 @@ export default async function Home() {
         <section>
           <div className="pl-[24px] flex flex-row mb-[8px]">
             <h2 className="text-h2">핫플차트</h2>
-            <div className="text-body5 text-grey-04 flex flex-col-reverse ml-[8px]">{`업로드 Date`}</div>
+            <div className="text-body5 text-grey-04 flex flex-col-reverse ml-[8px]">{`업로드 ${dayjs(
+              new Date()
+            ).format("YYYY.MM.DD HH:00")}`}</div>
           </div>
           <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
             {hotContent.map(({ idx, name, contentList }) => {
