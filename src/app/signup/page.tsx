@@ -11,6 +11,8 @@ import { ProfileFormData } from "@/types/signup";
 import { setAuthToken } from "@/utils/axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { AxiosError } from "axios";
+import customToast from "../../utils/customToast";
 
 const INITIAL_FORM_STATE = {
   emailToken: "",
@@ -32,11 +34,28 @@ const SignUpPage = () => {
   };
   const setToken = authStore(({ setToken }) => setToken);
 
-  const { mutate } = useLocalSignup({
+  const { mutate, status } = useLocalSignup({
     onSuccess: ({ data }) => {
       setToken(data.token);
       setAuthToken(data.token);
       router.replace("/");
+    },
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 401) {
+          customToast("이메일 인증이 해제되었습니다. 다시 시도해주세요.");
+          setFormIndex(0);
+          return;
+        }
+        if (err.response?.status === 409) {
+          if (err.response.data?.cause === "email") {
+            customToast("이미 사용중인 이메일 계정입니다.");
+            setFormIndex(0);
+            return;
+          }
+          customToast("이미 사용중인 닉네임입니다.");
+        }
+      }
     },
   });
 
@@ -49,6 +68,8 @@ const SignUpPage = () => {
     birth,
     gender,
   }: ProfileFormData) => {
+    console.log("request");
+
     mutate({
       ...formInformation,
       file,
@@ -92,6 +113,7 @@ const SignUpPage = () => {
           <ProfileForm
             nextButtonText="라이켓 시작하기"
             onClickNextButton={onClickNextButtonInProfileForm}
+            status={status}
           />
         )}
       </main>
