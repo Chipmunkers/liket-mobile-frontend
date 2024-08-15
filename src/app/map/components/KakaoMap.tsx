@@ -23,8 +23,8 @@ const KakaoMap = ({
   clickedContent,
   setClickedContent,
   mapFilter,
-  lng,
-  lat,
+  latLng,
+  setLatLng,
 }: {
   children?: ReactNode;
   contentList: MapContentEntity[];
@@ -36,14 +36,23 @@ const KakaoMap = ({
     age: Age | undefined;
     styles: Style[];
   };
-  lng: number;
-  lat: number;
+  latLng: {
+    lat: number;
+    lng: number;
+  };
+  setLatLng: Dispatch<
+    SetStateAction<{
+      lat: number;
+      lng: number;
+    }>
+  >;
 }) => {
   const [loading, error] = useKakaoLoader({
     appkey: process.env.NEXT_PUBLIC_MAP_API_KEY || "",
     retries: 2,
   });
 
+  const [level, setLevel] = useState(8);
   const [mapInfo, setMapInfo] = useState<{
     bound: {
       top: { x: number; y: number };
@@ -52,15 +61,11 @@ const KakaoMap = ({
     level: number;
   }>({
     bound: {
-      top: { x: lng - 0.01358209850525327, y: lat + 0.01318500402963707 },
-      bottom: {
-        x: lng + 0.01358209850525327,
-        y: lat - 0.01318500402963707,
-      },
+      top: { x: 0, y: 0 },
+      bottom: { x: 0, y: 0 },
     },
-    level: 8,
+    level,
   });
-  const [level, setLevel] = useState(8);
 
   // * 현재 맵에 표시되고 있는 클러스터링 컨텐츠 목록
   const [clusteredContentList, setClusteredContentList] = useState<
@@ -112,6 +117,7 @@ const KakaoMap = ({
     setClusteredContentList([]);
     setContentList([]);
     setClickedContent(undefined);
+    setMapInfo({ ...mapInfo, level });
   }, [level, mapFilter]);
 
   const openModal = useModalStore(({ openModal }) => openModal);
@@ -188,13 +194,13 @@ const KakaoMap = ({
     <>
       <Map
         center={{
-          lng,
-          lat,
+          lng: latLng.lng,
+          lat: latLng.lat,
         }}
         isPanto={false}
         className="grow relative w-[100%]"
         minLevel={10}
-        level={8}
+        level={mapInfo.level}
         onDragEnd={(map) => {
           setMapInfo(getMapInfo(map));
         }}
@@ -220,7 +226,13 @@ const KakaoMap = ({
               }}
               key={`${lat}-${lng}`}
             >
-              <div className="rounded-full border-solid border-skyblue-02 border w-[48px] h-[48px] -translate-y-2/4 -translate-x-2/4 flex justify-center items-center bg-skyblue-02 bg-opacity-80 text-white font-bold">
+              <div
+                onClick={() => {
+                  setLatLng({ lng, lat });
+                  setLevel(level - 1);
+                }}
+                className="rounded-full border-solid border-skyblue-02 border w-[48px] h-[48px] -translate-y-2/4 -translate-x-2/4 flex justify-center items-center bg-skyblue-02 bg-opacity-80 text-white font-bold"
+              >
                 <span>{count}</span>
               </div>
             </CustomOverlayMap>

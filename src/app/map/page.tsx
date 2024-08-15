@@ -78,6 +78,19 @@ export default function MapPage() {
     return !!(mapFilter.genre || mapFilter.age || mapFilter.styles.length);
   };
 
+  // * 현재 보고 있는 위치
+  const [latLng, setLatLng] = useState<{ lng: number; lat: number }>({
+    lng: Number(selectLocation.sigungu?.lng || selectLocation.sido.lng),
+    lat: Number(selectLocation.sigungu?.lat || selectLocation.sido.lat),
+  });
+
+  useEffect(() => {
+    setLatLng({
+      lng: Number(selectLocation.sigungu?.lng || selectLocation.sido.lng),
+      lat: Number(selectLocation.sigungu?.lat || selectLocation.sido.lat),
+    });
+  }, [selectLocation]);
+
   return (
     <>
       <Header key={"header"}>
@@ -98,8 +111,8 @@ export default function MapPage() {
           clickedContent={clickedContent}
           setClickedContent={setClickedContent}
           mapFilter={mapFilter}
-          lng={Number(selectLocation.sigungu?.lng || selectLocation.sido.lng)}
-          lat={Number(selectLocation.sigungu?.lat || selectLocation.sido.lat)}
+          latLng={latLng}
+          setLatLng={setLatLng}
         >
           <div className="absolute z-[2] mt-[16px] ml-[24px] w-100 flex items-center">
             <ButtonBase
