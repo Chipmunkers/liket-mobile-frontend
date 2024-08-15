@@ -11,7 +11,7 @@ const ReviewCard = (props: { review: ReviewEntity }) => {
 
   return (
     <Link
-      href={`/contents/${review.cultureContent.idx}`}
+      href={`/contents/${review.cultureContent.idx}?tab=review&review=${review.idx}`}
       className="w-[164px] h-[232px]"
     >
       <article className="w-[164px] h-[232px] relative bg-grey-black">

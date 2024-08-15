@@ -7,6 +7,7 @@ export const useGetReviewAllByContentIdx = (
   option: {
     order?: "desc" | "asc";
     orderby?: "time" | "like";
+    review: string | null;
   }
 ) =>
   useInfiniteQuery({
@@ -16,6 +17,7 @@ export const useGetReviewAllByContentIdx = (
         `/apis/review/all?content=${idx}&` +
           (option?.order ? `order=${option.order}&` : ``) +
           (option?.orderby ? `orderby=${option.orderby}&` : ``) +
+          (option.review ? `review=${option.review}&` : ``) +
           `page=${pageParam}`
       );
 
