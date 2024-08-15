@@ -109,10 +109,6 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
 
   const router = useRouter();
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   return (
     <>
       <div className="flex flex-col items-center mt-[16px] mb-[24px] justify-between">
