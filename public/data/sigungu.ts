@@ -1,4 +1,12 @@
-export const sigungu = [
+export interface Sigungu {
+  bjd_cd: string;
+  cd: string;
+  lng: string;
+  lat: string;
+  name: string;
+}
+
+export const sigunguList: Sigungu[] = [
   {
     bjd_cd: "1111000000",
     cd: "11110",
