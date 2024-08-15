@@ -62,7 +62,7 @@ const SearchHeader = ({
             autoCorrect="off"
             spellCheck={false}
             placeholder={placeholder}
-            className="w-[100%] text-body3 placeholder:text-body3 placeholder-grey-02"
+            className="w-[100%] text-body3 placeholder:text-body3 placeholder-grey-02 bg-white"
             onChange={handleChangeInput}
           />
           {!searchText ? (
