@@ -52,10 +52,10 @@ const KakaoMap = ({
     level: number;
   }>({
     bound: {
-      top: { x: 127.04270718193654, y: 37.52115908000757 },
+      top: { x: lng - 0.01358209850525327, y: lat + 0.01318500402963707 },
       bottom: {
-        x: 127.05628928044179,
-        y: 37.507974075977934,
+        x: lng + 0.01358209850525327,
+        y: lat - 0.01318500402963707,
       },
     },
     level: 8,
@@ -205,6 +205,9 @@ const KakaoMap = ({
         }}
         onClick={() => {
           setClickedContent(undefined);
+        }}
+        onTileLoaded={(map) => {
+          setMapInfo(getMapInfo(map));
         }}
       >
         {children}
