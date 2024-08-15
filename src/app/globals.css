@@ -44,9 +44,6 @@
   input[type="search"]::-webkit-search-results-decoration {
     display: none;
   }
-  [type="search"] {
-    -webkit-appearance: textfield;
-  }
 
   /* react-spring-bottom-sheet */
   div[data-rsbs-overlay],
