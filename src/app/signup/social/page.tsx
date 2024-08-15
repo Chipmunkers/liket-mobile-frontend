@@ -32,7 +32,7 @@ const SignUpPage = () => {
     setFormIndex(formIndex + 1);
   };
 
-  const { mutate } = useSocialSignup({
+  const { mutate, status } = useSocialSignup({
     onSuccess: () => {
       router.push("/");
     },
@@ -97,6 +97,7 @@ const SignUpPage = () => {
         <ProfileForm
           nextButtonText="라이켓 시작하기"
           onClickNextButton={onClickNextButtonInProfileForm}
+          status={status}
         />
       </main>
     </>
