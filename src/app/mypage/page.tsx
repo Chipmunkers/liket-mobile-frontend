@@ -149,7 +149,7 @@ export default function Page() {
               </Then>
               <Else>
                 <div className="text-body5 text-grey-04">
-                  컨텐츠가 없습니다.
+                  게시물이 없습니다.
                 </div>
               </Else>
             </If>
@@ -189,7 +189,7 @@ export default function Page() {
               </Then>
               <Else>
                 <div className="text-body5 text-grey-04">
-                  컨텐츠가 없습니다.
+                  게시물이 없습니다.
                 </div>
               </Else>
             </If>
