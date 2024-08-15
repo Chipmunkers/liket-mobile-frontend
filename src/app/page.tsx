@@ -57,14 +57,12 @@ export default async function Home() {
             {hotContent.map(({ idx, name, contentList }) => {
               return (
                 <div key={idx}>
-                  <Link href="/search" className="flex item-center">
+                  <Link
+                    href={`/search?genre=${idx}&open=true&orderby=like`}
+                    className="flex item-center"
+                  >
                     <div className="text-skyblue-01 text-body4">{name}</div>
-                    <RightArrow
-                      fill={colors.skyblue["01"]}
-                      style={{
-                        display: "inline",
-                      }}
-                    />
+                    <RightArrow fill={colors.skyblue["01"]} />
                   </Link>
                   {contentList.length === 0 ? (
                     <div className="text-body5 text-grey-04 mt-[8px] w-[256px]">
