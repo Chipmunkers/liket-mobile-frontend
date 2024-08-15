@@ -181,7 +181,7 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
         <li className="bottom-sheet-list">
           <ButtonBase
             onClick={() => {
-              return customToast("준비중인 기능입니다.");
+              return customToast("열심히 준비중입니다!");
               // TODO: 페이지 생성 후 붙여야함
               router.push(`/edit/review/${selectReviewIdx}`);
             }}
