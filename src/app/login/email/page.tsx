@@ -13,8 +13,7 @@ import Link from "next/link";
 import authStore from "@/stores/authStore";
 import { setAuthToken } from "@/utils/axios";
 import customToast from "@/utils/customToast";
-import { useEffect } from "react";
-import DefaultLoading from "../../../components/Loading/DefaultLoading";
+import DefaultLoading from "@/components/Loading/DefaultLoading";
 
 const schema = z.object({
   email: z.string().email("올바른 이메일을 입력해주세요."),
