@@ -69,7 +69,7 @@ export default function MapPage() {
   };
 
   const onClickSettingNeighbor = () => {
-    customToast("준비중인 기능입니다.");
+    customToast("열심히 준비중입니다!");
     setCityAndGuSelection({
       ...cityAndGuSelection,
       currentSelectedCity: cityAndGuSelection.newSelectedCity,
