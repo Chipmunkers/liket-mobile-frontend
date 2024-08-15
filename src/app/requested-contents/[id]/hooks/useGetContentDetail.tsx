@@ -1,8 +1,4 @@
-import {
-  ContentEntity,
-  SummaryContentEntity,
-} from "@/types/api/culture-content";
-import { StyleEntity } from "@/types/api/tag";
+import { ContentEntity } from "@/types/api/culture-content";
 import axiosInstance from "@/utils/axios";
 import { useQuery } from "@tanstack/react-query";
 
