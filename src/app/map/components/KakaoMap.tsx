@@ -15,6 +15,7 @@ import { ClusteredContentEntity, MapContentEntity } from "@/types/api/map";
 import { AxiosError } from "axios";
 import useModalStore from "../../../stores/modalStore";
 import { useRouter } from "next/navigation";
+import { classNames } from "../../../utils/helpers";
 
 const KakaoMap = ({
   children,
@@ -190,6 +191,37 @@ const KakaoMap = ({
     ]);
   }, [clusteredApiResult]);
 
+  const [clusteredData, setClusteredData] =
+    useState<(ClusteredContentEntity & { scale: number })[]>();
+
+  useEffect(() => {
+    if (!clusteredContentList) return;
+    const countList = clusteredContentList.map((data) => data.count);
+
+    // 평균
+    const mean =
+      countList.reduce((sum, value) => sum + value, 0) / countList.length;
+
+    // 분산
+    const variance =
+      countList.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) /
+      countList.length;
+
+    const standardDeviation = Math.sqrt(variance);
+
+    // 각 zValue 계산
+    const zValueList = countList.map(
+      (count) => ((count - mean) / standardDeviation) * 3
+    );
+
+    setClusteredData(
+      clusteredContentList.map((data, i) => ({
+        ...data,
+        scale: zValueList[i],
+      }))
+    );
+  }, [clusteredContentList]);
+
   return (
     <>
       <Map
@@ -217,27 +249,35 @@ const KakaoMap = ({
         }}
       >
         {children}
-        {clusteredContentList.map(({ lat, lng, count }) => {
-          return (
-            <CustomOverlayMap
-              position={{
-                lat: lat,
-                lng: lng,
-              }}
-              key={`${lat}-${lng}`}
-            >
-              <div
-                onClick={() => {
-                  setLatLng({ lng, lat });
-                  setLevel(level - 1);
+        {clusteredData &&
+          clusteredData.map(({ lat, lng, count, scale }) => {
+            const calculatedScale = (100 + scale * 3).toFixed(0).toString();
+            return (
+              <CustomOverlayMap
+                position={{
+                  lat: lat,
+                  lng: lng,
                 }}
-                className="rounded-full border-solid border-skyblue-02 border w-[48px] h-[48px] -translate-y-2/4 -translate-x-2/4 flex justify-center items-center bg-skyblue-02 bg-opacity-80 text-white font-bold"
+                key={`${lat}-${lng}`}
               >
-                <span>{count}</span>
-              </div>
-            </CustomOverlayMap>
-          );
-        })}
+                <div
+                  onClick={() => {
+                    setLatLng({ lng, lat });
+                    setLevel(level - 1);
+                  }}
+                  className={classNames(
+                    "rounded-full border-solid hover:scale-110 origin-center duration-200 border-skyblue-02 border w-[48px] h-[48px] -translate-y-2/4 -translate-x-2/4 flex justify-center items-center bg-skyblue-02 bg-opacity-80 text-white font-bold",
+                    `scale-[${calculatedScale}%]`
+                  )}
+                  style={{
+                    scale: `${calculatedScale}%`,
+                  }}
+                >
+                  <span>{count}</span>
+                </div>
+              </CustomOverlayMap>
+            );
+          })}
         {contentList.map((content) => {
           const { idx, genre, title, location } = content;
 
