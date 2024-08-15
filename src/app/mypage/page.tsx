@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import { If, Then, Else } from "react-if";
 import ScrollContainer from "react-indiana-drag-scroll";
 import customToast from "../../utils/customToast";
+import VerticalDivider from "./icons/vertical-divider.svg";
 
 export default function Page() {
   const router = useRouter();
@@ -60,19 +61,38 @@ export default function Page() {
                   />
                 </Link>
                 <div className="text-body5 text-grey-04 mt-[7px]">{email}</div>
-                <div className="flex text-body3 items-center mt-[15px]">
-                  좋아요{" "}
-                  <ButtonBase
-                    disableRipple={true}
-                    className="text-numbering1 text-skyblue-01 ml-[4px]"
-                    onClick={() => {
-                      customToast("준비중인 기능입니다.");
-                    }}
-                  >
-                    <div className="text-numbering1 text-skyblue-01 ml-[4px]">
-                      {likeCount}
-                    </div>
-                  </ButtonBase>
+                <div className="flex mt-[15px]">
+                  <div className="flex text-body3 items-end">
+                    좋아요{" "}
+                    <ButtonBase
+                      disableRipple={true}
+                      className="text-numbering1 text-skyblue-01 ml-[4px] h-[18px]"
+                      onClick={() => {
+                        router.push("/like");
+                      }}
+                    >
+                      <div className="text-numbering1 text-skyblue-01 ml-[4px]">
+                        {likeCount}
+                      </div>
+                    </ButtonBase>
+                  </div>
+                  <div className="flex items-center mx-[16px]">
+                    <VerticalDivider />
+                  </div>
+                  <div className="flex text-body3 items-end">
+                    루트보관함{" "}
+                    <ButtonBase
+                      disableRipple={true}
+                      className="text-numbering1 text-skyblue-01 ml-[4px] h-[18px]"
+                      onClick={() => {
+                        customToast("열심히 준비중입니다!");
+                      }}
+                    >
+                      <div className="text-numbering1 text-skyblue-01 ml-[4px]">
+                        0
+                      </div>
+                    </ButtonBase>
+                  </div>
                 </div>
               </div>
             </div>
