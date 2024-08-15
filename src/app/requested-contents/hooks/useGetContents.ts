@@ -6,19 +6,19 @@ export const useGetContents = (idx: number | undefined) => {
   const res = useInfiniteQuery({
     queryKey: ["requested-contents", idx],
     queryFn: async ({ pageParam = 1 }) => {
-      const { data } = await axiosInstance.get(
-        `/apis/culture-content/all?user=${idx}&page=${pageParam}`
-      );
+      const { data } = await axiosInstance.get<{
+        contentList: ContentEntity[];
+      }>(`/apis/culture-content/all?user=${idx}&page=${pageParam}`);
 
-      return data.contentList;
+      return {
+        contentList: data.contentList,
+        nextPage: data.contentList.length > 0 ? pageParam + 1 : undefined, // 다음 페이지 번호 계산
+        isLastPage: data.contentList.length === 0,
+      };
     },
     initialPageParam: 1,
-    getNextPageParam: (lastPage, pages) => {
-      if (lastPage.length === 10) {
-        return pages.length + 1;
-      } else {
-        return undefined;
-      }
+    getNextPageParam: (lastPage) => {
+      return lastPage.nextPage;
     },
     staleTime: 0,
     retry: 0,
