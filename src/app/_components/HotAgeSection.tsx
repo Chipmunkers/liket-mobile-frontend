@@ -12,7 +12,7 @@ const HotAgeSection = () => {
   if (data) {
     return (
       <section>
-        <h2 className="pl-[24px] mb-[8px] h-[20px] text-h2">
+        <h2 className="pl-[24px] mb-[4px] h-[20px] text-h2">
           요즘 <span className="text-skyblue-01">#{data.age.name}</span>
           연령대가 주목하는 곳 ✨
         </h2>
@@ -36,7 +36,7 @@ const HotAgeSection = () => {
 
   return (
     <section>
-      <h2 className="pl-[24px] mb-[8px]">
+      <h2 className="pl-[24px] mb-[4px]">
         <div className="bg-grey-01 rounded-[4px] w-[258px]"></div>
       </h2>
       <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] touch-action-none [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
