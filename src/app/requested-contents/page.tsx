@@ -66,6 +66,7 @@ export default function Page() {
                     <li
                       key={idx}
                       className="flex justify-between items-center border-b-[1px] w-[100%] h-[80px] border-bottom"
+                      onClick={() => router.push(`/requested-contents/${idx}`)}
                     >
                       <div className="flex">
                         <div className="w-[64px] h-[64px] mr-[12px] relative">
