@@ -20,8 +20,9 @@ import { getHotReview } from "./_hooks/getHotReviews";
 import dayjs from "dayjs";
 import LeftOption from "@/components/Header/LeftOption";
 import RightOption from "@/components/Header/RightOption";
+import { headers } from "next/headers";
 
-export default async function Home() {
+const Home = async () => {
   const { contentList: soonOpenContents } =
     await getSoonOpenContentsForServer();
   const { contentList: soonEndContents } = await getSoonEndContentsForServer();
@@ -31,7 +32,10 @@ export default async function Home() {
 
   return (
     <>
-      <Header>
+      <Header
+        checkUserAgent={true}
+        userAgent={headers().get("user-agent") || ""}
+      >
         <LeftOption logo />
         <RightOption option={{ search: true, like: true }} />
       </Header>
@@ -115,4 +119,6 @@ export default async function Home() {
       <LinkableTab shadow />
     </>
   );
-}
+};
+
+export default Home;
