@@ -14,6 +14,8 @@ import Logo from "./icon/logo.svg";
 import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
+import { headers } from "next/headers";
+import { stackRouterBack } from "../../utils/stackRouter";
 
 export default function Page() {
   const router = useRouter();
@@ -32,7 +34,7 @@ export default function Page() {
           option={{
             close: {
               onClick: () => {
-                router.back();
+                stackRouterBack(router);
               },
             },
           }}

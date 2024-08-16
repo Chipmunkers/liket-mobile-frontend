@@ -8,6 +8,7 @@ type Props = StrictPropsWithChildren<{
   transparent?: boolean;
   userAgent?: string;
   checkUserAgent?: boolean;
+  test?: string;
 }>;
 
 const Header = ({
@@ -20,7 +21,6 @@ const Header = ({
 
   return (
     <header
-      id={`${isWebview}_${navigator.userAgent}`}
       className={classNames(
         "header",
         isWebview && checkUserAgent ? "hidden" : "",

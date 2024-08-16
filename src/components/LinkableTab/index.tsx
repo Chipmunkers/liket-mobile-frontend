@@ -21,6 +21,7 @@ import CustomDrawer from "../CustomDrawer";
 import customToast from "@/utils/customToast";
 import { useGetMyInfo } from "../../hooks/useGetMyInfo";
 import { ButtonBase } from "@mui/material";
+import { stackRouterPush } from "../../utils/stackRouter";
 
 interface LinkTabProps {
   isSelected: boolean;
@@ -176,7 +177,7 @@ const LinkableTab = ({ shadow = false }: Props) => {
             shadow && "shadow-[0px_-8px_16px_0px_rgba(0,0,0,0.04)]"
           )}
         >
-          <ButtonBase className="w-[20%] h-[44px]">
+          <ButtonBase className="w-[20%] h-[44px]" onClick={() => {}}>
             <LinkTab
               href="/"
               isSelected={pathname === "/" && !isWriteModalOpen}
@@ -210,15 +211,13 @@ const LinkableTab = ({ shadow = false }: Props) => {
               <CreateIcon color={colors.grey["02"]} />
             )}
           </ButtonBase>
-          <ButtonBase className={`w-[20%] h-[44px]`}>
-            <LinkTab
-              href="/mypage"
-              isSelected={pathname === "/mypage" && !isWriteModalOpen}
-              icon={<MyPageIcon color={colors.grey["02"]} />}
-              onClickLink={onClickLink}
-              className="w-[100%] h-[100%] flex justify-center items-center"
-              selectedIcon={<FilledMyPageIcon color={colors.skyblue["01"]} />}
-            />
+          <ButtonBase
+            className={`w-[20%] h-[44px]`}
+            onClick={() => {
+              stackRouterPush(router, "/login", "Login");
+            }}
+          >
+            <MyPageIcon color={colors.grey["02"]} />
           </ButtonBase>
         </div>
       </div>
