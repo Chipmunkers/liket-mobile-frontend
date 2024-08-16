@@ -1,5 +1,7 @@
 import { getTosItem } from "@/apis/terms";
 import Header from "@/components/Header";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 interface PageProps {
   params: {
@@ -12,12 +14,12 @@ export default async function Page({ params: { idx } }: PageProps) {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <LeftOption
           option={{
             back: true,
           }}
         />
-        <Header.MiddleText text={title} />
+        <MiddleText text={title} />
       </Header>
       <main>{contents}</main>
     </>

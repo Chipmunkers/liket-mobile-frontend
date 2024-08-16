@@ -19,6 +19,9 @@ import useMoveLoginPage from "../../hooks/useMoveLoginPage";
 import { AxiosError } from "axios";
 import EmptyLike from "./components/EmptyLike";
 import DefaultLoading from "../../components/Loading/DefaultLoading";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 export default function Page() {
   const [isGenreDrawerOpen, setIsGenreDrawerOpen] = useState(false);
@@ -92,8 +95,8 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption option={{ back: true }} />
-        <Header.MiddleText text="좋아요" />
+        <LeftOption option={{ back: true }} />
+        <MiddleText text="좋아요" />
       </Header>
       <main className="flex flex-col items-center">
         <div className="flex justify-between h-[40px] w-[100%] items-center px-[24px]">

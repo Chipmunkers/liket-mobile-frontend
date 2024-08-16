@@ -14,6 +14,9 @@ import authStore from "@/stores/authStore";
 import { setAuthToken } from "@/utils/axios";
 import customToast from "@/utils/customToast";
 import DefaultLoading from "@/components/Loading/DefaultLoading";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 const schema = z.object({
   email: z.string().email("올바른 이메일을 입력해주세요."),
@@ -71,14 +74,14 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <LeftOption
           option={{
             back: {
               onClick: () => router.back(),
             },
           }}
         />
-        <Header.MiddleText text="로그인" />
+        <MiddleText text="로그인" />
       </Header>
       <form
         className="flex flex-col grow pt-[16px]"

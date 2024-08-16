@@ -27,6 +27,9 @@ import Script from "next/script";
 import { ButtonBase } from "@mui/material";
 import { Sido, sidoList } from "../../../public/data/sido";
 import { Sigungu, sigunguList } from "../../../public/data/sigungu";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -94,7 +97,7 @@ export default function MapPage() {
   return (
     <>
       <Header key={"header"}>
-        <Header.LeftOption
+        <LeftOption
           townName={
             selectLocation.sigungu
               ? selectLocation.sido.name + " " + selectLocation.sigungu.name
@@ -102,7 +105,7 @@ export default function MapPage() {
           }
           onClickTownSelection={onClickTownSelection}
         />
-        <Header.RightOption option={{ search: true, like: true }} />
+        <RightOption option={{ search: true, like: true }} />
       </Header>
       <main>
         <KakaoMap
@@ -181,7 +184,7 @@ export default function MapPage() {
         }}
       >
         <Header key={"filter-header"}>
-          <Header.LeftOption
+          <LeftOption
             key={"filter-option"}
             option={{
               close: {
@@ -194,7 +197,7 @@ export default function MapPage() {
               },
             }}
           />
-          <Header.MiddleText text="필터" />
+          <MiddleText text="필터" />
         </Header>
         <div className="full-modal-main px-[24px] py-[16px] gap-[48px]">
           {/* 장르 선택 */}
@@ -325,7 +328,7 @@ export default function MapPage() {
         }}
       >
         <Header key={"town-filter-header"}>
-          <Header.LeftOption
+          <LeftOption
             option={{
               close: {
                 onClick: () => {
@@ -336,7 +339,7 @@ export default function MapPage() {
               },
             }}
           />
-          <Header.MiddleText text="지역설정" />
+          <MiddleText text="지역설정" />
         </Header>
         <div className="full-modal-main">
           <div className="flex grow h-[100%]">

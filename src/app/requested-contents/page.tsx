@@ -6,6 +6,9 @@ import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import DevIng from "../../components/DevIng";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 export default function Page() {
   const [contents, setContents] = useState([1]);
@@ -16,9 +19,9 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption option={{ back: true }} />
-        <Header.MiddleText text="컨텐츠 등록 요청 내역" />
-        <Header.RightOption
+        <LeftOption option={{ back: true }} />
+        <MiddleText text="컨텐츠 등록 요청 내역" />
+        <RightOption
           option={{ create: { onClick: () => router.push("/create/content") } }}
         />
       </Header>

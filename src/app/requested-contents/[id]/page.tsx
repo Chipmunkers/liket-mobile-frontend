@@ -8,6 +8,9 @@ import { Input, InputWrapper, Label } from "@/components/newInput";
 import CalendarIcon from "@/icons/calendar.svg";
 import ScrollContainer from "react-indiana-drag-scroll";
 import Image from "next/image";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 const uploadedImgs = Array.from(
   { length: 10 },
@@ -18,8 +21,8 @@ export default function Page({ params }: { params: { slug: string } }) {
   return (
     <>
       <Header>
-        <Header.LeftOption option={{ back: true }} />
-        <Header.MiddleText text="컨텐츠 등록 요청" />
+        <LeftOption option={{ back: true }} />
+        <MiddleText text="컨텐츠 등록 요청" />
       </Header>
       <main>
         <div className="px-[24px] mt-[16px]">

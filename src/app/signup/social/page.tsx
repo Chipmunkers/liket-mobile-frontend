@@ -8,6 +8,9 @@ import { ProfileFormData } from "@/types/signup";
 import customToast from "@/utils/customToast";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 const INITIAL_FORM_STATE = {
   emailToken: "",
@@ -75,12 +78,12 @@ const SignUpPage = () => {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <LeftOption
           option={{
             back: true,
           }}
         />
-        <Header.MiddleText text={"프로필"} />
+        <MiddleText text={"프로필"} />
       </Header>
       <main>
         <div className="my-[16px] gap-[8px] center">

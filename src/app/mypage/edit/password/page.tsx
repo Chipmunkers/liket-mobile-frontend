@@ -5,6 +5,9 @@ import { PasswordChangeForm } from "@/app/signup/components/PasswordForm";
 import { useChangePassword } from "@/service/changePassword";
 import customToast from "@/utils/customToast";
 import { useRouter } from "next/navigation";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 export default function Page() {
   const router = useRouter();
@@ -35,8 +38,8 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption option={{ back: true }} />
-        <Header.MiddleText text="비밀번호 변경" />
+        <LeftOption option={{ back: true }} />
+        <MiddleText text="비밀번호 변경" />
       </Header>
       <main>
         <PasswordChangeForm
