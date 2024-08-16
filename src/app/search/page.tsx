@@ -27,6 +27,7 @@ import useModalStore from "@/stores/modalStore";
 import { classNames } from "../../utils/helpers";
 import ReloadIcon from "@/icons/reload.svg";
 import DefaultLoading from "../../components/Loading/DefaultLoading";
+import { stackRouterBack, stackRouterPush } from "../../utils/stackRouter";
 
 interface Pagerble {
   region: string | null;
@@ -158,10 +159,10 @@ export default function Page() {
       if (error.response?.status === 401) {
         openModal("LoginModal", {
           onClickPositive: () => {
-            router.replace("/login");
+            stackRouterPush(router, "/login", "Login");
           },
           onClickNegative: () => {
-            router.back();
+            stackRouterBack(router);
           },
         });
         return;
