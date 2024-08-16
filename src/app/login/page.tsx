@@ -11,6 +11,9 @@ import KakaoLogo from "./icon/kakao-logo.svg";
 import AppleLogo from "./icon/apple-logo.svg";
 import NaverLogo from "./icon/naver-logo.svg";
 import Logo from "./icon/logo.svg";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 export default function Page() {
   const router = useRouter();
@@ -25,7 +28,7 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <LeftOption
           option={{
             close: {
               onClick: () => {

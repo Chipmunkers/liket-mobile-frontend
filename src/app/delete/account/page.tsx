@@ -14,6 +14,9 @@ import { setAuthToken } from "@/utils/axios";
 import authStore from "@/stores/authStore";
 import { useQueryClient } from "@tanstack/react-query";
 import customToast from "../../../utils/customToast";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 export default function Page() {
   const queryClient = useQueryClient();
@@ -46,8 +49,8 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption option={{ back: true }} />
-        <Header.MiddleText text="회원탈퇴" />
+        <LeftOption option={{ back: true }} />
+        <MiddleText text="회원탈퇴" />
       </Header>
       <main>
         <div className="px-[24px] mt-[24px]">

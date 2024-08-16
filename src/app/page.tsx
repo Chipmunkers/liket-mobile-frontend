@@ -18,6 +18,8 @@ import { getHotContentsForServer } from "./_hooks/getHotContents";
 import ReviewCard from "../components/Card/ReviewCard";
 import { getHotReview } from "./_hooks/getHotReviews";
 import dayjs from "dayjs";
+import LeftOption from "@/components/Header/LeftOption";
+import RightOption from "@/components/Header/RightOption";
 
 export default async function Home() {
   const { contentList: soonOpenContents } =
@@ -30,8 +32,8 @@ export default async function Home() {
   return (
     <>
       <Header>
-        <Header.LeftOption logo />
-        <Header.RightOption option={{ search: true, like: true }} />
+        <LeftOption logo />
+        <RightOption option={{ search: true, like: true }} />
       </Header>
       <main className="mb-[40px]">
         {/* 배너 */}

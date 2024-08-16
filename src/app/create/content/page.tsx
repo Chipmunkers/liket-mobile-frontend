@@ -38,6 +38,9 @@ import { useCreateContent } from "./hooks/useCreateContent";
 import { genres } from "../../../../public/data/genre";
 import { useGetContentDetail } from "./hooks/useGetContentDetail";
 import { useEditContent } from "./hooks/useEditContent";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",
@@ -311,9 +314,9 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption option={{ back: true }} />
-        <Header.MiddleText text="컨텐츠 등록 요청" />
-        <Header.RightOption
+        <LeftOption option={{ back: true }} />
+        <MiddleText text="컨텐츠 등록 요청" />
+        <RightOption
           option={{
             check: {
               disabled: !formState.isValid,
@@ -791,14 +794,14 @@ export default function Page() {
         }}
       >
         <Header>
-          <Header.LeftOption
+          <LeftOption
             option={{
               back: {
                 onClick: () => router.back(),
               },
             }}
           />
-          <Header.MiddleText text="주소 검색" />
+          <MiddleText text="주소 검색" />
         </Header>
         <div className="full-modal-main">
           <div id="search-list" className="flex grow h-[100%] mx-[24px]"></div>

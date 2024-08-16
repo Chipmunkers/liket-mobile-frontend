@@ -1,6 +1,8 @@
 import { getTosList } from "@/apis/terms";
 import Header from "@/components/Header";
 import LinkItem from "@/components/LinkItem";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 export default async function Page() {
   const { tosList } = await getTosList();
@@ -8,12 +10,12 @@ export default async function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <LeftOption
           option={{
             back: true,
           }}
         />
-        <Header.MiddleText text="약관/정책" />
+        <MiddleText text="약관/정책" />
       </Header>
       <main>
         {tosList.map(({ idx, title }) => {
