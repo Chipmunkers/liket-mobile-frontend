@@ -29,6 +29,9 @@ import { TextareaAutosize } from "@mui/material";
 import ScrollContainer from "react-indiana-drag-scroll";
 import CustomImage from "@/components/CustomImage";
 import EmptyImage from "@/components/EmptyImage.tsx";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 const MAX_IMAGES_COUNT = 10;
 const MAX_REVIEW_LENGTH = 1000;
@@ -161,7 +164,7 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <LeftOption
           option={{
             back: {
               onClick: () => {
@@ -170,8 +173,8 @@ export default function Page() {
             },
           }}
         />
-        <Header.MiddleText text="작성" />
-        <Header.RightOption
+        <MiddleText text="작성" />
+        <RightOption
           option={{
             check: {
               disabled: !enabledToSubmit,

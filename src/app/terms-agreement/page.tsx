@@ -10,6 +10,8 @@ import { useGetDetailTos, useGetTosList } from "@/service/terms/hooks";
 import { classNames } from "@/utils/helpers";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 export default function Page() {
   const router = useRouter();
@@ -43,14 +45,14 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <LeftOption
           option={{
             close: {
               onClick: () => router.back(),
             },
           }}
         />
-        <Header.MiddleText text="로그인" />
+        <MiddleText text="로그인" />
       </Header>
       <main className="px-[24px] pt-[15px]">
         <div className="my-[8px]">
@@ -118,7 +120,7 @@ export default function Page() {
         )}
       >
         <Header>
-          <Header.LeftOption
+          <LeftOption
             option={{
               back: {
                 onClick: () => {
@@ -128,7 +130,7 @@ export default function Page() {
               },
             }}
           />
-          <Header.MiddleText text={detailTosData?.title || ""} />
+          <MiddleText text={detailTosData?.title || ""} />
         </Header>
         <div className="full-modal-main">
           <div className="flex grow h-[100%]">

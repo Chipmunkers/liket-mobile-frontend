@@ -13,6 +13,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AxiosError } from "axios";
 import customToast from "../../utils/customToast";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 const INITIAL_FORM_STATE = {
   emailToken: "",
@@ -82,12 +85,12 @@ const SignUpPage = () => {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <LeftOption
           option={{
             back: true,
           }}
         />
-        <Header.MiddleText text={formIndex === 2 ? "프로필" : "회원가입"} />
+        <MiddleText text={formIndex === 2 ? "프로필" : "회원가입"} />
       </Header>
       <main>
         <div className="my-[16px] gap-[8px] center">

@@ -3,6 +3,9 @@ import customFetch from "@/utils/fetch";
 import ErrorPage from "../../error";
 import DetailContent from "./components/DetailContent";
 import ContentNotFound from "./components/ContentNotFound";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 interface PageProps {
   params: {
@@ -21,12 +24,12 @@ export default async function Page({ params: { idx } }: PageProps) {
     return (
       <>
         <Header>
-          <Header.LeftOption
+          <LeftOption
             option={{
               back: true,
             }}
           />
-          <Header.RightOption
+          <RightOption
             option={{
               search: {},
             }}
@@ -41,12 +44,12 @@ export default async function Page({ params: { idx } }: PageProps) {
     return (
       <>
         <Header>
-          <Header.LeftOption
+          <LeftOption
             option={{
               back: true,
             }}
           />
-          <Header.RightOption
+          <RightOption
             option={{
               search: {},
             }}

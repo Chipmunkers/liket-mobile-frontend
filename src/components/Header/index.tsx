@@ -1,3 +1,5 @@
+"use client";
+
 import { StrictPropsWithChildren } from "@/types/common";
 import LeftOption from "./LeftOption";
 import RightOption from "./RightOption";
@@ -18,9 +20,5 @@ const Header = ({ children, transparent = false }: Props) => {
     </header>
   );
 };
-
-Header.LeftOption = LeftOption;
-Header.RightOption = RightOption;
-Header.MiddleText = MiddleText;
 
 export default Header;
