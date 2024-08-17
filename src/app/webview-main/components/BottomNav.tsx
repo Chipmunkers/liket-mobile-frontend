@@ -73,6 +73,7 @@ const BottomNav = ({ shadow = false, setPage, page }: Props) => {
                         });
                       },
                       onClickNegative: () => {
+                        pageChangeSendToRN("main");
                         setPage("main");
                       },
                     });
