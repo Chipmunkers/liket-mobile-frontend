@@ -8,6 +8,8 @@ import FallbackContentImg from "../FallbackContentImg";
 import { classNames, getStatus } from "@/utils/helpers";
 import ContentLikeBtn from "../ContentLikeBtn";
 import { SummaryContentEntity } from "../../types/api/culture-content";
+import { useRouter } from "next/navigation";
+import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
 
 type ContentCardProps = SummaryContentEntity & {
   isButton?: boolean;
@@ -34,6 +36,8 @@ export const ContentCard = ({
   onClick,
 }: ContentCardProps) => {
   const { region1Depth, region2Depth } = location;
+
+  const router = useRouter();
 
   if (isButton) {
     return (
@@ -103,7 +107,17 @@ export const ContentCard = ({
   }
 
   return (
-    <Link href={`/contents/${idx}`}>
+    <Link
+      href={`/contents/${idx}`}
+      onClick={(e) => {
+        e.preventDefault();
+
+        stackRouterPush(router, {
+          path: `/contents/${idx}`,
+          screen: ScreenTYPE.CONTENT_DETAIL,
+        });
+      }}
+    >
       <article className={classNames(width ? `w-[${width}]` : "w-[164px]")}>
         <div className="relative mb-[8px]">
           <div className="relative aspect-[164/232]">
