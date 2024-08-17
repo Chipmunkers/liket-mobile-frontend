@@ -29,14 +29,6 @@ const WebviewWrap = (props: {
 
   const [page, setPage] = useState<"main" | "map" | "mypage">("main");
 
-  useEffect(() => {
-    window.ReactNativeWebView.postMessage(
-      JSON.stringify({
-        page: page,
-      })
-    );
-  }, [page]);
-
   return (
     <>
       {page === "main" ? (
