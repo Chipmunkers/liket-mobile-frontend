@@ -38,6 +38,14 @@ const BottomNav = ({ shadow = false, setPage, page }: Props) => {
 
   const { data: loginUser } = useGetMyInfo();
 
+  const pageChangeSendToRN = (page: string) => {
+    window.ReactNativeWebView.postMessage(
+      JSON.stringify({
+        page: page,
+      })
+    );
+  };
+
   return (
     <>
       <CustomDrawer
@@ -155,7 +163,10 @@ const BottomNav = ({ shadow = false, setPage, page }: Props) => {
         >
           <ButtonBase
             className="w-[20%] h-[44px]"
-            onClick={() => setPage("main")}
+            onClick={() => {
+              pageChangeSendToRN("main");
+              setPage("main");
+            }}
           >
             {page === "main" ? (
               <FilledHomeIcon color={colors.skyblue["01"]} />
@@ -165,7 +176,10 @@ const BottomNav = ({ shadow = false, setPage, page }: Props) => {
           </ButtonBase>
           <ButtonBase
             className="w-[20%] h-[44px]"
-            onClick={() => setPage("map")}
+            onClick={() => {
+              pageChangeSendToRN("map");
+              setPage("map");
+            }}
           >
             {page === "map" ? (
               <FilledMapIcon color={colors.skyblue["01"]} />
@@ -189,7 +203,10 @@ const BottomNav = ({ shadow = false, setPage, page }: Props) => {
           </ButtonBase>
           <ButtonBase
             className={`w-[20%] h-[44px]`}
-            onClick={() => setPage("mypage")}
+            onClick={() => {
+              pageChangeSendToRN("mypage");
+              setPage("mypage");
+            }}
           >
             {page === "mypage" ? (
               <FilledMyPageIcon color={colors.skyblue["01"]} />

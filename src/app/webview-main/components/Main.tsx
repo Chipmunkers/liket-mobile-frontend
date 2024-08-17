@@ -32,40 +32,42 @@ const WebviewMain = (props: {
   } = props;
 
   return (
-    <main className="mb-[40px]">
-      {/* 배너 */}
-      <MainCarousel list={bannerList.map(({ imgPath }) => imgPath)} />
+    <>
+      <main className="mb-[40px]">
+        {/* 배너 */}
+        <MainCarousel list={bannerList.map(({ imgPath }) => imgPath)} />
 
-      {/* 인기 스타일  문화생활 컨텐츠*/}
-      <HotStyleSection />
+        {/* 인기 스타일  문화생활 컨텐츠*/}
+        <HotStyleSection />
 
-      {/* 인기 연령대 문화생활 컨텐츠 */}
-      <HotAgeSection />
+        {/* 인기 연령대 문화생활 컨텐츠 */}
+        <HotAgeSection />
 
-      <Divider height="8px" width="100%" margin="24px 0" />
+        <Divider height="8px" width="100%" margin="24px 0" />
 
-      {/* 핫플 차트 */}
-      <HotPlaceSection contentList={hotContentList} />
+        {/* 핫플 차트 */}
+        <HotPlaceSection contentList={hotContentList} />
 
-      <Divider height="8px" width="100%" margin="24px 0" />
+        <Divider height="8px" width="100%" margin="24px 0" />
 
-      {/* 오픈 예정 컨텐츠 */}
-      <SoonOpenContentSection contentList={soonOpenContents} />
+        {/* 오픈 예정 컨텐츠 */}
+        <SoonOpenContentSection contentList={soonOpenContents} />
 
-      {/* 종료 예정 컨텐츠 */}
-      <SoonEndContentSection contentList={soonEndContents} />
+        {/* 종료 예정 컨텐츠 */}
+        <SoonEndContentSection contentList={soonEndContents} />
 
-      <Divider height="8px" width="100%" margin="24px 0" />
+        <Divider height="8px" width="100%" margin="24px 0" />
 
-      <section className="mb-[24px] text-h2">
-        <h2 className="pl-[24px] mb-[8px]">최근 인기 리뷰</h2>
-        <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-          {reviews.map((review, index) => (
-            <ReviewCard key={index} review={review} />
-          ))}
-        </CustomScrollContainer>
-      </section>
-    </main>
+        <section className="mb-[24px] text-h2">
+          <h2 className="pl-[24px] mb-[8px]">최근 인기 리뷰</h2>
+          <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
+            {reviews.map((review, index) => (
+              <ReviewCard key={index} review={review} />
+            ))}
+          </CustomScrollContainer>
+        </section>
+      </main>
+    </>
   );
 };
 
