@@ -5,7 +5,6 @@ import DetailContent from "./components/DetailContent";
 import ContentNotFound from "./components/ContentNotFound";
 import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
 
 interface PageProps {
   params: {
