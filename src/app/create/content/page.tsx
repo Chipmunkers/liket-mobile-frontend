@@ -742,7 +742,7 @@ export default function Page() {
           minDate={dayjs(`${dayjs().year() - 100}`)}
           maxDate={tempEndDate ? dayjs(tempEndDate) : dayjs()}
         />
-        <div className="flex h-[98px] px-[24px]">
+        <div className="flex pb-[8px] px-[24px]">
           <Button
             height={48}
             fullWidth
@@ -772,7 +772,7 @@ export default function Page() {
           }
           maxDate={dayjs(new Date())}
         />
-        <div className="flex h-[98px] px-[24px]">
+        <div className="flex pb-[8px] px-[24px]">
           <Button
             height={48}
             fullWidth
