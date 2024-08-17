@@ -15,7 +15,11 @@ import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
 import { headers } from "next/headers";
-import { stackRouterBack } from "../../utils/stackRouter";
+import {
+  ScreenTYPE,
+  stackRouterBack,
+  stackRouterPush,
+} from "../../utils/stackRouter";
 
 export default function Page() {
   const router = useRouter();
@@ -95,6 +99,13 @@ export default function Page() {
           <Link
             href="/login/email"
             className="text-grey-03 text-button6 mr-[16px]"
+            onClick={(e) => {
+              e.preventDefault();
+              stackRouterPush(router, {
+                path: "/login/email",
+                screen: ScreenTYPE.EMAIL_LOGIN,
+              });
+            }}
           >
             이메일로 로그인
           </Link>

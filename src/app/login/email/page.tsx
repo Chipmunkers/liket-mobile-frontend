@@ -14,9 +14,13 @@ import authStore from "@/stores/authStore";
 import { setAuthToken } from "@/utils/axios";
 import customToast from "@/utils/customToast";
 import DefaultLoading from "@/components/Loading/DefaultLoading";
-import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
+import {
+  ScreenTYPE,
+  stackRouterBack,
+  stackRouterPush,
+} from "../../../utils/stackRouter";
 
 const schema = z.object({
   email: z.string().email("올바른 이메일을 입력해주세요."),
@@ -29,7 +33,10 @@ export default function Page() {
     onSuccess: ({ data }) => {
       setAuthToken(data.token);
       setToken(data.token);
-      router.push("/");
+      stackRouterPush(router, {
+        path: "/",
+        screen: ScreenTYPE.MAIN,
+      });
     },
     onError: ({ response }) => {
       if (response?.status === 400) {
@@ -77,7 +84,7 @@ export default function Page() {
         <LeftOption
           option={{
             back: {
-              onClick: () => router.back(),
+              onClick: () => stackRouterBack(router),
             },
           }}
         />
