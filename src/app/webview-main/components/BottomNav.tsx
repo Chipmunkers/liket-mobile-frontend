@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ReactNode, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import HomeIcon from "@/icons/home.svg";
 import FilledHomeIcon from "@/icons/home-filled.svg";
 import MapIcon from "@/icons/map.svg";
@@ -17,19 +17,20 @@ import CreateLiket from "@/icons/create-liket.svg";
 import CreateRoute from "@/icons/create-route.svg";
 import useModalStore from "@/stores/modalStore";
 import { classNames } from "@/utils/helpers";
-import CustomDrawer from "../CustomDrawer";
 import customToast from "@/utils/customToast";
-import { useGetMyInfo } from "../../hooks/useGetMyInfo";
 import { ButtonBase } from "@mui/material";
-import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
+import CustomDrawer from "@/components/CustomDrawer";
+import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
+import { useGetMyInfo } from "../../../hooks/useGetMyInfo";
 
 interface Props {
   shadow?: boolean;
+  setPage: Dispatch<SetStateAction<"main" | "map" | "mypage">>;
+  page: "main" | "map" | "mypage";
 }
 
-const LinkableTab = ({ shadow = false }: Props) => {
+const BottomNav = ({ shadow = false, setPage, page }: Props) => {
   const router = useRouter();
-  const pathname = usePathname();
   const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
 
   const isLoggedIn = false;
@@ -62,6 +63,9 @@ const LinkableTab = ({ shadow = false }: Props) => {
                           screen: ScreenTYPE.LOGIN,
                           isStack: false,
                         });
+                      },
+                      onClickNegative: () => {
+                        setPage("main");
                       },
                     });
                   }
@@ -151,18 +155,9 @@ const LinkableTab = ({ shadow = false }: Props) => {
         >
           <ButtonBase
             className="w-[20%] h-[44px]"
-            onClick={() => {
-              if (pathname === "/") return;
-
-              stackRouterPush(router, {
-                path: "/",
-                screen: ScreenTYPE.MAIN,
-                isStack: false,
-                moveScreen: false,
-              });
-            }}
+            onClick={() => setPage("main")}
           >
-            {pathname === "/" ? (
+            {page === "main" ? (
               <FilledHomeIcon color={colors.skyblue["01"]} />
             ) : (
               <HomeIcon color={colors.grey["02"]} />
@@ -170,17 +165,9 @@ const LinkableTab = ({ shadow = false }: Props) => {
           </ButtonBase>
           <ButtonBase
             className="w-[20%] h-[44px]"
-            onClick={(e) => {
-              if (pathname === "map") return;
-
-              stackRouterPush(router, {
-                path: "/map",
-                screen: ScreenTYPE.MAIN,
-                moveScreen: false,
-              });
-            }}
+            onClick={() => setPage("map")}
           >
-            {pathname === "/map" ? (
+            {page === "map" ? (
               <FilledMapIcon color={colors.skyblue["01"]} />
             ) : (
               <MapIcon color={colors.grey["02"]} />
@@ -202,16 +189,9 @@ const LinkableTab = ({ shadow = false }: Props) => {
           </ButtonBase>
           <ButtonBase
             className={`w-[20%] h-[44px]`}
-            onClick={() => {
-              stackRouterPush(router, {
-                path: "/mypage",
-                screen: ScreenTYPE.MAIN,
-                isStack: false,
-                moveScreen: false,
-              });
-            }}
+            onClick={() => setPage("mypage")}
           >
-            {pathname === "/mypage" ? (
+            {page === "mypage" ? (
               <FilledMyPageIcon color={colors.skyblue["01"]} />
             ) : (
               <MyPageIcon color={colors.grey["02"]} />
@@ -223,4 +203,4 @@ const LinkableTab = ({ shadow = false }: Props) => {
   );
 };
 
-export default LinkableTab;
+export default BottomNav;
