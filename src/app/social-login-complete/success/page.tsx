@@ -5,6 +5,7 @@ import authStore from "@/stores/authStore";
 import { setAuthToken } from "@/utils/axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
 
 export default function Page() {
   const setToken = authStore(({ setToken }) => setToken);
@@ -14,7 +15,11 @@ export default function Page() {
     onSuccess: ({ data }) => {
       setAuthToken(data);
       setToken(data);
-      router.replace("/");
+      stackRouterPush(router, {
+        path: "/",
+        screen: ScreenTYPE.MAIN,
+        isStack: false,
+      });
     },
   });
 

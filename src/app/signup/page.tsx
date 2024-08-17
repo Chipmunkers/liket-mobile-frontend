@@ -13,9 +13,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AxiosError } from "axios";
 import customToast from "../../utils/customToast";
-import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
+import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
 
 const INITIAL_FORM_STATE = {
   emailToken: "",
@@ -41,7 +41,11 @@ const SignUpPage = () => {
     onSuccess: ({ data }) => {
       setToken(data.token);
       setAuthToken(data.token);
-      router.replace("/");
+      stackRouterPush(router, {
+        path: "/",
+        screen: ScreenTYPE.MAIN,
+        isStack: false,
+      });
     },
     onError: (err) => {
       if (err instanceof AxiosError) {
@@ -71,8 +75,6 @@ const SignUpPage = () => {
     birth,
     gender,
   }: ProfileFormData) => {
-    console.log("request");
-
     mutate({
       ...formInformation,
       file,
@@ -98,7 +100,9 @@ const SignUpPage = () => {
             return (
               <Control
                 key={index}
-                onClick={() => {}}
+                onClick={() => {
+                  // ! 완료된 순서대로 이 전으로 갈 수 있도록 변경해야함
+                }}
                 isSelected={index === formIndex}
               />
             );
