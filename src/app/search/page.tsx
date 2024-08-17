@@ -379,7 +379,7 @@ export default function Page() {
       >
         <div className="center text-h2">지역</div>
         {sidoList.map((sido) => (
-          <li className="bottom-sheet-list">
+          <li className="bottom-sheet-list" key={`${sido.cd}`}>
             <ButtonBase
               onClick={() => {
                 setPagerble((pagerble) => ({
@@ -406,7 +406,7 @@ export default function Page() {
       >
         <div className="center text-h2">연령대</div>
         {ages.map((age) => (
-          <li className="bottom-sheet-list">
+          <li className="bottom-sheet-list" key={age.idx}>
             <ButtonBase
               onClick={() => {
                 setPagerble((pagerble) => ({

@@ -1,6 +1,8 @@
 import { useState, ChangeEvent } from "react";
-import Header from "../Header";
+import Header from "@/components/Header";
 import { EmptyFunction } from "@/types/common";
+import LeftOption from "@/components/Header/LeftOption";
+import RightOption from "@/components/Header/RightOption";
 
 interface Props {
   isOpen: boolean;
@@ -37,7 +39,7 @@ const Index = ({
       {isOpen && (
         <div className="z-[9999] flex flex-col fixed top-0 left-0 right-0 height-0 bottom-0 bg-black bg-opacity-80">
           <Header transparent>
-            <Header.LeftOption
+            <LeftOption
               option={{
                 close: {
                   color: "#fff",
@@ -45,7 +47,7 @@ const Index = ({
                 },
               }}
             />
-            <Header.RightOption
+            <RightOption
               option={{
                 check: {
                   onClick: () => {
