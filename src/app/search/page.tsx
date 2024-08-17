@@ -472,7 +472,7 @@ export default function Page() {
             );
           })}
         </ul>
-        <div className="flex h-[98px] px-[24px]">
+        <div className="flex pb-[8px] px-[24px]">
           <ButtonBase
             className="w-[100%] h-[48px] rounded-[28px] bg-skyblue-01 text-button1 text-white"
             onClick={() => {
