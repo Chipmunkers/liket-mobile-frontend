@@ -216,7 +216,7 @@ const LinkableTab = ({ shadow = false }: Props) => {
             onClick={() => {
               stackRouterPush(router, {
                 path: "/mypage",
-                screen: ScreenTYPE.LOGIN,
+                screen: ScreenTYPE.MY_PAGE,
                 isStack: false,
               });
             }}
