@@ -14,6 +14,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import profileStore from "@/stores/profileStore";
 import { PROVIDER_ICON } from "@/utils/const";
 import { ButtonBase } from "@mui/material";
+import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
+import customToast from "../../utils/customToast";
 
 export default function Page() {
   const router = useRouter();
@@ -27,7 +29,14 @@ export default function Page() {
       setAuthToken("");
       setToken("");
       queryClient.resetQueries();
-      router.replace("/");
+      stackRouterPush(router, {
+        path: "/",
+        screen: ScreenTYPE.MAIN,
+        isStack: false,
+      });
+    },
+    onError: () => {
+      customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
     },
   });
   const setToken = authStore(({ setToken }) => setToken);
@@ -48,7 +57,14 @@ export default function Page() {
           </div>
         </div>
         <Divider width="100%" height="8px" margin="16px 0 0 0" />
-        <ButtonBase>
+        <ButtonBase
+          onClick={() => {
+            stackRouterPush(router, {
+              path: "/mypage/edit/password",
+              screen: ScreenTYPE.EDIT_MY_PASSWORD,
+            });
+          }}
+        >
           <LinkItem href="/mypage/edit/password">비밀번호 변경</LinkItem>
         </ButtonBase>
 
@@ -62,6 +78,14 @@ export default function Page() {
           <Link
             className="text-body5 text-grey-04 mr-[25px]"
             href="/delete/account"
+            onClick={(e) => {
+              e.preventDefault();
+
+              stackRouterPush(router, {
+                path: "/delete/account",
+                screen: ScreenTYPE.DELETE_ACCOUNT,
+              });
+            }}
           >
             회원탈퇴
           </Link>

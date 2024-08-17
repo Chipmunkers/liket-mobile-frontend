@@ -24,6 +24,8 @@ export const ScreenTYPE = {
   MY_INQUIRY: "My Inquiry",
   REQUEST_CONTENT: "Request Content",
   ACCOUNT: "Account",
+  EDIT_MY_PASSWORD: "Edit My Password",
+  DELETE_ACCOUNT: "Delete Account", // 회원탈퇴
 } as const;
 
 export const WebViewEventType = {
