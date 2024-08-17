@@ -83,6 +83,11 @@ const DetailContent = (props: { content: ContentEntity }) => {
             <Link
               href={content.websiteLink}
               className="text-skyblue-01 text-body3"
+              onClick={(e) => {
+                e.preventDefault();
+
+                // TODO: 모바일에서 클릭 시 갇혀버림
+              }}
             >
               {content.websiteLink}
             </Link>

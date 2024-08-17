@@ -41,6 +41,7 @@ import { useEditContent } from "./hooks/useEditContent";
 import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
+import { stackRouterPush } from "../../../utils/stackRouter";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",
