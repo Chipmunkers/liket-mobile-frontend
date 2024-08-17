@@ -82,7 +82,7 @@ const DetailContent = (props: { content: ContentEntity }) => {
             </div>
             <Link
               href={content.websiteLink}
-              className="text-skyblue-01 text-body3"
+              className="text-skyblue-01 text-body3 break-words overflow-wrap-normal"
               onClick={(e) => {
                 e.preventDefault();
 

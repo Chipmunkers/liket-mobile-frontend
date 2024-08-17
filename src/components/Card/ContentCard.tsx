@@ -79,18 +79,6 @@ export const ContentCard = ({
             >
               {variantToText[getStatus(startDate, endDate)]}
             </Badge>
-            {/* <button
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-              className="absolute bottom-[8px] right-[8px]"
-            >
-              {likeState ? (
-                <ActiveLike color={colors.skyblue["01"]} />
-              ) : (
-                <Like color={colors.grey["02"]} />
-              )}
-            </button> */}
           </div>
           <div className="flex flex-col text-left">
             <div className="text-body4 text-skyblue-01">{genre.name}</div>

@@ -24,7 +24,11 @@ const CheckBoxWithLink = ({
         size="14px"
         onChange={onChangeCheckbox}
       />
-      <button className="flex grow ml-[8px]" onClick={onClickListItem}>
+      <button
+        className="flex grow ml-[8px]"
+        onClick={onClickListItem}
+        type="button"
+      >
         <div className="text-body3 grow text-start">{children}</div>
         {rightArrow && (
           <RightArrow

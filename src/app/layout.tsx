@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
 import ModalProvider from "@/components/Modal/ModalProvider";
-import { Toaster } from "react-hot-toast";
 import MuiLocalizationProvider from "@/components/MuiLocalizationProvider";
 import QueryProvider from "@/components/QueryProvider";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
+import ToastProvider from "./_components/ToasterProvider";
 
 dayjs.locale("ko");
 
@@ -72,13 +72,7 @@ export default function RootLayout({
         <ModalProvider>
           <QueryProvider>
             <MuiLocalizationProvider>
-              <Toaster
-                position="bottom-center"
-                containerStyle={{
-                  inset: "16px 16px 114px 16px",
-                  zIndex: 99999,
-                }}
-              />
+              <ToastProvider />
               {children}
             </MuiLocalizationProvider>
           </QueryProvider>

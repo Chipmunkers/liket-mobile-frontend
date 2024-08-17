@@ -250,8 +250,8 @@ export default function Page() {
               />
             </div>
           </div>
-          <div className="flex mt-[34px] justify-between">
-            <div>
+          <div className="flex justify-between flex-wrap">
+            <div className="mt-[34px]">
               <div className="text-grey-04 text-caption mb-[12px]">
                 방문 날짜<span className="text-top">*</span>
               </div>
@@ -266,7 +266,7 @@ export default function Page() {
                 Icon={<CalendarIcon />}
               />
             </div>
-            <div className="ml-[16px]">
+            <div className="mt-[34px]">
               <div className="text-grey-04 text-caption mb-[12px]">
                 방문 시간<span className="text-top">*</span>
               </div>
