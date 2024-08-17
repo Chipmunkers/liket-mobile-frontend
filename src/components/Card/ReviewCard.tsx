@@ -16,12 +16,14 @@ const ReviewCard = (props: { review: ReviewEntity }) => {
     <Link
       href={`/contents/${review.cultureContent.idx}?tab=review&review=${review.idx}`}
       className="w-[164px] h-[232px]"
-      onClick={() =>
+      onClick={(e) => {
+        e.preventDefault();
+
         stackRouterPush(router, {
           path: `/contents/${review.cultureContent.idx}?tab=review&review=${review.idx}`,
           screen: "Content Detail",
-        })
-      }
+        });
+      }}
     >
       <article className="w-[164px] h-[232px] relative bg-grey-black">
         <CustomImage

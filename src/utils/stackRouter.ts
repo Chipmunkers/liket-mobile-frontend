@@ -7,7 +7,9 @@ import { NextRouter } from "next/router";
 export const ScreenTYPE = {
   MAIN: "Main",
   SEARCH: "Search",
+  LIKE: "Like",
   LOGIN: "Login",
+  EMAIL_LOGIN: "Email Login",
   CONTENT_DETAIL: "Content Detail",
 } as const;
 
