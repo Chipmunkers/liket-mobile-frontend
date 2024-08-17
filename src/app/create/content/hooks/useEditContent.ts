@@ -7,7 +7,7 @@ export const useEditContent = ({
   idx,
   onSuccess,
   onError,
-}: UseMutationOptions<AxiosResponse, ResponseError, CreateContentRequestDto> & {
+}: UseMutationOptions<AxiosResponse, ResponseError> & {
   idx: string | null;
 }) =>
   useMutation({
