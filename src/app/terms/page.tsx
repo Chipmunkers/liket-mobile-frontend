@@ -19,7 +19,7 @@ export default async function Page() {
       </Header>
       <main>
         {tosList.map((tos) => (
-          <TosItem tos={tos} />
+          <TosItem tos={tos} key={tos.idx} />
         ))}
       </main>
     </>
