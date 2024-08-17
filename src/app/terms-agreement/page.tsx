@@ -12,6 +12,11 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
+import {
+  ScreenTYPE,
+  stackRouterBack,
+  stackRouterPush,
+} from "../../utils/stackRouter";
 
 export default function Page() {
   const router = useRouter();
@@ -48,7 +53,7 @@ export default function Page() {
         <LeftOption
           option={{
             close: {
-              onClick: () => router.back(),
+              onClick: () => stackRouterBack(router),
             },
           }}
         />
@@ -93,7 +98,10 @@ export default function Page() {
                   handleChangeCheckbox("youth-protection", isChecked)
                 }
                 onClickListItem={() => {
-                  router.push(`${pathname}?termIdx=${idx}`);
+                  stackRouterPush(router, {
+                    path: `${pathname}?termIdx=${idx}`,
+                    screen: ScreenTYPE.TERMS_DETAIL,
+                  });
                   setDetailTosIdx(idx);
                 }}
               >
@@ -108,7 +116,12 @@ export default function Page() {
           fullWidth
           height={48}
           disabled={!isAllAgreed}
-          onClick={() => router.replace("/signup/social")}
+          onClick={() =>
+            stackRouterPush(router, {
+              path: "/signup/social",
+              screen: ScreenTYPE.SOCIAL_SIGNUP,
+            })
+          }
         >
           다음
         </Button>
@@ -125,7 +138,7 @@ export default function Page() {
               back: {
                 onClick: () => {
                   setDetailTosIdx(undefined);
-                  router.back();
+                  stackRouterBack(router);
                 },
               },
             }}
