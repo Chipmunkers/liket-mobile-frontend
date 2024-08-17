@@ -8,9 +8,9 @@ import { ProfileFormData } from "@/types/signup";
 import customToast from "@/utils/customToast";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
+import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
 
 const INITIAL_FORM_STATE = {
   emailToken: "",
@@ -37,7 +37,11 @@ const SignUpPage = () => {
 
   const { mutate, status } = useSocialSignup({
     onSuccess: () => {
-      router.push("/");
+      stackRouterPush(router, {
+        path: "/",
+        screen: ScreenTYPE.MAIN,
+        isStack: false,
+      });
     },
     onError: ({ response }) => {
       if (response?.status === 400) {
