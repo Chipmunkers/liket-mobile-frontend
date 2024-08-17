@@ -9,6 +9,7 @@ import { useResetPassword } from "@/service/reset/hooks";
 import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
+import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
 
 export default function Page() {
   const [formIndex, setFormIndex] = useState(0);
@@ -21,7 +22,11 @@ export default function Page() {
   };
   const { mutate } = useResetPassword({
     onSuccess: () => {
-      router.replace("/login/email");
+      stackRouterPush(router, {
+        path: "/login/email",
+        screen: ScreenTYPE.EMAIL_LOGIN,
+        isStack: false,
+      });
     },
   });
 

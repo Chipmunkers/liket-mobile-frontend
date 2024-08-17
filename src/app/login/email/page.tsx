@@ -118,7 +118,18 @@ export default function Page() {
             </InputWrapper>
           </div>
           <div className="flex flex-row-reverse">
-            <Link className="text-button5 text-grey-02" href="/find/password">
+            <Link
+              className="text-button5 text-grey-02"
+              href="/find/password"
+              onClick={(e) => {
+                e.preventDefault();
+
+                stackRouterPush(router, {
+                  path: "/find/password",
+                  screen: ScreenTYPE.FIND_PASSWORD,
+                });
+              }}
+            >
               비밀번호 재설정
             </Link>
           </div>
