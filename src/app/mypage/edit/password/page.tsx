@@ -5,16 +5,20 @@ import { PasswordChangeForm } from "@/app/signup/components/PasswordForm";
 import { useChangePassword } from "@/service/changePassword";
 import customToast from "@/utils/customToast";
 import { useRouter } from "next/navigation";
-import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
+import { ScreenTYPE, stackRouterPush } from "../../../../utils/stackRouter";
 
 export default function Page() {
   const router = useRouter();
   const { mutate } = useChangePassword({
     onSuccess: () => {
       customToast("비밀번호가 변경됐습니다.");
-      router.replace("/mypage");
+      stackRouterPush(router, {
+        path: "router",
+        screen: ScreenTYPE.MY_PAGE,
+        isStack: false,
+      });
     },
     onError: ({ response }) => {
       if (response?.status === 400) {
