@@ -5,14 +5,23 @@ import { ReviewEntity } from "../../types/api/review";
 import EmptyImage from "../EmptyImage.tsx";
 import CustomImage from "../CustomImage";
 import RightArrowIcon from "@/icons/right-arrow.svg";
+import { useRouter } from "next/navigation";
+import { stackRouterPush } from "../../utils/stackRouter";
 
 const ReviewCard = (props: { review: ReviewEntity }) => {
   const { review } = props;
+  const router = useRouter();
 
   return (
     <Link
       href={`/contents/${review.cultureContent.idx}?tab=review&review=${review.idx}`}
       className="w-[164px] h-[232px]"
+      onClick={() =>
+        stackRouterPush(router, {
+          path: `/contents/${review.cultureContent.idx}?tab=review&review=${review.idx}`,
+          screen: "Content Detail",
+        })
+      }
     >
       <article className="w-[164px] h-[232px] relative bg-grey-black">
         <CustomImage
