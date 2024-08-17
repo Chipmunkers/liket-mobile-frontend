@@ -32,6 +32,11 @@ import EmptyImage from "@/components/EmptyImage.tsx";
 import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
+import {
+  ScreenTYPE,
+  stackRouterBack,
+  stackRouterPush,
+} from "../../../utils/stackRouter";
 
 const MAX_IMAGES_COUNT = 10;
 const MAX_REVIEW_LENGTH = 1000;
@@ -58,7 +63,11 @@ export default function Page() {
 
   const { mutate: writeReview } = useWriteReview({
     onSuccess: () => {
-      router.replace(`/contents/${targetContent?.idx}`);
+      stackRouterPush(router, {
+        path: `/contents/${targetContent?.idx}`,
+        screen: ScreenTYPE.CONTENT_DETAIL,
+        isStack: false,
+      });
     },
   });
 
@@ -96,7 +105,7 @@ export default function Page() {
   };
 
   const handleClickSearchContent = () => {
-    router.push(`${pathname}?isSearchContentModalOpen=true`);
+    router.replace(`${pathname}?isSearchContentModalOpen=true`);
   };
 
   const handleUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -124,7 +133,7 @@ export default function Page() {
     >
   ) => {
     setTargetContent(targetContent);
-    router.back();
+    router.replace("/create/review");
   };
 
   const enabledToSubmit =
@@ -168,7 +177,7 @@ export default function Page() {
           option={{
             back: {
               onClick: () => {
-                router.back();
+                stackRouterBack(router);
               },
             },
           }}
