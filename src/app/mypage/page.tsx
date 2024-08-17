@@ -266,7 +266,7 @@ export default function Page() {
           onClick={(e) => {
             stackRouterPush(router, {
               path: "/requested-contents",
-              screen: ScreenTYPE.REQUEST_CONTENT,
+              screen: ScreenTYPE.MY_REQUEST_CONTENT,
             });
           }}
         >
