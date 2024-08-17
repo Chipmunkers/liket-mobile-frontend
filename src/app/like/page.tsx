@@ -178,7 +178,11 @@ export default function Page() {
                     genre,
                   });
                 }}
-                className="bottom-sheet-button flex justify-start px-[24px] text-body3"
+                className={classNames(
+                  "bottom-sheet-button flex justify-start px-[24px] text-body3",
+                  contentPagerble?.genre?.name === genre.name &&
+                    "text-skyblue-01 text-body1"
+                )}
               >
                 {genre.name}
               </ButtonBase>
