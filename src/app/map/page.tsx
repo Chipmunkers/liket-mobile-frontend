@@ -9,12 +9,9 @@ import Button from "@/components/Button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import CustomBottomSheet from "@/components/BottomSheet";
 import MapBottomSheetCard from "@/components/Card/MapBottomSheetCard";
-import FilterFilled from "@/icons/filter-filled.svg";
 import Filter from "@/icons/filter.svg";
 import ButtonGroup from "@/components/ButtonGroup";
-import { AGES, GENRES, STYLES } from "@/utils/const";
 import Chip from "@/components/Chip";
-import { AgeType, CityType, GenreType, StyleType } from "@/types/const";
 import { genres } from "../../../public/data/genre";
 import { Age, Genre, Style } from "@/types/content";
 import { ages } from "../../../public/data/age";
@@ -23,13 +20,13 @@ import customToast from "@/utils/customToast";
 import KakaoMap from "./components/KakaoMap";
 import { MapContentEntity } from "@/types/api/map";
 import MapContentInfo from "./components/ContentInfo";
-import Script from "next/script";
 import { ButtonBase } from "@mui/material";
 import { Sido, sidoList } from "../../../public/data/sido";
 import { Sigungu, sigunguList } from "../../../public/data/sigungu";
 import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
+import { stackRouterBack } from "../../utils/stackRouter";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -40,7 +37,7 @@ export default function MapPage() {
   const isFilterModalOpen = searchParams.get("isFilterModalOpen");
 
   const onClickTownSelection = () => {
-    router.push(`${pathname}?isTownSelectionModalOpen=true`);
+    router.replace(`${pathname}?isTownSelectionModalOpen=true`);
   };
 
   // * 현재 보여지고 있는 컨텐츠 목록
@@ -123,7 +120,9 @@ export default function MapPage() {
                 "rounded-full w-[36px] h-[36px] shadow-[0_0_8px_0_rgba(0,0,0,0.16)]",
                 isSetMapFilter() ? "bg-skyblue-01" : "bg-white"
               )}
-              onClick={() => router.push(`${pathname}?isFilterModalOpen=true`)}
+              onClick={() =>
+                router.replace(`${pathname}?isFilterModalOpen=true`)
+              }
             >
               <Filter
                 className={!isSetMapFilter() ? "fill-grey-black" : "fill-white"}
@@ -192,7 +191,7 @@ export default function MapPage() {
                   setSelectedGenre(mapFilter.genre);
                   setSelectedAge(mapFilter.age);
                   setSelectedStyles(mapFilter.styles);
-                  router.back();
+                  stackRouterBack(router);
                 },
               },
             }}
@@ -295,7 +294,7 @@ export default function MapPage() {
                   age: undefined,
                   styles: [],
                 });
-                router.back();
+                router.replace("/map");
               }}
               variant="ghost"
               fullWidth
@@ -310,7 +309,7 @@ export default function MapPage() {
                   age: selectedAge,
                   styles: selectedStyles,
                 });
-                router.back();
+                router.replace("/map");
               }}
               fullWidth
             >
@@ -332,9 +331,9 @@ export default function MapPage() {
             option={{
               close: {
                 onClick: () => {
-                  router.back();
                   setSelectSido(selectLocation.sido);
                   setSelectSigungu(selectLocation.sigungu);
+                  router.replace("/map");
                 },
               },
             }}
@@ -410,7 +409,7 @@ export default function MapPage() {
                 setSelectLocation({ sido: selectSido, sigungu: selectSigungu });
               }
 
-              router.back();
+              router.replace("/map");
             }}
             fullWidth
           >
@@ -420,96 +419,4 @@ export default function MapPage() {
       </div>
     </>
   );
-}
-
-const SEOUL_GU_DUMMY = [
-  "동대문구",
-  "도봉구",
-  "동작구",
-  "서대문구",
-  "마포구",
-  "서초구",
-  "은평구",
-  "용산구",
-  "영등포구",
-  "양천구",
-  "성북구",
-  "송파구",
-  "노원구",
-  "강서구",
-  "관악구",
-  "강북구",
-  "도봉구",
-  "광진구",
-  "구로구",
-  "금천구",
-];
-
-const INCHENON_GU_DUMMY = ["미추홀구", "부평구"];
-
-const GYEONGGI_GU_DUMMY = [
-  "권선구",
-  "기흥구",
-  "수정구",
-  "수지구",
-  "영통구",
-  "오정구",
-];
-
-const CITY_GU_MAP = {
-  서울광역시: SEOUL_GU_DUMMY,
-  인천광역시: INCHENON_GU_DUMMY,
-  경기도: GYEONGGI_GU_DUMMY,
-} as const;
-
-const CITIES = Object.keys(CITY_GU_MAP) as Array<keyof typeof CITY_GU_MAP>;
-
-const INITIAL_CITY_AND_GU_SELECTION = {
-  currentSelectedCity: CITIES[0],
-  currentSelectedGu: CITY_GU_MAP[CITIES[0]][0],
-  newSelectedCity: CITIES[0],
-  newSelectedGu: CITY_GU_MAP[CITIES[0]][0],
-};
-
-const FILTER_OPTIONS = {
-  장르: GENRES,
-  지역: CITIES,
-  연령대: AGES,
-  스타일: STYLES,
-} as const;
-
-const isAppliedFilterExist = ({
-  currentAges,
-  currentCities,
-  currentGenres,
-  currentStyles,
-}: AppliedFiltersType) => {
-  return (
-    currentAges.length !== 0 ||
-    currentCities.length !== 0 ||
-    currentGenres.length !== 0 ||
-    currentStyles.length !== 0
-  );
-};
-
-const getAppliedOptionList = (
-  prevOptionList: string[],
-  targetOption: string
-) => {
-  if (prevOptionList.some((option) => option === targetOption)) {
-    return prevOptionList.filter((option) => option !== targetOption);
-  }
-
-  return [...prevOptionList, targetOption];
-};
-
-interface AppliedFiltersType {
-  currentGenres: GenreType[];
-  currentAges: AgeType[];
-  currentStyles: StyleType[];
-  currentCities: CityType[];
-  newGenres: GenreType[];
-  newCities: CityType[];
-  newAges: AgeType[];
-  newStyles: StyleType[];
 }
