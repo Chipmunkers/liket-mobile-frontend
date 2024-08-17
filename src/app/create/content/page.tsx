@@ -786,7 +786,7 @@ export default function Page() {
         </div>
       </CustomDrawer>
       <div
-        className="full-modal transform translate-y-full"
+        className="full-modal"
         style={{
           transform: !!isSearchModalOpen ? "translateY(0)" : "translateY(100%)",
         }}
