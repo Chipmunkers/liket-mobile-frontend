@@ -17,6 +17,7 @@ export const ScreenTYPE = {
   CREATE_REVIEW: "Create Review",
   TERMS_DETAIL: "Terms Detail",
   SOCIAL_SIGNUP: "Social Signup",
+  TERMS_LIST: "Terms List",
 } as const;
 
 export const WebViewEventType = {

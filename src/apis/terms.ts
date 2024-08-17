@@ -1,8 +1,9 @@
 import { TosDetailInformation, TosListItem } from "@/service/terms/model";
 import customFetch from "@/utils/fetch";
+import { SummaryTosEntity } from "../types/api/terms";
 
 export const getTosList = async (): Promise<{
-  tosList: TosListItem[];
+  tosList: SummaryTosEntity[];
 }> =>
   (
     await customFetch(`/tos/all`, {
