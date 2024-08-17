@@ -36,6 +36,7 @@ export default function Page() {
       stackRouterPush(router, {
         path: "/",
         screen: ScreenTYPE.MAIN,
+        isStack: false,
       });
     },
     onError: ({ response }) => {
