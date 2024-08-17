@@ -251,7 +251,14 @@ export default function Page() {
           </div>
         </div>
         <Divider width="100%" height="8px" margin="24px 0 0 0" />
-        <ButtonBase>
+        <ButtonBase
+          onClick={() => {
+            stackRouterPush(router, {
+              path: "/account",
+              screen: ScreenTYPE.ACCOUNT,
+            });
+          }}
+        >
           <LinkItem href="/account">계정 관리</LinkItem>
         </ButtonBase>
         <Divider width="100%" height="8px" />

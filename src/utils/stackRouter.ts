@@ -23,6 +23,7 @@ export const ScreenTYPE = {
   MY_LIKET: "My Liket",
   MY_INQUIRY: "My Inquiry",
   REQUEST_CONTENT: "Request Content",
+  ACCOUNT: "Account",
 } as const;
 
 export const WebViewEventType = {
