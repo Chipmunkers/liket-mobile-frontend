@@ -22,6 +22,7 @@ import DefaultLoading from "../../components/Loading/DefaultLoading";
 import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
+import { classNames } from "@/utils/helpers";
 
 export default function Page() {
   const [isGenreDrawerOpen, setIsGenreDrawerOpen] = useState(false);
@@ -100,22 +101,20 @@ export default function Page() {
       </Header>
       <main className="flex flex-col items-center">
         <div className="flex justify-between h-[40px] w-[100%] items-center px-[24px]">
-          {contentPagerble.genre ? (
-            <SmallSelectButton
-              placeholder={contentPagerble.genre.name}
-              text=""
-              onClick={() => setIsGenreDrawerOpen(true)}
-              Icon={<SmallDownArrow className="fill-white" />}
-              className="bg-skyblue-01 text-white"
-            />
-          ) : (
-            <SmallSelectButton
-              placeholder="장르"
-              text=""
-              onClick={() => setIsGenreDrawerOpen(true)}
-              Icon={<SmallDownArrow />}
-            />
-          )}
+          <SmallSelectButton
+            placeholder="장르"
+            text={contentPagerble?.genre?.name || ""}
+            onClick={() => setIsGenreDrawerOpen(true)}
+            Icon={
+              <SmallDownArrow
+                className={classNames(
+                  contentPagerble?.genre?.name
+                    ? "fill-white"
+                    : "fill-grey-black"
+                )}
+              />
+            }
+          />
           <div>
             <Checkbox
               label="진행중인 컨텐츠만 보기"
