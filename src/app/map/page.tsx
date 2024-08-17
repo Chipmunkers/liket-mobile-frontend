@@ -191,7 +191,7 @@ export default function MapPage() {
                   setSelectedGenre(mapFilter.genre);
                   setSelectedAge(mapFilter.age);
                   setSelectedStyles(mapFilter.styles);
-                  stackRouterBack(router);
+                  router.replace("/map");
                 },
               },
             }}
