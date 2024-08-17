@@ -442,10 +442,10 @@ export default function Page() {
               />
             </InputWrapper>
           </div>
-          <Divider width="100%" height="8px" margin="24px 0 16px 0" />
+          <Divider width="100%" height="8px" margin="24px 0 0" />
           <div className="mx-[24px]">
-            <div className="flex justify-between mb-[34px]">
-              <div>
+            <div className="flex justify-between flex-wrap mb-[34px]">
+              <div className="mt-[16px]">
                 <Label htmlFor="open-date">
                   오픈날짜<span className="text-top">*</span>
                 </Label>
@@ -458,7 +458,7 @@ export default function Page() {
                   />
                 </div>
               </div>
-              <div>
+              <div className="mt-[16px]">
                 <Label htmlFor="close-date">
                   종료날짜<span className="text-top">*</span>
                 </Label>
