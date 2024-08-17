@@ -20,7 +20,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import CalendarIcon from "@/icons/calendar.svg";
 import MediumSelectButton from "@/components/SelectButton/MediumSelectButton";
-import { TextareaAutosize } from "@mui/material";
+import { ButtonBase, TextareaAutosize } from "@mui/material";
 import CustomDrawer from "@/components/CustomDrawer";
 import Chip from "@/components/Chip";
 import Button from "@/components/Button";
@@ -28,7 +28,6 @@ import dayjs from "dayjs";
 import { DateCalendar } from "@mui/x-date-pickers";
 import { GenreType } from "@/types/const";
 import { useUploadContentImages } from "@/service/uploadImage";
-import { UploadedFileEntity } from "@/types/upload";
 import customToast from "@/utils/customToast";
 import Script from "next/script";
 import { classNames } from "@/utils/helpers";
@@ -642,7 +641,7 @@ export default function Page() {
         <ul className="my-[16px] w-[100%] flex px-[34px] flex-wrap gap-[8px]">
           {styles.map(({ name, idx }) => {
             return (
-              <li key={idx} className="">
+              <li key={idx}>
                 <Chip
                   isSelected={tempStyles.some((style) => style === name)}
                   onClick={() => {
@@ -667,7 +666,7 @@ export default function Page() {
             );
           })}
         </ul>
-        <div className="flex h-[98px] px-[24px]">
+        <div className="flex px-[24px] pb-[8px]">
           <Button
             height={48}
             fullWidth
@@ -685,22 +684,23 @@ export default function Page() {
         onClose={() => setIsAgeRangeSelectionDrawerOpen(false)}
       >
         <div className="center text-h2">연령대</div>
-        <ul className="mb-[48px]" onClick={(e) => {}}>
-          {ages.map(({ idx, name }) => {
-            return (
-              <li key={idx} className="bottom-sheet-list">
-                <button
-                  className="bottom-sheet-button"
-                  onClick={() => {
-                    setValue("age", name);
-                    setIsAgeRangeSelectionDrawerOpen(false);
-                  }}
-                >
-                  {name}
-                </button>
-              </li>
-            );
-          })}
+        <ul>
+          {ages.map(({ idx, name }) => (
+            <li className="bottom-sheet-list" key={idx}>
+              <ButtonBase
+                onClick={() => {
+                  setValue("age", name);
+                  setIsAgeRangeSelectionDrawerOpen(false);
+                }}
+                className={classNames(
+                  "bottom-sheet-button flex justify-start px-[24px]",
+                  watch("age") === name ? "text-skyblue-01 text-body1" : ""
+                )}
+              >
+                {name}
+              </ButtonBase>
+            </li>
+          ))}
         </ul>
       </CustomDrawer>
       <CustomDrawer
@@ -708,26 +708,23 @@ export default function Page() {
         onClose={() => setIsGenreSelectionDrawerOpen(false)}
       >
         <div className="center text-h2">장르</div>
-        <ul
-          className="mb-[48px]"
-          onClick={(e) => {
-            const target = e.target as HTMLElement;
-
-            if (target.tagName === "BUTTON") {
-              const targetGenre = target.textContent as GenreType;
-              setValue("genre", targetGenre);
-            }
-
-            setIsGenreSelectionDrawerOpen(false);
-          }}
-        >
-          {genres.map(({ idx, name }) => {
-            return (
-              <li key={idx} className="bottom-sheet-list">
-                <button className="bottom-sheet-button">{name}</button>
-              </li>
-            );
-          })}
+        <ul>
+          {genres.map(({ idx, name }) => (
+            <li className="bottom-sheet-list" key={idx}>
+              <ButtonBase
+                onClick={() => {
+                  setValue("genre", name);
+                  setIsGenreSelectionDrawerOpen(false);
+                }}
+                className={classNames(
+                  "bottom-sheet-button flex justify-start px-[24px]",
+                  watch("genre") === name ? "text-skyblue-01 text-body1" : ""
+                )}
+              >
+                {name}
+              </ButtonBase>
+            </li>
+          ))}
         </ul>
       </CustomDrawer>
       <CustomDrawer
