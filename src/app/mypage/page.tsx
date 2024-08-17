@@ -16,6 +16,7 @@ import { If, Then, Else } from "react-if";
 import ScrollContainer from "react-indiana-drag-scroll";
 import customToast from "../../utils/customToast";
 import VerticalDivider from "./icons/vertical-divider.svg";
+import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
 
 export default function Page() {
   const router = useRouter();
@@ -27,7 +28,11 @@ export default function Page() {
   useEffect(() => {
     if (!error) return;
 
-    router.replace("/login");
+    stackRouterPush(router, {
+      path: "/login",
+      screen: ScreenTYPE.LOGIN,
+      isStack: false,
+    });
   }, [error, router]);
 
   if (!data) {
@@ -52,7 +57,18 @@ export default function Page() {
           <div className="flex mt-[64px]">
             <div className="grow">
               <div className="flex flex-col">
-                <Link className="text-h1" href="/mypage/edit/profile">
+                <Link
+                  className="text-h1"
+                  href="/mypage/edit/profile"
+                  onClick={(e) => {
+                    e.preventDefault();
+
+                    stackRouterPush(router, {
+                      path: "/mypage/edit/profile",
+                      screen: ScreenTYPE.EDIT_PROFILE,
+                    });
+                  }}
+                >
                   {nickname}
                   <RightArrow
                     style={{
@@ -68,7 +84,10 @@ export default function Page() {
                       disableRipple={true}
                       className="text-numbering1 text-skyblue-01 ml-[4px] h-[18px]"
                       onClick={() => {
-                        router.push("/like");
+                        stackRouterPush(router, {
+                          path: "/like",
+                          screen: ScreenTYPE.LIKE,
+                        });
                       }}
                     >
                       <div className="text-numbering1 text-skyblue-01 ml-[4px]">
@@ -113,7 +132,18 @@ export default function Page() {
             </div>
           </div>
           <div className="flex flex-col mt-[24px]">
-            <Link className="flex items-center" href="/reviews">
+            <Link
+              className="flex items-center"
+              href="/reviews"
+              onClick={(e) => {
+                e.preventDefault();
+
+                stackRouterPush(router, {
+                  path: "/reviews",
+                  screen: ScreenTYPE.MY_REVIEW,
+                });
+              }}
+            >
               <div className="text-h2 mr-[4px]">리뷰</div>
               <div className="text-numbering1 text-skyblue-01">
                 {reviewCount}
@@ -125,7 +155,15 @@ export default function Page() {
                 <ScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] mt-[8px]">
                   {reviewList.map(({ idx, thumbnail }) => {
                     return (
-                      <Link href={`/reviews/${idx}`} key={idx}>
+                      <Link
+                        href={`/reviews/${idx}`}
+                        key={idx}
+                        onClick={(e) => {
+                          e.preventDefault();
+
+                          // TODO: 추후에 /contents/${idx}?review=${review.idx} 로 변경
+                        }}
+                      >
                         <div className="relative w-[112px] h-[178px]">
                           <CustomImage
                             src={
@@ -155,7 +193,18 @@ export default function Page() {
             </If>
           </div>
           <div className="flex flex-col mt-[24px]">
-            <Link className="flex items-center" href="/likets">
+            <Link
+              className="flex items-center"
+              href="/likets"
+              onClick={(e) => {
+                e.preventDefault();
+
+                stackRouterPush(router, {
+                  path: "/likets",
+                  screen: ScreenTYPE.MY_LIKET,
+                });
+              }}
+            >
               <div className="text-h2 mr-[4px]">라이켓</div>
               <div className="text-numbering1 text-skyblue-01">
                 {liketCount}
@@ -167,7 +216,13 @@ export default function Page() {
                 <ScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] mt-[8px]">
                   {liketList.map(({ idx, imgPath }) => {
                     return (
-                      <Link href={`/likets/${idx}`} key={idx}>
+                      <Link
+                        href={`/likets/${idx}`}
+                        key={idx}
+                        onClick={(e) => {
+                          e.preventDefault();
+                        }}
+                      >
                         <div className="relative w-[112px] h-[178px]">
                           <CustomImage
                             src={process.env.NEXT_PUBLIC_IMAGE_SERVER + imgPath}
@@ -200,14 +255,35 @@ export default function Page() {
           <LinkItem href="/account">계정 관리</LinkItem>
         </ButtonBase>
         <Divider width="100%" height="8px" />
-        <ButtonBase>
+        <ButtonBase
+          onClick={(e) => {
+            stackRouterPush(router, {
+              path: "/requested-contents",
+              screen: ScreenTYPE.REQUEST_CONTENT,
+            });
+          }}
+        >
           <LinkItem href="/requested-contents">컨텐츠 등록 요청</LinkItem>
         </ButtonBase>
-        <ButtonBase>
+        <ButtonBase
+          onClick={() => {
+            stackRouterPush(router, {
+              path: "/inquiries",
+              screen: ScreenTYPE.MY_INQUIRY,
+            });
+          }}
+        >
           <LinkItem href="/inquires">1:1문의</LinkItem>
         </ButtonBase>
         <Divider width="100%" height="8px" />
-        <ButtonBase>
+        <ButtonBase
+          onClick={() => {
+            stackRouterPush(router, {
+              path: "/terms",
+              screen: ScreenTYPE.TERMS_LIST,
+            });
+          }}
+        >
           <LinkItem href="/terms">약관/정책</LinkItem>
         </ButtonBase>
         <div className="flex justify-between items-center w-[100%] h-[48px] px-[24px]">
