@@ -18,6 +18,11 @@ export const ScreenTYPE = {
   TERMS_DETAIL: "Terms Detail",
   SOCIAL_SIGNUP: "Social Signup",
   TERMS_LIST: "Terms List",
+  EDIT_PROFILE: "Edit Profile",
+  MY_REVIEW: "My Review",
+  MY_LIKET: "My Liket",
+  MY_INQUIRY: "My Inquiry",
+  REQUEST_CONTENT: "Request Content",
 } as const;
 
 export const WebViewEventType = {
@@ -44,7 +49,8 @@ export interface StackRouterPushOption {
   screen?: (typeof ScreenTYPE)[keyof typeof ScreenTYPE];
 
   /**
-   * 스크린 넘어갈 때 스택으로 쌓을지 여부, true일 경우 해당 화면에서 스택으로 쌓여 들어감
+   * 스크린 넘어갈 때 스택으로 쌓을지 여부. 기본적으로 Push 되는 스크린이 하나 더 추가되는 형식.
+   * false로 할 경우 이전 스택은 전부 초기화하고 Main 스크린 위에 띄워지는 형태로 바뀜
    *
    * @example false
    * @default true
