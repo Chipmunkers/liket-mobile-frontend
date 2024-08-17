@@ -119,7 +119,7 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
         </div>
         {props.content.reviewCount ? (
           <div className="text-numbering1 mt-[16px]">
-            {props.content.avgStarRating.toFixed(2)}{" "}
+            {props.content.avgStarRating.toFixed(1)}{" "}
             <span className="text-grey-02">/ 5.0</span>
           </div>
         ) : null}
