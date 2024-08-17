@@ -8,11 +8,11 @@ export const ScreenTYPE = {
   MAIN: "Main",
   SEARCH: "Search",
   LOGIN: "Login",
-};
+} as const;
 
 export const WebViewEventType = {
   ROUTER_EVENT: "ROUTER_EVENT",
-};
+} as const;
 
 /**
  * 스택 라우팅 옵션
@@ -80,7 +80,7 @@ const sendRouterEvent = <T extends "back" | string>(
     JSON.stringify({
       type: WebViewEventType.ROUTER_EVENT,
       path: path,
-      screen: screen,
+      screen: option?.screen,
       isStack: option?.isStack,
     })
   );
@@ -116,7 +116,7 @@ export const stackRouterPush = (
 ) => {
   const path = option.path || "/";
   const screen = option.screen || ScreenTYPE.MAIN;
-  const isStack = option.isStack || true;
+  const isStack = option.isStack === undefined ? true : option.isStack;
   const moveScreen = option.moveScreen || true;
 
   if (isApp()) {

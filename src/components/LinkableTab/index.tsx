@@ -21,7 +21,7 @@ import CustomDrawer from "../CustomDrawer";
 import customToast from "@/utils/customToast";
 import { useGetMyInfo } from "../../hooks/useGetMyInfo";
 import { ButtonBase } from "@mui/material";
-import { stackRouterPush } from "../../utils/stackRouter";
+import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
 
 interface LinkTabProps {
   isSelected: boolean;
@@ -214,7 +214,11 @@ const LinkableTab = ({ shadow = false }: Props) => {
           <ButtonBase
             className={`w-[20%] h-[44px]`}
             onClick={() => {
-              stackRouterPush(router, "/login", "Login");
+              stackRouterPush(router, {
+                path: "/login",
+                screen: ScreenTYPE.LOGIN,
+                isStack: false,
+              });
             }}
           >
             <MyPageIcon color={colors.grey["02"]} />
