@@ -22,10 +22,13 @@ export const ScreenTYPE = {
   MY_REVIEW: "My Review",
   MY_LIKET: "My Liket",
   MY_INQUIRY: "My Inquiry",
-  REQUEST_CONTENT: "Request Content",
+  MY_REQUEST_CONTENT: "Request Content",
   ACCOUNT: "Account",
   EDIT_MY_PASSWORD: "Edit My Password",
   DELETE_ACCOUNT: "Delete Account", // 회원탈퇴
+  NAVER_LOGIN: "Naver Login",
+  KAKAO_LOGIN: "Kakao Login",
+  APPLE_LOGIN: "Apple Login",
 } as const;
 
 export const WebViewEventType = {

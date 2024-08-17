@@ -11,10 +11,7 @@ import KakaoLogo from "./icon/kakao-logo.svg";
 import AppleLogo from "./icon/apple-logo.svg";
 import NaverLogo from "./icon/naver-logo.svg";
 import Logo from "./icon/logo.svg";
-import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
-import { headers } from "next/headers";
 import {
   ScreenTYPE,
   stackRouterBack,
@@ -53,6 +50,14 @@ export default function Page() {
             <Link
               href={process.env.NEXT_PUBLIC_API_SERVER + "/auth/kakao"}
               className="h-[100%] flex justify-center items-center w-[100%]"
+              onClick={(e) => {
+                e.preventDefault();
+
+                stackRouterPush(router, {
+                  path: process.env.NEXT_PUBLIC_API_SERVER + "/auth/kakao",
+                  screen: ScreenTYPE.KAKAO_LOGIN,
+                });
+              }}
             >
               <div className="absolute flex justify-center items-center w-[48px] h-[48px] left-[8px]">
                 <KakaoLogo />
@@ -66,6 +71,14 @@ export default function Page() {
             <Link
               href={process.env.NEXT_PUBLIC_API_SERVER + "/auth/apple"}
               className="h-[100%] flex justify-center items-center w-[100%]"
+              onClick={(e) => {
+                e.preventDefault();
+
+                stackRouterPush(router, {
+                  path: process.env.NEXT_PUBLIC_API_SERVER + "/auth/apple",
+                  screen: ScreenTYPE.APPLE_LOGIN,
+                });
+              }}
             >
               <div className="absolute flex justify-center items-center w-[48px] h-[48px] left-[8px]">
                 <AppleLogo />
@@ -79,6 +92,14 @@ export default function Page() {
             <Link
               href={process.env.NEXT_PUBLIC_API_SERVER + "/auth/naver"}
               className="h-[100%] flex justify-center items-center w-[100%]"
+              onClick={(e) => {
+                e.preventDefault();
+
+                stackRouterPush(router, {
+                  path: process.env.NEXT_PUBLIC_API_SERVER + "/auth/naver",
+                  screen: ScreenTYPE.NAVER_LOGIN,
+                });
+              }}
             >
               <div className="absolute flex justify-center items-center w-[48px] h-[48px] left-[8px]">
                 <NaverLogo />
@@ -110,7 +131,18 @@ export default function Page() {
             이메일로 로그인
           </Link>
           <Divider height="8px" width="1px" orientation="vertical" />
-          <Link href="/signup" className="text-grey-03 text-button6 ml-[16px]">
+          <Link
+            href="/signup"
+            className="text-grey-03 text-button6 ml-[16px]"
+            onClick={(e) => {
+              e.preventDefault();
+
+              stackRouterPush(router, {
+                path: "/signup",
+                screen: ScreenTYPE.SIGN_UP,
+              });
+            }}
+          >
             이메일로 회원가입
           </Link>
         </div>
