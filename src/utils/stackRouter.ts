@@ -8,6 +8,7 @@ export const ScreenTYPE = {
   MAIN: "Main",
   SEARCH: "Search",
   LOGIN: "Login",
+  CONTENT_DETAIL: "Content Detail",
 } as const;
 
 export const WebViewEventType = {
