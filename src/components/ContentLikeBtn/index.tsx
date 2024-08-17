@@ -58,6 +58,7 @@ const ContentLikeBtn = (props: {
     <button
       className={`cursor-pointer ${props.className}`}
       onClick={(e) => {
+        e.stopPropagation();
         e.preventDefault();
 
         if (!like) {
