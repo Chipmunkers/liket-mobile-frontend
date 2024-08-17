@@ -2,12 +2,15 @@
 
 import Control from "@/components/Control";
 import Header from "@/components/Header";
-import ProfileForm from "@/components/SignupForm/ProfileForm";
+import ProfileForm from "@/app/signup/components/ProfileForm";
 import { useSocialSignup } from "@/service/signup/hooks";
 import { ProfileFormData } from "@/types/signup";
 import customToast from "@/utils/customToast";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
+import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
 
 const INITIAL_FORM_STATE = {
   emailToken: "",
@@ -32,9 +35,13 @@ const SignUpPage = () => {
     setFormIndex(formIndex + 1);
   };
 
-  const { mutate } = useSocialSignup({
+  const { mutate, status } = useSocialSignup({
     onSuccess: () => {
-      router.push("/");
+      stackRouterPush(router, {
+        path: "/",
+        screen: ScreenTYPE.MAIN,
+        isStack: false,
+      });
     },
     onError: ({ response }) => {
       if (response?.status === 400) {
@@ -75,12 +82,12 @@ const SignUpPage = () => {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <LeftOption
           option={{
             back: true,
           }}
         />
-        <Header.MiddleText text={"프로필"} />
+        <MiddleText text={"프로필"} />
       </Header>
       <main>
         <div className="my-[16px] gap-[8px] center">
@@ -97,6 +104,7 @@ const SignUpPage = () => {
         <ProfileForm
           nextButtonText="라이켓 시작하기"
           onClickNextButton={onClickNextButtonInProfileForm}
+          status={status}
         />
       </main>
     </>

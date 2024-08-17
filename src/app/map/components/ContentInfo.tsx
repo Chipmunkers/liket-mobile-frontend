@@ -1,14 +1,31 @@
+"user client";
+
 import Link from "next/link";
 import Image from "next/image";
 import Badge from "@/components/Badge/Badge";
 import dayjs from "dayjs";
 import { MapContentEntity } from "@/types/api/map";
 import ContentLikeBtn from "../../../components/ContentLikeBtn";
+import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
+import { useRouter } from "next/navigation";
 
 const MapContentInfo = ({ content }: { content: MapContentEntity }) => {
+  const router = useRouter();
+
   return (
     <div className="w-[calc(100%-16px)] bottom-[--bottom-tab-height] mb-[8px] z-10 absolute left-[8px] bg-white rounded-[24px]">
-      <Link href={`/contents/${content.idx}`} className="relative flex m-4">
+      <Link
+        href={`/contents/${content.idx}`}
+        className="relative flex m-4"
+        onClick={(e) => {
+          e.preventDefault();
+
+          stackRouterPush(router, {
+            path: `/contents/${content.idx}`,
+            screen: ScreenTYPE.CONTENT_DETAIL,
+          });
+        }}
+      >
         <div className="relative w-[72px] h-[100px] mr-[16px]">
           <Image
             src={process.env.NEXT_PUBLIC_IMAGE_SERVER + content.imgList[0]}

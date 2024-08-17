@@ -17,22 +17,32 @@ import { getBanners } from "./_hooks/getBanners";
 import { getHotContentsForServer } from "./_hooks/getHotContents";
 import ReviewCard from "../components/Card/ReviewCard";
 import { getHotReview } from "./_hooks/getHotReviews";
+import dayjs from "dayjs";
+import LeftOption from "@/components/Header/LeftOption";
+import RightOption from "@/components/Header/RightOption";
+import { headers } from "next/headers";
+import { ScreenTYPE, stackRouterPush } from "../utils/stackRouter";
+import { useRouter } from "next/navigation";
+import HotPlaceSection from "./_components/HotPlaceSection";
 
-export default async function Home() {
+const Home = async () => {
   const { contentList: soonOpenContents } =
     await getSoonOpenContentsForServer();
   const { contentList: soonEndContents } = await getSoonEndContentsForServer();
   const { bannerList } = await getBanners();
-  const hotContent = await getHotContentsForServer();
+  const hotContentList = await getHotContentsForServer();
   const reviews = await getHotReview();
 
   return (
     <>
-      <Header>
-        <Header.LeftOption logo />
-        <Header.RightOption option={{ search: true, like: true }} />
+      <Header
+        checkUserAgent={true}
+        userAgent={headers().get("user-agent") || ""}
+      >
+        <LeftOption logo />
+        <RightOption option={{ search: true, like: true }} />
       </Header>
-      <main>
+      <main className="mb-[40px]">
         {/* 배너 */}
         <MainCarousel list={bannerList.map(({ imgPath }) => imgPath)} />
 
@@ -45,56 +55,7 @@ export default async function Home() {
         <Divider height="8px" width="100%" margin="24px 0" />
 
         {/* 핫플 차트 */}
-        <section>
-          <div className="pl-[24px] flex flex-row mb-[8px]">
-            <h2 className="text-h2">핫플차트</h2>
-            <div className="text-body5 text-grey-04 flex flex-col-reverse ml-[8px]">{`업로드 Date`}</div>
-          </div>
-          <CustomScrollContainer className="flex flex-row overflow-x-hidden gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-            {hotContent.map(({ idx, name, contentList }) => {
-              return (
-                <div key={idx}>
-                  <Link
-                    // TODO: 검색 페이지 구현 후 연결
-                    href="/search"
-                    className="flex item-center"
-                  >
-                    <div className="text-skyblue-01 text-body4 w-[200px]">
-                      {name}
-                    </div>
-                    <RightArrow
-                      fill={colors.skyblue["01"]}
-                      style={{
-                        display: "inline",
-                      }}
-                    />
-                  </Link>
-                  {contentList.length === 0 ? (
-                    <div className="text-body5 text-grey-04 mt-[8px]">
-                      컨텐츠가 없습니다.
-                    </div>
-                  ) : (
-                    <ul>
-                      {contentList.map((dummy, index) => {
-                        return (
-                          <li
-                            className="flex my-[13px] w-[256px]"
-                            key={dummy.idx}
-                          >
-                            <div className="text-numbering1 mr-[18px] center align-middle">
-                              {index + 1}
-                            </div>
-                            <HotPlaceListItem {...dummy} />
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  )}
-                </div>
-              );
-            })}
-          </CustomScrollContainer>
-        </section>
+        <HotPlaceSection contentList={hotContentList} />
 
         <Divider height="8px" width="100%" margin="24px 0" />
 
@@ -118,4 +79,6 @@ export default async function Home() {
       <LinkableTab shadow />
     </>
   );
-}
+};
+
+export default Home;

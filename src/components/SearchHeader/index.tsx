@@ -6,18 +6,36 @@ import RemoveIcon from "@/icons/remove.svg";
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ButtonBase } from "@mui/material";
+import {
+  ScreenTYPE,
+  stackRouterBack,
+  stackRouterPush,
+} from "../../utils/stackRouter";
 
 interface SearchHeaderProps {
   placeholder: string;
   onSearch: (text: string) => void;
+  replacePath?: string;
 }
 
-const SearchHeader = ({ placeholder, onSearch }: SearchHeaderProps) => {
+const SearchHeader = ({
+  placeholder,
+  onSearch,
+  replacePath,
+}: SearchHeaderProps) => {
   const [searchText, setSearchText] = useState("");
   const router = useRouter();
 
   const handleClickBackButton = () => {
-    router.back();
+    if (replacePath) {
+      stackRouterPush(router, {
+        path: "/search",
+        screen: ScreenTYPE.SEARCH,
+      });
+      return;
+    }
+
+    stackRouterBack(router);
   };
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -26,14 +44,11 @@ const SearchHeader = ({ placeholder, onSearch }: SearchHeaderProps) => {
 
   const handleClickRemoveButton = () => {
     setSearchText("");
+    onSearch(searchText);
   };
 
   const handleSubmitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!searchText.length) {
-      return;
-    }
 
     onSearch(searchText);
   };
@@ -55,16 +70,16 @@ const SearchHeader = ({ placeholder, onSearch }: SearchHeaderProps) => {
             autoCorrect="off"
             spellCheck={false}
             placeholder={placeholder}
-            className="w-[100%] text-body3 placeholder:text-body3 placeholder-grey-02"
+            className="w-[100%] text-body3 placeholder:text-body3 placeholder-grey-02 bg-white"
             onChange={handleChangeInput}
           />
-          {searchText.length >= 1 ? (
-            <button type="reset" onClick={handleClickRemoveButton}>
-              <RemoveIcon />
-            </button>
-          ) : (
+          {!searchText ? (
             <button type="submit">
               <SearchIcon />
+            </button>
+          ) : (
+            <button type="button" onClick={() => handleClickRemoveButton()}>
+              <RemoveIcon />
             </button>
           )}
         </form>

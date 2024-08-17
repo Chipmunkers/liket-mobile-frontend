@@ -3,6 +3,8 @@ import customFetch from "@/utils/fetch";
 import ErrorPage from "../../error";
 import DetailContent from "./components/DetailContent";
 import ContentNotFound from "./components/ContentNotFound";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
 
 interface PageProps {
   params: {
@@ -12,7 +14,7 @@ interface PageProps {
 
 export default async function Page({ params: { idx } }: PageProps) {
   const res = await customFetch("/culture-content/" + idx, {
-    next: { revalidate: 60 },
+    next: { revalidate: 0 },
   });
 
   if (res.ok) {
@@ -21,12 +23,12 @@ export default async function Page({ params: { idx } }: PageProps) {
     return (
       <>
         <Header>
-          <Header.LeftOption
+          <LeftOption
             option={{
               back: true,
             }}
           />
-          <Header.RightOption
+          <RightOption
             option={{
               search: {},
             }}
@@ -41,12 +43,12 @@ export default async function Page({ params: { idx } }: PageProps) {
     return (
       <>
         <Header>
-          <Header.LeftOption
+          <LeftOption
             option={{
               back: true,
             }}
           />
-          <Header.RightOption
+          <RightOption
             option={{
               search: {},
             }}

@@ -13,6 +13,14 @@ import Link from "next/link";
 import authStore from "@/stores/authStore";
 import { setAuthToken } from "@/utils/axios";
 import customToast from "@/utils/customToast";
+import DefaultLoading from "@/components/Loading/DefaultLoading";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
+import {
+  ScreenTYPE,
+  stackRouterBack,
+  stackRouterPush,
+} from "../../../utils/stackRouter";
 
 const schema = z.object({
   email: z.string().email("올바른 이메일을 입력해주세요."),
@@ -21,11 +29,15 @@ const schema = z.object({
 
 export default function Page() {
   const setToken = authStore(({ setToken }) => setToken);
-  const { mutate } = useLogin({
+  const { mutate, status } = useLogin({
     onSuccess: ({ data }) => {
       setAuthToken(data.token);
       setToken(data.token);
-      router.push("/");
+      stackRouterPush(router, {
+        path: "/",
+        screen: ScreenTYPE.MAIN,
+        isStack: false,
+      });
     },
     onError: ({ response }) => {
       if (response?.status === 400) {
@@ -70,14 +82,14 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <LeftOption
           option={{
             back: {
-              onClick: () => router.back(),
+              onClick: () => stackRouterBack(router),
             },
           }}
         />
-        <Header.MiddleText text="로그인" />
+        <MiddleText text="로그인" />
       </Header>
       <form
         className="flex flex-col grow pt-[16px]"
@@ -106,19 +118,30 @@ export default function Page() {
             </InputWrapper>
           </div>
           <div className="flex flex-row-reverse">
-            <Link className="text-button5 text-grey-02" href="/find/password">
+            <Link
+              className="text-button5 text-grey-02"
+              href="/find/password"
+              onClick={(e) => {
+                e.preventDefault();
+
+                stackRouterPush(router, {
+                  path: "/find/password",
+                  screen: ScreenTYPE.FIND_PASSWORD,
+                });
+              }}
+            >
               비밀번호 재설정
             </Link>
           </div>
         </div>
         <BottomButtonTabWrapper shadow>
           <Button
-            type="submit"
             fullWidth
-            disabled={!formState.isValid}
+            disabled={!formState.isValid || status === "pending"}
             height={48}
+            onClick={() => onSubmit()}
           >
-            로그인
+            {status === "pending" ? <DefaultLoading dotSize="8px" /> : "로그인"}
           </Button>
         </BottomButtonTabWrapper>
       </form>

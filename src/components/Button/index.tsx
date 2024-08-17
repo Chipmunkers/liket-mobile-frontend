@@ -13,7 +13,8 @@ type ButtonProps = StrictPropsWithChildren<
     onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
     height: 48 | 40;
   },
-  string
+  // ! 컴포넌트 땜방처리
+  string | any
 >;
 const Button = ({
   type = "button",

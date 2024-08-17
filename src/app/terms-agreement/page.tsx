@@ -10,6 +10,13 @@ import { useGetDetailTos, useGetTosList } from "@/service/terms/hooks";
 import { classNames } from "@/utils/helpers";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
+import {
+  ScreenTYPE,
+  stackRouterBack,
+  stackRouterPush,
+} from "../../utils/stackRouter";
 
 export default function Page() {
   const router = useRouter();
@@ -43,14 +50,14 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <LeftOption
           option={{
             close: {
-              onClick: () => router.back(),
+              onClick: () => stackRouterBack(router),
             },
           }}
         />
-        <Header.MiddleText text="로그인" />
+        <MiddleText text="로그인" />
       </Header>
       <main className="px-[24px] pt-[15px]">
         <div className="my-[8px]">
@@ -91,7 +98,10 @@ export default function Page() {
                   handleChangeCheckbox("youth-protection", isChecked)
                 }
                 onClickListItem={() => {
-                  router.push(`${pathname}?termIdx=${idx}`);
+                  stackRouterPush(router, {
+                    path: `${pathname}?termIdx=${idx}`,
+                    screen: ScreenTYPE.TERMS_DETAIL,
+                  });
                   setDetailTosIdx(idx);
                 }}
               >
@@ -106,7 +116,12 @@ export default function Page() {
           fullWidth
           height={48}
           disabled={!isAllAgreed}
-          onClick={() => router.replace("/signup/social")}
+          onClick={() =>
+            stackRouterPush(router, {
+              path: "/signup/social",
+              screen: ScreenTYPE.SOCIAL_SIGNUP,
+            })
+          }
         >
           다음
         </Button>
@@ -118,17 +133,17 @@ export default function Page() {
         )}
       >
         <Header>
-          <Header.LeftOption
+          <LeftOption
             option={{
               back: {
                 onClick: () => {
                   setDetailTosIdx(undefined);
-                  router.back();
+                  stackRouterBack(router);
                 },
               },
             }}
           />
-          <Header.MiddleText text={detailTosData?.title || ""} />
+          <MiddleText text={detailTosData?.title || ""} />
         </Header>
         <div className="full-modal-main">
           <div className="flex grow h-[100%]">

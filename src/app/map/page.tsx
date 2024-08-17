@@ -2,19 +2,16 @@
 
 import Header from "@/components/Header";
 import LinkableTab from "@/components/LinkableTab";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { classNames } from "@/utils/helpers";
 import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
 import Button from "@/components/Button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import CustomBottomSheet from "@/components/BottomSheet";
 import MapBottomSheetCard from "@/components/Card/MapBottomSheetCard";
-import FilterFilled from "@/icons/filter-filled.svg";
 import Filter from "@/icons/filter.svg";
 import ButtonGroup from "@/components/ButtonGroup";
-import { AGES, GENRES, STYLES } from "@/utils/const";
 import Chip from "@/components/Chip";
-import { AgeType, CityType, GenreType, StyleType } from "@/types/const";
 import { genres } from "../../../public/data/genre";
 import { Age, Genre, Style } from "@/types/content";
 import { ages } from "../../../public/data/age";
@@ -23,8 +20,13 @@ import customToast from "@/utils/customToast";
 import KakaoMap from "./components/KakaoMap";
 import { MapContentEntity } from "@/types/api/map";
 import MapContentInfo from "./components/ContentInfo";
-import Script from "next/script";
 import { ButtonBase } from "@mui/material";
+import { Sido, sidoList } from "../../../public/data/sido";
+import { Sigungu, sigunguList } from "../../../public/data/sigungu";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
+import { stackRouterBack } from "../../utils/stackRouter";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -34,49 +36,9 @@ export default function MapPage() {
   const isTownSelectionModalOpen = searchParams.get("isTownSelectionModalOpen");
   const isFilterModalOpen = searchParams.get("isFilterModalOpen");
 
-  // ! 레거시 영역
-  const [cityAndGuSelection, setCityAndGuSelection] = useState(
-    INITIAL_CITY_AND_GU_SELECTION
-  );
-
-  const { currentSelectedGu, newSelectedCity, newSelectedGu } =
-    cityAndGuSelection;
-
   const onClickTownSelection = () => {
-    router.push(`${pathname}?isTownSelectionModalOpen=true`);
+    router.replace(`${pathname}?isTownSelectionModalOpen=true`);
   };
-
-  const onCloseTownSelectionModal = () => {
-    router.back();
-    setCityAndGuSelection({
-      ...cityAndGuSelection,
-      newSelectedCity: cityAndGuSelection.currentSelectedCity,
-      newSelectedGu: cityAndGuSelection.currentSelectedGu,
-    });
-  };
-
-  const onClickGu = (gu: string) => {
-    const newCityAndGuSelection = { ...cityAndGuSelection };
-    newCityAndGuSelection.newSelectedGu = gu;
-    setCityAndGuSelection(newCityAndGuSelection);
-  };
-
-  const onClickCity = (city: (typeof CITIES)[number]) => {
-    const newCityAndGuSelection = { ...cityAndGuSelection };
-    newCityAndGuSelection.newSelectedCity = city;
-    newCityAndGuSelection.newSelectedGu = CITY_GU_MAP[city][0];
-    setCityAndGuSelection(newCityAndGuSelection);
-  };
-
-  const onClickSettingNeighbor = () => {
-    customToast("준비중인 기능입니다.");
-    setCityAndGuSelection({
-      ...cityAndGuSelection,
-      currentSelectedCity: cityAndGuSelection.newSelectedCity,
-      currentSelectedGu: cityAndGuSelection.newSelectedGu,
-    });
-  };
-  // ! 레거시 영역
 
   // * 현재 보여지고 있는 컨텐츠 목록
   const [contentList, setContentList] = useState<MapContentEntity[]>([]);
@@ -104,18 +66,43 @@ export default function MapPage() {
     styles: [],
   });
 
+  // * 지역 선택
+  const [selectSido, setSelectSido] = useState<Sido>(sidoList[0]);
+  const [selectSigungu, setSelectSigungu] = useState<Sigungu | null>(null);
+  const [selectLocation, setSelectLocation] = useState<{
+    sido: Sido;
+    sigungu: Sigungu | null;
+  }>({ sido: selectSido, sigungu: selectSigungu });
+
   const isSetMapFilter = (): boolean => {
     return !!(mapFilter.genre || mapFilter.age || mapFilter.styles.length);
   };
 
+  // * 현재 보고 있는 위치
+  const [latLng, setLatLng] = useState<{ lng: number; lat: number }>({
+    lng: Number(selectLocation.sigungu?.lng || selectLocation.sido.lng),
+    lat: Number(selectLocation.sigungu?.lat || selectLocation.sido.lat),
+  });
+
+  useEffect(() => {
+    setLatLng({
+      lng: Number(selectLocation.sigungu?.lng || selectLocation.sido.lng),
+      lat: Number(selectLocation.sigungu?.lat || selectLocation.sido.lat),
+    });
+  }, [selectLocation]);
+
   return (
     <>
       <Header key={"header"}>
-        <Header.LeftOption
-          townName={currentSelectedGu}
+        <LeftOption
+          townName={
+            selectLocation.sigungu
+              ? selectLocation.sido.name + " " + selectLocation.sigungu.name
+              : selectLocation.sido.name
+          }
           onClickTownSelection={onClickTownSelection}
         />
-        <Header.RightOption option={{ search: true, like: true }} />
+        <RightOption option={{ search: true, like: true }} />
       </Header>
       <main>
         <KakaoMap
@@ -124,6 +111,8 @@ export default function MapPage() {
           clickedContent={clickedContent}
           setClickedContent={setClickedContent}
           mapFilter={mapFilter}
+          latLng={latLng}
+          setLatLng={setLatLng}
         >
           <div className="absolute z-[2] mt-[16px] ml-[24px] w-100 flex items-center">
             <ButtonBase
@@ -131,7 +120,9 @@ export default function MapPage() {
                 "rounded-full w-[36px] h-[36px] shadow-[0_0_8px_0_rgba(0,0,0,0.16)]",
                 isSetMapFilter() ? "bg-skyblue-01" : "bg-white"
               )}
-              onClick={() => router.push(`${pathname}?isFilterModalOpen=true`)}
+              onClick={() =>
+                router.replace(`${pathname}?isFilterModalOpen=true`)
+              }
             >
               <Filter
                 className={!isSetMapFilter() ? "fill-grey-black" : "fill-white"}
@@ -186,13 +177,13 @@ export default function MapPage() {
       </main>
       <LinkableTab />
       <div
-        className="full-modal transform translate-y-full"
+        className="full-modal"
         style={{
           transform: !!isFilterModalOpen ? "translateY(0)" : "translateY(100%)",
         }}
       >
         <Header key={"filter-header"}>
-          <Header.LeftOption
+          <LeftOption
             key={"filter-option"}
             option={{
               close: {
@@ -200,12 +191,12 @@ export default function MapPage() {
                   setSelectedGenre(mapFilter.genre);
                   setSelectedAge(mapFilter.age);
                   setSelectedStyles(mapFilter.styles);
-                  router.back();
+                  stackRouterBack(router);
                 },
               },
             }}
           />
-          <Header.MiddleText text="필터" />
+          <MiddleText text="필터" />
         </Header>
         <div className="full-modal-main px-[24px] py-[16px] gap-[48px]">
           {/* 장르 선택 */}
@@ -303,7 +294,7 @@ export default function MapPage() {
                   age: undefined,
                   styles: [],
                 });
-                router.back();
+                router.replace("/map");
               }}
               variant="ghost"
               fullWidth
@@ -318,7 +309,7 @@ export default function MapPage() {
                   age: selectedAge,
                   styles: selectedStyles,
                 });
-                router.back();
+                router.replace("/map");
               }}
               fullWidth
             >
@@ -328,7 +319,7 @@ export default function MapPage() {
         </BottomButtonTabWrapper>
       </div>
       <div
-        className="full-modal transform translate-y-full"
+        className="full-modal"
         style={{
           transform: !!isTownSelectionModalOpen
             ? "translateY(0)"
@@ -336,31 +327,40 @@ export default function MapPage() {
         }}
       >
         <Header key={"town-filter-header"}>
-          <Header.LeftOption
+          <LeftOption
             option={{
               close: {
-                onClick: onCloseTownSelectionModal,
+                onClick: () => {
+                  setSelectSido(selectLocation.sido);
+                  setSelectSigungu(selectLocation.sigungu);
+                  router.replace("/map");
+                },
               },
             }}
           />
-          <Header.MiddleText text="지역설정" />
+          <MiddleText text="지역설정" />
         </Header>
         <div className="full-modal-main">
           <div className="flex grow h-[100%]">
             <div className="h-[100%] w-[50%] bg-grey-01">
               <ul className="flex flex-col w-[100%]">
-                {CITIES.map((CITY, index) => {
+                {sidoList.map((sido, index) => {
                   return (
                     <li
                       key={`city_${index}`}
                       className={classNames(
                         "center h-[48px]",
-                        newSelectedCity === CITY
+                        selectSido.cd === sido.cd
                           ? "bg-white text-skyblue-01"
                           : "bg-grey-01 text-grey-04"
                       )}
                     >
-                      <button onClick={() => onClickCity(CITY)}>{CITY}</button>
+                      <ButtonBase
+                        className="w-[100%] h-[100%]"
+                        onClick={() => setSelectSido(sido)}
+                      >
+                        {sido.fullName}
+                      </ButtonBase>
                     </li>
                   );
                 })}
@@ -368,121 +368,55 @@ export default function MapPage() {
             </div>
             <div className="w-[50%]">
               <ul className="flex flex-col w-[100%] h-[100%] overflow-y-auto">
-                {CITY_GU_MAP[newSelectedCity].map((GU, index) => {
-                  return (
-                    <li
-                      key={index}
-                      className={classNames(
-                        "center h-[48px] shrink-0",
-                        newSelectedGu === GU && "text-skyblue-01"
-                      )}
-                    >
-                      <button onClick={() => onClickGu(GU)}>{GU}</button>
-                    </li>
-                  );
-                })}
+                {sigunguList
+                  .filter((sigungu) => sigungu.bjd_cd.startsWith(selectSido.cd))
+                  .map((sigungu, index) => {
+                    return (
+                      <li
+                        key={index}
+                        className={classNames(
+                          "center h-[48px] shrink-0",
+                          selectSigungu?.cd === sigungu.cd && "text-skyblue-01"
+                        )}
+                      >
+                        <ButtonBase
+                          className="w-[100%] h-[100%]"
+                          onClick={() => setSelectSigungu(sigungu)}
+                        >
+                          {sigungu.name}
+                        </ButtonBase>
+                      </li>
+                    );
+                  })}
               </ul>
             </div>
           </div>
         </div>
         <BottomButtonTabWrapper shadow className="bg-white">
-          <Button height={48} onClick={onClickSettingNeighbor} fullWidth>
+          <Button
+            height={48}
+            onClick={() => {
+              if (
+                !selectSigungu ||
+                !selectSigungu.bjd_cd.startsWith(selectSido.cd)
+              ) {
+                setSelectSigungu(null);
+                setSelectLocation({
+                  sido: selectSido,
+                  sigungu: null,
+                });
+              } else {
+                setSelectLocation({ sido: selectSido, sigungu: selectSigungu });
+              }
+
+              router.replace("/map");
+            }}
+            fullWidth
+          >
             설정하기
           </Button>
         </BottomButtonTabWrapper>
       </div>
     </>
   );
-}
-
-const SEOUL_GU_DUMMY = [
-  "동대문구",
-  "도봉구",
-  "동작구",
-  "서대문구",
-  "마포구",
-  "서초구",
-  "은평구",
-  "용산구",
-  "영등포구",
-  "양천구",
-  "성북구",
-  "송파구",
-  "노원구",
-  "강서구",
-  "관악구",
-  "강북구",
-  "도봉구",
-  "광진구",
-  "구로구",
-  "금천구",
-];
-
-const INCHENON_GU_DUMMY = ["미추홀구", "부평구"];
-
-const GYEONGGI_GU_DUMMY = [
-  "권선구",
-  "기흥구",
-  "수정구",
-  "수지구",
-  "영통구",
-  "오정구",
-];
-
-const CITY_GU_MAP = {
-  서울광역시: SEOUL_GU_DUMMY,
-  인천광역시: INCHENON_GU_DUMMY,
-  경기도: GYEONGGI_GU_DUMMY,
-} as const;
-
-const CITIES = Object.keys(CITY_GU_MAP) as Array<keyof typeof CITY_GU_MAP>;
-
-const INITIAL_CITY_AND_GU_SELECTION = {
-  currentSelectedCity: CITIES[0],
-  currentSelectedGu: CITY_GU_MAP[CITIES[0]][0],
-  newSelectedCity: CITIES[0],
-  newSelectedGu: CITY_GU_MAP[CITIES[0]][0],
-};
-
-const FILTER_OPTIONS = {
-  장르: GENRES,
-  지역: CITIES,
-  연령대: AGES,
-  스타일: STYLES,
-} as const;
-
-const isAppliedFilterExist = ({
-  currentAges,
-  currentCities,
-  currentGenres,
-  currentStyles,
-}: AppliedFiltersType) => {
-  return (
-    currentAges.length !== 0 ||
-    currentCities.length !== 0 ||
-    currentGenres.length !== 0 ||
-    currentStyles.length !== 0
-  );
-};
-
-const getAppliedOptionList = (
-  prevOptionList: string[],
-  targetOption: string
-) => {
-  if (prevOptionList.some((option) => option === targetOption)) {
-    return prevOptionList.filter((option) => option !== targetOption);
-  }
-
-  return [...prevOptionList, targetOption];
-};
-
-interface AppliedFiltersType {
-  currentGenres: GenreType[];
-  currentAges: AgeType[];
-  currentStyles: StyleType[];
-  currentCities: CityType[];
-  newGenres: GenreType[];
-  newCities: CityType[];
-  newAges: AgeType[];
-  newStyles: StyleType[];
 }

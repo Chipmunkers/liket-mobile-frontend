@@ -9,6 +9,7 @@ import CloseIcon from "@/icons/close.svg";
 import { useRouter } from "next/navigation";
 import DropDown from "@/icons/dropdown.svg";
 import { ButtonBase } from "@mui/material";
+import { stackRouterBack } from "../../utils/stackRouter";
 
 type LeftOptionProps = XOR<
   {
@@ -68,7 +69,7 @@ const LeftOption = ({
             return;
           }
 
-          router.back();
+          stackRouterBack(router);
         }}
       >
         <BackIcon />

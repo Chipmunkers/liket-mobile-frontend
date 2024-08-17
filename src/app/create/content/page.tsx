@@ -36,6 +36,12 @@ import { ages } from "../../../../public/data/age";
 import { styles } from "../../../../public/data/style";
 import { useCreateContent } from "./hooks/useCreateContent";
 import { genres } from "../../../../public/data/genre";
+import { useGetContentDetail } from "./hooks/useGetContentDetail";
+import { useEditContent } from "./hooks/useEditContent";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
+import { stackRouterPush } from "../../../utils/stackRouter";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",
@@ -51,7 +57,7 @@ const schema = z.object({
   address: z.string().min(1, "필수로 입력돼야합니다."),
   age: z.string().min(1, "필수로 입력돼야합니다."),
   style: z.array(z.string()),
-  detailAddress: z.string(),
+  "additional-address": z.string().min(1, "필수로 입력돼야합니다."),
   openTime: z.string().min(1, "필수로 입력돼야합니다."),
   websiteLink: z.string().min(1, "필수로 입력돼야합니다."),
   condition: z.array(z.string()),
@@ -62,12 +68,28 @@ const schema = z.object({
 });
 
 export default function Page() {
-  const [uploadedImgs, setUploadedImgs] = useState<UploadedFileEntity[]>([]);
+  const searchParam = useSearchParams();
+  const editedContentIdx = searchParam.get("idx");
+  const { data: contentDetail, isFetched } = useGetContentDetail({
+    idx: editedContentIdx,
+    queryKey: ["requested-content-detail", editedContentIdx],
+    enabled: !!editedContentIdx,
+  });
+  const { mutate: editContent } = useEditContent({
+    idx: editedContentIdx,
+    onSuccess: () => {
+      router.replace("/requested-contents/" + editedContentIdx);
+    },
+  });
+
+  const [uploadedImgs, setUploadedImgs] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const { mutate: uploadContentImages } = useUploadContentImages({
     onSuccess: ({ data }) => {
-      setUploadedImgs([...uploadedImgs, ...data]);
-      setValue("imgList", [...uploadedImgs, ...data]);
+      const newData = data.map(({ filePath }) => filePath);
+
+      setUploadedImgs([...uploadedImgs, ...newData]);
+      setValue("imgList", [...uploadedImgs, ...newData]);
       trigger("imgList");
     },
   });
@@ -93,14 +115,14 @@ export default function Page() {
     address: string;
     age: string;
     style: string[];
-    detailAddress: string;
+    "additional-address": string;
     openTime: string;
     websiteLink: string;
     condition: string[];
     description: string;
     startDate: string;
     endDate: string;
-    imgList: UploadedFileEntity[];
+    imgList: string[];
   }>({
     mode: "onBlur",
     defaultValues: {
@@ -109,7 +131,7 @@ export default function Page() {
       address: "",
       age: "",
       style: [],
-      detailAddress: "",
+      "additional-address": "",
       openTime: "",
       websiteLink: "",
       condition: [],
@@ -121,12 +143,11 @@ export default function Page() {
     resolver: zodResolver(schema),
   });
 
-  const searchParam = useSearchParams();
   const { formState, watch, register, setValue, getValues, trigger } = methods;
   const isSearchModalOpen = searchParam.get("isSearchModalOpen");
   const { mutate: createContent } = useCreateContent({
     onSuccess: ({ data }) => {
-      console.log(data.idx);
+      router.replace(`/requested-contents/${data.idx}`);
     },
   });
 
@@ -206,6 +227,76 @@ export default function Page() {
   };
 
   useEffect(() => {
+    if (contentDetail && isFetched) {
+      const {
+        title,
+        genre,
+        location,
+        startDate,
+        endDate,
+        age,
+        style,
+        openTime,
+        websiteLink,
+        description,
+        isFee,
+        isParking,
+        isPet,
+        isReservation,
+        imgList,
+      } = contentDetail;
+
+      const condition = ["에약", "주차", "입장료", "반려동물"].reduce(
+        (prev, cur) => {
+          if (prev.length === 1 && prev[0] === "") {
+            prev.pop();
+          }
+
+          if (cur === "예약" && isReservation) {
+            prev.push("예약");
+          }
+
+          if (cur === "주차" && isParking) {
+            prev.push("주차");
+          }
+
+          if (cur === "반려동물" && isPet) {
+            prev.push("반려동물");
+          }
+
+          if (cur === "입장료" && isFee) {
+            prev.push("입장료");
+          }
+
+          return prev;
+        },
+        [""]
+      );
+      setValue("address", location.address);
+      setValue("title", title);
+      setValue("genre", genre.name);
+      setValue("additional-address", location.detailAddress);
+      setValue("description", description);
+      setValue("age", age.name);
+      setValue("startDate", formatDateToYYYYMMDD(startDate));
+      setValue("endDate", formatDateToYYYYMMDD(endDate));
+      setValue(
+        "style",
+        style.map(({ name }) => name)
+      );
+      setValue("openTime", openTime);
+      setValue("websiteLink", websiteLink);
+      setValue("condition", condition);
+
+      setDetailAddress(location.address);
+      setAddressInformation(location);
+      setUploadedImgs([...imgList]);
+      setValue("imgList", [...imgList]);
+      trigger();
+    }
+  }, [contentDetail, isFetched, setValue]);
+
+  useEffect(() => {
     const $mapScript = document.createElement("script");
     $mapScript.async = false;
     $mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_API_KEY}&autoload=false&libraries=services`;
@@ -224,9 +315,9 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption option={{ back: true }} />
-        <Header.MiddleText text="컨텐츠 등록 요청" />
-        <Header.RightOption
+        <LeftOption option={{ back: true }} />
+        <MiddleText text="컨텐츠 등록 요청" />
+        <RightOption
           option={{
             check: {
               disabled: !formState.isValid,
@@ -236,7 +327,6 @@ export default function Page() {
                   style,
                   genre,
                   condition,
-                  detailAddress,
                   title,
                   openTime,
                   websiteLink,
@@ -250,7 +340,7 @@ export default function Page() {
                 const styleIdxList = findIdxsByNames(styles, style);
 
                 if (addressInformation && genreIdx && ageIdx && styleIdxList) {
-                  createContent({
+                  const finalDataToSave = {
                     isPet: condition.includes("반려동물"),
                     isFee: condition.includes("입장료"),
                     isParking: condition.includes("주차"),
@@ -262,38 +352,17 @@ export default function Page() {
                     openTime,
                     websiteLink,
                     description,
-                    startDate,
-                    endDate,
-                    imgList: imgList.map(({ filePath }) => filePath),
+                    startDate: startDate.replace(/\./g, "-"),
+                    endDate: endDate.replace(/\./g, "-"),
+                    imgList: imgList,
                     location: {
                       ...addressInformation,
-                      detailAddress,
+                      detailAddress: getValues("additional-address"),
                     },
-                    // imgList: ["abc"],
-                    // genreIdx: 5,
-                    // ageIdx: 4,
-                    // styleIdxList: [1, 4, 5],
-                    // location: {
-                    //   detailAddress: "LH아파트 1205호",
-                    //   address: "전북 익산시 부송동 100",
-                    //   region1Depth: "서울",
-                    //   region2Depth: "강동구",
-                    //   positionX: 126.99597295767953,
-                    //   positionY: 35.97664845766847,
-                    //   hCode: "4514069000",
-                    //   bCode: "4514013400",
-                    // },
-                    // title: "string",
-                    // description: "200글자가 안되는 description",
-                    // websiteLink: "https://google.com",
-                    // startDate: "2024-05-07T00:00:00.000Z",
-                    // endDate: "2024-05-07T00:00:00.000Z",
-                    // openTime: "월-금 12:00-20:00",
-                    // isFee: true,
-                    // isReservation: false,
-                    // isPet: true,
-                    // isParking: true,
-                  });
+                  };
+                  editedContentIdx
+                    ? editContent(finalDataToSave)
+                    : createContent(finalDataToSave);
                 }
               },
             },
@@ -347,8 +416,8 @@ export default function Page() {
             </InputWrapper>
             <InputWrapper margin="8px 0 0 0">
               <Input
-                field="detailAddress"
-                placeholder="상세주소를 입력해주세요."
+                field="additional-address"
+                placeholder="상세주소를 입력해주세요. (필수)"
                 register={register}
                 formState={formState}
               />
@@ -510,20 +579,24 @@ export default function Page() {
               >
                 <CreateIcon color="#fff" />
               </button>
-              {uploadedImgs.map(({ fullUrl }) => {
+              {uploadedImgs.map((filePath) => {
                 return (
                   <li
-                    key={fullUrl}
+                    key={filePath}
                     className="w-[96px] h-[96px] relative shrink-0"
                   >
-                    <Image src={fullUrl} fill alt="업로드된 이미지" />
+                    <Image
+                      src={process.env.NEXT_PUBLIC_IMAGE_SERVER + filePath}
+                      fill
+                      alt="업로드된 이미지"
+                    />
                     <button
                       type="button"
                       aria-label="현재 선택된 이미지 삭제"
                       className="absolute right-[8px] top-[8px]"
                       onClick={() => {
                         const newImgList = uploadedImgs.filter(
-                          ({ fullUrl: targetUrl }) => targetUrl !== fullUrl
+                          (targetFilePath) => targetFilePath !== filePath
                         );
 
                         setUploadedImgs(newImgList);
@@ -700,7 +773,7 @@ export default function Page() {
           minDate={
             tempStartDate ? dayjs(tempStartDate) : dayjs(`${thisYear - 100}`)
           }
-          maxDate={dayjs()}
+          maxDate={dayjs(new Date())}
         />
         <div className="flex h-[98px] px-[24px]">
           <Button
@@ -722,14 +795,14 @@ export default function Page() {
         }}
       >
         <Header>
-          <Header.LeftOption
+          <LeftOption
             option={{
               back: {
                 onClick: () => router.back(),
               },
             }}
           />
-          <Header.MiddleText text="주소 검색" />
+          <MiddleText text="주소 검색" />
         </Header>
         <div className="full-modal-main">
           <div id="search-list" className="flex grow h-[100%] mx-[24px]"></div>
@@ -750,3 +823,13 @@ const findIdxByName = (
   list: { idx: number; name: string }[],
   name: string
 ): number | undefined => list.find((item) => item.name === name)?.idx;
+
+function formatDateToYYYYMMDD(isoDate: string): string {
+  const date = new Date(isoDate);
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}.${month}.${day}`;
+}

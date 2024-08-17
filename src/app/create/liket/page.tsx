@@ -14,6 +14,9 @@ import { Else, If, Then } from "react-if";
 import useWriteTab from "@/hooks/useWriteTab";
 import useCreateLiket from "@/hooks/useCreateLiket";
 import WriteTab from "@/components/WriteTab";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 const NoSSRLiketUploader = dynamic(() => import("@/components/LiketUploader"), {
   ssr: false,
@@ -69,13 +72,13 @@ export default function Page() {
       <Header>
         {!isTextEnteringOpen && (
           <>
-            <Header.LeftOption
+            <LeftOption
               option={{
                 back: true,
               }}
             />
-            <Header.MiddleText text="라이켓 제작" />
-            <Header.RightOption
+            <MiddleText text="라이켓 제작" />
+            <RightOption
               option={{
                 check: {
                   disabled: !uploadedImage,

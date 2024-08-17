@@ -1,16 +1,29 @@
+"use client";
+
 import { StrictPropsWithChildren } from "@/types/common";
-import LeftOption from "./LeftOption";
-import RightOption from "./RightOption";
-import MiddleText from "./MiddleText";
 import { classNames } from "@/utils/helpers";
+import { useIsWebView } from "../../hooks/useIsWebView";
 
-type Props = StrictPropsWithChildren<{ transparent?: boolean }>;
+type Props = StrictPropsWithChildren<{
+  transparent?: boolean;
+  userAgent?: string;
+  checkUserAgent?: boolean;
+  test?: string;
+}>;
 
-const Header = ({ children, transparent = false }: Props) => {
+const Header = ({
+  children,
+  transparent = false,
+  userAgent,
+  checkUserAgent,
+}: Props) => {
+  const isWebview = useIsWebView(userAgent);
+
   return (
     <header
       className={classNames(
         "header",
+        isWebview && checkUserAgent ? "hidden" : "",
         transparent && "max-w-content mx-auto bg-transparent"
       )}
     >
@@ -18,9 +31,5 @@ const Header = ({ children, transparent = false }: Props) => {
     </header>
   );
 };
-
-Header.LeftOption = LeftOption;
-Header.RightOption = RightOption;
-Header.MiddleText = MiddleText;
 
 export default Header;

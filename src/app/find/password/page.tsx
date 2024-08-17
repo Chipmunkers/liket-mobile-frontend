@@ -2,10 +2,14 @@
 
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
-import { PasswordResetEmailForm } from "@/components/SignupForm/EmailForm";
+import { PasswordResetEmailForm } from "@/app/signup/components/EmailForm";
 import { useState } from "react";
-import PasswordForm from "@/components/SignupForm/PasswordForm";
+import PasswordForm from "@/app/signup/components/PasswordForm";
 import { useResetPassword } from "@/service/reset/hooks";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
+import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
 
 export default function Page() {
   const [formIndex, setFormIndex] = useState(0);
@@ -18,7 +22,11 @@ export default function Page() {
   };
   const { mutate } = useResetPassword({
     onSuccess: () => {
-      router.replace("/login/email");
+      stackRouterPush(router, {
+        path: "/login/email",
+        screen: ScreenTYPE.EMAIL_LOGIN,
+        isStack: false,
+      });
     },
   });
 
@@ -31,14 +39,14 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <LeftOption
           option={{
             close: {
               onClick: () => router.back(),
             },
           }}
         />
-        <Header.MiddleText text="비밀번호 재설정" />
+        <MiddleText text="비밀번호 재설정" />
       </Header>
       {formIndex === 0 && <PasswordResetEmailForm updateForm={updateForm} />}
       {formIndex === 1 && (

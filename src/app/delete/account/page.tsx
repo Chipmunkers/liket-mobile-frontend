@@ -14,6 +14,13 @@ import { setAuthToken } from "@/utils/axios";
 import authStore from "@/stores/authStore";
 import { useQueryClient } from "@tanstack/react-query";
 import customToast from "../../../utils/customToast";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
+import {
+  ScreenTYPE,
+  stackRouterBack,
+  stackRouterPush,
+} from "../../../utils/stackRouter";
 
 export default function Page() {
   const queryClient = useQueryClient();
@@ -21,9 +28,13 @@ export default function Page() {
   const { mutate } = useDeleteAccount({
     onSuccess: () => {
       queryClient.invalidateQueries();
-      router.replace("/");
       setAuthToken("");
       setToken("");
+      stackRouterPush(router, {
+        path: "/",
+        screen: ScreenTYPE.MAIN,
+        isStack: false,
+      });
     },
     onError: () => {
       customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
@@ -46,8 +57,8 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption option={{ back: true }} />
-        <Header.MiddleText text="회원탈퇴" />
+        <LeftOption option={{ back: true }} />
+        <MiddleText text="회원탈퇴" />
       </Header>
       <main>
         <div className="px-[24px] mt-[24px]">
@@ -96,7 +107,9 @@ export default function Page() {
               <CheckBoxWithLink
                 isChecked={selectedIndex === 6}
                 onChangeCheckbox={() => handleChangeCheckbox(6)}
-                onClickListItem={() => {}}
+                onClickListItem={() => {
+                  handleChangeCheckbox(6);
+                }}
               >
                 기타
               </CheckBoxWithLink>
@@ -122,7 +135,7 @@ export default function Page() {
             <Button
               height={48}
               onClick={() => {
-                router.back();
+                stackRouterBack(router);
               }}
               variant="ghost"
               fullWidth

@@ -14,8 +14,28 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./stories/**/*.{js,ts,jsx,tsx}",
   ],
+  important: true,
   theme: {
     extend: {
+      keyframes: {
+        bounce1: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        bounce2: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        bounce3: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+      },
+      animation: {
+        bounce1: "bounce1 0.6s infinite",
+        bounce2: "bounce2 0.6s infinite 0.2s",
+        bounce3: "bounce3 0.6s infinite 0.4s",
+      },
       screens: {
         sm: "390px",
       },

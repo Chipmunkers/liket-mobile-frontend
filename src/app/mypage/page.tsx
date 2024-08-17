@@ -15,6 +15,8 @@ import { useEffect } from "react";
 import { If, Then, Else } from "react-if";
 import ScrollContainer from "react-indiana-drag-scroll";
 import customToast from "../../utils/customToast";
+import VerticalDivider from "./icons/vertical-divider.svg";
+import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
 
 export default function Page() {
   const router = useRouter();
@@ -26,7 +28,11 @@ export default function Page() {
   useEffect(() => {
     if (!error) return;
 
-    router.replace("/login");
+    stackRouterPush(router, {
+      path: "/login",
+      screen: ScreenTYPE.LOGIN,
+      isStack: false,
+    });
   }, [error, router]);
 
   if (!data) {
@@ -51,7 +57,18 @@ export default function Page() {
           <div className="flex mt-[64px]">
             <div className="grow">
               <div className="flex flex-col">
-                <Link className="text-h1" href="/mypage/edit/profile">
+                <Link
+                  className="text-h1"
+                  href="/mypage/edit/profile"
+                  onClick={(e) => {
+                    e.preventDefault();
+
+                    stackRouterPush(router, {
+                      path: "/mypage/edit/profile",
+                      screen: ScreenTYPE.EDIT_PROFILE,
+                    });
+                  }}
+                >
                   {nickname}
                   <RightArrow
                     style={{
@@ -60,17 +77,41 @@ export default function Page() {
                   />
                 </Link>
                 <div className="text-body5 text-grey-04 mt-[7px]">{email}</div>
-                <div className="flex text-body3 items-center mt-[15px]">
-                  좋아요{" "}
-                  <ButtonBase
-                    disableRipple={true}
-                    className="text-numbering1 text-skyblue-01 ml-[4px]"
-                    onClick={() => {
-                      customToast("준비중인 기능입니다.");
-                    }}
-                  >
-                    {likeCount}
-                  </ButtonBase>
+                <div className="flex mt-[15px]">
+                  <div className="flex text-body3 items-end">
+                    좋아요{" "}
+                    <ButtonBase
+                      disableRipple={true}
+                      className="text-numbering1 text-skyblue-01 ml-[4px] h-[18px]"
+                      onClick={() => {
+                        stackRouterPush(router, {
+                          path: "/like",
+                          screen: ScreenTYPE.LIKE,
+                        });
+                      }}
+                    >
+                      <div className="text-numbering1 text-skyblue-01 ml-[4px]">
+                        {likeCount}
+                      </div>
+                    </ButtonBase>
+                  </div>
+                  <div className="flex items-center mx-[16px]">
+                    <VerticalDivider />
+                  </div>
+                  <div className="flex text-body3 items-end">
+                    루트보관함{" "}
+                    <ButtonBase
+                      disableRipple={true}
+                      className="text-numbering1 text-skyblue-01 ml-[4px] h-[18px]"
+                      onClick={() => {
+                        customToast("열심히 준비중입니다!");
+                      }}
+                    >
+                      <div className="text-numbering1 text-skyblue-01 ml-[4px]">
+                        0
+                      </div>
+                    </ButtonBase>
+                  </div>
                 </div>
               </div>
             </div>
@@ -78,8 +119,9 @@ export default function Page() {
               <div className="w-[80px] h-[80px] rounded-full relative overflow-hidden">
                 <CustomImage
                   src={
-                    profileImgPath &&
-                    process.env.NEXT_PUBLIC_IMAGE_SERVER + profileImgPath
+                    profileImgPath
+                      ? process.env.NEXT_PUBLIC_IMAGE_SERVER + profileImgPath
+                      : ""
                   }
                   fallbackImg={"/icons/default-avatar.svg"}
                   alt="프로필 이미지"
@@ -90,7 +132,18 @@ export default function Page() {
             </div>
           </div>
           <div className="flex flex-col mt-[24px]">
-            <Link className="flex items-center" href="/reviews">
+            <Link
+              className="flex items-center"
+              href="/reviews"
+              onClick={(e) => {
+                e.preventDefault();
+
+                stackRouterPush(router, {
+                  path: "/reviews",
+                  screen: ScreenTYPE.MY_REVIEW,
+                });
+              }}
+            >
               <div className="text-h2 mr-[4px]">리뷰</div>
               <div className="text-numbering1 text-skyblue-01">
                 {reviewCount}
@@ -102,7 +155,15 @@ export default function Page() {
                 <ScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] mt-[8px]">
                   {reviewList.map(({ idx, thumbnail }) => {
                     return (
-                      <Link href={`/reviews/${idx}`} key={idx}>
+                      <Link
+                        href={`/reviews/${idx}`}
+                        key={idx}
+                        onClick={(e) => {
+                          e.preventDefault();
+
+                          // TODO: 추후에 /contents/${idx}?review=${review.idx} 로 변경
+                        }}
+                      >
                         <div className="relative w-[112px] h-[178px]">
                           <CustomImage
                             src={
@@ -126,13 +187,24 @@ export default function Page() {
               </Then>
               <Else>
                 <div className="text-body5 text-grey-04">
-                  컨텐츠가 없습니다.
+                  게시물이 없습니다.
                 </div>
               </Else>
             </If>
           </div>
           <div className="flex flex-col mt-[24px]">
-            <Link className="flex items-center" href="/likets">
+            <Link
+              className="flex items-center"
+              href="/likets"
+              onClick={(e) => {
+                e.preventDefault();
+
+                stackRouterPush(router, {
+                  path: "/likets",
+                  screen: ScreenTYPE.MY_LIKET,
+                });
+              }}
+            >
               <div className="text-h2 mr-[4px]">라이켓</div>
               <div className="text-numbering1 text-skyblue-01">
                 {liketCount}
@@ -144,7 +216,13 @@ export default function Page() {
                 <ScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] mt-[8px]">
                   {liketList.map(({ idx, imgPath }) => {
                     return (
-                      <Link href={`/likets/${idx}`} key={idx}>
+                      <Link
+                        href={`/likets/${idx}`}
+                        key={idx}
+                        onClick={(e) => {
+                          e.preventDefault();
+                        }}
+                      >
                         <div className="relative w-[112px] h-[178px]">
                           <CustomImage
                             src={process.env.NEXT_PUBLIC_IMAGE_SERVER + imgPath}
@@ -166,25 +244,53 @@ export default function Page() {
               </Then>
               <Else>
                 <div className="text-body5 text-grey-04">
-                  컨텐츠가 없습니다.
+                  게시물이 없습니다.
                 </div>
               </Else>
             </If>
           </div>
         </div>
         <Divider width="100%" height="8px" margin="24px 0 0 0" />
-        <ButtonBase>
+        <ButtonBase
+          onClick={() => {
+            stackRouterPush(router, {
+              path: "/account",
+              screen: ScreenTYPE.ACCOUNT,
+            });
+          }}
+        >
           <LinkItem href="/account">계정 관리</LinkItem>
         </ButtonBase>
         <Divider width="100%" height="8px" />
-        <ButtonBase>
+        <ButtonBase
+          onClick={(e) => {
+            stackRouterPush(router, {
+              path: "/requested-contents",
+              screen: ScreenTYPE.MY_REQUEST_CONTENT,
+            });
+          }}
+        >
           <LinkItem href="/requested-contents">컨텐츠 등록 요청</LinkItem>
         </ButtonBase>
-        <ButtonBase>
+        <ButtonBase
+          onClick={() => {
+            stackRouterPush(router, {
+              path: "/inquiries",
+              screen: ScreenTYPE.MY_INQUIRY,
+            });
+          }}
+        >
           <LinkItem href="/inquires">1:1문의</LinkItem>
         </ButtonBase>
         <Divider width="100%" height="8px" />
-        <ButtonBase>
+        <ButtonBase
+          onClick={() => {
+            stackRouterPush(router, {
+              path: "/terms",
+              screen: ScreenTYPE.TERMS_LIST,
+            });
+          }}
+        >
           <LinkItem href="/terms">약관/정책</LinkItem>
         </ButtonBase>
         <div className="flex justify-between items-center w-[100%] h-[48px] px-[24px]">

@@ -2,15 +2,20 @@
 
 import Control from "@/components/Control";
 import Header from "@/components/Header";
-import EmailForm from "@/components/SignupForm/EmailForm";
-import PasswordForm from "@/components/SignupForm/PasswordForm";
-import ProfileForm from "@/components/SignupForm/ProfileForm";
+import EmailForm from "./components/EmailForm";
+import PasswordForm from "./components/PasswordForm";
+import ProfileForm from "./components/ProfileForm";
 import { useLocalSignup } from "@/service/signup/hooks";
 import authStore from "@/stores/authStore";
 import { ProfileFormData } from "@/types/signup";
 import { setAuthToken } from "@/utils/axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { AxiosError } from "axios";
+import customToast from "../../utils/customToast";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
+import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
 
 const INITIAL_FORM_STATE = {
   emailToken: "",
@@ -32,11 +37,32 @@ const SignUpPage = () => {
   };
   const setToken = authStore(({ setToken }) => setToken);
 
-  const { mutate } = useLocalSignup({
+  const { mutate, status } = useLocalSignup({
     onSuccess: ({ data }) => {
       setToken(data.token);
       setAuthToken(data.token);
-      router.replace("/");
+      stackRouterPush(router, {
+        path: "/",
+        screen: ScreenTYPE.MAIN,
+        isStack: false,
+      });
+    },
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 401) {
+          customToast("이메일 인증이 해제되었습니다. 다시 시도해주세요.");
+          setFormIndex(0);
+          return;
+        }
+        if (err.response?.status === 409) {
+          if (err.response.data?.cause === "email") {
+            customToast("이미 사용중인 이메일 계정입니다.");
+            setFormIndex(0);
+            return;
+          }
+          customToast("이미 사용중인 닉네임입니다.");
+        }
+      }
     },
   });
 
@@ -61,12 +87,12 @@ const SignUpPage = () => {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <LeftOption
           option={{
             back: true,
           }}
         />
-        <Header.MiddleText text={formIndex === 2 ? "프로필" : "회원가입"} />
+        <MiddleText text={formIndex === 2 ? "프로필" : "회원가입"} />
       </Header>
       <main>
         <div className="my-[16px] gap-[8px] center">
@@ -74,7 +100,9 @@ const SignUpPage = () => {
             return (
               <Control
                 key={index}
-                onClick={() => {}}
+                onClick={() => {
+                  // ! 완료된 순서대로 이 전으로 갈 수 있도록 변경해야함
+                }}
                 isSelected={index === formIndex}
               />
             );
@@ -92,6 +120,7 @@ const SignUpPage = () => {
           <ProfileForm
             nextButtonText="라이켓 시작하기"
             onClickNextButton={onClickNextButtonInProfileForm}
+            status={status}
           />
         )}
       </main>

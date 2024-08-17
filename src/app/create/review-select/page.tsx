@@ -8,6 +8,9 @@ import { classNames } from "@/utils/helpers";
 import dayjs from "dayjs";
 import Image from "next/image";
 import { useState } from "react";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 export default function Page() {
   const [selectedId, setSelectedId] = useState(0);
@@ -138,14 +141,14 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <LeftOption
           option={{
             back: {
               onClick: () => {},
             },
           }}
         />
-        <Header.MiddleText text="리뷰 선택" />
+        <MiddleText text="리뷰 선택" />
       </Header>
       <main>
         <ul className="flex flex-col grow">

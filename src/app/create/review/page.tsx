@@ -27,6 +27,16 @@ import { useMyPage } from "@/service/profile";
 import { UploadedFileEntity } from "@/types/upload";
 import { TextareaAutosize } from "@mui/material";
 import ScrollContainer from "react-indiana-drag-scroll";
+import CustomImage from "@/components/CustomImage";
+import EmptyImage from "@/components/EmptyImage.tsx";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
+import {
+  ScreenTYPE,
+  stackRouterBack,
+  stackRouterPush,
+} from "../../../utils/stackRouter";
 
 const MAX_IMAGES_COUNT = 10;
 const MAX_REVIEW_LENGTH = 1000;
@@ -53,7 +63,11 @@ export default function Page() {
 
   const { mutate: writeReview } = useWriteReview({
     onSuccess: () => {
-      router.replace(`/contents/${targetContent?.idx}`);
+      stackRouterPush(router, {
+        path: `/contents/${targetContent?.idx}`,
+        screen: ScreenTYPE.CONTENT_DETAIL,
+        isStack: false,
+      });
     },
   });
 
@@ -77,7 +91,6 @@ export default function Page() {
     before: dayjs(new Date()),
     selected: undefined,
   });
-  const calendarRef = useRef(null);
 
   const handleClickRemoveImage = (targetFullUrl: string) => {
     const newUploadedImages = uploadedImages.filter(
@@ -92,7 +105,7 @@ export default function Page() {
   };
 
   const handleClickSearchContent = () => {
-    router.push(`${pathname}?isSearchContentModalOpen=true`);
+    router.replace(`${pathname}?isSearchContentModalOpen=true`);
   };
 
   const handleUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -120,7 +133,7 @@ export default function Page() {
     >
   ) => {
     setTargetContent(targetContent);
-    router.back();
+    router.replace("/create/review");
   };
 
   const enabledToSubmit =
@@ -160,17 +173,17 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <LeftOption
           option={{
             back: {
               onClick: () => {
-                router.back();
+                stackRouterBack(router);
               },
             },
           }}
         />
-        <Header.MiddleText text="작성" />
-        <Header.RightOption
+        <MiddleText text="작성" />
+        <RightOption
           option={{
             check: {
               disabled: !enabledToSubmit,
@@ -193,12 +206,16 @@ export default function Page() {
               {targetContent ? (
                 <div className="flex">
                   <div className="h-[48px] w-[48px] relative">
-                    <Image
+                    <CustomImage
+                      fallbackComponent={
+                        <EmptyImage width={"48"} height={"48"} />
+                      }
                       src={
                         process.env.NEXT_PUBLIC_IMAGE_SERVER +
                         targetContent.thumbnail
                       }
                       fill
+                      style={{ objectFit: "cover" }}
                       alt={`${targetContent.title}의 썸네일 이미지`}
                     />
                   </div>
@@ -233,7 +250,7 @@ export default function Page() {
               />
             </div>
           </div>
-          <div className="flex mt-[34px]">
+          <div className="flex mt-[34px] justify-between">
             <div>
               <div className="text-grey-04 text-caption mb-[12px]">
                 방문 날짜<span className="text-top">*</span>
@@ -343,7 +360,6 @@ export default function Page() {
         onClose={() => setIsYearSelectionDrawerOpen(false)}
       >
         <DateCalendar
-          ref={calendarRef}
           value={dateInfo.before}
           maxDate={dayjs(new Date())}
           onChange={(date) => {
@@ -382,9 +398,9 @@ export default function Page() {
         <MultiSectionDigitalClock
           value={timeInfo.before}
           maxTime={
-            dateInfo.selected && dayjs().isSame(dayjs(new Date()), "day")
-              ? undefined
-              : dayjs(new Date())
+            dateInfo.selected && isToday(dateInfo.selected)
+              ? dayjs(new Date())
+              : undefined
           }
           onChange={(time) => setTimeInfo({ ...timeInfo, before: time })}
         />
@@ -405,7 +421,7 @@ export default function Page() {
         </div>
       </CustomDrawer>
       <div
-        className="full-modal transform translate-y-full"
+        className="full-modal transform"
         style={{
           visibility: !!isSearchContentModalOpen ? "visible" : "hidden",
           transform: !!isSearchContentModalOpen
@@ -438,3 +454,14 @@ export default function Page() {
     </>
   );
 }
+
+const isToday = (date: Dayjs | undefined) => {
+  if (date) {
+    const todayStr = dayjs().format("YYYY.MM.DD");
+    const dateStr = date.format("YYYY.MM.DD");
+
+    return todayStr === dateStr;
+  }
+
+  return false;
+};

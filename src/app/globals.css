@@ -116,10 +116,12 @@ div[data-rsbs-header] {
 
 /* carousel */
 .dot {
+  opacity: 1 !important;
   width: 8px;
   height: 8px;
   border-radius: 50%;
   box-shadow: none !important;
+  background-color: "#f0f0f0" !important;
 }
 
 .dot.selected {

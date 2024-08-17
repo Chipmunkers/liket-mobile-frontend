@@ -1,7 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import ArrowIcon from "../icon/review-arrow.svg";
+import { useRouter } from "next/navigation";
+import { ScreenTYPE, stackRouterPush } from "../../../../utils/stackRouter";
 
 const EmptyReview = (props: { idx: number }) => {
+  const router = useRouter();
+
   return (
     <div className="flex flex-col justify-center items-center">
       <div className="flex flex-col w-[200px] items-center mt-[24px]">
@@ -11,6 +17,14 @@ const EmptyReview = (props: { idx: number }) => {
       <Link
         href={`/create/review?content=${props.idx}`}
         className="h-[18px] mt-[18px] flex items-center"
+        onClick={(e) => {
+          e.preventDefault();
+
+          stackRouterPush(router, {
+            path: `/create/review?content=${props.idx}`,
+            screen: ScreenTYPE.CREATE_REVIEW,
+          });
+        }}
       >
         <p className="text-body5 text-grey-02">리뷰 작성하러가기</p>
         <ArrowIcon />

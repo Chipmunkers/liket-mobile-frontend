@@ -1,6 +1,8 @@
 import { getTosList } from "@/apis/terms";
 import Header from "@/components/Header";
-import LinkItem from "@/components/LinkItem";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
+import TosItem from "./components/TosItem";
 
 export default async function Page() {
   const { tosList } = await getTosList();
@@ -8,21 +10,17 @@ export default async function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <LeftOption
           option={{
             back: true,
           }}
         />
-        <Header.MiddleText text="약관/정책" />
+        <MiddleText text="약관/정책" />
       </Header>
       <main>
-        {tosList.map(({ idx, title }) => {
-          return (
-            <LinkItem key={idx} href={`/terms/${idx}`}>
-              {title}
-            </LinkItem>
-          );
-        })}
+        {tosList.map((tos) => (
+          <TosItem tos={tos} />
+        ))}
       </main>
     </>
   );

@@ -1,10 +1,11 @@
 "use client";
 
 import Header from "@/components/Header";
-import ProfileForm from "@/components/SignupForm/ProfileForm";
+import ProfileForm from "@/app/signup/components/ProfileForm";
 import { useEditProfile } from "@/service/profile";
 import profileStore from "@/stores/profileStore";
 import customToast from "@/utils/customToast";
+import DevIng from "../../../../components/DevIng";
 
 export default function Page() {
   const { mutate } = useEditProfile({
@@ -22,6 +23,8 @@ export default function Page() {
     })
   );
 
+  return <DevIng />;
+
   // const handleClickNextButton = ({ file, nickname, gender, birth }) => {
   //   const formData = new FormData();
   //   formData.append("profileImg", file);
@@ -32,24 +35,24 @@ export default function Page() {
   //   mutate({ profileImg: file, nickname, gender, birth });
   // };
 
-  return (
-    <>
-      <Header>
-        <Header.LeftOption option={{ back: true }} />
-        <Header.MiddleText text="프로필" />
-      </Header>
-      <main>
-        <ProfileForm
-          currentFormInformation={{
-            nickname,
-            gender: "" + gender,
-            birth: "" + birth,
-            file: profileImgPath,
-          }}
-          nextButtonText="저장하기"
-          onClickNextButton={() => {}}
-        />
-      </main>
-    </>
-  );
+  // return (
+  //   <>
+  //     <Header>
+  //       <Header.LeftOption option={{ back: true }} />
+  //       <Header.MiddleText text="프로필" />
+  //     </Header>
+  //     <main>
+  //       <ProfileForm
+  //         currentFormInformation={{
+  //           nickname,
+  //           gender: "" + gender,
+  //           birth: "" + birth,
+  //           file: profileImgPath,
+  //         }}
+  //         nextButtonText="저장하기"
+  //         onClickNextButton={() => {}}
+  //       />
+  //     </main>
+  //   </>
+  // );
 }

@@ -2,53 +2,105 @@
 
 import Badge from "@/components/Badge/Badge";
 import Header from "@/components/Header";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import DevIng from "../../components/DevIng";
+import { useGetMyInfo } from "@/hooks/useGetMyInfo";
+import { useGetContents } from "./hooks/useGetContents";
+import RightOption from "@/components/Header/RightOption";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
 
 export default function Page() {
-  const [contents, setContents] = useState([1]);
   const router = useRouter();
+  const { data: myInformationData, error: myInformationError } = useGetMyInfo();
+  const { data, fetchNextPage, isFetching, refetch, error, hasNextPage } =
+    useGetContents(myInformationData?.idx);
+
+  const [target, setTarget] = useState<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (myInformationError?.response?.status === 401) {
+      router.replace("/login");
+    }
+  }, [myInformationError?.response?.status, router]);
+
+  useEffect(() => {
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isFetching && !error) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 1 }
+    );
+
+    observer.observe(target);
+    return () => {
+      observer.unobserve(target);
+    };
+  }, [target, hasNextPage, isFetching]);
 
   return <DevIng />;
 
   return (
     <>
       <Header>
-        <Header.LeftOption option={{ back: true }} />
-        <Header.MiddleText text="컨텐츠 등록 요청 내역" />
-        <Header.RightOption
+        <LeftOption option={{ back: true }} />
+        <MiddleText text="컨텐츠 등록 요청 내역" />
+        <RightOption
           option={{ create: { onClick: () => router.push("/create/content") } }}
         />
       </Header>
       <main className="px-[24px]">
-        {contents.length === 0 ? (
+        {data && data?.pages[0].contentList.length === 0 ? (
           <div className="empty">컨텐츠 등록 요청 내역이 없습니다.</div>
         ) : (
           <ul>
-            {DUMMY_DATA.map(({ id, genre, title, img, date, status }) => {
-              return (
-                <li
-                  key={id}
-                  className="flex justify-between items-center border-b-[1px] w-[100%] h-[80px] border-bottom"
-                >
-                  <div className="flex">
-                    <div className="w-[64px] h-[64px] mr-[12px] relative">
-                      <Image src={img} fill alt="컨텐츠 이미지" />
-                    </div>
-                    <div className="flex flex-col justify-between">
-                      <div className="text-body4 text-skyblue-01">{genre}</div>
-                      <div className="text-body2">{title}</div>
-                      <div className="text-body5 text-grey-04">{date}</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center">
-                    <Badge variant="active">등록 대기</Badge>
-                  </div>
-                </li>
-              );
-            })}
+            {data?.pages
+              .map((page) => page.contentList)
+              .flat()
+              ?.map(
+                ({ idx, genre, title, thumbnail, createdAt, acceptedAt }) => {
+                  return (
+                    <li
+                      key={idx}
+                      className="flex justify-between items-center border-b-[1px] w-[100%] h-[80px] border-bottom"
+                      onClick={() => router.push(`/requested-contents/${idx}`)}
+                    >
+                      <div className="flex">
+                        <div className="w-[64px] h-[64px] mr-[12px] relative">
+                          <Image
+                            src={
+                              process.env.NEXT_PUBLIC_IMAGE_SERVER + thumbnail
+                            }
+                            fill
+                            alt="컨텐츠 이미지"
+                          />
+                        </div>
+                        <div className="flex flex-col justify-between">
+                          <div className="text-body4 text-skyblue-01">
+                            {genre.name}
+                          </div>
+                          <div className="text-body2">{title}</div>
+                          <div className="text-body5 text-grey-04">
+                            {formatDateToYYYYMMDD(createdAt)}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center">
+                        <Badge variant={acceptedAt ? "active" : "waiting"}>
+                          {acceptedAt ? "등록완료" : "등록대기"}
+                        </Badge>
+                      </div>
+                    </li>
+                  );
+                }
+              )}
+            <div ref={setTarget} />
           </ul>
         )}
       </main>
@@ -56,11 +108,12 @@ export default function Page() {
   );
 }
 
-const DUMMY_DATA = Array.from({ length: 20 }, (_, index) => ({
-  id: index,
-  date: "2023.09.03",
-  genre: "팝업스토어",
-  title: "동대문엽기떡볶이 팝업스토어",
-  img: `https://picsum.photos/112/112?random=${index}`,
-  status: "active",
-}));
+function formatDateToYYYYMMDD(isoDate: string): string {
+  const date = new Date(isoDate);
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}

@@ -4,14 +4,15 @@ import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import BottomButtonTabWrapper from "../BottomButtonTabWrapper";
-import CustomDrawer from "../CustomDrawer";
-import { Input, InputWrapper, Label } from "../newInput";
-import MediumSelectButton from "../SelectButton/MediumSelectButton";
-import Button from "../Button";
-import AvatarUploader from "../AvatarUploader";
-import Chip from "../Chip";
+import BottomButtonTabWrapper from "../../../components/BottomButtonTabWrapper";
+import CustomDrawer from "../../../components/CustomDrawer";
+import { Input, InputWrapper, Label } from "../../../components/newInput";
+import MediumSelectButton from "../../../components/SelectButton/MediumSelectButton";
+import Button from "../../../components/Button";
+import AvatarUploader from "../../../components/AvatarUploader";
+import Chip from "../../../components/Chip";
 import { ProfileFormData } from "@/types/signup";
+import DefaultLoading from "../../../components/Loading/DefaultLoading";
 
 const profileScheme = z
   .object({
@@ -39,12 +40,14 @@ interface ProfileForm {
   currentFormInformation?: typeof FORM_DEFAULT_VALUES;
   nextButtonText: string;
   onClickNextButton: (insertedFormData: ProfileFormData) => void;
+  status: "error" | "idle" | "pending" | "success";
 }
 
 const ProfileForm = ({
   currentFormInformation = FORM_DEFAULT_VALUES,
   nextButtonText,
   onClickNextButton,
+  status,
 }: ProfileForm) => {
   const [isYearSelectionDrawerOpen, setIsYearSelectionDrawerOpen] =
     useState(false);
@@ -66,8 +69,14 @@ const ProfileForm = ({
       onClickNextButton({
         file: uploadedImageFile,
         nickname,
-        birth: +birth,
-        gender: +gender as 1 | 2,
+        birth: birth ? +birth : null,
+        gender: gender ? (+gender as 1 | 2) : null,
+      });
+    } else {
+      onClickNextButton({
+        nickname,
+        birth: birth ? +birth : null,
+        gender: gender ? (+gender as 1 | 2) : null,
       });
     }
   };
@@ -79,11 +88,14 @@ const ProfileForm = ({
           <div className="center mb-[34px]">
             <AvatarUploader
               defaultAvatar={
-                currentFormInformation.file &&
-                process.env.NEXT_PUBLIC_IMAGE_SERVER +
-                  currentFormInformation.file
+                currentFormInformation.file
+                  ? process.env.NEXT_PUBLIC_IMAGE_SERVER +
+                    currentFormInformation.file
+                  : ""
               }
               onUploadImage={(file, base64String) => {
+                if (!file) return;
+
                 setValue("file", base64String);
                 setUploadedImageFile(file);
               }}
@@ -153,12 +165,15 @@ const ProfileForm = ({
       <BottomButtonTabWrapper shadow>
         <Button
           fullWidth
-          // disabled={!formState.isValid}
-          disabled={false}
+          disabled={status === "pending"}
           height={48}
           onClick={handleClickNextButton}
         >
-          {nextButtonText}
+          {status === "pending" ? (
+            <DefaultLoading dotSize="8px" />
+          ) : (
+            nextButtonText
+          )}
         </Button>
       </BottomButtonTabWrapper>
       <CustomDrawer

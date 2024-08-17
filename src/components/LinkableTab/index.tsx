@@ -21,36 +21,7 @@ import CustomDrawer from "../CustomDrawer";
 import customToast from "@/utils/customToast";
 import { useGetMyInfo } from "../../hooks/useGetMyInfo";
 import { ButtonBase } from "@mui/material";
-
-interface LinkTabProps {
-  isSelected: boolean;
-  href: string;
-  icon: ReactNode;
-  selectedIcon: ReactNode;
-  className?: string;
-  onClickLink: (href: string) => void;
-}
-
-const LinkTab = ({
-  isSelected,
-  href,
-  icon,
-  selectedIcon,
-  className,
-  onClickLink,
-}: LinkTabProps) => {
-  return (
-    <Link
-      role="tab"
-      href={href}
-      aria-selected={isSelected}
-      className={className}
-      onClick={() => onClickLink(href)}
-    >
-      {isSelected ? selectedIcon : icon}
-    </Link>
-  );
-};
+import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
 
 interface Props {
   shadow?: boolean;
@@ -60,41 +31,11 @@ const LinkableTab = ({ shadow = false }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
   const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
-  const onClickLink = (href: string) => {
-    if (pathname === href) {
-      setIsWriteModalOpen(false);
-    }
-  };
 
   const isLoggedIn = false;
   const openModal = useModalStore(({ openModal }) => openModal);
 
   const { data: loginUser } = useGetMyInfo();
-
-  const [translateY, setTranslateY] = useState(0);
-  const [lastScrollTop, setLastScrollTop] = useState(0);
-
-  useEffect(() => {
-    if (["/map"].includes(pathname)) return;
-
-    const handleScroll = () => {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-
-      if (scrollTop > lastScrollTop) {
-        setTranslateY(100); // 스크롤 내릴 때 아래로 사라지게
-      } else {
-        setTranslateY(0); // 스크롤 올릴 때 다시 제자리로
-      }
-
-      setLastScrollTop(scrollTop <= 0 ? 0 : scrollTop);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [lastScrollTop]);
 
   return (
     <>
@@ -116,11 +57,17 @@ const LinkableTab = ({ shadow = false }: Props) => {
                   if (!loginUser) {
                     openModal("LoginModal", {
                       onClickPositive: () => {
-                        router.push("/login");
+                        stackRouterPush(router, {
+                          path: "/login",
+                          screen: ScreenTYPE.LOGIN,
+                        });
                       },
                     });
                   }
-                  router.push("/create/review");
+                  stackRouterPush(router, {
+                    path: "/create/review",
+                    screen: ScreenTYPE.CREATE_REVIEW,
+                  });
                 }}
                 className="bottom-sheet-button flex justify-start px-[24px]"
               >
@@ -200,30 +147,37 @@ const LinkableTab = ({ shadow = false }: Props) => {
             "flex w-[100%] justify-around h-[48px] z-[5] items-center bg-white",
             shadow && "shadow-[0px_-8px_16px_0px_rgba(0,0,0,0.04)]"
           )}
-          style={{
-            transform: `translateY(${translateY}%)`,
-            transition: "transform 0.3s ease-in-out",
-          }}
         >
-          <ButtonBase className="w-[20%] h-[44px]">
-            <LinkTab
-              href="/"
-              isSelected={pathname === "/" && !isWriteModalOpen}
-              icon={<HomeIcon color={colors.grey["02"]} />}
-              selectedIcon={<FilledHomeIcon color={colors.skyblue["01"]} />}
-              onClickLink={onClickLink}
-              className="w-[100%] h-[100%] flex justify-center items-center"
-            />
+          <ButtonBase
+            className="w-[20%] h-[44px]"
+            onClick={() => {
+              stackRouterPush(router, {
+                path: "/",
+                screen: ScreenTYPE.MAP,
+                isStack: false,
+              });
+            }}
+          >
+            {pathname === "/" ? (
+              <FilledHomeIcon color={colors.skyblue["01"]} />
+            ) : (
+              <HomeIcon color={colors.grey["02"]} />
+            )}
           </ButtonBase>
-          <ButtonBase className="w-[20%] h-[44px]">
-            <LinkTab
-              href="/map"
-              isSelected={pathname === "/map" && !isWriteModalOpen}
-              icon={<MapIcon color={colors.grey["02"]} />}
-              selectedIcon={<FilledMapIcon color={colors.skyblue["01"]} />}
-              className="w-[100%] h-[100%] flex justify-center items-center"
-              onClickLink={onClickLink}
-            />
+          <ButtonBase
+            className="w-[20%] h-[44px]"
+            onClick={(e) => {
+              stackRouterPush(router, {
+                path: "/map",
+                screen: ScreenTYPE.MAP,
+              });
+            }}
+          >
+            {pathname === "/map" ? (
+              <FilledMapIcon color={colors.skyblue["01"]} />
+            ) : (
+              <MapIcon color={colors.grey["02"]} />
+            )}
           </ButtonBase>
           <ButtonBase
             role="tab"
@@ -239,15 +193,21 @@ const LinkableTab = ({ shadow = false }: Props) => {
               <CreateIcon color={colors.grey["02"]} />
             )}
           </ButtonBase>
-          <ButtonBase className={`w-[20%] h-[44px]`}>
-            <LinkTab
-              href="/mypage"
-              isSelected={pathname === "/mypage" && !isWriteModalOpen}
-              icon={<MyPageIcon color={colors.grey["02"]} />}
-              onClickLink={onClickLink}
-              className="w-[100%] h-[100%] flex justify-center items-center"
-              selectedIcon={<FilledMyPageIcon color={colors.skyblue["01"]} />}
-            />
+          <ButtonBase
+            className={`w-[20%] h-[44px]`}
+            onClick={() => {
+              stackRouterPush(router, {
+                path: "/mypage",
+                screen: ScreenTYPE.MY_PAGE,
+                isStack: false,
+              });
+            }}
+          >
+            {pathname === "/mypage" ? (
+              <FilledMyPageIcon color={colors.skyblue["01"]} />
+            ) : (
+              <MyPageIcon color={colors.grey["02"]} />
+            )}
           </ButtonBase>
         </div>
       </div>

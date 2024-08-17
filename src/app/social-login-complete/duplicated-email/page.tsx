@@ -4,6 +4,8 @@ import Header from "@/components/Header";
 import { useRouter, useSearchParams } from "next/navigation";
 import KaKaoIcon from "@/icons/logins/kakao.svg";
 import { Case, Default, Switch } from "react-if";
+import LeftOption from "@/components/Header/LeftOption";
+import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
 
 export default function Page() {
   const router = useRouter();
@@ -18,11 +20,15 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <LeftOption
           option={{
             back: {
               onClick: () => {
-                router.replace("/login");
+                stackRouterPush(router, {
+                  path: "/login",
+                  screen: ScreenTYPE.LOGIN,
+                  isStack: false,
+                });
               },
             },
           }}

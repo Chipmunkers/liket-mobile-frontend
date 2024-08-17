@@ -4,18 +4,18 @@ import {
 } from "@/service/signup/hooks";
 import customToast from "@/utils/customToast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTimer } from "react-timer-hook";
-import BottomButtonTabWrapper from "../BottomButtonTabWrapper";
+import BottomButtonTabWrapper from "../../../components/BottomButtonTabWrapper";
 import {
   Input,
   InputButton,
   InputText,
   InputWrapper,
   Label,
-} from "../newInput";
-import Button from "../Button";
+} from "../../../components/newInput";
+import Button from "../../../components/Button";
 import { z } from "zod";
 import { useCheckEmailDuplication } from "@/service/emailCheck/hooks";
 
@@ -36,6 +36,12 @@ const EmailForm = ({ updateForm }: EmailFormProps) => {
     autoStart: false,
   });
   const [userEmail, setUserEmail] = useState("");
+
+  useEffect(() => {
+    if (minutes === 0 && seconds === 0) {
+      customToast("입력 시간이 초과되었습니다.");
+    }
+  }, [seconds]);
 
   const {
     mutate: sendAuthenticationNumber,

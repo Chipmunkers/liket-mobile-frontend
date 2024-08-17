@@ -15,6 +15,12 @@ import { ClusteredContentEntity, MapContentEntity } from "@/types/api/map";
 import { AxiosError } from "axios";
 import useModalStore from "../../../stores/modalStore";
 import { useRouter } from "next/navigation";
+import { classNames } from "../../../utils/helpers";
+import {
+  ScreenTYPE,
+  stackRouterBack,
+  stackRouterPush,
+} from "../../../utils/stackRouter";
 
 const KakaoMap = ({
   children,
@@ -23,6 +29,8 @@ const KakaoMap = ({
   clickedContent,
   setClickedContent,
   mapFilter,
+  latLng,
+  setLatLng,
 }: {
   children?: ReactNode;
   contentList: MapContentEntity[];
@@ -34,12 +42,23 @@ const KakaoMap = ({
     age: Age | undefined;
     styles: Style[];
   };
+  latLng: {
+    lat: number;
+    lng: number;
+  };
+  setLatLng: Dispatch<
+    SetStateAction<{
+      lat: number;
+      lng: number;
+    }>
+  >;
 }) => {
   const [loading, error] = useKakaoLoader({
     appkey: process.env.NEXT_PUBLIC_MAP_API_KEY || "",
     retries: 2,
   });
 
+  const [level, setLevel] = useState(8);
   const [mapInfo, setMapInfo] = useState<{
     bound: {
       top: { x: number; y: number };
@@ -48,15 +67,11 @@ const KakaoMap = ({
     level: number;
   }>({
     bound: {
-      top: { x: 127.04270718193654, y: 37.52115908000757 },
-      bottom: {
-        x: 127.05628928044179,
-        y: 37.507974075977934,
-      },
+      top: { x: 0, y: 0 },
+      bottom: { x: 0, y: 0 },
     },
-    level: 4,
+    level,
   });
-  const [level, setLevel] = useState(4);
 
   // * 현재 맵에 표시되고 있는 클러스터링 컨텐츠 목록
   const [clusteredContentList, setClusteredContentList] = useState<
@@ -108,6 +123,7 @@ const KakaoMap = ({
     setClusteredContentList([]);
     setContentList([]);
     setClickedContent(undefined);
+    setMapInfo({ ...mapInfo, level });
   }, [level, mapFilter]);
 
   const openModal = useModalStore(({ openModal }) => openModal);
@@ -124,10 +140,14 @@ const KakaoMap = ({
       if (error.response?.status === 401)
         openModal("LoginModal", {
           onClickPositive: () => {
-            router.replace("/login");
+            stackRouterPush(router, {
+              path: "/login",
+              screen: ScreenTYPE.LOGIN,
+              isStack: false,
+            });
           },
           onClickNegative: () => {
-            router.back();
+            stackRouterBack(router);
           },
         });
     }
@@ -180,17 +200,48 @@ const KakaoMap = ({
     ]);
   }, [clusteredApiResult]);
 
+  const [clusteredData, setClusteredData] =
+    useState<(ClusteredContentEntity & { scale: number })[]>();
+
+  useEffect(() => {
+    if (!clusteredContentList) return;
+    const countList = clusteredContentList.map((data) => data.count);
+
+    // 평균
+    const mean =
+      countList.reduce((sum, value) => sum + value, 0) / countList.length;
+
+    // 분산
+    const variance =
+      countList.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) /
+      countList.length;
+
+    const standardDeviation = Math.sqrt(variance);
+
+    // 각 zValue 계산
+    const zValueList = countList.map(
+      (count) => ((count - mean) / standardDeviation) * 3
+    );
+
+    setClusteredData(
+      clusteredContentList.map((data, i) => ({
+        ...data,
+        scale: zValueList[i],
+      }))
+    );
+  }, [clusteredContentList]);
+
   return (
     <>
       <Map
         center={{
-          lng: 127.0495556,
-          lat: 37.514575,
+          lng: latLng.lng,
+          lat: latLng.lat,
         }}
         isPanto={false}
         className="grow relative w-[100%]"
-        minLevel={11}
-        level={4}
+        minLevel={10}
+        level={mapInfo.level}
         onDragEnd={(map) => {
           setMapInfo(getMapInfo(map));
         }}
@@ -202,23 +253,40 @@ const KakaoMap = ({
         onClick={() => {
           setClickedContent(undefined);
         }}
+        onTileLoaded={(map) => {
+          setMapInfo(getMapInfo(map));
+        }}
       >
         {children}
-        {clusteredContentList.map(({ lat, lng, count }) => {
-          return (
-            <CustomOverlayMap
-              position={{
-                lat: lat,
-                lng: lng,
-              }}
-              key={`${lat}-${lng}`}
-            >
-              <div className="rounded-full border-solid border-skyblue-02 border w-[48px] h-[48px] -translate-y-2/4 -translate-x-2/4 flex justify-center items-center bg-skyblue-02 bg-opacity-80 text-white font-bold">
-                <span>{count}</span>
-              </div>
-            </CustomOverlayMap>
-          );
-        })}
+        {clusteredData &&
+          clusteredData.map(({ lat, lng, count, scale }) => {
+            const calculatedScale = (100 + scale * 3).toFixed(0).toString();
+            return (
+              <CustomOverlayMap
+                position={{
+                  lat: lat,
+                  lng: lng,
+                }}
+                key={`${lat}-${lng}`}
+              >
+                <div
+                  onClick={() => {
+                    setLatLng({ lng, lat });
+                    setLevel(level - 1);
+                  }}
+                  className={classNames(
+                    "rounded-full border-solid hover:scale-110 origin-center duration-200 border-skyblue-02 border w-[48px] h-[48px] -translate-y-2/4 -translate-x-2/4 flex justify-center items-center bg-skyblue-02 bg-opacity-80 text-white font-bold",
+                    `scale-[${calculatedScale}%]`
+                  )}
+                  style={{
+                    scale: `${calculatedScale}%`,
+                  }}
+                >
+                  <span>{count}</span>
+                </div>
+              </CustomOverlayMap>
+            );
+          })}
         {contentList.map((content) => {
           const { idx, genre, title, location } = content;
 

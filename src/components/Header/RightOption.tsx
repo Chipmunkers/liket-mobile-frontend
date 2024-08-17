@@ -1,3 +1,5 @@
+"use client";
+
 import { IconButtonOption, XOR } from "@/types/common";
 
 import SearchIcon from "@/icons/search.svg";
@@ -8,6 +10,8 @@ import CheckIcon from "@/icons/check.svg";
 import { colors } from "@/utils/style";
 import Link from "next/link";
 import { ButtonBase } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
 
 type RightOptionProps = XOR<
   {
@@ -25,6 +29,8 @@ type RightOptionProps = XOR<
 >;
 
 const RightOption = ({ text, option }: RightOptionProps) => {
+  const router = useRouter();
+
   // ! 어떤 목적으로 있는 코드인지 분석 필요
   if (text) {
     return <button>{text}</button>;
@@ -41,6 +47,13 @@ const RightOption = ({ text, option }: RightOptionProps) => {
         <Link
           href="/search"
           className="w-[100%] h-[100%] flex justify-center items-center"
+          onClick={(e) => {
+            e.preventDefault();
+            stackRouterPush(router, {
+              path: "/search",
+              screen: ScreenTYPE.SEARCH,
+            });
+          }}
         >
           <SearchIcon />
         </Link>
@@ -55,11 +68,19 @@ const RightOption = ({ text, option }: RightOptionProps) => {
           href="/like"
           key={"like_button"}
           className="w-[100%] h-[100%] flex justify-center items-center"
+          onClick={(e) => {
+            e.preventDefault();
+            stackRouterPush(router, {
+              path: "/like",
+              screen: ScreenTYPE.LIKE,
+            });
+          }}
         >
           <LikeIcon />
         </Link>
       </ButtonBase>
     );
+
     const Create = create && (
       <button
         key="create_button"
@@ -72,9 +93,17 @@ const RightOption = ({ text, option }: RightOptionProps) => {
         <CreateIcon />
       </button>
     );
+
     const Menu = menu && (
-      <button key="menu_button">
-        <MenuIcon />
+      <button
+        key="menu_button"
+        onClick={() => {
+          if (typeof menu === "object") {
+            menu.onClick && menu.onClick();
+          }
+        }}
+      >
+        <MenuIcon fill={"#fa23123"} />
       </button>
     );
 
