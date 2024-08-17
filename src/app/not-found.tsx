@@ -4,9 +4,12 @@ import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
 import ButtonGroup from "@/components/ButtonGroup";
 import ExclamationIcon from "@/icons/circle-exclamation.svg";
 import { useRouter } from "next/navigation";
-import { variantToStyleMap } from "../utils/style";
-import { classNames } from "../utils/helpers";
 import Button from "../components/Button";
+import {
+  ScreenTYPE,
+  stackRouterBack,
+  stackRouterPush,
+} from "../utils/stackRouter";
 
 export default function Page() {
   const router = useRouter();
@@ -31,9 +34,7 @@ export default function Page() {
             variant="ghost"
             height={48}
             fullWidth
-            onClick={() => {
-              router.back();
-            }}
+            onClick={() => stackRouterBack(router)}
           >
             이전 페이지
           </Button>
@@ -41,9 +42,13 @@ export default function Page() {
             variant="primary"
             fullWidth
             height={48}
-            onClick={() => {
-              router.replace("/");
-            }}
+            onClick={() =>
+              stackRouterPush(router, {
+                path: "/",
+                screen: ScreenTYPE.MAIN,
+                isStack: false,
+              })
+            }
           >
             메인으로 가기
           </Button>
