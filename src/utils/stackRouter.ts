@@ -12,6 +12,9 @@ export const ScreenTYPE = {
   EMAIL_LOGIN: "Email Login",
   CONTENT_DETAIL: "Content Detail",
   MY_PAGE: "My Page",
+  MAP: "Map",
+  SIGN_UP: "Sign Up",
+  CREATE_REVIEW: "Create Review",
 } as const;
 
 export const WebViewEventType = {
