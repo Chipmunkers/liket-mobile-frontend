@@ -11,6 +11,7 @@ export const ScreenTYPE = {
   LOGIN: "Login",
   EMAIL_LOGIN: "Email Login",
   CONTENT_DETAIL: "Content Detail",
+  MY_PAGE: "My Page",
 } as const;
 
 export const WebViewEventType = {
