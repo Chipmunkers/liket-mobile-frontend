@@ -405,27 +405,24 @@ export default function Page() {
         onClose={() => setIsAgeDrawerOpen(false)}
       >
         <div className="center text-h2">연령대</div>
-        {ages.map((age) => (
-          <li className="bottom-sheet-list" key={age.idx}>
+        {ages.map(({ idx, name }) => (
+          <li className="bottom-sheet-list" key={idx}>
             <ButtonBase
               onClick={() => {
                 setPagerble((pagerble) => ({
                   ...pagerble,
-                  age:
-                    age.idx.toString() === pagerble.age
-                      ? null
-                      : age.idx.toString(),
+                  age: idx.toString() === pagerble.age ? null : idx.toString(),
                 }));
                 setIsAgeDrawerOpen(false);
               }}
               className={classNames(
                 "bottom-sheet-button flex justify-start px-[24px]",
-                pagerble.age === age.idx.toString()
+                pagerble.age === idx.toString()
                   ? "text-skyblue-01 text-body1"
                   : ""
               )}
             >
-              {age.name}
+              {name}
             </ButtonBase>
           </li>
         ))}
