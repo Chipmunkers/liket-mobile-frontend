@@ -21,7 +21,7 @@ export default async function Page({ params: { idx } }: PageProps) {
         />
         <MiddleText text={title} />
       </Header>
-      <main>{contents}</main>
+      <main className="px-[24px] pt-[24px] mb-[24px]">{contents}</main>
     </>
   );
 }
