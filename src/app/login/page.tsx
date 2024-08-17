@@ -35,7 +35,11 @@ export default function Page() {
           option={{
             close: {
               onClick: () => {
-                stackRouterBack(router);
+                stackRouterPush(router, {
+                  path: "/",
+                  screen: ScreenTYPE.MAIN,
+                  isStack: false,
+                });
               },
             },
           }}
