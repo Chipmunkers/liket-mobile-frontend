@@ -16,6 +16,11 @@ import { AxiosError } from "axios";
 import useModalStore from "../../../stores/modalStore";
 import { useRouter } from "next/navigation";
 import { classNames } from "../../../utils/helpers";
+import {
+  ScreenTYPE,
+  stackRouterBack,
+  stackRouterPush,
+} from "../../../utils/stackRouter";
 
 const KakaoMap = ({
   children,
@@ -135,10 +140,14 @@ const KakaoMap = ({
       if (error.response?.status === 401)
         openModal("LoginModal", {
           onClickPositive: () => {
-            router.replace("/login");
+            stackRouterPush(router, {
+              path: "/login",
+              screen: ScreenTYPE.LOGIN,
+              isStack: false,
+            });
           },
           onClickNegative: () => {
-            router.back();
+            stackRouterBack(router);
           },
         });
     }
