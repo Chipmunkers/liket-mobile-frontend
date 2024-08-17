@@ -16,14 +16,12 @@ import { PROVIDER_ICON } from "@/utils/const";
 import { ButtonBase } from "@mui/material";
 import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
 import customToast from "../../utils/customToast";
+import { useGetMyInfo } from "@/hooks/useGetMyInfo";
 
 export default function Page() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { email, provider } = profileStore(({ email, provider }) => ({
-    email,
-    provider,
-  }));
+  const { data } = useGetMyInfo();
   const { mutate } = useLogout({
     onSuccess: () => {
       setAuthToken("");
@@ -41,6 +39,12 @@ export default function Page() {
   });
   const setToken = authStore(({ setToken }) => setToken);
   const handleClickLogout = () => mutate();
+
+  if (!data) {
+    return <></>;
+  }
+
+  const { provider, email } = data;
 
   return (
     <>
