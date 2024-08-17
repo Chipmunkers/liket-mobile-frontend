@@ -6,7 +6,11 @@ import RemoveIcon from "@/icons/remove.svg";
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ButtonBase } from "@mui/material";
-import { stackRouterBack, stackRouterPush } from "../../utils/stackRouter";
+import {
+  ScreenTYPE,
+  stackRouterBack,
+  stackRouterPush,
+} from "../../utils/stackRouter";
 
 interface SearchHeaderProps {
   placeholder: string;
@@ -22,12 +26,12 @@ const SearchHeader = ({
   const [searchText, setSearchText] = useState("");
   const router = useRouter();
 
-  console.log("hi2");
-
   const handleClickBackButton = () => {
-    console.log("click");
     if (replacePath) {
-      stackRouterPush(router, replacePath);
+      stackRouterPush(router, {
+        path: "/search",
+        screen: ScreenTYPE.SEARCH,
+      });
       return;
     }
 
