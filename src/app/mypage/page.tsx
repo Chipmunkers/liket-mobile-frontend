@@ -52,7 +52,7 @@ export default function Page() {
 
   return (
     <>
-      <main className="grow">
+      <main className="grow mb-[48px]">
         <div className="mx-[24px]">
           <div className="flex mt-[64px]">
             <div className="grow">
