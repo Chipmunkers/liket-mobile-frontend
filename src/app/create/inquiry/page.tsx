@@ -27,9 +27,10 @@ import { classNames } from "@/utils/helpers";
 const MAX_IMAGES_COUNT = 10;
 
 const schema = z.object({
-  title: z.string().min(1),
-  description: z.string().min(1),
+  title: z.string().min(1, "필수로 입력돼야합니다."),
+  description: z.string().min(1, "필수로 입력돼야합니다."),
   imgList: z.array(z.string()).min(1, "이미지가 최소 하나 이상 필요합니다."),
+  inquiryTypeIdx: z.string().min(1, "필수로 선택돼야합니다."),
 });
 
 export default function Page() {
@@ -56,12 +57,14 @@ export default function Page() {
     title: string;
     description: string;
     imgList: string[];
+    inquiryTypeIdx: string;
   }>({
     mode: "onBlur",
     defaultValues: {
       title: "",
       description: "",
       imgList: [],
+      inquiryTypeIdx: "",
     },
     resolver: zodResolver(schema),
   });
@@ -94,6 +97,7 @@ export default function Page() {
         <RightOption
           option={{
             check: {
+              disabled: !formState.isValid,
               onClick: () => {
                 createInquiry;
               },
@@ -127,7 +131,7 @@ export default function Page() {
             </Label>
             <div className="mt-[12px]">
               <MediumSelectButton
-                text={""}
+                text={watch("inquiryTypeIdx")}
                 className="w-full"
                 placeholder="문의 유형을 선택해주세요."
                 onClick={() => setIsTypeSelectionModalOpen(true)}
@@ -147,7 +151,7 @@ export default function Page() {
               <TextareaAutosize
                 maxLength={200}
                 placeholder="내용을 입력해주세요."
-                className="w-[100%] mb-[34px] min-h-[132px] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0"
+                className="w-[100%] min-h-[132px] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0"
                 {...register("description")}
               />
             </InputWrapper>
@@ -230,12 +234,14 @@ export default function Page() {
             <li className="bottom-sheet-list" key={idx}>
               <ButtonBase
                 onClick={() => {
-                  // setValue("genre", name);
+                  setValue("inquiryTypeIdx", `${idx}`);
                   setIsTypeSelectionModalOpen(false);
                 }}
                 className={classNames(
-                  "bottom-sheet-button flex justify-start px-[24px]"
-                  // watch("genre") === name ? "text-skyblue-01 text-body1" : ""
+                  "bottom-sheet-button flex justify-start px-[24px]",
+                  watch("inquiryTypeIdx") === `${idx}`
+                    ? "text-skyblue-01 text-body1"
+                    : ""
                 )}
               >
                 {name}
