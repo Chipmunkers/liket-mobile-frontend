@@ -1,3 +1,5 @@
+"use client";
+
 import Header from "@/components/Header";
 import LeftOption from "@/components/Header/LeftOption";
 import RightOption from "@/components/Header/RightOption";

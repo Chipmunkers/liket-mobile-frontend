@@ -148,6 +148,9 @@ export default function Page() {
     onSuccess: ({ data }) => {
       router.replace(`/requested-contents/${data.idx}`);
     },
+    onError: () => {
+      // TODO: 에러 핸들링
+    },
   });
 
   const [isStyleSelectionDrawerOpen, setIsStyleSelectionDrawerOpen] =

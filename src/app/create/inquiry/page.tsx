@@ -1,5 +1,248 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useCreateInquiry } from "./hooks/useCreateInquiry";
+import LeftOption from "@/components/Header/LeftOption";
+import MiddleText from "@/components/Header/MiddleText";
+import RightOption from "@/components/Header/RightOption";
+import Header from "@/components/Header";
+import { Input, InputWrapper, Label } from "@/components/newInput";
+import customToast from "@/utils/customToast";
+import { ButtonBase, TextareaAutosize } from "@mui/material";
+import ScrollContainer from "react-indiana-drag-scroll";
+import CreateIcon from "@/icons/create.svg";
+import { useForm } from "react-hook-form";
+import DeleteIcon from "@/icons/circle-cross.svg";
+import Image from "next/image";
+import { useRef, useState } from "react";
+import SmallDownArrow from "@/icons/down-arrow-small.svg";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useUploadInquiryImages } from "./hooks/useUploadImages";
+import MediumSelectButton from "@/components/SelectButton/MediumSelectButton";
+import CustomDrawer from "@/components/CustomDrawer";
+import { INQUIRY_TYPES } from "../../../../public/data/inquiry";
+import { classNames } from "@/utils/helpers";
+
+const MAX_IMAGES_COUNT = 10;
+
+const schema = z.object({
+  title: z.string().min(1),
+  description: z.string().min(1),
+  imgList: z.array(z.string()).min(1, "이미지가 최소 하나 이상 필요합니다."),
+});
+
 export default function Page() {
-  return <div>개발중</div>;
+  const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { mutate: uploadInquiryImages } = useUploadInquiryImages({
+    onSuccess: ({ data }) => {
+      const newData = data.map(({ filePath }) => filePath);
+
+      setUploadedImages([...uploadedImages, ...newData]);
+      // setValue("imgList", [...uploadedImages, ...newData]);
+      // trigger("imgList");
+    },
+  });
+  const { mutate: createInquiry } = useCreateInquiry({
+    onSuccess: ({ data }) => {
+      router.replace(`/inquiries/${data.idx}`);
+    },
+    onError: () => {
+      // TODO: 에러 핸들링
+    },
+  });
+  const methods = useForm<{
+    title: string;
+    description: string;
+    imgList: string[];
+  }>({
+    mode: "onBlur",
+    defaultValues: {
+      title: "",
+      description: "",
+      imgList: [],
+    },
+    resolver: zodResolver(schema),
+  });
+
+  const { formState, register, setValue, trigger, watch } = methods;
+
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+  const [isTypeSelectionModalOpen, setIsTypeSelectionModalOpen] =
+    useState(false);
+
+  const handleRemoveImage = (filePath: string) => {
+    const newImgList = uploadedImages.filter(
+      (targetFilePath) => targetFilePath !== filePath
+    );
+
+    setUploadedImages(newImgList);
+    setValue("imgList", newImgList);
+    trigger("imgList");
+  };
+
+  return (
+    <>
+      <Header>
+        <LeftOption
+          option={{
+            back: true,
+          }}
+        />
+        <MiddleText text="문의하기" />
+        <RightOption
+          option={{
+            check: {
+              onClick: () => {
+                createInquiry;
+              },
+            },
+          }}
+        />
+      </Header>
+      <main>
+        <form className="mt-[16px]">
+          <div className="mx-[24px]">
+            <InputWrapper>
+              <Label
+                maxLength={40}
+                htmlFor="title"
+                currentLength={watch("title").length}
+              >
+                제목<span className="text-top">*</span>
+              </Label>
+              <Input
+                field="title"
+                maxLength={30}
+                placeholder="제목을 입력해주세요."
+                formState={formState}
+                register={register}
+              />
+            </InputWrapper>
+          </div>
+          <div className="mt-[16px] mx-[24px]">
+            <Label htmlFor="open-date">
+              오픈날짜<span className="text-top">*</span>
+            </Label>
+            <div className="mt-[12px]">
+              <MediumSelectButton
+                text={""}
+                placeholder="문의 유형을 선택해주세요."
+                onClick={() => setIsTypeSelectionModalOpen(true)}
+                Icon={<SmallDownArrow />}
+              />
+            </div>
+          </div>
+          <div className="px-[24px]">
+            <Label
+              htmlFor="photos"
+              maxLength={10}
+              currentLength={uploadedImages.length}
+            >
+              사진<span className="text-top">*</span>
+            </Label>
+            <ScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] mt-[8px]">
+              <input
+                ref={inputRef}
+                type="file"
+                multiple
+                className="hidden grow"
+                onChange={(e) => {
+                  if (uploadedImages.length > MAX_IMAGES_COUNT) {
+                    customToast("이미지는 최대 10개까지만 업로드 가능합니다.");
+
+                    return;
+                  }
+
+                  if (e.target.files) {
+                    const formData = new FormData();
+
+                    for (let i = 0; i < e.target.files.length; i++) {
+                      formData.append("files", e.target.files[i]);
+                    }
+
+                    uploadInquiryImages(formData);
+                  }
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  inputRef.current && inputRef.current.click();
+                }}
+                className="center w-[96px] h-[96px] bg-grey-01 shrink-0"
+                aria-label="이미지 업로드 버튼"
+              >
+                <CreateIcon color="#fff" />
+              </button>
+              {uploadedImages.map((filePath) => {
+                return (
+                  <li
+                    key={filePath}
+                    className="w-[96px] h-[96px] relative shrink-0"
+                  >
+                    <Image
+                      src={process.env.NEXT_PUBLIC_IMAGE_SERVER + filePath}
+                      fill
+                      alt="업로드된 이미지"
+                    />
+                    <button
+                      type="button"
+                      aria-label="현재 선택된 이미지 삭제"
+                      className="absolute right-[8px] top-[8px]"
+                      onClick={() => handleRemoveImage(filePath)}
+                    >
+                      <DeleteIcon width="24px" height="24px" />
+                    </button>
+                  </li>
+                );
+              })}
+            </ScrollContainer>
+          </div>
+          <div className="px-[24px]">
+            <InputWrapper>
+              <Label
+                htmlFor="description"
+                maxLength={200}
+                currentLength={watch("description").length}
+              >
+                문의 내용<span className="text-top">*</span>
+              </Label>
+              <TextareaAutosize
+                maxLength={200}
+                placeholder="내용을 입력해주세요."
+                className="w-[100%] mb-[34px] min-h-[132px] h-[auto] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0"
+                {...register("description")}
+              />
+            </InputWrapper>
+          </div>
+        </form>
+      </main>
+      <CustomDrawer
+        open={isTypeSelectionModalOpen}
+        onClose={() => setIsTypeSelectionModalOpen(false)}
+      >
+        <div className="center text-h2">문의 유형</div>
+        <ul>
+          {INQUIRY_TYPES.map(({ idx, name }) => (
+            <li className="bottom-sheet-list" key={idx}>
+              <ButtonBase
+                onClick={() => {
+                  // setValue("genre", name);
+                  setIsTypeSelectionModalOpen(false);
+                }}
+                className={classNames(
+                  "bottom-sheet-button flex justify-start px-[24px]"
+                  // watch("genre") === name ? "text-skyblue-01 text-body1" : ""
+                )}
+              >
+                {name}
+              </ButtonBase>
+            </li>
+          ))}
+        </ul>
+      </CustomDrawer>
+    </>
+  );
 }
