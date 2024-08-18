@@ -8,7 +8,7 @@ import { Input, InputWrapper, Label } from "@/components/newInput";
 import CalendarIcon from "@/icons/calendar.svg";
 import ScrollContainer from "react-indiana-drag-scroll";
 import Image from "next/image";
-import { useGetHotStyleContents } from "./hooks/useGetContentDetail";
+import { useGetContentDetail } from "./hooks/useGetContentDetail";
 import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 import { stackRouterPush } from "@/utils/stackRouter";
 
 export default function Page({ params }: { params: { id: string } }) {
-  const { data } = useGetHotStyleContents(params?.id);
+  const { data } = useGetContentDetail(params?.id);
   const [isMenuDrawerOpen, setIsMenuDrawerOpen] = useState(false);
   const router = useRouter();
 
