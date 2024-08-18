@@ -166,8 +166,6 @@ export default function Page() {
       e.data
     );
 
-    console.log(data);
-
     if (data.type === WebViewEventType.SEARCH_SUBMIT) {
       if (data.genre !== undefined) {
         setPagerble((pagerble) => ({
