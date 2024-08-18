@@ -111,7 +111,11 @@ const LinkableTab = ({ shadow = false }: Props) => {
           <li className="bottom-sheet-list">
             <ButtonBase
               onClick={() => {
-                customToast("모바일 앱에서만 사용이 가능해요.");
+                if (isWebview) {
+                  router.push("/create/liket");
+                } else {
+                  customToast("모바일 앱에서만 사용이 가능해요.");
+                }
               }}
               className="bottom-sheet-button flex justify-start px-[24px]"
             >
