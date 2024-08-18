@@ -16,12 +16,26 @@ import { useState } from "react";
 import CustomDrawer from "@/components/CustomDrawer";
 import ButtonBase from "@mui/material/ButtonBase/ButtonBase";
 import { useRouter } from "next/navigation";
-import { stackRouterPush } from "@/utils/stackRouter";
+import { useRemoveContent } from "./hooks/useRemoveContent";
+import { AxiosError } from "axios";
+import customToast from "@/utils/customToast";
 
 export default function Page({ params }: { params: { id: string } }) {
   const { data } = useGetContentDetail(params?.id);
   const [isMenuDrawerOpen, setIsMenuDrawerOpen] = useState(false);
   const router = useRouter();
+  const { mutate: removeContent } = useRemoveContent({
+    onSuccess: () => {
+      router.replace("/requested-contents");
+    },
+    onError: (error) => {
+      if (error?.response?.status === 404) {
+        customToast("해당 컨텐츠를 조회할 수 없습니다.");
+        setIsMenuDrawerOpen(false);
+        return;
+      }
+    },
+  });
 
   if (!data) {
     return <></>;
@@ -192,8 +206,9 @@ export default function Page({ params }: { params: { id: string } }) {
             수정하기
           </ButtonBase>
           <ButtonBase
+            disabled={!!acceptedAt}
             onClick={() => {
-              router.replace("/requested-contents");
+              removeContent(params?.id);
             }}
             className="bottom-sheet-button flex justify-start px-[24px] text-rosepink-01"
           >
