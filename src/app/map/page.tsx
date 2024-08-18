@@ -27,6 +27,7 @@ import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
 import { stackRouterBack } from "../../utils/stackRouter";
+import { setAppNavBack } from "../../utils/setAppNavState";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -35,6 +36,14 @@ export default function MapPage() {
 
   const isTownSelectionModalOpen = searchParams.get("isTownSelectionModalOpen");
   const isFilterModalOpen = searchParams.get("isFilterModalOpen");
+
+  useEffect(() => {
+    setAppNavBack(isTownSelectionModalOpen === "true");
+  }, [isTownSelectionModalOpen]);
+
+  useEffect(() => {
+    setAppNavBack(isFilterModalOpen === "true");
+  }, [isFilterModalOpen]);
 
   const onClickTownSelection = () => {
     router.replace(`${pathname}?isTownSelectionModalOpen=true`);

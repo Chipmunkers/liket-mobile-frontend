@@ -1,11 +1,7 @@
 import Divider from "@/components/Divider";
 import Header from "@/components/Header";
 import LinkableTab from "@/components/LinkableTab";
-import RightArrow from "@/icons/right-arrow.svg";
-import { colors } from "@/utils/style";
-import Link from "next/link";
 import CustomScrollContainer from "@/components/CustomScrollContainer";
-import HotPlaceListItem from "@/components/HotplaceListItem";
 import MainCarousel from "@/components/Carousel/MainCarousel";
 import SoonOpenContentSection from "./_components/SoonOpenContentSection";
 import SoonEndContentSection from "./_components/SoonEndContentSection";
@@ -17,12 +13,8 @@ import { getBanners } from "./_hooks/getBanners";
 import { getHotContentsForServer } from "./_hooks/getHotContents";
 import ReviewCard from "../components/Card/ReviewCard";
 import { getHotReview } from "./_hooks/getHotReviews";
-import dayjs from "dayjs";
 import LeftOption from "@/components/Header/LeftOption";
 import RightOption from "@/components/Header/RightOption";
-import { headers } from "next/headers";
-import { ScreenTYPE, stackRouterPush } from "../utils/stackRouter";
-import { useRouter } from "next/navigation";
 import HotPlaceSection from "./_components/HotPlaceSection";
 
 const Home = async () => {
@@ -35,14 +27,12 @@ const Home = async () => {
 
   return (
     <>
-      <Header
-        checkUserAgent={true}
-        userAgent={headers().get("user-agent") || ""}
-      >
+      <Header checkUserAgent={true}>
         <LeftOption logo />
         <RightOption option={{ search: true, like: true }} />
       </Header>
-      <main className="mb-[40px]">
+      {/* 높이 값을 주면 마진 만큼 비어있는 공간으로 남게됨: 이유는 모름 */}
+      <main className="mb-[48px] h-[1px] overflow-y-scroll">
         {/* 배너 */}
         <MainCarousel list={bannerList.map(({ imgPath }) => imgPath)} />
 
