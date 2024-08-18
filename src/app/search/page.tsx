@@ -31,7 +31,9 @@ import {
   ScreenTYPE,
   stackRouterBack,
   stackRouterPush,
+  WebViewEventType,
 } from "../../utils/stackRouter";
+import { useIsWebView } from "../../hooks/useIsWebView";
 
 interface Pagerble {
   region: string | null;
@@ -156,6 +158,46 @@ export default function Page() {
 
   const openModal = useModalStore(({ openModal }) => openModal);
 
+  // * 웹뷰 확인 코드
+  const [isWebview, setIsWebview] = useState(true);
+
+  const webviewMessageEvent = (e: MessageEvent) => {
+    const data: { type: string; genre?: number; search?: string } = JSON.parse(
+      e.data
+    );
+
+    console.log(data);
+
+    if (data.type === WebViewEventType.SEARCH_SUBMIT) {
+      if (data.genre !== undefined) {
+        setPagerble((pagerble) => ({
+          ...pagerble,
+          genre: data.genre === 0 ? null : (data.genre || 0).toString(),
+        }));
+        return;
+      }
+
+      if (typeof data.search === "string") {
+        setPagerble((pagerble) => ({
+          ...pagerble,
+          search: data.search || null,
+        }));
+        return;
+      }
+    }
+  };
+
+  useEffect(() => {
+    setIsWebview(useIsWebView());
+    // ios
+    window.addEventListener("message", webviewMessageEvent);
+
+    // android
+    //document.addEventListener("message", (e) => alert(e.data));
+
+    return () => window.removeEventListener("message", webviewMessageEvent);
+  }, []);
+
   useEffect(() => {
     if (!error) return;
 
@@ -182,46 +224,26 @@ export default function Page() {
 
   return (
     <>
-      <SearchHeader
-        onSearch={(text) => {
-          setPagerble({
-            ...pagerble,
-            search: text || null,
-          });
-        }}
-        placeholder="검색어를 입력해주세요."
-      />
-      <CustomScrollContainer className="flex flex-row mt-[8px] [&>*:first-child]:ml-[24px] border-b-[1px] border-b-grey-01">
-        <ul className="flex h-[32px] ">
-          <li
-            key={"all_category"}
-            className={classNames(
-              "h-[100%] w-[80px]",
-              pagerble.genre === null
-                ? "text-skyblue-01 border-b-[2px] border-skyblue-01 text-button3"
-                : "text-button4 text-grey-03 pb-[2px]"
-            )}
-          >
-            <ButtonBase
-              disableRipple={true}
-              className="w-[100%] h-[100%] center"
-              onClick={() => {
-                setPagerble({
-                  ...pagerble,
-                  genre: null,
-                });
-              }}
-            >
-              전체
-            </ButtonBase>
-          </li>
-          {genres.map((genre) => {
-            return (
+      {isWebview ? (
+        <></>
+      ) : (
+        <>
+          <SearchHeader
+            onSearch={(text) => {
+              setPagerble({
+                ...pagerble,
+                search: text || null,
+              });
+            }}
+            placeholder="검색어를 입력해주세요."
+          />
+          <CustomScrollContainer className="flex flex-row mt-[8px] [&>*:first-child]:ml-[24px] border-b-[1px] border-b-grey-01">
+            <ul className="flex h-[32px] ">
               <li
-                key={genre.idx}
+                key={"all_category"}
                 className={classNames(
                   "h-[100%] w-[80px]",
-                  pagerble.genre === genre.idx.toString()
+                  pagerble.genre === null
                     ? "text-skyblue-01 border-b-[2px] border-skyblue-01 text-button3"
                     : "text-button4 text-grey-03 pb-[2px]"
                 )}
@@ -232,17 +254,44 @@ export default function Page() {
                   onClick={() => {
                     setPagerble({
                       ...pagerble,
-                      genre: genre.idx.toString(),
+                      genre: null,
                     });
                   }}
                 >
-                  {genre.name}
+                  전체
                 </ButtonBase>
               </li>
-            );
-          })}
-        </ul>
-      </CustomScrollContainer>
+              {genres.map((genre) => {
+                return (
+                  <li
+                    key={genre.idx}
+                    className={classNames(
+                      "h-[100%] w-[80px]",
+                      pagerble.genre === genre.idx.toString()
+                        ? "text-skyblue-01 border-b-[2px] border-skyblue-01 text-button3"
+                        : "text-button4 text-grey-03 pb-[2px]"
+                    )}
+                  >
+                    <ButtonBase
+                      disableRipple={true}
+                      className="w-[100%] h-[100%] center"
+                      onClick={() => {
+                        setPagerble({
+                          ...pagerble,
+                          genre: genre.idx.toString(),
+                        });
+                      }}
+                    >
+                      {genre.name}
+                    </ButtonBase>
+                  </li>
+                );
+              })}
+            </ul>
+          </CustomScrollContainer>
+        </>
+      )}
+
       <div className="flex ml-[24px] mt-[8px] mb-[11px] gap-[8px]">
         <SmallSelectButton
           placeholder="지역"

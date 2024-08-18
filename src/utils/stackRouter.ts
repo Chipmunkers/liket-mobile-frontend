@@ -34,6 +34,7 @@ export const WebViewEventType = {
   ROUTER_EVENT: "ROUTER_EVENT",
   NAV_BACK: "NAV_BACK",
   CLICK: "CLICK_EVENT",
+  SEARCH_SUBMIT: "SEARCH_SUBMIT",
 } as const;
 
 /**

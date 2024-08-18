@@ -58,6 +58,7 @@ const LinkableTab = ({ shadow = false }: Props) => {
 
     // android
     //document.addEventListener("message", (e) => alert(e.data));
+
     return () => window.removeEventListener("message", messageEvent);
   });
 
