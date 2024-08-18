@@ -197,6 +197,10 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
+    console.log(isWebview);
+  }, [isWebview]);
+
+  useEffect(() => {
     if (!error) return;
 
     if (error instanceof AxiosError) {
