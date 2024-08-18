@@ -11,7 +11,7 @@ import customToast from "@/utils/customToast";
 import { ButtonBase, TextareaAutosize } from "@mui/material";
 import ScrollContainer from "react-indiana-drag-scroll";
 import CreateIcon from "@/icons/create.svg";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import DeleteIcon from "@/icons/circle-cross.svg";
 import Image from "next/image";
 import { useRef, useState } from "react";
@@ -26,11 +26,16 @@ import { classNames } from "@/utils/helpers";
 
 const MAX_IMAGES_COUNT = 10;
 
+const inquiryTypeSchema = z.object({
+  idx: z.string(),
+  name: z.string(),
+});
+
 const schema = z.object({
   title: z.string().min(1, "필수로 입력돼야합니다."),
   description: z.string().min(1, "필수로 입력돼야합니다."),
   imgList: z.array(z.string()).min(1, "이미지가 최소 하나 이상 필요합니다."),
-  inquiryTypeIdx: z.string().min(1, "필수로 선택돼야합니다."),
+  inquiryType: inquiryTypeSchema,
 });
 
 export default function Page() {
@@ -53,23 +58,12 @@ export default function Page() {
       // TODO: 에러 핸들링
     },
   });
-  const methods = useForm<{
-    title: string;
-    description: string;
-    imgList: string[];
-    inquiryTypeIdx: string;
-  }>({
+  const methods = useForm({
     mode: "onBlur",
-    defaultValues: {
-      title: "",
-      description: "",
-      imgList: [],
-      inquiryTypeIdx: "",
-    },
     resolver: zodResolver(schema),
   });
 
-  const { formState, register, setValue, trigger, watch } = methods;
+  const { formState, control, register, setValue, trigger, watch } = methods;
 
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [isTypeSelectionModalOpen, setIsTypeSelectionModalOpen] =
@@ -112,7 +106,7 @@ export default function Page() {
               <Label
                 maxLength={40}
                 htmlFor="title"
-                currentLength={watch("title").length}
+                currentLength={watch("title")?.length}
               >
                 제목<span className="text-top">*</span>
               </Label>
@@ -129,22 +123,31 @@ export default function Page() {
             <Label htmlFor="open-date">
               문의유형<span className="text-top">*</span>
             </Label>
-            <div className="mt-[12px]">
-              <MediumSelectButton
-                text={watch("inquiryTypeIdx")}
-                className="w-full"
-                placeholder="문의 유형을 선택해주세요."
-                onClick={() => setIsTypeSelectionModalOpen(true)}
-                Icon={<SmallDownArrow />}
-              />
-            </div>
+            <Controller
+              name="inquiryType"
+              control={control}
+              render={({ field }) => {
+                console.log(field);
+                return (
+                  <div className="mt-[12px]">
+                    <MediumSelectButton
+                      text={""}
+                      className="w-full"
+                      placeholder="문의 유형을 선택해주세요."
+                      onClick={() => setIsTypeSelectionModalOpen(true)}
+                      Icon={<SmallDownArrow />}
+                    />
+                  </div>
+                );
+              }}
+            />
           </div>
           <div className="px-[24px] mt-[34px]">
             <InputWrapper>
               <Label
                 htmlFor="description"
                 maxLength={200}
-                currentLength={watch("description").length}
+                currentLength={watch("description")?.length}
               >
                 문의 내용<span className="text-top">*</span>
               </Label>
@@ -160,7 +163,7 @@ export default function Page() {
             <Label
               htmlFor="photos"
               maxLength={10}
-              currentLength={uploadedImages.length}
+              currentLength={uploadedImages?.length}
             >
               사진<span className="text-top">*</span>
             </Label>
@@ -224,32 +227,43 @@ export default function Page() {
           </div>
         </form>
       </main>
-      <CustomDrawer
-        open={isTypeSelectionModalOpen}
-        onClose={() => setIsTypeSelectionModalOpen(false)}
-      >
-        <div className="center text-h2">문의 유형</div>
-        <ul>
-          {INQUIRY_TYPES.map(({ idx, name }) => (
-            <li className="bottom-sheet-list" key={idx}>
-              <ButtonBase
-                onClick={() => {
-                  setValue("inquiryTypeIdx", `${idx}`);
-                  setIsTypeSelectionModalOpen(false);
-                }}
-                className={classNames(
-                  "bottom-sheet-button flex justify-start px-[24px]",
-                  watch("inquiryTypeIdx") === `${idx}`
-                    ? "text-skyblue-01 text-body1"
-                    : ""
-                )}
-              >
-                {name}
-              </ButtonBase>
-            </li>
-          ))}
-        </ul>
-      </CustomDrawer>
+      <Controller
+        name="inquiryType"
+        control={control}
+        render={({ field }) => {
+          return (
+            <CustomDrawer
+              open={isTypeSelectionModalOpen}
+              onClose={() => setIsTypeSelectionModalOpen(false)}
+            >
+              <div className="center text-h2">문의 유형</div>
+              <ul>
+                {INQUIRY_TYPES.map(({ idx, name }) => {
+                  return (
+                    <li className="bottom-sheet-list" key={idx}>
+                      <ButtonBase
+                        onClick={() => {
+                          field.onChange({ idx, name });
+                          // setValue("inquiryTypeIdx", `${idx}`);
+                          setIsTypeSelectionModalOpen(false);
+                        }}
+                        className={classNames(
+                          "bottom-sheet-button flex justify-start px-[24px]"
+                          // watch("inquiryTypeIdx") === `${idx}`
+                          //   ? "text-skyblue-01 text-body1"
+                          //   : ""
+                        )}
+                      >
+                        {name}
+                      </ButtonBase>
+                    </li>
+                  );
+                })}
+              </ul>
+            </CustomDrawer>
+          );
+        }}
+      />
     </>
   );
 }
