@@ -11,17 +11,20 @@ import {
   stackRouterBack,
   stackRouterPush,
 } from "../../utils/stackRouter";
+import { classNames } from "../../utils/helpers";
 
 interface SearchHeaderProps {
   placeholder: string;
   onSearch: (text: string) => void;
   replacePath?: string;
+  className?: string;
 }
 
 const SearchHeader = ({
   placeholder,
   onSearch,
   replacePath,
+  className,
 }: SearchHeaderProps) => {
   const [searchText, setSearchText] = useState("");
   const router = useRouter();
@@ -54,7 +57,7 @@ const SearchHeader = ({
   };
 
   return (
-    <div className="header">
+    <div className={classNames("header", className || "")}>
       <ButtonBase
         className="w-[48px] h-[48px] rounded-full"
         onClick={handleClickBackButton}
