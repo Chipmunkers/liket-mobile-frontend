@@ -15,8 +15,8 @@ export default function Page() {
     onSuccess: () => {
       customToast("비밀번호가 변경됐습니다.");
       stackRouterPush(router, {
-        path: "router",
-        screen: ScreenTYPE.MY_PAGE,
+        path: "/mypage",
+        screen: ScreenTYPE.MAIN,
         isStack: false,
       });
     },
