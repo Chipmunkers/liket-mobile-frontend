@@ -12,15 +12,23 @@ import { useGetHotStyleContents } from "./hooks/useGetContentDetail";
 import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
+import { useState } from "react";
+import CustomDrawer from "@/components/CustomDrawer";
+import ButtonBase from "@mui/material/ButtonBase/ButtonBase";
+import { useRouter } from "next/navigation";
+import { stackRouterPush } from "@/utils/stackRouter";
 
 export default function Page({ params }: { params: { id: string } }) {
   const { data } = useGetHotStyleContents(params?.id);
+  const [isMenuDrawerOpen, setIsMenuDrawerOpen] = useState(false);
+  const router = useRouter();
 
   if (!data) {
     return <></>;
   }
 
   const {
+    idx,
     title,
     genre,
     location,
@@ -53,6 +61,17 @@ export default function Page({ params }: { params: { id: string } }) {
       <Header>
         <LeftOption option={{ back: true }} />
         <MiddleText text="컨텐츠 등록 요청" />
+        {!acceptedAt && (
+          <RightOption
+            option={{
+              menu: {
+                onClick: () => {
+                  setIsMenuDrawerOpen(true);
+                },
+              },
+            }}
+          />
+        )}
       </Header>
       <main>
         <div className="px-[24px] mt-[16px]">
@@ -158,6 +177,30 @@ export default function Page({ params }: { params: { id: string } }) {
           </InputWrapper>
         </div>
       </main>
+      <CustomDrawer
+        open={isMenuDrawerOpen}
+        onClose={() => setIsMenuDrawerOpen(false)}
+      >
+        <div className="center text-h2">장르</div>
+        <ul>
+          <ButtonBase
+            onClick={() => {
+              router.push(`/create/content?idx=${idx}`);
+            }}
+            className="bottom-sheet-button flex justify-start px-[24px]"
+          >
+            수정하기
+          </ButtonBase>
+          <ButtonBase
+            onClick={() => {
+              router.replace("/requested-contents");
+            }}
+            className="bottom-sheet-button flex justify-start px-[24px] text-rosepink-01"
+          >
+            삭제
+          </ButtonBase>
+        </ul>
+      </CustomDrawer>
     </>
   );
 }
