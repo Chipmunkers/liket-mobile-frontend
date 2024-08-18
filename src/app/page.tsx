@@ -32,7 +32,7 @@ const Home = async () => {
         <RightOption option={{ search: true, like: true }} />
       </Header>
       {/* 높이 값을 주면 마진 만큼 비어있는 공간으로 남게됨: 이유는 모름 */}
-      <main className="mb-[48px] h-[1px] overflow-y-scroll">
+      <main className="mb-[48px]">
         {/* 배너 */}
         <MainCarousel list={bannerList.map(({ imgPath }) => imgPath)} />
 
