@@ -102,8 +102,8 @@ export default function Page() {
         />
       </Header>
       <main>
-        <form className="mt-[16px]">
-          <div className="mx-[24px]">
+        <form>
+          <div className="mx-[24px] mt-[16px]">
             <InputWrapper>
               <Label
                 maxLength={40}
@@ -121,20 +121,38 @@ export default function Page() {
               />
             </InputWrapper>
           </div>
-          <div className="mt-[16px] mx-[24px]">
+          <div className="mt-[34px] mx-[24px]">
             <Label htmlFor="open-date">
-              오픈날짜<span className="text-top">*</span>
+              문의유형<span className="text-top">*</span>
             </Label>
             <div className="mt-[12px]">
               <MediumSelectButton
                 text={""}
+                className="w-full"
                 placeholder="문의 유형을 선택해주세요."
                 onClick={() => setIsTypeSelectionModalOpen(true)}
                 Icon={<SmallDownArrow />}
               />
             </div>
           </div>
-          <div className="px-[24px]">
+          <div className="px-[24px] mt-[34px]">
+            <InputWrapper>
+              <Label
+                htmlFor="description"
+                maxLength={200}
+                currentLength={watch("description").length}
+              >
+                문의 내용<span className="text-top">*</span>
+              </Label>
+              <TextareaAutosize
+                maxLength={200}
+                placeholder="내용을 입력해주세요."
+                className="w-[100%] mb-[34px] min-h-[132px] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0"
+                {...register("description")}
+              />
+            </InputWrapper>
+          </div>
+          <div className="px-[24px] mt-[34px]">
             <Label
               htmlFor="photos"
               maxLength={10}
@@ -199,23 +217,6 @@ export default function Page() {
                 );
               })}
             </ScrollContainer>
-          </div>
-          <div className="px-[24px]">
-            <InputWrapper>
-              <Label
-                htmlFor="description"
-                maxLength={200}
-                currentLength={watch("description").length}
-              >
-                문의 내용<span className="text-top">*</span>
-              </Label>
-              <TextareaAutosize
-                maxLength={200}
-                placeholder="내용을 입력해주세요."
-                className="w-[100%] mb-[34px] min-h-[132px] h-[auto] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0"
-                {...register("description")}
-              />
-            </InputWrapper>
           </div>
         </form>
       </main>
