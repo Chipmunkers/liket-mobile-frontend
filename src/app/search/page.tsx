@@ -166,8 +166,6 @@ export default function Page() {
       e.data
     );
 
-    console.log(data);
-
     if (data.type === WebViewEventType.SEARCH_SUBMIT) {
       if (data.genre !== undefined) {
         setPagerble((pagerble) => ({
@@ -197,6 +195,10 @@ export default function Page() {
 
     return () => window.removeEventListener("message", webviewMessageEvent);
   }, []);
+
+  useEffect(() => {
+    console.log(isWebview);
+  }, [isWebview]);
 
   useEffect(() => {
     if (!error) return;
