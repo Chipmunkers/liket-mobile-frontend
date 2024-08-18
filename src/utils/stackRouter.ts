@@ -34,6 +34,8 @@ export const ScreenTYPE = {
 
 export const WebViewEventType = {
   ROUTER_EVENT: "ROUTER_EVENT",
+  NAV_BACK: "NAV_BACK",
+  CLICK: "CLICK_EVENT",
 } as const;
 
 /**

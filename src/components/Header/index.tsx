@@ -6,24 +6,18 @@ import { useIsWebView } from "../../hooks/useIsWebView";
 
 type Props = StrictPropsWithChildren<{
   transparent?: boolean;
-  userAgent?: string;
   checkUserAgent?: boolean;
   test?: string;
 }>;
 
-const Header = ({
-  children,
-  transparent = false,
-  userAgent,
-  checkUserAgent,
-}: Props) => {
-  const isWebview = useIsWebView(userAgent);
+const Header = ({ children, transparent = false, checkUserAgent }: Props) => {
+  const isWebview = useIsWebView();
 
   return (
     <header
       className={classNames(
         "header",
-        isWebview && checkUserAgent ? "hidden" : "",
+        isWebview && checkUserAgent ? "opacity-0" : "",
         transparent && "max-w-content mx-auto bg-transparent"
       )}
     >

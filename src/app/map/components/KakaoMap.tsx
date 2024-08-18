@@ -137,7 +137,7 @@ const KakaoMap = ({
     const error = clusteredError || contentError;
 
     if (error instanceof AxiosError) {
-      if (error.response?.status === 401)
+      if (error.response?.status === 401) {
         openModal("LoginModal", {
           onClickPositive: () => {
             stackRouterPush(router, {
@@ -147,9 +147,14 @@ const KakaoMap = ({
             });
           },
           onClickNegative: () => {
-            stackRouterBack(router);
+            stackRouterPush(router, {
+              path: "/",
+              screen: ScreenTYPE.MAIN,
+              isStack: false,
+            });
           },
         });
+      }
     }
   }, [clusteredError, contentError]);
 

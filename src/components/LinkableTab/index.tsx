@@ -21,7 +21,13 @@ import CustomDrawer from "../CustomDrawer";
 import customToast from "@/utils/customToast";
 import { useGetMyInfo } from "../../hooks/useGetMyInfo";
 import { ButtonBase } from "@mui/material";
-import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
+import {
+  ScreenTYPE,
+  stackRouterPush,
+  WebViewEventType,
+} from "../../utils/stackRouter";
+import { useIsWebView } from "../../hooks/useIsWebView";
+import { setAppNavBack } from "../../utils/setAppNavState";
 
 interface Props {
   shadow?: boolean;
@@ -36,6 +42,30 @@ const LinkableTab = ({ shadow = false }: Props) => {
   const openModal = useModalStore(({ openModal }) => openModal);
 
   const { data: loginUser } = useGetMyInfo();
+
+  const messageEvent = (e: MessageEvent) => {
+    const data: { type: string; click: string } = JSON.parse(e.data);
+    if (data.type === WebViewEventType.CLICK) {
+      if (data.click === "nav-create-button") {
+        setIsWriteModalOpen(true);
+      }
+    }
+  };
+
+  useEffect(() => {
+    // ios
+    window.addEventListener("message", messageEvent);
+
+    // android
+    //document.addEventListener("message", (e) => alert(e.data));
+    return () => window.removeEventListener("message", messageEvent);
+  });
+
+  const isWebview = useIsWebView();
+
+  useEffect(() => {
+    setAppNavBack(isWriteModalOpen);
+  }, [isWriteModalOpen]);
 
   return (
     <>
@@ -141,7 +171,7 @@ const LinkableTab = ({ shadow = false }: Props) => {
           </li>
         </ul>
       </CustomDrawer>
-      <div className="bottom-tab z-10">
+      <div className={classNames("bottom-tab z-10", isWebview ? "hidden" : "")}>
         <div
           role="tablist"
           className={classNames(
