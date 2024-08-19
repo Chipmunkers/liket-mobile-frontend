@@ -2,11 +2,12 @@ import { getRefValue } from "@/utils/helpers";
 import { checkedLocalStorage, checkedSessionStorage } from "@/utils/storage";
 import { useRef, useState } from "react";
 
-export const useStorage = <T,>(
+export const useStorage = <T>(
   key: string,
   defaultValue: T,
   storageObject: "localStorage" | "sessionStorage"
 ) => {
+  // ! 왜 있는 확인 필요
   const storageRef = useRef(
     storageObject === "localStorage"
       ? checkedLocalStorage
