@@ -159,7 +159,7 @@ export default function Page() {
   const openModal = useModalStore(({ openModal }) => openModal);
 
   // * 웹뷰 확인 코드
-  const [isWebview, setIsWebview] = useState(true);
+  const isWebview = useIsWebView();
 
   const webviewMessageEvent = (e: MessageEvent) => {
     const data: { type: string; genre?: number; search?: string } = JSON.parse(
@@ -186,7 +186,6 @@ export default function Page() {
   };
 
   useEffect(() => {
-    setIsWebview(useIsWebView());
     // ios
     window.addEventListener("message", webviewMessageEvent);
 

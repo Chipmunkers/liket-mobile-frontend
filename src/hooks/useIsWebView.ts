@@ -1,9 +1,21 @@
+import { useEffect, useState } from "react";
+
 export const WEB_VIEW_FLAG = "WEB_VIEW";
 
 export const useIsWebView = () => {
-  if (typeof window === "undefined") return true;
+  const [isWebview, setIsWebview] = useState(true);
 
-  if (window.isWebview === undefined) return false;
+  useEffect(() => {
+    if (window.isWebview === undefined) {
+      setIsWebview(false);
+      return;
+    }
 
-  return window.isWebview;
+    if (window.isWebview === false) {
+      setIsWebview(false);
+      return;
+    }
+  }, []);
+
+  return isWebview;
 };
