@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import HomeIcon from "@/icons/home.svg";
 import FilledHomeIcon from "@/icons/home-filled.svg";
 import MapIcon from "@/icons/map.svg";
@@ -15,11 +15,9 @@ import { colors } from "@/utils/style";
 import CreateReview from "@/icons/create-review.svg";
 import CreateLiket from "@/icons/create-liket.svg";
 import CreateRoute from "@/icons/create-route.svg";
-import useModalStore from "@/stores/modalStore";
 import { classNames } from "@/utils/helpers";
 import CustomDrawer from "../CustomDrawer";
 import customToast from "@/utils/customToast";
-import { useGetMyInfo } from "../../hooks/useGetMyInfo";
 import { ButtonBase } from "@mui/material";
 import {
   ScreenTYPE,
@@ -39,9 +37,6 @@ const LinkableTab = ({ shadow = false }: Props) => {
   const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
 
   const isLoggedIn = false;
-  const openModal = useModalStore(({ openModal }) => openModal);
-
-  const { data: loginUser } = useGetMyInfo();
 
   const messageEvent = (e: MessageEvent) => {
     const data: { type: string; click: string } = JSON.parse(e.data);
@@ -85,17 +80,6 @@ const LinkableTab = ({ shadow = false }: Props) => {
             ) : (
               <ButtonBase
                 onClick={() => {
-                  if (!loginUser) {
-                    openModal("LoginModal", {
-                      onClickPositive: () => {
-                        stackRouterPush(router, {
-                          path: "/login",
-                          screen: ScreenTYPE.LOGIN,
-                          isStack: false,
-                        });
-                      },
-                    });
-                  }
                   stackRouterPush(router, {
                     path: "/create/review",
                     screen: ScreenTYPE.CREATE_REVIEW,
