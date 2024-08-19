@@ -71,7 +71,7 @@ const SearchHeader = ({
       >
         <BackIcon />
       </ButtonBase>
-      <div className="flex-1 border-solid border-b-[1px] ml-[4px] pb-[12px] mr-[12px] pt-[16px]">
+      <div className="h-[48px] flex-1 border-solid border-b-[1px] ml-[4px] pb-[12px] mr-[12px] pt-[16px]">
         <form className="flex" role="search" onSubmit={handleSubmitForm}>
           <input
             type="search"
