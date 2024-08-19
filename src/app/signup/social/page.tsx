@@ -12,6 +12,8 @@ import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
 import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
 
+// ! 페이지 Deprecated 되었음
+
 const INITIAL_FORM_STATE = {
   emailToken: "",
   email: "",
@@ -22,6 +24,9 @@ const INITIAL_FORM_STATE = {
   file: "",
 };
 
+/**
+ * @deprecated
+ */
 const SignUpPage = () => {
   const router = useRouter();
   const params = useSearchParams();
