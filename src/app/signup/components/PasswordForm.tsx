@@ -141,7 +141,6 @@ export const PasswordChangeForm = ({
 
   const { formState, trigger, watch, register, getValues } = methods;
   const { isValid, dirtyFields, errors } = formState;
-  console.log(errors);
 
   const handleClickNextButton = () => {
     onClickNextButton(getValues("oldPw"), getValues("newPw"));
