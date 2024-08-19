@@ -17,13 +17,13 @@ const Chip = ({ children, isSelected, onClick }: ChipProps) => {
       onClick={onClick}
       disableRipple={true}
       className={classNames(
-        "rounded-[14px] border-grey-02 border-solid border-[1px] px-[12px] h-[28px]",
+        "rounded-[14px] border-grey-02 border-solid border-[1px] px-[8px] h-[28px]",
         isSelected && "bg-skyblue-01 border-skyblue-01"
       )}
     >
       <span
         className={classNames(
-          "text-button4",
+          "text-button4 mt-[2px]",
           isSelected && "text-white bg-skyblue-01 border-skyblue-01"
         )}
       >
