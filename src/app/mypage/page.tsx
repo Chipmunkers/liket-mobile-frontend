@@ -16,7 +16,7 @@ import { If, Then, Else } from "react-if";
 import ScrollContainer from "react-indiana-drag-scroll";
 import customToast from "../../utils/customToast";
 import VerticalDivider from "./icons/vertical-divider.svg";
-import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
+import { ScreenTYPE, stackRouterPush } from "@/utils/stackRouter";
 
 export default function Page() {
   const router = useRouter();

@@ -1,7 +1,7 @@
 "use client";
 
 import Header from "@/components/Header";
-import { PasswordChangeForm } from "@/app/signup/components/PasswordForm";
+import { PasswordChangeForm } from "@/app/signup/_components/PasswordForm";
 import { useChangePassword } from "@/service/changePassword";
 import customToast from "@/utils/customToast";
 import { useRouter } from "next/navigation";
