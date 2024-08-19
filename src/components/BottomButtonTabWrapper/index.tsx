@@ -19,7 +19,7 @@ const BottomButtonTabWrapper = ({
         gap,
       }}
       className={classNames(
-        `bottom-tab flex flex-row pt-[8px] pl-[24px] pr-[24px] pb-[42px]`,
+        `bottom-tab flex flex-row pt-[8px] pb-[8px] pl-[24px] pr-[24px]`,
         shadow && `shadow-[0px_-8px_16px_0px_rgba(0,0,0,0.04)]`,
         className || ""
       )}
