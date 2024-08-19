@@ -16,6 +16,7 @@ import { getHotReview } from "./_hooks/getHotReviews";
 import LeftOption from "@/components/Header/LeftOption";
 import RightOption from "@/components/Header/RightOption";
 import HotPlaceSection from "./_components/HotPlaceSection";
+import { useEffect } from "react";
 
 const Home = async () => {
   const { contentList: soonOpenContents } =
@@ -24,6 +25,8 @@ const Home = async () => {
   const { bannerList } = await getBanners();
   const hotContentList = await getHotContentsForServer();
   const reviews = await getHotReview();
+
+  console.log(reviews);
 
   return (
     <>
@@ -55,16 +58,21 @@ const Home = async () => {
         {/* 종료 예정 컨텐츠 */}
         <SoonEndContentSection contentList={soonEndContents} />
 
-        <Divider height="8px" width="100%" margin="24px 0" />
+        {reviews.length ? (
+          <>
+            <Divider height="8px" width="100%" margin="24px 0" />
 
-        <section className="mb-[24px] text-h2">
-          <h2 className="pl-[24px] mb-[8px]">최근 인기 리뷰</h2>
-          <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-            {reviews.map((review, index) => (
-              <ReviewCard key={index} review={review} />
-            ))}
-          </CustomScrollContainer>
-        </section>
+            <section className="mb-[24px] text-h2">
+              <h2 className="pl-[24px] mb-[8px]">최근 인기 리뷰</h2>
+              <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
+                {reviews.map((review, index) => {
+                  console.log(reviews);
+                  return <ReviewCard key={index} review={review} />;
+                })}
+              </CustomScrollContainer>
+            </section>
+          </>
+        ) : null}
       </main>
       <LinkableTab shadow />
     </>
