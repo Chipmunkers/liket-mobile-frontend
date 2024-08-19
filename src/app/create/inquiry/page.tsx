@@ -27,7 +27,7 @@ import { classNames } from "@/utils/helpers";
 const MAX_IMAGES_COUNT = 10;
 
 const inquiryTypeSchema = z.object({
-  idx: z.string(),
+  idx: z.number(),
   name: z.string(),
 });
 
@@ -63,7 +63,7 @@ export default function Page() {
     resolver: zodResolver(schema),
   });
 
-  const { formState, control, register, setValue, watch, getValues } = methods;
+  const { formState, control, register, setValue, getValues } = methods;
 
   const [isTypeSelectionModalOpen, setIsTypeSelectionModalOpen] =
     useState(false);
@@ -77,6 +77,8 @@ export default function Page() {
 
     setValue("imgList", newImgList);
   };
+
+  console.log(formState.errors);
 
   return (
     <>
@@ -101,22 +103,30 @@ export default function Page() {
       <main>
         <form>
           <div className="mx-[24px] mt-[16px]">
-            <InputWrapper>
-              <Label
-                maxLength={40}
-                htmlFor="title"
-                currentLength={watch("title")?.length}
-              >
-                제목<span className="text-top">*</span>
-              </Label>
-              <Input
-                field="title"
-                maxLength={30}
-                placeholder="제목을 입력해주세요."
-                formState={formState}
-                register={register}
-              />
-            </InputWrapper>
+            <Controller
+              name="title"
+              control={control}
+              render={({ field }) => {
+                return (
+                  <InputWrapper>
+                    <Label
+                      maxLength={40}
+                      htmlFor="title"
+                      currentLength={field.value?.length || 0}
+                    >
+                      제목<span className="text-top">*</span>
+                    </Label>
+                    <Input
+                      field="title"
+                      formState={formState}
+                      register={register}
+                      placeholder="제목을 입력해주세요."
+                      maxLength={30}
+                    />
+                  </InputWrapper>
+                );
+              }}
+            />
           </div>
           <div className="mt-[34px] mx-[24px]">
             <Label htmlFor="open-date">
@@ -141,21 +151,38 @@ export default function Page() {
             />
           </div>
           <div className="px-[24px] mt-[34px]">
-            <InputWrapper>
-              <Label
-                htmlFor="description"
-                maxLength={200}
-                currentLength={watch("description")?.length}
-              >
-                문의 내용<span className="text-top">*</span>
-              </Label>
-              <TextareaAutosize
-                maxLength={200}
-                placeholder="내용을 입력해주세요."
-                className="w-[100%] min-h-[132px] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0"
-                {...register("description")}
-              />
-            </InputWrapper>
+            <Controller
+              name="description"
+              control={control}
+              render={({ field, formState }) => {
+                return (
+                  <InputWrapper>
+                    <Label
+                      htmlFor="description"
+                      maxLength={200}
+                      currentLength={field.value?.length || 0}
+                    >
+                      문의 내용<span className="text-top">*</span>
+                    </Label>
+                    <TextareaAutosize
+                      {...field}
+                      maxLength={200}
+                      placeholder="내용을 입력해주세요."
+                      className="w-[100%] min-h-[132px] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0"
+                    />
+                    <strong
+                      className="text-button6 text-rosepink-01 mt-[4px] h-[18px]"
+                      aria-live="assertive"
+                      hidden={
+                        !formState.errors["description"]?.message?.toString()
+                      }
+                    >
+                      {formState.errors["description"]?.message?.toString()}
+                    </strong>
+                  </InputWrapper>
+                );
+              }}
+            />
           </div>
           <div className="px-[24px] mt-[34px]">
             <Controller
@@ -167,7 +194,7 @@ export default function Page() {
                     <Label
                       htmlFor="photos"
                       maxLength={10}
-                      currentLength={watch("imgList")?.length}
+                      currentLength={field.value?.length || 0}
                     >
                       사진<span className="text-top">*</span>
                     </Label>
@@ -265,7 +292,7 @@ export default function Page() {
                         }}
                         className={classNames(
                           "bottom-sheet-button flex justify-start px-[24px]",
-                          field.value?.idx === `${idx}` &&
+                          field.value?.idx === idx &&
                             "text-skyblue-01 text-body1"
                         )}
                       >
