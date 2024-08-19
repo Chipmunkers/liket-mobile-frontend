@@ -38,16 +38,16 @@ const schema = z.object({
   inquiryType: inquiryTypeSchema,
 });
 
+type FormState = z.infer<typeof schema>;
+
 export default function Page() {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const { mutate: uploadInquiryImages } = useUploadInquiryImages({
     onSuccess: ({ data }) => {
       const newData = data.map(({ filePath }) => filePath);
-
-      setUploadedImages([...uploadedImages, ...newData]);
-      // setValue("imgList", [...uploadedImages, ...newData]);
-      // trigger("imgList");
+      const [priorImgList] = getValues(["imgList"]);
+      setValue("imgList", [...(priorImgList || []), ...newData]);
     },
   });
   const { mutate: createInquiry } = useCreateInquiry({
@@ -58,25 +58,24 @@ export default function Page() {
       // TODO: 에러 핸들링
     },
   });
-  const methods = useForm({
+  const methods = useForm<FormState>({
     mode: "onBlur",
     resolver: zodResolver(schema),
   });
 
-  const { formState, control, register, setValue, trigger, watch } = methods;
+  const { formState, control, register, setValue, watch, getValues } = methods;
 
-  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [isTypeSelectionModalOpen, setIsTypeSelectionModalOpen] =
     useState(false);
 
   const handleRemoveImage = (filePath: string) => {
-    const newImgList = uploadedImages.filter(
+    const uploadedImages = getValues(["imgList"]);
+
+    const newImgList = uploadedImages[0].filter(
       (targetFilePath) => targetFilePath !== filePath
     );
 
-    setUploadedImages(newImgList);
     setValue("imgList", newImgList);
-    trigger("imgList");
   };
 
   return (
@@ -130,7 +129,7 @@ export default function Page() {
                 return (
                   <div className="mt-[12px]">
                     <MediumSelectButton
-                      text={""}
+                      text={field.value?.name || ""}
                       className="w-full"
                       placeholder="문의 유형을 선택해주세요."
                       onClick={() => setIsTypeSelectionModalOpen(true)}
@@ -159,70 +158,89 @@ export default function Page() {
             </InputWrapper>
           </div>
           <div className="px-[24px] mt-[34px]">
-            <Label
-              htmlFor="photos"
-              maxLength={10}
-              currentLength={uploadedImages?.length}
-            >
-              사진<span className="text-top">*</span>
-            </Label>
-            <ScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] mt-[8px]">
-              <input
-                ref={inputRef}
-                type="file"
-                multiple
-                className="hidden grow"
-                onChange={(e) => {
-                  if (uploadedImages.length > MAX_IMAGES_COUNT) {
-                    customToast("이미지는 최대 10개까지만 업로드 가능합니다.");
-
-                    return;
-                  }
-
-                  if (e.target.files) {
-                    const formData = new FormData();
-
-                    for (let i = 0; i < e.target.files.length; i++) {
-                      formData.append("files", e.target.files[i]);
-                    }
-
-                    uploadInquiryImages(formData);
-                  }
-                }}
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  inputRef.current && inputRef.current.click();
-                }}
-                className="center w-[96px] h-[96px] bg-grey-01 shrink-0"
-                aria-label="이미지 업로드 버튼"
-              >
-                <CreateIcon color="#fff" />
-              </button>
-              {uploadedImages.map((filePath) => {
+            <Controller
+              name="imgList"
+              control={control}
+              render={({ field }) => {
                 return (
-                  <li
-                    key={filePath}
-                    className="w-[96px] h-[96px] relative shrink-0"
-                  >
-                    <Image
-                      src={process.env.NEXT_PUBLIC_IMAGE_SERVER + filePath}
-                      fill
-                      alt="업로드된 이미지"
-                    />
-                    <button
-                      type="button"
-                      aria-label="현재 선택된 이미지 삭제"
-                      className="absolute right-[8px] top-[8px]"
-                      onClick={() => handleRemoveImage(filePath)}
+                  <>
+                    <Label
+                      htmlFor="photos"
+                      maxLength={10}
+                      currentLength={watch("imgList")?.length}
                     >
-                      <DeleteIcon width="24px" height="24px" />
-                    </button>
-                  </li>
+                      사진<span className="text-top">*</span>
+                    </Label>
+                    <ScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] mt-[8px]">
+                      <input
+                        ref={inputRef}
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        className="hidden grow"
+                        onChange={(e) => {
+                          if (field.value?.length > MAX_IMAGES_COUNT) {
+                            customToast(
+                              "이미지는 최대 10개까지만 업로드 가능합니다."
+                            );
+
+                            return;
+                          }
+
+                          if (e.target.files) {
+                            const formData = new FormData();
+
+                            for (let i = 0; i < e.target.files.length; i++) {
+                              formData.append("files", e.target.files[i]);
+
+                              if (!validateFile(e.target.files[i])) {
+                                customToast("허용하는 확장자 타입이 아닙니다.");
+                              }
+                            }
+
+                            uploadInquiryImages(formData);
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          inputRef.current && inputRef.current.click();
+                        }}
+                        className="center w-[96px] h-[96px] bg-grey-01 shrink-0"
+                        aria-label="이미지 업로드 버튼"
+                      >
+                        <CreateIcon color="#fff" />
+                      </button>
+                      {field.value?.map((filePath) => {
+                        return (
+                          <li
+                            key={filePath}
+                            className="w-[96px] h-[96px] relative shrink-0"
+                          >
+                            <Image
+                              src={
+                                process.env.NEXT_PUBLIC_IMAGE_SERVER + filePath
+                              }
+                              fill
+                              alt="업로드된 이미지"
+                            />
+                            <button
+                              type="button"
+                              aria-label="현재 선택된 이미지 삭제"
+                              className="absolute right-[8px] top-[8px]"
+                              onClick={() => handleRemoveImage(filePath)}
+                            >
+                              <DeleteIcon width="24px" height="24px" />
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ScrollContainer>
+                  </>
                 );
-              })}
-            </ScrollContainer>
+              }}
+            />
           </div>
         </form>
       </main>
@@ -243,14 +261,12 @@ export default function Page() {
                       <ButtonBase
                         onClick={() => {
                           field.onChange({ idx, name });
-                          // setValue("inquiryTypeIdx", `${idx}`);
                           setIsTypeSelectionModalOpen(false);
                         }}
                         className={classNames(
-                          "bottom-sheet-button flex justify-start px-[24px]"
-                          // watch("inquiryTypeIdx") === `${idx}`
-                          //   ? "text-skyblue-01 text-body1"
-                          //   : ""
+                          "bottom-sheet-button flex justify-start px-[24px]",
+                          field.value?.idx === `${idx}` &&
+                            "text-skyblue-01 text-body1"
                         )}
                       >
                         {name}
@@ -266,3 +282,18 @@ export default function Page() {
     </>
   );
 }
+
+const validateFile = (file: File) => {
+  const allowedExtensions = ["jpg", "jpeg", "png", "gif"];
+  const fileExtension = file.name.split(".").pop()?.toLowerCase();
+  const isValidMimeType = file.type.startsWith("image/");
+
+  if (
+    (fileExtension && !allowedExtensions.includes(fileExtension)) ||
+    !isValidMimeType
+  ) {
+    return false;
+  }
+
+  return true;
+};
