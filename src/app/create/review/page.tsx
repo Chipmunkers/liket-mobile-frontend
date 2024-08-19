@@ -15,7 +15,7 @@ import CalendarIcon from "@/icons/calendar.svg";
 import customToast from "@/utils/customToast";
 import { usePathname, useRouter } from "next/navigation";
 import { useUploadReviewImages, useWriteReview } from "@/service/review";
-import { UploadedFileEntity } from "@/types/upload";
+import { UploadedFileEntity } from "@/types/api/upload";
 import { TextareaAutosize } from "@mui/material";
 import ScrollContainer from "react-indiana-drag-scroll";
 import CustomImage from "@/components/CustomImage";
