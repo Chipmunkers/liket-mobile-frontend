@@ -1,29 +1,20 @@
 "use client";
 
-import Button from "@/components/Button";
-import CustomDrawer from "@/components/CustomDrawer";
 import Header from "@/components/Header";
 import MediumSelectButton from "@/components/SelectButton/MediumSelectButton";
 import StarRating from "@/components/StarRating";
 import { colors } from "@/utils/style";
-import { DateCalendar, MultiSectionDigitalClock } from "@mui/x-date-pickers";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { ChangeEvent, useRef, useState } from "react";
 import SearchIcon from "@/icons/search.svg";
 import CreateIcon from "@/icons/create.svg";
 import Image from "next/image";
-import { getRefValue } from "@/utils/helpers";
 import ClockIcon from "@/icons/clock.svg";
 import DeleteIcon from "@/icons/circle-cross.svg";
 import CalendarIcon from "@/icons/calendar.svg";
 import customToast from "@/utils/customToast";
-import SearchHeader from "@/components/SearchHeader";
-import { useSearchContent } from "@/service/searchContent";
-import { ContentCard } from "@/components/Card/ContentCard";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ContentListItem } from "@/types/content";
+import { usePathname, useRouter } from "next/navigation";
 import { useUploadReviewImages, useWriteReview } from "@/service/review";
-import { useMyPage } from "@/service/profile";
 import { UploadedFileEntity } from "@/types/upload";
 import { TextareaAutosize } from "@mui/material";
 import ScrollContainer from "react-indiana-drag-scroll";
@@ -36,52 +27,31 @@ import {
   ScreenTYPE,
   stackRouterBack,
   stackRouterPush,
-} from "../../../utils/stackRouter";
+} from "@/utils/stackRouter";
+import { SummaryContentEntity } from "@/types/api/culture-content";
+import SearchContentDrawer from "./_components/SearchContent";
+import { DateAndTime } from "./_types/DateAndTime";
+import DateDrawer from "./_components/DateDrawer";
+import TimeDrawer from "./_components/TimeDrawer";
+import useCheckLoginUser from "./_hooks/useCheckLoginUser";
 
 const MAX_IMAGES_COUNT = 10;
 const MAX_REVIEW_LENGTH = 1000;
 
-interface DateAndTime {
-  before: Dayjs;
-  selected: Dayjs | undefined;
-}
-
 export default function Page() {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [searchText, setSearchText] = useState("");
-  const { data, contentListToShow } = useSearchContent(searchText);
-  const { error } = useMyPage();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { mutate: uploadImages } = useUploadReviewImages({
-    onSuccess: ({ data }) => {
-      setUploadedImages([...uploadedImages, ...data]);
-    },
-  });
-
-  const { mutate: writeReview } = useWriteReview({
-    onSuccess: () => {
-      stackRouterPush(router, {
-        path: `/contents/${targetContent?.idx}`,
-        screen: ScreenTYPE.CONTENT_DETAIL,
-        isStack: false,
-      });
-    },
-  });
-
-  const [targetContent, setTargetContent] =
-    useState<Pick<ContentListItem, "idx" | "title" | "thumbnail" | "genre">>();
-  const isSearchContentModalOpen = searchParams.get("isSearchContentModalOpen");
-  const [isYearSelectionDrawerOpen, setIsYearSelectionDrawerOpen] =
-    useState(false);
-  const [isTimePickerDrawerOpen, setIsTimePickerDrawerOpen] = useState(false);
+  // * State
+  const [selectedContent, setSelectedContent] =
+    useState<SummaryContentEntity>();
+  const [isDateDrawerOpen, setIsDateDrawerOpen] = useState(false);
+  const [isTimeDrawerOpen, setIsTimeDrawerOpen] = useState(false);
   const [uploadedImages, setUploadedImages] = useState<UploadedFileEntity[]>(
     []
   );
   const [rate, setRate] = useState(0);
-  const uploadInputRef = useRef<HTMLInputElement>(null);
   const [review, setReview] = useState("");
   const [dateInfo, setDateInfo] = useState<DateAndTime>({
     before: dayjs(new Date()),
@@ -92,22 +62,26 @@ export default function Page() {
     selected: undefined,
   });
 
-  const handleClickRemoveImage = (targetFullUrl: string) => {
-    const newUploadedImages = uploadedImages.filter(
-      ({ fullUrl }) => fullUrl != targetFullUrl
-    );
+  // * Hooks
+  const { mutate: uploadImages } = useUploadReviewImages({
+    onSuccess: ({ data }) => {
+      setUploadedImages([...uploadedImages, ...data]);
+    },
+  });
 
-    setUploadedImages(newUploadedImages);
-  };
+  const { mutate: writeReview } = useWriteReview({
+    onSuccess: () => {
+      stackRouterPush(router, {
+        path: `/contents/${selectedContent?.idx}`,
+        screen: ScreenTYPE.CONTENT_DETAIL,
+        isStack: false,
+      });
+    },
+  });
 
-  const handleClickUploadImage = () => {
-    getRefValue(uploadInputRef).click();
-  };
+  useCheckLoginUser();
 
-  const handleClickSearchContent = () => {
-    router.replace(`${pathname}?isSearchContentModalOpen=true`);
-  };
-
+  // * Handle
   const handleUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
     if (uploadedImages.length > MAX_IMAGES_COUNT) {
       customToast("이미지는 최대 10개까지만 업로드 가능합니다.");
@@ -126,24 +100,6 @@ export default function Page() {
     }
   };
 
-  const handleClickSearchedContent = (
-    targetContent: Pick<
-      ContentListItem,
-      "title" | "thumbnail" | "idx" | "genre"
-    >
-  ) => {
-    setTargetContent(targetContent);
-    router.replace("/create/review");
-  };
-
-  const enabledToSubmit =
-    review.length > 1 &&
-    rate > 0 &&
-    targetContent &&
-    uploadedImages.length > 0 &&
-    dateInfo.selected &&
-    dateInfo.selected;
-
   const handleWriteReview = () => {
     const imgList = uploadedImages.map(({ filePath }) => filePath);
     if (dateInfo.selected && timeInfo.selected) {
@@ -152,12 +108,12 @@ export default function Page() {
     const date = dateInfo.selected;
     const time = timeInfo.selected;
 
-    if (date && time && targetContent) {
+    if (date && time && selectedContent) {
       const extractedDate = date.format("YYYY-MM-DD");
       const extractedTime = time.format("HH:mm:ss");
 
       writeReview({
-        idx: targetContent.idx,
+        idx: selectedContent.idx,
         imgList,
         description: review,
         starRating: rate,
@@ -166,27 +122,34 @@ export default function Page() {
     }
   };
 
-  if (error?.response?.status === 401) {
-    return router.replace("/login");
-  }
+  const openSearchDrawer = () => {
+    router.replace(`${pathname}?isSearchContentModalOpen=true`);
+  };
+
+  const closeSearchDrawer = () => {
+    router.replace(`${pathname}`);
+  };
 
   return (
     <>
       <Header>
         <LeftOption
           option={{
-            back: {
-              onClick: () => {
-                stackRouterBack(router);
-              },
-            },
+            back: { onClick: () => stackRouterBack(router) },
           }}
         />
         <MiddleText text="작성" />
         <RightOption
           option={{
             check: {
-              disabled: !enabledToSubmit,
+              disabled: !(
+                review.length > 1 &&
+                rate > 0 &&
+                selectedContent &&
+                uploadedImages.length > 0 &&
+                dateInfo.selected &&
+                dateInfo.selected
+              ),
               onClick: handleWriteReview,
             },
           }}
@@ -201,9 +164,9 @@ export default function Page() {
             <button
               type="button"
               className="flex items-center mt-[8px]"
-              onClick={handleClickSearchContent}
+              onClick={() => openSearchDrawer()}
             >
-              {targetContent ? (
+              {selectedContent ? (
                 <div className="flex">
                   <div className="h-[48px] w-[48px] relative">
                     <CustomImage
@@ -212,17 +175,17 @@ export default function Page() {
                       }
                       src={
                         process.env.NEXT_PUBLIC_IMAGE_SERVER +
-                        targetContent.thumbnail
+                        selectedContent.thumbnail
                       }
                       fill
                       style={{ objectFit: "cover" }}
-                      alt={`${targetContent.title}의 썸네일 이미지`}
+                      alt={`${selectedContent.title}의 썸네일 이미지`}
                     />
                   </div>
                   <div className="flex flex-col justify-center text-start ml-[12px]">
-                    <div className="text-body2">{targetContent.title}</div>
+                    <div className="text-body2">{selectedContent.title}</div>
                     <div className="text-body5 text-grey-04">
-                      {targetContent.genre.name}
+                      {selectedContent.genre.name}
                     </div>
                   </div>
                 </div>
@@ -262,7 +225,7 @@ export default function Page() {
                     : ""
                 }
                 placeholder="날짜 선택"
-                onClick={() => setIsYearSelectionDrawerOpen(true)}
+                onClick={() => setIsDateDrawerOpen(true)}
                 Icon={<CalendarIcon />}
               />
             </div>
@@ -277,7 +240,7 @@ export default function Page() {
                     : ""
                 }
                 placeholder="시간 선택"
-                onClick={() => setIsTimePickerDrawerOpen(true)}
+                onClick={() => setIsTimeDrawerOpen(true)}
                 Icon={<ClockIcon />}
               />
             </div>
@@ -357,117 +320,28 @@ export default function Page() {
       </main>
 
       {/* 방문 날짜 */}
-      <CustomDrawer
-        open={isYearSelectionDrawerOpen}
-        onClose={() => setIsYearSelectionDrawerOpen(false)}
-      >
-        <DateCalendar
-          value={dateInfo.before}
-          maxDate={dayjs(new Date())}
-          onChange={(date) => {
-            setDateInfo({
-              ...dateInfo,
-              before: date,
-            });
-          }}
-        />
-        <div className="flex h-[98px] px-[24px]">
-          <Button
-            height={48}
-            fullWidth
-            onClick={() => {
-              setDateInfo({
-                ...dateInfo,
-                selected: dateInfo.before,
-              });
-
-              setTimeInfo({
-                ...timeInfo,
-                selected: undefined,
-              });
-
-              setIsYearSelectionDrawerOpen(false);
-            }}
-          >
-            확인
-          </Button>
-        </div>
-      </CustomDrawer>
+      <DateDrawer
+        isOpen={isDateDrawerOpen}
+        setIsOpen={setIsDateDrawerOpen}
+        date={dateInfo}
+        setDate={setDateInfo}
+      />
 
       {/* 방문 시간 */}
-      <CustomDrawer
-        open={isTimePickerDrawerOpen}
-        onClose={() => setIsTimePickerDrawerOpen(false)}
-      >
-        <MultiSectionDigitalClock
-          value={timeInfo.before}
-          maxTime={
-            dateInfo.selected && isToday(dateInfo.selected)
-              ? dayjs(new Date())
-              : undefined
-          }
-          onChange={(time) => setTimeInfo({ ...timeInfo, before: time })}
-        />
-        <div className="flex h-[98px] px-[24px]">
-          <Button
-            height={48}
-            fullWidth
-            onClick={() => {
-              setTimeInfo({
-                ...timeInfo,
-                selected: timeInfo.before,
-              });
-              setIsTimePickerDrawerOpen(false);
-            }}
-          >
-            확인
-          </Button>
-        </div>
-      </CustomDrawer>
+      <TimeDrawer
+        isOpen={isTimeDrawerOpen}
+        setIsOpen={setIsTimeDrawerOpen}
+        time={timeInfo}
+        setTime={setTimeInfo}
+      />
 
       {/* 컨텐츠 검색 */}
-      <div
-        className="full-modal transform"
-        style={{
-          visibility: !!isSearchContentModalOpen ? "visible" : "hidden",
-          transform: !!isSearchContentModalOpen
-            ? "translateY(0)"
-            : "translateY(100%)",
+      <SearchContentDrawer
+        setSelectedContent={(content) => {
+          setSelectedContent(content);
+          closeSearchDrawer();
         }}
-      >
-        <SearchHeader
-          placeholder="검색어를 입력해주세요."
-          onSearch={(text) => {
-            setSearchText(text);
-          }}
-        />
-        <div className="full-modal-main">
-          <div className="flex grow h-[100%] mx-[24px] mt-[24px]">
-            {contentListToShow?.map((data, index) => {
-              return (
-                <ContentCard
-                  key={index}
-                  {...data}
-                  status="willActive"
-                  isButton
-                  onClick={handleClickSearchedContent}
-                />
-              );
-            })}
-          </div>
-        </div>
-      </div>
+      />
     </>
   );
 }
-
-const isToday = (date: Dayjs | undefined) => {
-  if (date) {
-    const todayStr = dayjs().format("YYYY.MM.DD");
-    const dateStr = date.format("YYYY.MM.DD");
-
-    return todayStr === dateStr;
-  }
-
-  return false;
-};
