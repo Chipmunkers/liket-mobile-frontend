@@ -6,7 +6,7 @@ import { SummaryContentEntity } from "@/types/api/culture-content";
 import { SetState } from "@/types/react";
 import { useGetSearchContents } from "./_hooks/useGetSearchContent";
 import ContentCardGroup from "@/components/ContentCardGroup";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface Props {
   setSelectedContent: SetState<SummaryContentEntity | undefined>;
@@ -17,6 +17,7 @@ const SearchContentDrawer = (props: Props) => {
   const { setSelectedContent } = props;
 
   // * Hooks
+  const router = useRouter();
   const searchParams = useSearchParams();
   const isSearchModalOpen = searchParams.get("isSearchContentModalOpen");
   const [searchText, setSearchText] = useState("");
@@ -36,6 +37,9 @@ const SearchContentDrawer = (props: Props) => {
         placeholder="검색어를 입력해주세요."
         onSearch={(text) => {
           setSearchText(text);
+        }}
+        onBackButtonClick={() => {
+          router.replace("/create/review");
         }}
       />
       <div className="full-modal-main">

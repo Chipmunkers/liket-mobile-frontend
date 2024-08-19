@@ -18,6 +18,7 @@ interface SearchHeaderProps {
   onSearch: (text: string) => void;
   replacePath?: string;
   className?: string;
+  onBackButtonClick?: () => void;
 }
 
 const SearchHeader = ({
@@ -25,6 +26,7 @@ const SearchHeader = ({
   onSearch,
   replacePath,
   className,
+  onBackButtonClick,
 }: SearchHeaderProps) => {
   const [searchText, setSearchText] = useState("");
   const router = useRouter();
@@ -60,7 +62,12 @@ const SearchHeader = ({
     <div className={classNames("header", className || "")}>
       <ButtonBase
         className="w-[48px] h-[48px] rounded-full"
-        onClick={handleClickBackButton}
+        onClick={() => {
+          if (onBackButtonClick) {
+            return onBackButtonClick();
+          }
+          handleClickBackButton();
+        }}
       >
         <BackIcon />
       </ButtonBase>
