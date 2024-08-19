@@ -2,7 +2,7 @@ import { ContentEntity } from "@/types/api/culture-content";
 import axiosInstance from "@/utils/axios";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetHotStyleContents = (idx: string | undefined) =>
+export const useGetContentDetail = (idx: string | undefined) =>
   useQuery({
     queryKey: ["requested-content-detail", idx],
     queryFn: async () => {

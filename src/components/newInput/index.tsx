@@ -108,12 +108,14 @@ export const Input = <T extends FieldValues>({
         {...register(field, { onChange })}
         {...props}
       />
-      <strong
-        className="text-button6 text-rosepink-01 mt-[4px] h-[18px]"
-        aria-live="assertive"
-      >
-        {errors[field]?.message?.toString()}
-      </strong>
+      {errors[field]?.message?.toString() && (
+        <strong
+          className="text-button6 text-rosepink-01 mt-[4px] h-[18px]"
+          aria-live="assertive"
+        >
+          {errors[field]?.message?.toString()}
+        </strong>
+      )}
     </>
   );
 };

@@ -4,14 +4,11 @@ import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 
 export const useRemoveContent = ({
-  idx,
   onSuccess,
   onError,
-}: UseMutationOptions<AxiosResponse, ResponseError> & {
-  idx: number;
-}) =>
+}: UseMutationOptions<AxiosResponse, ResponseError, string | null>) =>
   useMutation({
-    mutationFn: () => {
+    mutationFn: (idx) => {
       return axiosInstance.delete(`/apis/culture-content/request/${idx}`);
     },
     onSuccess,
