@@ -11,97 +11,30 @@ import { SummaryContentEntity } from "../../types/api/culture-content";
 import { useRouter } from "next/navigation";
 import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
 
-type ContentCardProps = SummaryContentEntity & {
-  isButton?: boolean;
-  onClick?: (
-    contentListItem: Pick<
-      SummaryContentEntity,
-      "idx" | "title" | "thumbnail" | "genre"
-    >
-  ) => void;
+type ContentCardProps = {
+  content: SummaryContentEntity;
+  onClick?: (content: SummaryContentEntity) => void;
   width?: string;
 };
 
-export const ContentCard = ({
-  idx,
-  title,
-  thumbnail,
-  likeState,
-  startDate,
-  endDate,
-  location,
-  genre,
-  isButton = false,
-  width,
-  onClick,
-}: ContentCardProps) => {
-  const { region1Depth, region2Depth } = location;
+export const ContentCard = (props: ContentCardProps) => {
+  const { content, width, onClick } = props;
 
   const router = useRouter();
 
-  if (isButton) {
-    return (
-      <button
-        className="h-fit"
-        onClick={() =>
-          onClick &&
-          onClick({
-            idx,
-            title,
-            thumbnail,
-            genre,
-          })
-        }
-      >
-        <article className="">
-          <div className="relative mb-[8px]">
-            <div className="relative aspect-[164/232]">
-              <CustomImage
-                src={process.env.NEXT_PUBLIC_IMAGE_SERVER + thumbnail}
-                fallbackComponent={<FallbackContentImg />}
-                width={164}
-                height={232}
-                alt={`${title}에 대한 포스터`}
-                style={{
-                  objectFit: "cover",
-                  width: "100%",
-                  height: "100%",
-                }}
-              />
-            </div>
-            <Badge
-              variant={getStatus(startDate, endDate)}
-              style={{
-                position: "absolute",
-                left: "8px",
-                top: "8px",
-              }}
-            >
-              {variantToText[getStatus(startDate, endDate)]}
-            </Badge>
-          </div>
-          <div className="flex flex-col text-left">
-            <div className="text-body4 text-skyblue-01">{genre.name}</div>
-            <div className="text-body2">{title}</div>
-            <div className="text-body5 text-grey-04">{`${region1Depth} ${region2Depth}`}</div>
-            <div className="text-body5 text-grey-04">
-              {dayjs(startDate).format("YYYY-MM-DD")} -{" "}
-              {dayjs(endDate).format("MM.DD")}
-            </div>
-          </div>
-        </article>
-      </button>
-    );
-  }
-
   return (
     <Link
-      href={`/contents/${idx}`}
+      href={`/contents/${content.idx}`}
       onClick={(e) => {
         e.preventDefault();
 
+        if (onClick) {
+          onClick(content);
+          return;
+        }
+
         stackRouterPush(router, {
-          path: `/contents/${idx}`,
+          path: `/contents/${content.idx}`,
           screen: ScreenTYPE.CONTENT_DETAIL,
         });
       }}
@@ -110,11 +43,11 @@ export const ContentCard = ({
         <div className="relative mb-[8px]">
           <div className="relative aspect-[164/232]">
             <CustomImage
-              src={process.env.NEXT_PUBLIC_IMAGE_SERVER + thumbnail}
+              src={process.env.NEXT_PUBLIC_IMAGE_SERVER + content.thumbnail}
               fallbackComponent={<FallbackContentImg />}
               width={164}
               height={232}
-              alt={`${title}에 대한 포스터`}
+              alt={`${content.title}에 대한 포스터`}
               style={{
                 objectFit: "cover",
                 width: "100%",
@@ -123,30 +56,32 @@ export const ContentCard = ({
             />
           </div>
           <Badge
-            variant={getStatus(startDate, endDate)}
+            variant={getStatus(content.startDate, content.endDate)}
             style={{
               position: "absolute",
               left: "8px",
               top: "8px",
             }}
           >
-            {variantToText[getStatus(startDate, endDate)]}
+            {variantToText[getStatus(content.startDate, content.endDate)]}
           </Badge>
           <ContentLikeBtn
-            idx={idx}
+            idx={content.idx}
             className="absolute bottom-[8px] right-[8px]"
-            likeState={likeState}
+            likeState={content.likeState}
           />
         </div>
         <div className="flex flex-col">
           <div className="text-body4 text-skyblue-01 mb-[4px]">
-            {genre.name}
+            {content.genre.name}
           </div>
-          <div className="text-body2 min-h-[17px] mb-[4px]">{title}</div>
-          <div className="text-body5 text-grey-04">{`${region1Depth} ${region2Depth}`}</div>
+          <div className="text-body2 min-h-[17px] mb-[4px]">
+            {content.title}
+          </div>
+          <div className="text-body5 text-grey-04">{`${content.location.region1Depth} ${content.location.region2Depth}`}</div>
           <div className="text-body5 text-grey-04">
-            {dayjs(startDate).format("YYYY-MM-DD")} -{" "}
-            {dayjs(endDate).format("MM.DD")}
+            {dayjs(content.startDate).format("YYYY-MM-DD")} -{" "}
+            {dayjs(content.endDate).format("MM.DD")}
           </div>
         </div>
       </article>

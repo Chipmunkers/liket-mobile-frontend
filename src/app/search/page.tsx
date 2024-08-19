@@ -159,7 +159,7 @@ export default function Page() {
   const openModal = useModalStore(({ openModal }) => openModal);
 
   // * 웹뷰 확인 코드
-  const [isWebview, setIsWebview] = useState(true);
+  const isWebview = useIsWebView();
 
   const webviewMessageEvent = (e: MessageEvent) => {
     const data: { type: string; genre?: number; search?: string } = JSON.parse(
@@ -186,7 +186,6 @@ export default function Page() {
   };
 
   useEffect(() => {
-    setIsWebview(useIsWebView());
     // ios
     window.addEventListener("message", webviewMessageEvent);
 
@@ -195,10 +194,6 @@ export default function Page() {
 
     return () => window.removeEventListener("message", webviewMessageEvent);
   }, []);
-
-  useEffect(() => {
-    console.log(isWebview);
-  }, [isWebview]);
 
   useEffect(() => {
     if (!error) return;
@@ -375,7 +370,10 @@ export default function Page() {
             className="text-button3"
             text=""
             onClick={() => {
-              setIsOrderDrawerOpen(true);
+              setPagerble({
+                ...pagerble,
+                orderby: "like",
+              });
             }}
             Icon={<SmallDownArrow />}
           />
@@ -387,7 +385,10 @@ export default function Page() {
             className="text-button3"
             text=""
             onClick={() => {
-              setIsOrderDrawerOpen(true);
+              setPagerble({
+                ...pagerble,
+                orderby: "time",
+              });
             }}
             Icon={<SmallDownArrow />}
           />
@@ -539,7 +540,7 @@ export default function Page() {
         </div>
       </CustomDrawer>
 
-      <CustomDrawer
+      {/* <CustomDrawer
         open={isOrderDrawerOpen}
         onClose={() => setIsOrderDrawerOpen(false)}
       >
@@ -578,7 +579,7 @@ export default function Page() {
             인기순
           </ButtonBase>
         </li>
-      </CustomDrawer>
+      </CustomDrawer> */}
     </>
   );
 }

@@ -127,7 +127,6 @@ export default function Page() {
               name="inquiryType"
               control={control}
               render={({ field }) => {
-                console.log(field);
                 return (
                   <div className="mt-[12px]">
                     <MediumSelectButton

@@ -1,5 +1,5 @@
 import { ResponseError } from "@/types/api";
-import { UploadedFileEntity } from "@/types/upload";
+import { UploadedFileEntity } from "@/types/api/upload";
 import axiosInstance from "@/utils/axios";
 import { UseMutationOptions, useMutation } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";

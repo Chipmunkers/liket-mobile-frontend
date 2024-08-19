@@ -6,7 +6,7 @@ interface Props {
   Icon: ReactNode;
   text: string;
   placeholder: string;
-  className: string;
+  className?: string;
   onClick: EmptyFunction;
 }
 
@@ -18,7 +18,7 @@ const Index = ({ Icon, text, placeholder, className, onClick }: Props) => {
       className={classNames(
         "flex justify-between items-center border-solid border-[1px] border-grey-02 rounded-[20px] h-[40px] px-[16px] w-[171px] text-body3",
         !text ? "text-button4 text-grey-02" : "text-body3",
-        className
+        className || ""
       )}
     >
       {text || placeholder}
