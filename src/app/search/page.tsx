@@ -370,7 +370,10 @@ export default function Page() {
             className="text-button3"
             text=""
             onClick={() => {
-              setIsOrderDrawerOpen(true);
+              setPagerble({
+                ...pagerble,
+                orderby: "like",
+              });
             }}
             Icon={<SmallDownArrow />}
           />
@@ -382,7 +385,10 @@ export default function Page() {
             className="text-button3"
             text=""
             onClick={() => {
-              setIsOrderDrawerOpen(true);
+              setPagerble({
+                ...pagerble,
+                orderby: "time",
+              });
             }}
             Icon={<SmallDownArrow />}
           />
@@ -534,7 +540,7 @@ export default function Page() {
         </div>
       </CustomDrawer>
 
-      <CustomDrawer
+      {/* <CustomDrawer
         open={isOrderDrawerOpen}
         onClose={() => setIsOrderDrawerOpen(false)}
       >
@@ -573,7 +579,7 @@ export default function Page() {
             인기순
           </ButtonBase>
         </li>
-      </CustomDrawer>
+      </CustomDrawer> */}
     </>
   );
 }
