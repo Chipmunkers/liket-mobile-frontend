@@ -355,6 +355,8 @@ export default function Page() {
           </div>
         </form>
       </main>
+
+      {/* 방문 날짜 */}
       <CustomDrawer
         open={isYearSelectionDrawerOpen}
         onClose={() => setIsYearSelectionDrawerOpen(false)}
@@ -391,6 +393,8 @@ export default function Page() {
           </Button>
         </div>
       </CustomDrawer>
+
+      {/* 방문 시간 */}
       <CustomDrawer
         open={isTimePickerDrawerOpen}
         onClose={() => setIsTimePickerDrawerOpen(false)}
@@ -420,6 +424,8 @@ export default function Page() {
           </Button>
         </div>
       </CustomDrawer>
+
+      {/* 컨텐츠 검색 */}
       <div
         className="full-modal transform"
         style={{
