@@ -42,18 +42,16 @@ const SearchContentDrawer = (props: Props) => {
           router.replace("/create/review");
         }}
       />
-      <div className="full-modal-main">
-        <div className="flex grow h-[100%] mx-[24px] mt-[24px]">
-          {data && (
-            <ContentCardGroup
-              contentList={data.pages.map((page) => page.contentList).flat()}
-              setTarget={setTarget}
-              onContentClick={(content) => {
-                setSelectedContent(content);
-              }}
-            />
-          )}
-        </div>
+      <div className="mt-[16px]">
+        {data && (
+          <ContentCardGroup
+            contentList={data.pages.map((page) => page.contentList).flat()}
+            setTarget={setTarget}
+            onContentClick={(content) => {
+              setSelectedContent(content);
+            }}
+          />
+        )}
       </div>
     </div>
   );

@@ -34,6 +34,8 @@ import { DateAndTime } from "./_types/DateAndTime";
 import DateDrawer from "./_components/DateDrawer";
 import TimeDrawer from "./_components/TimeDrawer";
 import useCheckLoginUser from "./_hooks/useCheckLoginUser";
+import { AxiosError } from "axios";
+import { compressImage } from "./_utils/compressImage";
 
 const MAX_IMAGES_COUNT = 10;
 const MAX_REVIEW_LENGTH = 1000;
@@ -67,6 +69,16 @@ export default function Page() {
     onSuccess: ({ data }) => {
       setUploadedImages([...uploadedImages, ...data]);
     },
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 400) {
+          customToast(".png또는 .jpg파일만 업로드할 수 있습니다.");
+        }
+        if (err.response?.status === 413) {
+          customToast("파일 용량이 너무 큽니다.");
+        }
+      }
+    },
   });
 
   const { mutate: writeReview } = useWriteReview({
@@ -82,21 +94,25 @@ export default function Page() {
   useCheckLoginUser();
 
   // * Handle
-  const handleUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleUploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
     if (uploadedImages.length > MAX_IMAGES_COUNT) {
       customToast("이미지는 최대 10개까지만 업로드 가능합니다.");
 
       return;
     }
 
-    if (e.target.files) {
-      const formData = new FormData();
+    try {
+      if (e.target.files) {
+        const formData = new FormData();
 
-      for (let i = 0; i < e.target.files.length; i++) {
-        formData.append("files", e.target.files[i]);
+        for (let i = 0; i < e.target.files.length; i++) {
+          formData.append("files", await compressImage(e.target.files[i]));
+        }
+
+        uploadImages(formData);
       }
-
-      uploadImages(formData);
+    } catch (err) {
+      customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
     }
   };
 
