@@ -18,7 +18,7 @@ const SoonOpenContentSection = (props: {
         <Then>
           <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
             {data.contentList.map((content, index) => {
-              return <ContentCard key={index} {...content} />;
+              return <ContentCard key={index} content={content} />;
             })}
           </CustomScrollContainer>
         </Then>

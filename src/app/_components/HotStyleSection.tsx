@@ -25,7 +25,7 @@ const HotStyleSection = () => {
           <If condition={data.contentList.length >= 1}>
             <Then>
               {shuffle(data.contentList).map((content, i) => (
-                <ContentCard key={i} {...{ ...content }} />
+                <ContentCard key={i} content={content} />
               ))}
             </Then>
             <Else>
