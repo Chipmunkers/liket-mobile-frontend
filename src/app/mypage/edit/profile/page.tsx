@@ -1,7 +1,5 @@
 "use client";
 
-import Header from "@/components/Header";
-import ProfileForm from "@/app/signup/components/ProfileForm";
 import { useEditProfile } from "@/service/profile";
 import profileStore from "@/stores/profileStore";
 import customToast from "@/utils/customToast";

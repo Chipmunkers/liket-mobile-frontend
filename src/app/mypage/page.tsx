@@ -14,9 +14,14 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { If, Then, Else } from "react-if";
 import ScrollContainer from "react-indiana-drag-scroll";
-import customToast from "../../utils/customToast";
+import customToast from "@/utils/customToast";
 import VerticalDivider from "./icons/vertical-divider.svg";
-import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
+import { ScreenTYPE, stackRouterPush } from "@/utils/stackRouter";
+import AvatarUploader from "@/components/AvatarUploader";
+import { compressImage } from "@/utils/compressImg";
+import useUploadProfile from "./_hooks/useUploadProfile";
+import { AxiosError } from "axios";
+import useUpdateProfile from "./_hooks/useUpdateProfileImg";
 
 export default function Page() {
   const router = useRouter();
@@ -34,6 +39,65 @@ export default function Page() {
       isStack: false,
     });
   }, [error, router]);
+
+  const {
+    mutate: uploadProfileImg,
+    error: uploadProfileImgError,
+    data: uploadResult,
+  } = useUploadProfile();
+
+  const { mutate: updateUserProfile, error: updateUserProfileError } =
+    useUpdateProfile();
+
+  useEffect(() => {
+    if (!uploadResult) return;
+
+    updateUserProfile(uploadResult.filePath);
+  }, [uploadResult]);
+
+  useEffect(() => {
+    if (!uploadProfileImgError) return;
+
+    if (uploadProfileImgError instanceof AxiosError) {
+      if (uploadProfileImgError.response?.status === 401) {
+        stackRouterPush(router, {
+          screen: ScreenTYPE.LOGIN,
+          path: "/login?isTokenExpired=true",
+          isStack: false,
+        });
+        return;
+      }
+
+      if (uploadProfileImgError.response?.status === 400) {
+        customToast("png또는 jpg파일만 업로드할 수 있습니다.");
+        return;
+      }
+
+      customToast("예상하지 못한 에러가 발생했습니다.");
+    }
+  }, [uploadProfileImgError]);
+
+  useEffect(() => {
+    if (!updateUserProfileError) return;
+
+    if (updateUserProfileError instanceof AxiosError) {
+      if (updateUserProfileError.response?.status === 401) {
+        stackRouterPush(router, {
+          screen: ScreenTYPE.LOGIN,
+          path: "/login",
+          isStack: false,
+        });
+        return;
+      }
+
+      if (updateUserProfileError.response?.status === 400) {
+        customToast("png또는 jpg파일만 업로드할 수 있습니다.");
+        return;
+      }
+
+      customToast("예상하지 못한 에러가 발생했습니다.");
+    }
+  }, [updateUserProfileError]);
 
   if (!data) {
     return <></>;
@@ -116,17 +180,25 @@ export default function Page() {
               </div>
             </div>
             <div className="">
-              <div className="w-[80px] h-[80px] rounded-full relative overflow-hidden">
-                <CustomImage
-                  src={
-                    profileImgPath
-                      ? process.env.NEXT_PUBLIC_IMAGE_SERVER + profileImgPath
+              <div className="w-[80px] h-[80px] rounded-full relative">
+                <AvatarUploader
+                  defaultAvatar={
+                    data.profileImgPath
+                      ? process.env.NEXT_PUBLIC_IMAGE_SERVER +
+                        data.profileImgPath
                       : ""
                   }
-                  fallbackImg={"/icons/default-avatar.svg"}
-                  alt="프로필 이미지"
-                  fill
-                  objectFit="cover"
+                  onUploadImage={async (file, base64String) => {
+                    const formData = new FormData();
+                    formData.append(
+                      "file",
+                      await compressImage(file, {
+                        maxSizeMB: 1,
+                      })
+                    );
+
+                    uploadProfileImg(formData);
+                  }}
                 />
               </div>
             </div>

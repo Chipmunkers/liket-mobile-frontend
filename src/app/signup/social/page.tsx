@@ -2,7 +2,7 @@
 
 import Control from "@/components/Control";
 import Header from "@/components/Header";
-import ProfileForm from "@/app/signup/components/ProfileForm";
+import ProfileForm from "@/app/signup/_components/ProfileForm";
 import { useSocialSignup } from "@/service/signup/hooks";
 import { ProfileFormData } from "@/types/signup";
 import customToast from "@/utils/customToast";
@@ -11,6 +11,8 @@ import { useState } from "react";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
 import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
+
+// ! 페이지 Deprecated 되었음
 
 const INITIAL_FORM_STATE = {
   emailToken: "",
@@ -22,6 +24,9 @@ const INITIAL_FORM_STATE = {
   file: "",
 };
 
+/**
+ * @deprecated
+ */
 const SignUpPage = () => {
   const router = useRouter();
   const params = useSearchParams();

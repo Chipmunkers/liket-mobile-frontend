@@ -2,9 +2,9 @@
 
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
-import { PasswordResetEmailForm } from "@/app/signup/components/EmailForm";
+import { PasswordResetEmailForm } from "@/app/signup/_components/EmailForm";
 import { useState } from "react";
-import PasswordForm from "@/app/signup/components/PasswordForm";
+import PasswordForm from "@/app/signup/_components/PasswordForm";
 import { useResetPassword } from "@/service/reset/hooks";
 import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
