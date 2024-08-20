@@ -1,9 +1,9 @@
-import imageCompression from "browser-image-compression";
+import imageCompression, { Options } from "browser-image-compression";
 
 export const compressImage = async (file: File) => {
-  const options = {
+  const options: Options = {
     maxSizeMB: 1,
-    useWebWorker: true,
+    fileType: "image/jpeg",
   };
   try {
     const compressedFile = await imageCompression(file, options);
