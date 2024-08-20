@@ -28,6 +28,11 @@ const BottomTab = ({ shadow = false }: Props) => {
 
   useMessageWebview(isCreateDrawerOpen, setIsCreateDrawerOpen);
 
+  const buttonStyle = {
+    width: "20%",
+    height: "44px",
+  };
+
   return (
     <>
       <BottomTabCreateDrawer
@@ -43,7 +48,7 @@ const BottomTab = ({ shadow = false }: Props) => {
           )}
         >
           <ButtonBase
-            className="w-[20%] h-[44px]"
+            style={buttonStyle}
             onClick={() => {
               if (pathname === "/") return;
 
@@ -62,7 +67,7 @@ const BottomTab = ({ shadow = false }: Props) => {
             )}
           </ButtonBase>
           <ButtonBase
-            className="w-[20%] h-[44px]"
+            style={buttonStyle}
             onClick={(e) => {
               if (pathname === "map") return;
 
@@ -80,11 +85,11 @@ const BottomTab = ({ shadow = false }: Props) => {
             )}
           </ButtonBase>
           <ButtonBase
+            style={buttonStyle}
             role="tab"
             aria-selected={isCreateDrawerOpen}
             type="button"
             data-twe-ripple-init
-            className="w-[20%] h-[44px]"
             onClick={() => setIsCreateDrawerOpen(true)}
           >
             {isCreateDrawerOpen ? (
@@ -94,7 +99,7 @@ const BottomTab = ({ shadow = false }: Props) => {
             )}
           </ButtonBase>
           <ButtonBase
-            className={`w-[20%] h-[44px]`}
+            style={buttonStyle}
             onClick={() => {
               stackRouterPush(router, {
                 path: "/mypage",
