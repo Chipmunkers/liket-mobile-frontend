@@ -98,32 +98,30 @@ export default function Page() {
                   전체
                 </ButtonBase>
               </li>
-              {GENRES.map((genre) => {
-                return (
-                  <li
-                    key={genre.idx}
-                    className={classNames(
-                      "h-[100%] w-[80px]",
-                      pagerble.genre === genre.idx.toString()
-                        ? "text-skyblue-01 border-b-[2px] border-skyblue-01 text-button3"
-                        : "text-button4 text-grey-03 pb-[2px]"
-                    )}
+              {GENRES.map((genre) => (
+                <li
+                  key={genre.idx}
+                  className={classNames(
+                    "h-[100%] w-[80px]",
+                    pagerble.genre === genre.idx.toString()
+                      ? "text-skyblue-01 border-b-[2px] border-skyblue-01 text-button3"
+                      : "text-button4 text-grey-03 pb-[2px]"
+                  )}
+                >
+                  <ButtonBase
+                    disableRipple={true}
+                    className="w-[100%] h-[100%] center"
+                    onClick={() => {
+                      setPagerble({
+                        ...pagerble,
+                        genre: genre.idx.toString(),
+                      });
+                    }}
                   >
-                    <ButtonBase
-                      disableRipple={true}
-                      className="w-[100%] h-[100%] center"
-                      onClick={() => {
-                        setPagerble({
-                          ...pagerble,
-                          genre: genre.idx.toString(),
-                        });
-                      }}
-                    >
-                      {genre.name}
-                    </ButtonBase>
-                  </li>
-                );
-              })}
+                    {genre.name}
+                  </ButtonBase>
+                </li>
+              ))}
             </ul>
           </CustomScrollContainer>
         </>
