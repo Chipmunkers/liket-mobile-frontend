@@ -24,7 +24,10 @@
       "@/utils/*": ["./src/utils/*"],
       "@/components/*": ["./src/components/*"],
       "@/stores/*": ["./src/stores/*"],
-      "@/icons/*": ["./public/icons/*"]
+      "@/icons/*": ["./public/icons/*"],
+      "@/shared": ["./src/shared"],
+      "@/features": ["./src/features"],
+      "@/entities": ["./src/entities"]
     },
     "types": ["kakao.maps.d.ts"]
   },

@@ -15,6 +15,8 @@ const DefaultImg = ({
   className = "",
   srcHost = process.env.NEXT_PUBLIC_IMAGE_SERVER,
   cover = true,
+  width = "100%",
+  height = "100%",
   src,
   ...props
 }: Props) => {
@@ -87,7 +89,7 @@ const DefaultImg = ({
 
       {/* fallbackComponent와 fallbackImgSrc모두 없을 때 */}
       {isErrorEmit && !fallbackComponent && !fallbackImgSrc ? (
-        <div className="w-[100%] h-[100%] flex justify-center items-center">
+        <div className="w-[100%] h-[100%] flex justify-center items-center bg-grey-03">
           <EmptyImgIcon />
         </div>
       ) : null}

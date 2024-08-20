@@ -1,5 +1,5 @@
-import { SummaryContentEntity } from "../../../../shared/types/api/content/SummaryContentEntity";
-import { EntityUiProps } from "../../../../shared/types/react";
+import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
+import { EntityUiProps } from "@/shared/types/react";
 
 export type Props<
   T = Pick<

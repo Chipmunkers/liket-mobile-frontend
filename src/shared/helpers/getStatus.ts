@@ -1,5 +1,5 @@
+import { ContentState } from "@/shared/consts/content/state";
 import dayjs from "dayjs";
-import { ContentState } from "../../../shared/consts/content/state";
 
 export const getStatus = (startDate: string, endDate: string): ContentState => {
   const today = dayjs();

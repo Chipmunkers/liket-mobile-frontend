@@ -3,14 +3,17 @@
 import Link from "next/link";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { classNames } from "@/shared/helpers/classNames";
+import DefaultImg from "@/shared/ui/Image";
+import Badge from "@/shared/ui/Badge";
+import { CONTENT_STATES } from "@/shared/consts/content/state";
+import ContentLikeBtn from "@/components/ContentLikeBtn";
 import { Props } from "./types";
-import { ScreenTYPE } from "../../../../utils/stackRouter";
-import { stackRouterPush } from "../../../../shared/helpers/stackRouter";
-import { classNames } from "../../../../shared/helpers/classNames";
-import Badge from "../../../../shared/ui/Badge";
-import CustomImage from "../../../../components/CustomImage";
+import { getStatus } from "@/shared/helpers/getStatus";
 
-export const ContentCard = ({ content, width, onClick }: Props) => {
+const ContentCardLarge = ({ content, width, onClick }: Props) => {
   const router = useRouter();
 
   return (
@@ -26,35 +29,20 @@ export const ContentCard = ({ content, width, onClick }: Props) => {
 
         stackRouterPush(router, {
           path: `/contents/${content.idx}`,
-          screen: ScreenTYPE.CONTENT_DETAIL,
+          screen: WEBVIEW_SCREEN.CONTENT_DETAIL,
         });
       }}
     >
       <article className={classNames(width ? `w-[${width}]` : "w-[164px]")}>
         <div className="relative mb-[8px]">
           <div className="relative aspect-[164/232]">
-            <CustomImage
-              src={process.env.NEXT_PUBLIC_IMAGE_SERVER + content.thumbnail}
-              fallbackComponent={<FallbackContentImg />}
-              width={164}
-              height={232}
-              alt={`${content.title}에 대한 포스터`}
-              style={{
-                objectFit: "cover",
-                width: "100%",
-                height: "100%",
-              }}
-            />
+            <DefaultImg src={content.thumbnail} />
           </div>
           <Badge
             state={getStatus(content.startDate, content.endDate)}
-            style={{
-              position: "absolute",
-              left: "8px",
-              top: "8px",
-            }}
+            className="absolute top-[8px] left-[8px]"
           >
-            {variantToText[getStatus(content.startDate, content.endDate)]}
+            {CONTENT_STATES[getStatus(content.startDate, content.endDate)].name}
           </Badge>
           <ContentLikeBtn
             idx={content.idx}
@@ -79,3 +67,5 @@ export const ContentCard = ({ content, width, onClick }: Props) => {
     </Link>
   );
 };
+
+export default ContentCardLarge;

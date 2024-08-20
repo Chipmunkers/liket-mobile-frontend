@@ -6,15 +6,17 @@ export type DefaultProps = {
    * 가로
    *
    * @example 336px
+   * @default 100%
    */
-  width: string;
+  width?: string;
 
   /**
    * 세로
    *
    * @example 390px
+   * @default 100%
    */
-  height: string;
+  height?: string;
 
   /**
    * Object-Fit Cover 옵션 추가 여부
