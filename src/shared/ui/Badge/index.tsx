@@ -1,7 +1,6 @@
 import { StrictPropsWithChildren } from "@/types/common";
 import { classNames } from "@/utils/helpers";
-import { CSSProperties } from "react";
-import { CONTENT_STATES, ContentState } from "../../consts/content/state";
+import { ContentState } from "../../consts/content/state";
 import { SharedUiProps } from "../../types/react";
 
 const CONTENT_STATE_STYLE: Record<ContentState, string> = {
@@ -17,16 +16,19 @@ const CONTENT_STATE_STYLE: Record<ContentState, string> = {
 
 type Props = StrictPropsWithChildren<
   SharedUiProps<{
+    /**
+     * 컨텐츠 상태
+     *
+     * @example active
+     */
     state: ContentState;
-    style?: CSSProperties;
   }>,
   string
 >;
 
-const Badge = ({ state, children, style, className }: Props) => {
+const Badge = ({ state, children, className }: Props) => {
   return (
     <span
-      style={style}
       className={classNames(
         "text-flag rounded-[4px] pl-[4px] pr-[4px] h-[21px] inline-block",
         CONTENT_STATE_STYLE[state],
