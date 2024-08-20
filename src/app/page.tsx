@@ -17,6 +17,7 @@ import LeftOption from "@/components/Header/LeftOption";
 import RightOption from "@/components/Header/RightOption";
 import HotPlaceSection from "./_ui/HotPlaceSection";
 import { useEffect } from "react";
+import BottomTab from "@/widgets/common/BottomTab";
 
 const Home = async () => {
   const { contentList: soonOpenContents } =
@@ -73,7 +74,7 @@ const Home = async () => {
           </>
         ) : null}
       </main>
-      <LinkableTab shadow />
+      <BottomTab shadow={true} />
     </>
   );
 };
