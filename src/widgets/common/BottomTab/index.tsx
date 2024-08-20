@@ -17,7 +17,7 @@ import { useIsWebView } from "@/shared/hooks/useIsWebview";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { Props } from "./types";
-import BottomTabCreateDrawer from "@/features/common/BottomTabCreateDrawer";
+import BottomTabCreateDrawer from "@/widgets/common/BottomTab/ui/BottomTabCreateDrawer";
 import useMessageWebview from "@/widgets/common/BottomTab/hooks/useMessageWebview";
 
 const BottomTab = ({ shadow = false }: Props) => {
