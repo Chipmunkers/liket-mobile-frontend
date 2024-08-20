@@ -10,8 +10,6 @@ import CreateIcon from "@/icons/create.svg";
 import FilledCreateIcon from "@/icons/create-filled.svg";
 import MyPageIcon from "@/icons/mypage.svg";
 import FilledMyPageIcon from "@/icons/mypage-filled.svg";
-import { colors } from "@/utils/style";
-import { classNames } from "@/utils/helpers";
 import { ButtonBase } from "@mui/material";
 import { useIsWebView } from "@/shared/hooks/useIsWebview";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
@@ -19,6 +17,8 @@ import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { Props } from "./types";
 import BottomTabCreateDrawer from "@/widgets/common/BottomTab/ui/BottomTabCreateDrawer";
 import useMessageWebview from "@/widgets/common/BottomTab/hooks/useMessageWebview";
+import { colors } from "@/shared/style/color";
+import { classNames } from "@/shared/helpers/classNames";
 
 const BottomTab = ({ shadow = false }: Props) => {
   const router = useRouter();
