@@ -2,11 +2,19 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import axiosInstance from "@/utils/axios";
 import { SummaryContentEntity } from "../../../types/api/culture-content";
 import { useEffect, useState } from "react";
+import { AxiosError } from "axios";
+import useModalStore from "@/shared/hooks/useModalStore";
+import { useRouter } from "next/navigation";
+import customToast from "@/shared/helpers/customToast";
+import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
 export const GET_CONTENT_ALL_KEY = "content-search-key";
 
 export const useGetContentAll = (querystring: string) => {
+  const router = useRouter();
   const [target, setTarget] = useState<HTMLDivElement | null>(null);
+  const openModal = useModalStore(({ openModal }) => openModal);
 
   const { data, fetchNextPage, isFetching, refetch, error, hasNextPage } =
     useInfiniteQuery({
@@ -36,6 +44,32 @@ export const useGetContentAll = (querystring: string) => {
       refetchOnMount: false,
     });
 
+  //* 에러 헨들링
+  useEffect(() => {
+    if (!error) return;
+
+    if (error instanceof AxiosError) {
+      if (error.response?.status === 401) {
+        openModal("LoginModal", {
+          onClickPositive: () => {
+            stackRouterPush(router, {
+              path: "/login",
+              screen: WEBVIEW_SCREEN.LOGIN,
+              isStack: false,
+            });
+          },
+          onClickNegative: () => {
+            stackRouterBack(router);
+          },
+        });
+        return;
+      }
+    }
+
+    customToast("에러가 발생했습니다. 다시 시도해주세요.");
+  }, [error]);
+
+  // * 무한 스크롤 타겟팅
   useEffect(() => {
     if (!target) return;
 

@@ -10,29 +10,18 @@ import Checkbox from "@/components/Checkbox";
 import { ButtonBase } from "@mui/material";
 import { sidoList } from "../../../public/data/sido";
 import { Style } from "../../types/content";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { ages } from "../../../public/data/age";
 import { styles } from "../../../public/data/style";
 import customToast from "../../utils/customToast";
 import { genres } from "../../../public/data/genre";
 import CustomScrollContainer from "@/components/CustomScrollContainer";
-import { useQueryClient } from "@tanstack/react-query";
-import {
-  GET_CONTENT_ALL_KEY,
-  useGetContentAll,
-} from "./_hooks/useGetContentAll";
+import { useGetContentAll } from "./_hooks/useGetContentAll";
 import { AxiosError } from "axios";
 import ContentCardGroup from "@/components/ContentCardGroup";
-import useModalStore from "@/stores/modalStore";
 import { classNames } from "../../utils/helpers";
 import ReloadIcon from "@/icons/reload.svg";
 import DefaultLoading from "../../components/Loading/DefaultLoading";
-import {
-  ScreenTYPE,
-  stackRouterBack,
-  stackRouterPush,
-  WebViewEventType,
-} from "../../utils/stackRouter";
 import { useIsWebView } from "../../hooks/useIsWebView";
 import { SearchPagerble } from "@/app/search/_types/pagerble";
 import { createQuerystring } from "@/app/search/_util/createQueryString";
@@ -49,22 +38,14 @@ export default function Page() {
 
   useHandleMessageEvent(setPagerble);
 
-  const {
-    data,
-    fetchNextPage,
-    isFetching,
-    refetch,
-    error,
-    hasNextPage,
-    setTarget,
-  } = useGetContentAll(createQuerystring(getQuerystring(searchParams)));
+  const { data, refetch, error, setTarget } = useGetContentAll(
+    createQuerystring(getQuerystring(searchParams))
+  );
 
   // * Drawer
   const [isSidoDrawerOpen, setIsSidoDrawerOpen] = useState(false);
   const [isAgeDrawerOpen, setIsAgeDrawerOpen] = useState(false);
   const [isStyleDrawerOpen, setIsStyleDrawerOpen] = useState(false);
-
-  const router = useRouter();
 
   // * Style
   const [selectStyles, setSelectStyles] = useState<Style[]>([]);
@@ -75,34 +56,8 @@ export default function Page() {
 
   useCheckChangePagerble(pagerble);
 
-  const openModal = useModalStore(({ openModal }) => openModal);
-
   // * 웹뷰 확인 코드
   const isWebview = useIsWebView();
-
-  useEffect(() => {
-    if (!error) return;
-
-    if (error instanceof AxiosError) {
-      if (error.response?.status === 401) {
-        openModal("LoginModal", {
-          onClickPositive: () => {
-            stackRouterPush(router, {
-              path: "/login",
-              screen: ScreenTYPE.LOGIN,
-              isStack: false,
-            });
-          },
-          onClickNegative: () => {
-            stackRouterBack(router);
-          },
-        });
-        return;
-      }
-    }
-
-    customToast("에러가 발생했습니다. 다시 시도해주세요.");
-  }, [error]);
 
   return (
     <>
@@ -424,47 +379,6 @@ export default function Page() {
           </ButtonBase>
         </div>
       </CustomDrawer>
-
-      {/* <CustomDrawer
-        open={isOrderDrawerOpen}
-        onClose={() => setIsOrderDrawerOpen(false)}
-      >
-        <div className="center text-h2">정렬</div>
-        <li className="bottom-sheet-list">
-          <ButtonBase
-            onClick={() => {
-              setPagerble({
-                ...pagerble,
-                orderby: "time",
-              });
-              setIsOrderDrawerOpen(false);
-            }}
-            className={classNames(
-              "bottom-sheet-button flex justify-start px-[24px]",
-              pagerble.orderby === "time" ? "text-skyblue-01 text-body1" : ""
-            )}
-          >
-            최신순
-          </ButtonBase>
-        </li>
-        <li className="bottom-sheet-list">
-          <ButtonBase
-            onClick={() => {
-              setPagerble({
-                ...pagerble,
-                orderby: "like",
-              });
-              setIsOrderDrawerOpen(false);
-            }}
-            className={classNames(
-              "bottom-sheet-button flex justify-start px-[24px]",
-              pagerble.orderby === "like" ? "text-skyblue-01 text-body1" : ""
-            )}
-          >
-            인기순
-          </ButtonBase>
-        </li>
-      </CustomDrawer> */}
     </>
   );
 }
