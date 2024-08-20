@@ -1,9 +1,12 @@
+import { AgeEntity } from "@/shared/types/api/tag/AgeEntity";
+import { GenreEntity } from "@/shared/types/api/tag/GenreEntity";
+import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
 import { Age, Genre, Style } from "@/types/content";
 
 export const generateMapFilterQuerystring = (mapFilter: {
-  genre: Genre | undefined;
-  age: Age | undefined;
-  styles: Style[];
+  genre: GenreEntity | undefined;
+  age: AgeEntity | undefined;
+  styles: StyleEntity[];
 }) => {
   let querystring = ``;
 

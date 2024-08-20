@@ -10,6 +10,7 @@ const Button = ({
   fullWidth = false,
   children,
   onClick,
+  className,
 }: Props) => {
   return (
     <ButtonBase
@@ -18,7 +19,8 @@ const Button = ({
       className={classNames(
         "center text-button1 rounded-[28px]",
         disabled ? `${DISABLE_STYLES[variant]}` : `${ENABLE_STYLES[variant]}`,
-        fullWidth && "flex-1"
+        fullWidth && "flex-1",
+        className || ""
       )}
       onClick={(e) => onClick && onClick(e)}
     >

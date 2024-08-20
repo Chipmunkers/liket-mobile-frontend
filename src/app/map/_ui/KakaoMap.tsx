@@ -9,7 +9,6 @@ import {
 import { CustomOverlayMap, Map, useKakaoLoader } from "react-kakao-maps-sdk";
 import axiosInstance from "@/utils/axios";
 import { getMapInfo } from "../_util/getMapInfo";
-import { Age, Genre, Style } from "@/types/content";
 import { generateMapFilterQuerystring } from "../_util/generateMapFilterQuerystring";
 import { ClusteredContentEntity, MapContentEntity } from "@/types/api/map";
 import { AxiosError } from "axios";
@@ -17,6 +16,9 @@ import useModalStore from "../../../stores/modalStore";
 import { useRouter } from "next/navigation";
 import { classNames } from "../../../utils/helpers";
 import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
+import { GenreEntity } from "@/shared/types/api/tag/GenreEntity";
+import { AgeEntity } from "@/shared/types/api/tag/AgeEntity";
+import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
 
 const KakaoMap = ({
   children,
@@ -34,9 +36,9 @@ const KakaoMap = ({
   clickedContent: MapContentEntity | undefined;
   setClickedContent: Dispatch<SetStateAction<MapContentEntity | undefined>>;
   mapFilter: {
-    genre: Genre | undefined;
-    age: Age | undefined;
-    styles: Style[];
+    genre: GenreEntity | undefined;
+    age: AgeEntity | undefined;
+    styles: StyleEntity[];
   };
   latLng: {
     lat: number;
