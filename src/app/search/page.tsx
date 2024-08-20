@@ -8,7 +8,6 @@ import CustomDrawer from "@/components/CustomDrawer";
 import Checkbox from "@/components/Checkbox";
 import { ButtonBase } from "@mui/material";
 import { useSearchParams } from "next/navigation";
-import CustomScrollContainer from "@/components/CustomScrollContainer";
 import { useGetContentAll } from "./_hooks/useGetContentAll";
 import { AxiosError } from "axios";
 import ContentCardGroup from "@/components/ContentCardGroup";
