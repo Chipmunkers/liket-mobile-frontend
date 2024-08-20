@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import HomeIcon from "@/icons/home.svg";
 import FilledHomeIcon from "@/icons/home-filled.svg";
 import MapIcon from "@/icons/map.svg";
@@ -13,47 +13,20 @@ import FilledMyPageIcon from "@/icons/mypage-filled.svg";
 import { colors } from "@/utils/style";
 import { classNames } from "@/utils/helpers";
 import { ButtonBase } from "@mui/material";
-import { WEBVIEW_EVENT_TYPE } from "@/shared/consts/webview/event";
 import { useIsWebView } from "@/shared/hooks/useIsWebview";
-import { setAppNavBack } from "@/shared/helpers/setAppNavState";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { Props } from "./types";
 import BottomTabCreateDrawer from "@/features/common/BottomTabCreateDrawer";
+import useMessageWebview from "@/widgets/common/BottomTab/hooks/useMessageWebview";
 
 const BottomTab = ({ shadow = false }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
   const [isCreateDrawerOpen, setIsCreateDrawerOpen] = useState(false);
-
-  const isLoggedIn = false;
-
-  const messageEvent = (e: MessageEvent) => {
-    if (typeof e.data !== "string") return;
-
-    const data: { type: string; click: string } = JSON.parse(e.data);
-    if (data.type === WEBVIEW_EVENT_TYPE.CLICK) {
-      if (data.click === "nav-create-button") {
-        setIsCreateDrawerOpen(true);
-      }
-    }
-  };
-
-  useEffect(() => {
-    // ios
-    window.addEventListener("message", messageEvent);
-
-    // android
-    //document.addEventListener("message", (e) => alert(e.data));
-
-    return () => window.removeEventListener("message", messageEvent);
-  });
-
   const isWebview = useIsWebView();
 
-  useEffect(() => {
-    setAppNavBack(isCreateDrawerOpen);
-  }, [isCreateDrawerOpen]);
+  useMessageWebview(isCreateDrawerOpen, setIsCreateDrawerOpen);
 
   return (
     <>
