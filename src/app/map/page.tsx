@@ -25,8 +25,8 @@ import { Sigungu, sigunguList } from "../../../public/data/sigungu";
 import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
-import { setAppNavBack } from "../../utils/setAppNavState";
 import ContentCardMedium from "@/entities/content/ContentCardMedium";
+import useCheckModalOpenForWebview from "@/app/map/_hooks/onMessageWebview";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -36,17 +36,7 @@ export default function MapPage() {
   const isTownSelectionModalOpen = searchParams.get("isTownSelectionModalOpen");
   const isFilterModalOpen = searchParams.get("isFilterModalOpen");
 
-  useEffect(() => {
-    setAppNavBack(isTownSelectionModalOpen === "true");
-  }, [isTownSelectionModalOpen]);
-
-  useEffect(() => {
-    setAppNavBack(isFilterModalOpen === "true");
-  }, [isFilterModalOpen]);
-
-  const onClickTownSelection = () => {
-    router.replace(`${pathname}?isTownSelectionModalOpen=true`);
-  };
+  useCheckModalOpenForWebview(isTownSelectionModalOpen, isFilterModalOpen);
 
   // * 현재 보여지고 있는 컨텐츠 목록
   const [contentList, setContentList] = useState<MapContentEntity[]>([]);
@@ -108,7 +98,9 @@ export default function MapPage() {
               ? selectLocation.sido.name + " " + selectLocation.sigungu.name
               : selectLocation.sido.name
           }
-          onClickTownSelection={onClickTownSelection}
+          onClickTownSelection={() => {
+            router.replace(`${pathname}?isTownSelectionModalOpen=true`);
+          }}
         />
         <RightOption option={{ search: true, like: true }} />
       </Header>
