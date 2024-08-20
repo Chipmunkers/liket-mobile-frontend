@@ -11,8 +11,6 @@ import Chip from "@/components/Chip";
 import KakaoMap from "./_ui/KakaoMap";
 import { MapContentEntity } from "@/types/api/map";
 import { ButtonBase } from "@mui/material";
-import { Sido, sidoList } from "../../../public/data/sido";
-import { Sigungu, sigunguList } from "../../../public/data/sigungu";
 import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
@@ -23,8 +21,11 @@ import ContentBottomSheet from "@/app/map/_ui/ContentBottomSheet";
 import { GenreEntity } from "@/shared/types/api/tag/GenreEntity";
 import { AgeEntity } from "@/shared/types/api/tag/AgeEntity";
 import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
-import { MapFilter } from "@/app/map/_types/types";
+import { MapFilter, SelectLocation } from "@/app/map/_types/types";
 import FilterDrawer from "@/app/map/_ui/FilterDrawer";
+import { Sido, SIDO_LIST } from "@/shared/consts/region/sido";
+import { Sigungu, SIGUNGU_LIST } from "@/shared/consts/region/sigungu";
+import LocationDrawer from "@/app/map/_ui/LocationDrawer";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -42,13 +43,9 @@ export default function MapPage() {
   // * 선택된 컨텐츠
   const [clickedContent, setClickedContent] = useState<MapContentEntity>();
 
-  // * 필터링: 선택된 장르
+  // * 필터링 선택
   const [selectedGenre, setSelectedGenre] = useState<GenreEntity>();
-
-  // * 필터링: 선택된 연령대
   const [selectedAge, setSelectedAge] = useState<AgeEntity>();
-
-  // * 필터링: 선택된 스타일들
   const [selectedStyles, setSelectedStyles] = useState<StyleEntity[]>([]);
 
   // * 최종적으로 필터링 목록
@@ -59,12 +56,12 @@ export default function MapPage() {
   });
 
   // * 지역 선택
-  const [selectSido, setSelectSido] = useState<Sido>(sidoList[0]);
+  const [selectSido, setSelectSido] = useState<Sido>(SIDO_LIST[0]);
   const [selectSigungu, setSelectSigungu] = useState<Sigungu | null>(null);
-  const [selectLocation, setSelectLocation] = useState<{
-    sido: Sido;
-    sigungu: Sigungu | null;
-  }>({ sido: selectSido, sigungu: selectSigungu });
+  const [selectLocation, setSelectLocation] = useState<SelectLocation>({
+    sido: selectSido,
+    sigungu: selectSigungu,
+  });
 
   const isSetMapFilter = (): boolean => {
     return !!(mapFilter.genre || mapFilter.age || mapFilter.styles.length);
@@ -186,105 +183,15 @@ export default function MapPage() {
       />
 
       {/* 지역 모달 */}
-      <div
-        className="full-modal"
-        style={{
-          transform: !!isTownSelectionModalOpen
-            ? "translateY(0)"
-            : "translateY(100%)",
-        }}
-      >
-        <Header key={"town-filter-header"}>
-          <LeftOption
-            option={{
-              close: {
-                onClick: () => {
-                  setSelectSido(selectLocation.sido);
-                  setSelectSigungu(selectLocation.sigungu);
-                  router.replace("/map");
-                },
-              },
-            }}
-          />
-          <MiddleText text="지역설정" />
-        </Header>
-        <div className="full-modal-main">
-          <div className="flex grow h-[100%]">
-            <div className="h-[100%] w-[50%] bg-grey-01">
-              <ul className="flex flex-col w-[100%]">
-                {sidoList.map((sido, index) => {
-                  return (
-                    <li
-                      key={`city_${index}`}
-                      className={classNames(
-                        "center h-[48px]",
-                        selectSido.cd === sido.cd
-                          ? "bg-white text-skyblue-01"
-                          : "bg-grey-01 text-grey-04"
-                      )}
-                    >
-                      <ButtonBase
-                        className="w-[100%] h-[100%]"
-                        onClick={() => setSelectSido(sido)}
-                      >
-                        {sido.fullName}
-                      </ButtonBase>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-            <div className="w-[50%]">
-              <ul className="flex flex-col w-[100%] h-[100%] overflow-y-auto">
-                {sigunguList
-                  .filter((sigungu) => sigungu.bjd_cd.startsWith(selectSido.cd))
-                  .map((sigungu, index) => {
-                    return (
-                      <li
-                        key={index}
-                        className={classNames(
-                          "center h-[48px] shrink-0",
-                          selectSigungu?.cd === sigungu.cd && "text-skyblue-01"
-                        )}
-                      >
-                        <ButtonBase
-                          className="w-[100%] h-[100%]"
-                          onClick={() => setSelectSigungu(sigungu)}
-                        >
-                          {sigungu.name}
-                        </ButtonBase>
-                      </li>
-                    );
-                  })}
-              </ul>
-            </div>
-          </div>
-        </div>
-        <BottomButtonTabWrapper shadow className="bg-white">
-          <Button
-            height={48}
-            onClick={() => {
-              if (
-                !selectSigungu ||
-                !selectSigungu.bjd_cd.startsWith(selectSido.cd)
-              ) {
-                setSelectSigungu(null);
-                setSelectLocation({
-                  sido: selectSido,
-                  sigungu: null,
-                });
-              } else {
-                setSelectLocation({ sido: selectSido, sigungu: selectSigungu });
-              }
-
-              router.replace("/map");
-            }}
-            fullWidth
-          >
-            설정하기
-          </Button>
-        </BottomButtonTabWrapper>
-      </div>
+      <LocationDrawer
+        isOpen={!!isTownSelectionModalOpen}
+        selectSido={selectSido}
+        setSelectSido={setSelectSido}
+        selectSigungu={selectSigungu}
+        setSelectSigungu={setSelectSigungu}
+        selectLocation={selectLocation}
+        setSelectLocation={setSelectLocation}
+      />
 
       <BottomTab />
     </>

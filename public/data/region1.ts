@@ -1,3 +1,6 @@
+/**
+ * @deprecated
+ */
 export const region1s = [
   { code: "26", name: "부산" },
   { code: "27", name: "대구" },
