@@ -8,13 +8,7 @@ import CustomDrawer from "@/components/CustomDrawer";
 import Chip from "@/components/Chip";
 import Checkbox from "@/components/Checkbox";
 import { ButtonBase } from "@mui/material";
-import { sidoList } from "../../../public/data/sido";
-import { Style } from "../../types/content";
 import { useSearchParams } from "next/navigation";
-import { ages } from "../../../public/data/age";
-import { styles } from "../../../public/data/style";
-import customToast from "../../utils/customToast";
-import { genres } from "../../../public/data/genre";
 import CustomScrollContainer from "@/components/CustomScrollContainer";
 import { useGetContentAll } from "./_hooks/useGetContentAll";
 import { AxiosError } from "axios";
@@ -22,12 +16,18 @@ import ContentCardGroup from "@/components/ContentCardGroup";
 import { classNames } from "../../utils/helpers";
 import ReloadIcon from "@/icons/reload.svg";
 import DefaultLoading from "../../components/Loading/DefaultLoading";
-import { useIsWebView } from "../../hooks/useIsWebView";
 import { SearchPagerble } from "@/app/search/_types/pagerble";
 import { createQuerystring } from "@/app/search/_util/createQueryString";
 import useHandleMessageEvent from "@/app/search/_hooks/useHandleMesaageEvent";
 import { getQuerystring } from "@/app/search/_util/getQuerystring";
 import useCheckChangePagerble from "@/app/search/_hooks/useCheckChangePagerble";
+import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
+import { useIsWebView } from "@/shared/hooks/useIsWebview";
+import { GENRES } from "@/shared/consts/content/genre";
+import { SIDO_LIST } from "@/shared/consts/region/sido";
+import { AGES } from "@/shared/consts/content/age";
+import { STYLES } from "@/shared/consts/content/style";
+import customToast from "@/shared/helpers/customToast";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -48,7 +48,7 @@ export default function Page() {
   const [isStyleDrawerOpen, setIsStyleDrawerOpen] = useState(false);
 
   // * Style
-  const [selectStyles, setSelectStyles] = useState<Style[]>([]);
+  const [selectStyles, setSelectStyles] = useState<StyleEntity[]>([]);
 
   useEffect(() => {
     setPagerble(getQuerystring(searchParams));
@@ -98,7 +98,7 @@ export default function Page() {
                   전체
                 </ButtonBase>
               </li>
-              {genres.map((genre) => {
+              {GENRES.map((genre) => {
                 return (
                   <li
                     key={genre.idx}
@@ -133,7 +133,7 @@ export default function Page() {
         <SmallSelectButton
           placeholder="지역"
           text={
-            sidoList.find((sido) => sido.cd === pagerble.region)?.name || ""
+            SIDO_LIST.find((sido) => sido.cd === pagerble.region)?.name || ""
           }
           onClick={() => {
             setIsSidoDrawerOpen(true);
@@ -141,7 +141,7 @@ export default function Page() {
           Icon={
             <SmallDownArrow
               className={classNames(
-                sidoList.find((sido) => sido.cd === pagerble.region)
+                SIDO_LIST.find((sido) => sido.cd === pagerble.region)
                   ? "fill-white"
                   : "fill-grey-black"
               )}
@@ -151,13 +151,13 @@ export default function Page() {
         <SmallSelectButton
           placeholder="연령대"
           text={
-            ages.find((age) => age.idx.toString() === pagerble.age)?.name || ""
+            AGES.find((age) => age.idx.toString() === pagerble.age)?.name || ""
           }
           onClick={() => setIsAgeDrawerOpen(true)}
           Icon={
             <SmallDownArrow
               className={classNames(
-                ages.find((age) => age.idx.toString() === pagerble.age)
+                AGES.find((age) => age.idx.toString() === pagerble.age)
                   ? "fill-white"
                   : "fill-grey-black"
               )}
@@ -169,12 +169,12 @@ export default function Page() {
           text={pagerble.style
             .map(
               (styleIdx) =>
-                styles.find((style) => style.idx.toString() === styleIdx)
+                STYLES.find((style) => style.idx.toString() === styleIdx)
                   ?.name || ""
             )
             .join("·")}
           onClick={() => {
-            const findStyles = styles.filter((style) =>
+            const findStyles = STYLES.filter((style) =>
               pagerble.style.includes(style.idx.toString())
             );
 
@@ -270,7 +270,7 @@ export default function Page() {
         onClose={() => setIsSidoDrawerOpen(false)}
       >
         <div className="center text-h2">지역</div>
-        {sidoList.map((sido) => (
+        {SIDO_LIST.map((sido) => (
           <li className="bottom-sheet-list" key={`${sido.cd}`}>
             <ButtonBase
               onClick={() => {
@@ -297,7 +297,7 @@ export default function Page() {
         onClose={() => setIsAgeDrawerOpen(false)}
       >
         <div className="center text-h2">연령대</div>
-        {ages.map(({ idx, name }) => (
+        {AGES.map(({ idx, name }) => (
           <li className="bottom-sheet-list" key={idx}>
             <ButtonBase
               onClick={() => {
@@ -329,7 +329,7 @@ export default function Page() {
       >
         <div className="center text-h2">스타일</div>
         <ul className="my-[16px] w-[100%] flex px-[34px] flex-wrap gap-[8px]">
-          {styles.map((style) => {
+          {STYLES.map((style) => {
             return (
               <li key={style.idx} className="">
                 <Chip
