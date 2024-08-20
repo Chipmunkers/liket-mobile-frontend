@@ -3,7 +3,7 @@
 import CustomScrollContainer from "@/components/CustomScrollContainer";
 import { Else, If, Then } from "react-if";
 import ContentCardLarge from "@/entities/content/ContentCardLarge";
-import LikeContentButton from "@/features/content/LikeContentButton";
+import LikeContentButton from "@/entities/content/LikeContentButton";
 import { Props } from "./types";
 
 const ContentCardSection = (props: Props) => {
@@ -17,16 +17,7 @@ const ContentCardSection = (props: Props) => {
           <If condition={contentList.length >= 1}>
             <Then>
               {contentList.map((content, i) => (
-                <ContentCardLarge
-                  content={content}
-                  key={i}
-                  LikeButton={
-                    <LikeContentButton
-                      idx={content.idx}
-                      likeState={content.likeState}
-                    />
-                  }
-                />
+                <ContentCardLarge content={content} key={i} />
               ))}
             </Then>
             <Else>

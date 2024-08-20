@@ -11,8 +11,9 @@ import Badge from "@/shared/ui/Badge";
 import { CONTENT_STATES } from "@/shared/consts/content/state";
 import { Props } from "./types";
 import { getStatus } from "@/shared/helpers/getStatus";
+import LikeContentButton from "@/entities/content/LikeContentButton";
 
-const ContentCardLarge = ({ content, width, onClick, LikeButton }: Props) => {
+const ContentCardLarge = ({ content, width, onClick }: Props) => {
   const router = useRouter();
 
   return (
@@ -44,7 +45,10 @@ const ContentCardLarge = ({ content, width, onClick, LikeButton }: Props) => {
             {CONTENT_STATES[getStatus(content.startDate, content.endDate)].name}
           </Badge>
           <div className="absolute bottom-[8px] right-[8px] h-[24px]">
-            {LikeButton}
+            <LikeContentButton
+              idx={content.idx}
+              likeState={content.likeState}
+            />
           </div>
         </div>
         <div className="flex flex-col">

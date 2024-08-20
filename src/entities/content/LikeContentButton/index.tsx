@@ -8,7 +8,6 @@ import { colors } from "@/utils/style";
 import { useLikeContent } from "./hooks/useLikeContent";
 import { useCancelLikeContent } from "./hooks/useCancelLikeContent";
 import { Props } from "./types";
-import { ButtonBase } from "@mui/material";
 
 const LikeContentButton = (props: Props) => {
   const [like, setLike] = useState(props.likeState);

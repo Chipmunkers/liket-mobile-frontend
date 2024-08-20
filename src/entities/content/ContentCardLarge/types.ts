@@ -21,11 +21,6 @@ export type Props<
   content: T;
 
   /**
-   * 좋아요 버튼
-   */
-  LikeButton: ReactNode;
-
-  /**
    * 클릭 이벤트. 없을 경우 클릭이 되지 않음
    */
   onClick?: (content: T) => void;
