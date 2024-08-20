@@ -6,7 +6,7 @@ import MuiLocalizationProvider from "@/components/MuiLocalizationProvider";
 import QueryProvider from "@/components/QueryProvider";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
-import ToastProvider from "./_components/ToasterProvider";
+import ToastProvider from "./_ui/ToasterProvider";
 
 dayjs.locale("ko");
 

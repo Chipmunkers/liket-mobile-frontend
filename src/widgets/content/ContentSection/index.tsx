@@ -2,28 +2,21 @@
 
 import CustomScrollContainer from "@/components/CustomScrollContainer";
 import { Else, If, Then } from "react-if";
-import { SummaryContentEntity } from "@/types/api/culture-content";
-import { StrictPropsWithChildren } from "@/types/common";
 import ContentCardLarge from "@/entities/content/ContentCardLarge";
 import LikeContentButton from "@/features/content/LikeContentButton";
-
-type Props = StrictPropsWithChildren<{
-  data?: {
-    contentList: SummaryContentEntity[];
-  };
-}>;
+import { Props } from "./types";
 
 const ContentCardSection = (props: Props) => {
-  const { data, children } = props;
+  const { contentList, children } = props;
 
-  if (data) {
+  if (contentList) {
     return (
       <section className="mt-[24px] mb-[24px]">
         <h2 className="pl-[24px] mb-[8px] h-[20px] text-h2">{children}</h2>
         <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] touch-action-none [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-          <If condition={data.contentList.length >= 1}>
+          <If condition={contentList.length >= 1}>
             <Then>
-              {data.contentList.map((content, i) => (
+              {contentList.map((content, i) => (
                 <ContentCardLarge
                   content={content}
                   key={i}
@@ -47,6 +40,7 @@ const ContentCardSection = (props: Props) => {
     );
   }
 
+  // * 스켈레톤 UI
   return (
     <section className="mt-[24px] mb-[24px]">
       <h2 className="pl-[24px] mb-[8px]">

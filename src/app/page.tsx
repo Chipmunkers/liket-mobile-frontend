@@ -3,10 +3,10 @@ import Header from "@/components/Header";
 import LinkableTab from "@/components/LinkableTab";
 import CustomScrollContainer from "@/components/CustomScrollContainer";
 import MainCarousel from "@/components/Carousel/MainCarousel";
-import SoonOpenContentSection from "./_components/SoonOpenContentSection";
-import SoonEndContentSection from "./_components/SoonEndContentSection";
-import HotStyleSection from "./_components/HotStyleSection";
-import HotAgeSection from "./_components/HotAgeSection";
+import SoonOpenContentSection from "./_ui/SoonOpenContentSection";
+import SoonEndContentSection from "./_ui/SoonEndContentSection";
+import HotStyleSection from "./_ui/HotStyleSection";
+import HotAgeSection from "./_ui/HotAgeSection";
 import { getSoonOpenContentsForServer } from "./_hooks/getSoonOpenContents";
 import { getSoonEndContentsForServer } from "./_hooks/getSoonEndContents";
 import { getBanners } from "./_hooks/getBanners";
@@ -15,7 +15,7 @@ import ReviewCard from "../components/Card/ReviewCard";
 import { getHotReview } from "./_hooks/getHotReviews";
 import LeftOption from "@/components/Header/LeftOption";
 import RightOption from "@/components/Header/RightOption";
-import HotPlaceSection from "./_components/HotPlaceSection";
+import HotPlaceSection from "./_ui/HotPlaceSection";
 import { useEffect } from "react";
 
 const Home = async () => {
