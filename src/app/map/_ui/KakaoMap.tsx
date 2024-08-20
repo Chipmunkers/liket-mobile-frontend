@@ -8,19 +8,15 @@ import {
 } from "react";
 import { CustomOverlayMap, Map, useKakaoLoader } from "react-kakao-maps-sdk";
 import axiosInstance from "@/utils/axios";
-import { getMapInfo } from "../util/getMapInfo";
+import { getMapInfo } from "../_util/getMapInfo";
 import { Age, Genre, Style } from "@/types/content";
-import { generateMapFilterQuerystring } from "../util/generateMapFilterQuerystring";
+import { generateMapFilterQuerystring } from "../_util/generateMapFilterQuerystring";
 import { ClusteredContentEntity, MapContentEntity } from "@/types/api/map";
 import { AxiosError } from "axios";
 import useModalStore from "../../../stores/modalStore";
 import { useRouter } from "next/navigation";
 import { classNames } from "../../../utils/helpers";
-import {
-  ScreenTYPE,
-  stackRouterBack,
-  stackRouterPush,
-} from "../../../utils/stackRouter";
+import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
 
 const KakaoMap = ({
   children,
