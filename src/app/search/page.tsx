@@ -38,6 +38,7 @@ import { SearchPagerble } from "@/app/search/_types/pagerble";
 import { createQuerystring } from "@/app/search/_util/createQueryString";
 import useHandleMessageEvent from "@/app/search/_hooks/useHandleMesaageEvent";
 import { getQuerystring } from "@/app/search/_util/getQuerystring";
+import useCheckChangePagerble from "@/app/search/_hooks/useCheckChangePagerble";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -72,12 +73,7 @@ export default function Page() {
     setPagerble(getQuerystring(searchParams));
   }, [searchParams]);
 
-  useEffect(() => {
-    if (!pagerble) return;
-
-    // pagerble이 바뀌면 경로 변경
-    router.replace("/search?" + createQuerystring(pagerble));
-  }, [pagerble]);
+  useCheckChangePagerble(pagerble);
 
   const openModal = useModalStore(({ openModal }) => openModal);
 
