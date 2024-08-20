@@ -1,22 +1,6 @@
-import { StrictPropsWithChildren } from "@/types/common";
 import { classNames } from "@/utils/helpers";
 import { ButtonBase } from "@mui/material";
-import { SharedUiProps } from "../../types/react";
-
-type Props = StrictPropsWithChildren<
-  SharedUiProps<{
-    /**
-     * 선택되어있는지 여부. true일 경우 메인 색상으로 변경됨
-     */
-    isSelected: boolean;
-
-    /**
-     * 클릭 했을 때 동작. 없을 경우 클릭되지 않음
-     */
-    onClick?: () => void;
-  }>,
-  string
->;
+import { Props } from "./types";
 
 const Chip = ({ children, isSelected, onClick, className }: Props) => {
   return (
