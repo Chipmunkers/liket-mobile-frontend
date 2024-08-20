@@ -43,7 +43,9 @@ const ContentCardLarge = ({ content, width, onClick, LikeButton }: Props) => {
           >
             {CONTENT_STATES[getStatus(content.startDate, content.endDate)].name}
           </Badge>
-          {LikeButton}
+          <div className="absolute bottom-[8px] right-[8px] h-[24px]">
+            {LikeButton}
+          </div>
         </div>
         <div className="flex flex-col">
           <div className="text-body4 text-skyblue-01 mb-[4px]">
