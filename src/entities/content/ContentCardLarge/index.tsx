@@ -13,12 +13,13 @@ import { Props } from "./types";
 import { getStatus } from "@/shared/helpers/getStatus";
 import LikeContentButton from "@/entities/content/LikeContentButton";
 
-const ContentCardLarge = ({ content, width, onClick }: Props) => {
+const ContentCardLarge = ({ content, width, onClick, className }: Props) => {
   const router = useRouter();
 
   return (
     <Link
       href={`/contents/${content.idx}`}
+      className={className || ""}
       onClick={(e) => {
         e.preventDefault();
 

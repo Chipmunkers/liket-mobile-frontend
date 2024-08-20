@@ -27,6 +27,7 @@ import MiddleText from "@/components/Header/MiddleText";
 import ContentCardMedium from "@/entities/content/ContentCardMedium";
 import useCheckModalOpenForWebview from "@/app/map/_hooks/onMessageWebview";
 import BottomTab from "@/widgets/common/BottomTab";
+import ContentBottomSheet from "@/app/map/_ui/ContentBottomSheet";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -105,6 +106,18 @@ export default function MapPage() {
         <RightOption option={{ search: true, like: true }} />
       </Header>
       <main>
+        {clickedContent ? (
+          <div className="bottom-[--bottom-tab-height] absolute z-10 w-[calc(100%-16px)] left-[8px] mb-[8px]">
+            <div className="p-[16px] bg-white rounded-[24px]">
+              <ContentCardMedium
+                content={{
+                  ...clickedContent,
+                  thumbnail: clickedContent.imgList[0],
+                }}
+              />
+            </div>
+          </div>
+        ) : null}
         <KakaoMap
           contentList={contentList}
           setContentList={setContentList}
@@ -152,34 +165,14 @@ export default function MapPage() {
             ) : null}
           </div>
         </KakaoMap>
-        {clickedContent ? (
-          <ContentCardMedium
-            content={{
-              ...clickedContent,
-              thumbnail: clickedContent.imgList[0],
-            }}
-          />
-        ) : null}
+
         {!clickedContent && contentList.length !== 0 ? (
-          <CustomBottomSheet
-            open={true}
-            defaultSnap={20}
-            snapPoints={({ maxHeight }) => [
-              20,
-              maxHeight / 2 - 45,
-              maxHeight - 68 - 48 - 74,
-            ]}
-          >
-            <ul>
-              {contentList.map((content) => {
-                return (
-                  <li key={content.idx}>
-                    <MapBottomSheetCard content={content} />
-                  </li>
-                );
-              })}
-            </ul>
-          </CustomBottomSheet>
+          <ContentBottomSheet
+            contentList={contentList.map((content) => ({
+              ...content,
+              thumbnail: content.imgList[0],
+            }))}
+          />
         ) : null}
       </main>
       <BottomTab />

@@ -3,18 +3,18 @@
 import Link from "next/link";
 import Badge from "@/components/Badge/Badge";
 import dayjs from "dayjs";
-import ContentLikeBtn from "../../../components/ContentLikeBtn";
 import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
 import { useRouter } from "next/navigation";
 import { Props } from "./types";
 import DefaultImg from "@/shared/ui/DefaultImg";
 import LikeContentButton from "@/entities/content/LikeContentButton";
+import { classNames } from "@/shared/helpers/classNames";
 
-const ContentCardMedium = ({ content, onClick }: Props) => {
+const ContentCardMedium = ({ content, onClick, className }: Props) => {
   const router = useRouter();
 
   return (
-    <div className="w-[calc(100%-16px)] bottom-[--bottom-tab-height] mb-[8px] z-10 absolute left-[8px] bg-white rounded-[24px]">
+    <div className={classNames("w-[100%] bg-white", className || "")}>
       <Link
         href={`/contents/${content.idx}`}
         className="relative flex m-4"
