@@ -4,7 +4,6 @@ import CustomImage from "@/components/CustomImage";
 import Divider from "@/components/Divider";
 import FallbackContentImg from "@/components/FallbackContentImg";
 import LinkItem from "@/components/LinkItem";
-import LinkableTab from "@/components/LinkableTab";
 import RightArrow from "@/icons/right-arrow.svg";
 import { useMyPage } from "@/service/profile";
 import profileStore from "@/stores/profileStore";
@@ -22,6 +21,7 @@ import { compressImage } from "@/utils/compressImg";
 import useUploadProfile from "./_hooks/useUploadProfile";
 import { AxiosError } from "axios";
 import useUpdateProfile from "./_hooks/useUpdateProfileImg";
+import BottomTab from "@/widgets/common/BottomTab";
 
 export default function Page() {
   const router = useRouter();
@@ -370,7 +370,7 @@ export default function Page() {
           <div className="text-body2 text-grey-04">1.0</div>
         </div>
       </main>
-      <LinkableTab shadow />
+      <BottomTab shadow={true} />
     </>
   );
 }

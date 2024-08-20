@@ -1,6 +1,5 @@
 import Divider from "@/components/Divider";
 import Header from "@/components/Header";
-import LinkableTab from "@/components/LinkableTab";
 import CustomScrollContainer from "@/components/CustomScrollContainer";
 import MainCarousel from "@/components/Carousel/MainCarousel";
 import SoonOpenContentSection from "./_ui/SoonOpenContentSection";
