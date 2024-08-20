@@ -27,8 +27,6 @@ const Home = async () => {
   const hotContentList = await getHotContentsForServer();
   const reviews = await getHotReview();
 
-  console.log(reviews);
-
   return (
     <>
       <Header checkUserAgent={true}>
