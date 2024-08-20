@@ -41,13 +41,14 @@ const DefaultImg = ({
   return (
     <div
       className={classNames(className)}
-      style={
-        isErrorEmit && fallbackComponent && fallbackComponentBackgroundColor
-          ? {
-              backgroundColor: fallbackComponentBackgroundColor,
-            }
-          : {}
-      }
+      style={{
+        backgroundColor:
+          isErrorEmit && fallbackComponent && fallbackComponentBackgroundColor
+            ? fallbackComponentBackgroundColor
+            : undefined,
+        width: width || "100%",
+        height: height || "100%",
+      }}
     >
       {!isErrorEmit && (
         <Image

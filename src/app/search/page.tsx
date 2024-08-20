@@ -28,6 +28,7 @@ import { AGES } from "@/shared/consts/content/age";
 import { STYLES } from "@/shared/consts/content/style";
 import customToast from "@/shared/helpers/customToast";
 import Chip from "@/shared/ui/Chip";
+import GenreSelectTab from "@/app/search/_ui/GenreSelectTab";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -74,56 +75,7 @@ export default function Page() {
             }}
             placeholder="검색어를 입력해주세요."
           />
-          <CustomScrollContainer className="flex flex-row mt-[8px] [&>*:first-child]:ml-[24px] border-b-[1px] border-b-grey-01">
-            <ul className="flex h-[32px] ">
-              <li
-                key={"all_category"}
-                className={classNames(
-                  "h-[100%] w-[80px]",
-                  pagerble.genre === null
-                    ? "text-skyblue-01 border-b-[2px] border-skyblue-01 text-button3"
-                    : "text-button4 text-grey-03 pb-[2px]"
-                )}
-              >
-                <ButtonBase
-                  disableRipple={true}
-                  className="w-[100%] h-[100%] center"
-                  onClick={() => {
-                    setPagerble({
-                      ...pagerble,
-                      genre: null,
-                    });
-                  }}
-                >
-                  전체
-                </ButtonBase>
-              </li>
-              {GENRES.map((genre) => (
-                <li
-                  key={genre.idx}
-                  className={classNames(
-                    "h-[100%] w-[80px]",
-                    pagerble.genre === genre.idx.toString()
-                      ? "text-skyblue-01 border-b-[2px] border-skyblue-01 text-button3"
-                      : "text-button4 text-grey-03 pb-[2px]"
-                  )}
-                >
-                  <ButtonBase
-                    disableRipple={true}
-                    className="w-[100%] h-[100%] center"
-                    onClick={() => {
-                      setPagerble({
-                        ...pagerble,
-                        genre: genre.idx.toString(),
-                      });
-                    }}
-                  >
-                    {genre.name}
-                  </ButtonBase>
-                </li>
-              ))}
-            </ul>
-          </CustomScrollContainer>
+          <GenreSelectTab pagerble={pagerble} setPagerble={setPagerble} />
         </>
       )}
 

@@ -30,18 +30,6 @@ export type WidgetUiProps<T extends Object> = T & {
 };
 
 /**
- * Feature UI Props 타입
- */
-export type FeatureUiProps<T extends Object> = T & {
-  /**
-   * 루트 컴포넌트에 추가될 class
-   *
-   * @default ""
-   */
-  className?: string;
-};
-
-/**
  * Entity UI Props 타입
  */
 export type EntityUiProps<T extends Object> = T & {
