@@ -35,7 +35,12 @@ export default function Page() {
     getQuerystring(searchParams)
   );
 
+  useEffect(() => {
+    setPagerble(getQuerystring(searchParams));
+  }, [searchParams]);
+
   useHandleMessageEvent(setPagerble);
+  useCheckChangePagerble(pagerble);
 
   const { data, refetch, error, setTarget } = useGetContentAll(
     createQuerystring(getQuerystring(searchParams))
@@ -48,12 +53,6 @@ export default function Page() {
 
   // * Style
   const [selectStyles, setSelectStyles] = useState<StyleEntity[]>([]);
-
-  useEffect(() => {
-    setPagerble(getQuerystring(searchParams));
-  }, [searchParams]);
-
-  useCheckChangePagerble(pagerble);
 
   // * 웹뷰 확인 코드
   const isWebview = useIsWebView();
