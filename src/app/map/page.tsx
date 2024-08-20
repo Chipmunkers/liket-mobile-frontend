@@ -6,16 +6,8 @@ import { classNames } from "@/utils/helpers";
 import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
 import Button from "@/components/Button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import CustomBottomSheet from "@/components/BottomSheet";
-import MapBottomSheetCard from "@/components/Card/MapBottomSheetCard";
 import Filter from "@/icons/filter.svg";
-import ButtonGroup from "@/components/ButtonGroup";
 import Chip from "@/components/Chip";
-import { genres } from "../../../public/data/genre";
-import { Age, Genre, Style } from "@/types/content";
-import { ages } from "../../../public/data/age";
-import { styles } from "../../../public/data/style";
-import customToast from "@/utils/customToast";
 import KakaoMap from "./_ui/KakaoMap";
 import { MapContentEntity } from "@/types/api/map";
 import { ButtonBase } from "@mui/material";
@@ -31,7 +23,7 @@ import ContentBottomSheet from "@/app/map/_ui/ContentBottomSheet";
 import { GenreEntity } from "@/shared/types/api/tag/GenreEntity";
 import { AgeEntity } from "@/shared/types/api/tag/AgeEntity";
 import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
-import { MapFilter } from "@/app/map/_ui/types";
+import { MapFilter } from "@/app/map/_types/types";
 import FilterDrawer from "@/app/map/_ui/FilterDrawer";
 
 export default function MapPage() {

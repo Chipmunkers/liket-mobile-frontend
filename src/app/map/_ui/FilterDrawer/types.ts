@@ -1,4 +1,4 @@
-import { MapFilter } from "@/app/map/_ui/types";
+import { MapFilter } from "@/app/map/_types/types";
 import { AgeEntity } from "@/shared/types/api/tag/AgeEntity";
 import { GenreEntity } from "@/shared/types/api/tag/GenreEntity";
 import { StyleEntity } from "@/types/api/tag";
