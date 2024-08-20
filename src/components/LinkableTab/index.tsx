@@ -39,6 +39,8 @@ const LinkableTab = ({ shadow = false }: Props) => {
   const isLoggedIn = false;
 
   const messageEvent = (e: MessageEvent) => {
+    if (typeof e.data !== "string") return;
+
     const data: { type: string; click: string } = JSON.parse(e.data);
     if (data.type === WebViewEventType.CLICK) {
       if (data.click === "nav-create-button") {
