@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import SmallSelectButton from "@/components/SelectButton/SmallSelectButton";
 import SmallDownArrow from "@/icons/down-arrow-small.svg";
 import CustomDrawer from "@/components/CustomDrawer";
-import Chip from "@/components/Chip";
 import Checkbox from "@/components/Checkbox";
 import { ButtonBase } from "@mui/material";
 import { useSearchParams } from "next/navigation";
@@ -28,6 +27,7 @@ import { SIDO_LIST } from "@/shared/consts/region/sido";
 import { AGES } from "@/shared/consts/content/age";
 import { STYLES } from "@/shared/consts/content/style";
 import customToast from "@/shared/helpers/customToast";
+import Chip from "@/shared/ui/Chip";
 
 export default function Page() {
   const searchParams = useSearchParams();
