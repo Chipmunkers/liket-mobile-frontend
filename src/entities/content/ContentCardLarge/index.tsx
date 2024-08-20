@@ -9,7 +9,6 @@ import { classNames } from "@/shared/helpers/classNames";
 import DefaultImg from "@/shared/ui/Image";
 import Badge from "@/shared/ui/Badge";
 import { CONTENT_STATES } from "@/shared/consts/content/state";
-import ContentLikeBtn from "@/components/ContentLikeBtn";
 import { Props } from "./types";
 import { getStatus } from "@/shared/helpers/getStatus";
 

@@ -1,11 +1,16 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import axiosInstance from "@/utils/axios";
+import { AxiosError } from "axios";
 
 export const useLikeContent = (
-  idx: number | string,
-  props: UseMutationOptions
+  idx?: number,
+  props?: UseMutationOptions<unknown, AxiosError>
 ) =>
   useMutation({
-    mutationFn: () => axiosInstance.post(`/apis/culture-content/${idx}/like`),
+    mutationFn: async () => {
+      if (!idx) return;
+
+      return await axiosInstance.post(`/apis/culture-content/${idx}/like`);
+    },
     ...props,
   });

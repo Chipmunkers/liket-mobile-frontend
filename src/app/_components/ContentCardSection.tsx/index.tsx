@@ -5,6 +5,7 @@ import { Else, If, Then } from "react-if";
 import { SummaryContentEntity } from "@/types/api/culture-content";
 import { StrictPropsWithChildren } from "@/types/common";
 import ContentCardLarge from "@/entities/content/ContentCardLarge";
+import LikeContentButton from "@/features/content/LikeContentButton";
 
 type Props = StrictPropsWithChildren<{
   data?: {
@@ -23,7 +24,16 @@ const ContentCardSection = (props: Props) => {
           <If condition={data.contentList.length >= 1}>
             <Then>
               {data.contentList.map((content, i) => (
-                <ContentCardLarge content={content} key={i} />
+                <ContentCardLarge
+                  content={content}
+                  key={i}
+                  LikeButton={
+                    <LikeContentButton
+                      idx={content.idx}
+                      likeState={content.likeState}
+                    />
+                  }
+                />
               ))}
             </Then>
             <Else>
