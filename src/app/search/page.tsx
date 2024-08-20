@@ -8,8 +8,8 @@ import CustomDrawer from "@/components/CustomDrawer";
 import Chip from "@/components/Chip";
 import Checkbox from "@/components/Checkbox";
 import { ButtonBase } from "@mui/material";
-import { Sido, sidoList } from "../../../public/data/sido";
-import { Genre, Style } from "../../types/content";
+import { sidoList } from "../../../public/data/sido";
+import { Style } from "../../types/content";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ages } from "../../../public/data/age";
 import { styles } from "../../../public/data/style";
@@ -20,7 +20,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   GET_CONTENT_ALL_KEY,
   useGetContentAll,
-} from "./hooks/useGetContentAll";
+} from "./_hooks/useGetContentAll";
 import { AxiosError } from "axios";
 import ContentCardGroup from "@/components/ContentCardGroup";
 import useModalStore from "@/stores/modalStore";
@@ -34,78 +34,27 @@ import {
   WebViewEventType,
 } from "../../utils/stackRouter";
 import { useIsWebView } from "../../hooks/useIsWebView";
-
-interface Pagerble {
-  region: string | null;
-  style: string[];
-  age: string | null;
-  genre: string | null;
-  open: string | null;
-  orderby: string | null;
-  search: string | null;
-}
+import { SearchPagerble } from "@/app/search/_types/pagerble";
+import { createQuerystring } from "@/app/search/_util/createQueryString";
+import useHandleMessageEvent from "@/app/search/_hooks/useHandleMesaageEvent";
+import { getQuerystring } from "@/app/search/_util/getQuerystring";
 
 export default function Page() {
   const searchParams = useSearchParams();
 
-  const getQueryString = (): Pagerble => {
-    return {
-      style: searchParams.getAll("style"),
-      region: searchParams.get("region"),
-      genre: searchParams.get("genre"),
-      age: searchParams.get("age"),
-      open: searchParams.get("open"),
-      orderby: searchParams.get("orderby"),
-      search: searchParams.get("search"),
-    };
-  };
+  const [pagerble, setPagerble] = useState<SearchPagerble>(
+    getQuerystring(searchParams)
+  );
 
-  const createQuerystring = (data: Pagerble): string => {
-    const params = new URLSearchParams();
-
-    if (data.region) {
-      params.set("region", data.region);
-    }
-
-    if (data.genre) {
-      params.set("genre", data.genre);
-    }
-
-    if (data.age) {
-      params.set("age", data.age);
-    }
-
-    if (data.open) {
-      params.set("open", data.open);
-    }
-
-    if (data.orderby) {
-      params.set("orderby", data.orderby);
-    }
-
-    if (data.search) {
-      params.set("search", data.search);
-    }
-
-    if (data.style && data.style.length > 0) {
-      data.style.forEach((style) => {
-        params.append("style", style);
-      });
-    }
-
-    return params.toString();
-  };
-
-  const [pagerble, setPagerble] = useState<Pagerble>(getQueryString());
+  useHandleMessageEvent(setPagerble);
 
   const { data, fetchNextPage, isFetching, refetch, error, hasNextPage } =
-    useGetContentAll(createQuerystring(getQueryString()));
+    useGetContentAll(createQuerystring(getQuerystring(searchParams)));
 
   // * Drawer
   const [isSidoDrawerOpen, setIsSidoDrawerOpen] = useState(false);
   const [isAgeDrawerOpen, setIsAgeDrawerOpen] = useState(false);
   const [isStyleDrawerOpen, setIsStyleDrawerOpen] = useState(false);
-  const [isOrderDrawerOpen, setIsOrderDrawerOpen] = useState(false);
 
   const router = useRouter();
 
@@ -113,20 +62,8 @@ export default function Page() {
   const [selectStyles, setSelectStyles] = useState<Style[]>([]);
 
   useEffect(() => {
-    setPagerble(getQueryString());
+    setPagerble(getQuerystring(searchParams));
   }, [searchParams]);
-
-  // * 옵션 변경 시 리뷰 쿼리 데이터 초기화
-  const queryClient = useQueryClient();
-  const resetContent = () => {
-    queryClient.removeQueries({
-      queryKey: [GET_CONTENT_ALL_KEY],
-    });
-    queryClient.setQueryData([GET_CONTENT_ALL_KEY], {
-      pages: [],
-      pageParams: [],
-    });
-  };
 
   useEffect(() => {
     if (!pagerble) return;
@@ -160,40 +97,6 @@ export default function Page() {
 
   // * 웹뷰 확인 코드
   const isWebview = useIsWebView();
-
-  const webviewMessageEvent = (e: MessageEvent) => {
-    const data: { type: string; genre?: number; search?: string } = JSON.parse(
-      e.data
-    );
-
-    if (data.type === WebViewEventType.SEARCH_SUBMIT) {
-      if (data.genre !== undefined) {
-        setPagerble((pagerble) => ({
-          ...pagerble,
-          genre: data.genre === 0 ? null : (data.genre || 0).toString(),
-        }));
-        return;
-      }
-
-      if (typeof data.search === "string") {
-        setPagerble((pagerble) => ({
-          ...pagerble,
-          search: data.search || null,
-        }));
-        return;
-      }
-    }
-  };
-
-  useEffect(() => {
-    // ios
-    window.addEventListener("message", webviewMessageEvent);
-
-    // android
-    //document.addEventListener("message", (e) => alert(e.data));
-
-    return () => window.removeEventListener("message", webviewMessageEvent);
-  }, []);
 
   useEffect(() => {
     if (!error) return;
