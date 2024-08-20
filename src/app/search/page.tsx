@@ -22,7 +22,6 @@ import { getQuerystring } from "@/app/search/_util/getQuerystring";
 import useCheckChangePagerble from "@/app/search/_hooks/useCheckChangePagerble";
 import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
 import { useIsWebView } from "@/shared/hooks/useIsWebview";
-import { GENRES } from "@/shared/consts/content/genre";
 import { SIDO_LIST } from "@/shared/consts/region/sido";
 import { AGES } from "@/shared/consts/content/age";
 import { STYLES } from "@/shared/consts/content/style";
