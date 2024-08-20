@@ -17,7 +17,7 @@ import { Age, Genre, Style } from "@/types/content";
 import { ages } from "../../../public/data/age";
 import { styles } from "../../../public/data/style";
 import customToast from "@/utils/customToast";
-import KakaoMap from "./components/KakaoMap";
+import KakaoMap from "./_ui/KakaoMap";
 import { MapContentEntity } from "@/types/api/map";
 import { ButtonBase } from "@mui/material";
 import { Sido, sidoList } from "../../../public/data/sido";
