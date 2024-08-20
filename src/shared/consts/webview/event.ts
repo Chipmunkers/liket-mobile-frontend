@@ -1,0 +1,8 @@
+export const WEBVIEW_EVENT_TYPE = {
+  ROUTER_EVENT: "ROUTER_EVENT",
+  NAV_BACK: "NAV_BACK",
+  CLICK: "CLICK_EVENT",
+  SEARCH_SUBMIT: "SEARCH_SUBMIT",
+} as const;
+
+export type WebviewEvent = keyof typeof WEBVIEW_EVENT_TYPE;
