@@ -48,8 +48,15 @@ export default function Page() {
 
   useHandleMessageEvent(setPagerble);
 
-  const { data, fetchNextPage, isFetching, refetch, error, hasNextPage } =
-    useGetContentAll(createQuerystring(getQuerystring(searchParams)));
+  const {
+    data,
+    fetchNextPage,
+    isFetching,
+    refetch,
+    error,
+    hasNextPage,
+    setTarget,
+  } = useGetContentAll(createQuerystring(getQuerystring(searchParams)));
 
   // * Drawer
   const [isSidoDrawerOpen, setIsSidoDrawerOpen] = useState(false);
@@ -71,27 +78,6 @@ export default function Page() {
     // pagerble이 바뀌면 경로 변경
     router.replace("/search?" + createQuerystring(pagerble));
   }, [pagerble]);
-
-  // * 무한 스크롤 타겟
-  const [target, setTarget] = useState<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (!target) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !isFetching && !error) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 1 }
-    );
-
-    observer.observe(target);
-    return () => {
-      observer.unobserve(target);
-    };
-  }, [target, hasNextPage, isFetching]);
 
   const openModal = useModalStore(({ openModal }) => openModal);
 
