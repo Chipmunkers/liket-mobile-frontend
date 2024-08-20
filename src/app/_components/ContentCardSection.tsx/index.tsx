@@ -4,7 +4,7 @@ import CustomScrollContainer from "@/components/CustomScrollContainer";
 import { Else, If, Then } from "react-if";
 import { SummaryContentEntity } from "@/types/api/culture-content";
 import { StrictPropsWithChildren } from "@/types/common";
-import ContentCardLarge from "@/widgets/content/ContentCardLarge";
+import ContentCardLarge from "@/entities/content/ContentCardLarge";
 
 type Props = StrictPropsWithChildren<{
   data?: {

@@ -1,5 +1,6 @@
 import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 import { EntityUiProps } from "@/shared/types/react";
+import { ReactNode } from "react";
 
 export type Props<
   T = Pick<
@@ -18,6 +19,11 @@ export type Props<
    * 컨텐츠 정보
    */
   content: T;
+
+  /**
+   * 좋아요 버튼
+   */
+  LikeButton: ReactNode;
 
   /**
    * 클릭 이벤트. 없을 경우 클릭이 되지 않음

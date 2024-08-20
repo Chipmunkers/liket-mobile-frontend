@@ -13,7 +13,7 @@ import ContentLikeBtn from "@/components/ContentLikeBtn";
 import { Props } from "./types";
 import { getStatus } from "@/shared/helpers/getStatus";
 
-const ContentCardLarge = ({ content, width, onClick }: Props) => {
+const ContentCardLarge = ({ content, width, onClick, LikeButton }: Props) => {
   const router = useRouter();
 
   return (
@@ -44,11 +44,7 @@ const ContentCardLarge = ({ content, width, onClick }: Props) => {
           >
             {CONTENT_STATES[getStatus(content.startDate, content.endDate)].name}
           </Badge>
-          <ContentLikeBtn
-            idx={content.idx}
-            className="absolute bottom-[8px] right-[8px]"
-            likeState={content.likeState}
-          />
+          {LikeButton}
         </div>
         <div className="flex flex-col">
           <div className="text-body4 text-skyblue-01 mb-[4px]">
