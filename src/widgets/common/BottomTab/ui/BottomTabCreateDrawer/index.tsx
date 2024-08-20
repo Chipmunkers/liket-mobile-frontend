@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { useIsWebView } from "@/shared/hooks/useIsWebview";
 import customToast from "@/shared/helpers/customToast";
-import DrawerItem from "@/entities/common/DrawerItem";
+import DrawerItem from "@/shared/ui/DrawerItem";
 
 const BottomTabCreateDrawer = ({ isOpen, setIsOpen }: Props) => {
   const router = useRouter();
