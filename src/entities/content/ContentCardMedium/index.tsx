@@ -1,15 +1,16 @@
 "user client";
 
 import Link from "next/link";
-import Image from "next/image";
 import Badge from "@/components/Badge/Badge";
 import dayjs from "dayjs";
-import { MapContentEntity } from "@/types/api/map";
 import ContentLikeBtn from "../../../components/ContentLikeBtn";
 import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
 import { useRouter } from "next/navigation";
+import { Props } from "./types";
+import DefaultImg from "@/shared/ui/DefaultImg";
+import LikeContentButton from "@/entities/content/LikeContentButton";
 
-const MapContentInfo = ({ content }: { content: MapContentEntity }) => {
+const ContentCardMedium = ({ content, onClick }: Props) => {
   const router = useRouter();
 
   return (
@@ -20,6 +21,10 @@ const MapContentInfo = ({ content }: { content: MapContentEntity }) => {
         onClick={(e) => {
           e.preventDefault();
 
+          if (onClick) {
+            return onClick();
+          }
+
           stackRouterPush(router, {
             path: `/contents/${content.idx}`,
             screen: ScreenTYPE.CONTENT_DETAIL,
@@ -27,11 +32,7 @@ const MapContentInfo = ({ content }: { content: MapContentEntity }) => {
         }}
       >
         <div className="relative w-[72px] h-[100px] mr-[16px]">
-          <Image
-            src={process.env.NEXT_PUBLIC_IMAGE_SERVER + content.imgList[0]}
-            fill
-            alt={`${content.title} 썸네일 이미지`}
-          />
+          <DefaultImg src={content.thumbnail} />
         </div>
         <div>
           <Badge variant={"active"}>진행중</Badge>
@@ -48,11 +49,11 @@ const MapContentInfo = ({ content }: { content: MapContentEntity }) => {
           </div>
         </div>
         <div className="absolute right-0">
-          <ContentLikeBtn likeState={content.likeState} idx={content.idx} />
+          <LikeContentButton idx={content.idx} likeState={content.likeState} />
         </div>
       </Link>
     </div>
   );
 };
 
-export default MapContentInfo;
+export default ContentCardMedium;

@@ -28,6 +28,7 @@ import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
 import { stackRouterBack } from "../../utils/stackRouter";
 import { setAppNavBack } from "../../utils/setAppNavState";
+import ContentCardMedium from "@/entities/content/ContentCardMedium";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -161,7 +162,14 @@ export default function MapPage() {
             ) : null}
           </div>
         </KakaoMap>
-        {clickedContent ? <MapContentInfo content={clickedContent} /> : null}
+        {clickedContent ? (
+          <ContentCardMedium
+            content={{
+              ...clickedContent,
+              thumbnail: clickedContent.imgList[0],
+            }}
+          />
+        ) : null}
         {!clickedContent && contentList.length !== 0 ? (
           <CustomBottomSheet
             open={true}
