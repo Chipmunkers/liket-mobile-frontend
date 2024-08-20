@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { classNames } from "@/shared/helpers/classNames";
-import DefaultImg from "@/shared/ui/Image";
+import DefaultImg from "@/shared/ui/DefaultImg";
 import Badge from "@/shared/ui/Badge";
 import { CONTENT_STATES } from "@/shared/consts/content/state";
 import { Props } from "./types";

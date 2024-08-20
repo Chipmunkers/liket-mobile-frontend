@@ -1,7 +1,6 @@
 "use client";
 
 import Header from "@/components/Header";
-import LinkableTab from "@/components/LinkableTab";
 import { useEffect, useState } from "react";
 import { classNames } from "@/utils/helpers";
 import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
@@ -27,6 +26,7 @@ import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
 import ContentCardMedium from "@/entities/content/ContentCardMedium";
 import useCheckModalOpenForWebview from "@/app/map/_hooks/onMessageWebview";
+import BottomTab from "@/widgets/common/BottomTab";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -182,7 +182,7 @@ export default function MapPage() {
           </CustomBottomSheet>
         ) : null}
       </main>
-      <LinkableTab />
+      <BottomTab />
       <div
         className="full-modal"
         style={{

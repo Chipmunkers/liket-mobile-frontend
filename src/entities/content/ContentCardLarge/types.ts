@@ -1,6 +1,5 @@
 import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 import { EntityUiProps } from "@/shared/types/react";
-import { ReactNode } from "react";
 
 export type Props<
   T = Pick<
