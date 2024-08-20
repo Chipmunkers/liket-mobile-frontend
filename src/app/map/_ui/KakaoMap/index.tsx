@@ -8,17 +8,18 @@ import {
 } from "react";
 import { CustomOverlayMap, Map, useKakaoLoader } from "react-kakao-maps-sdk";
 import axiosInstance from "@/utils/axios";
-import { getMapInfo } from "../_util/getMapInfo";
-import { generateMapFilterQuerystring } from "../_util/generateMapFilterQuerystring";
 import { ClusteredContentEntity, MapContentEntity } from "@/types/api/map";
 import { AxiosError } from "axios";
-import useModalStore from "../../../stores/modalStore";
 import { useRouter } from "next/navigation";
-import { classNames } from "../../../utils/helpers";
-import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
 import { GenreEntity } from "@/shared/types/api/tag/GenreEntity";
 import { AgeEntity } from "@/shared/types/api/tag/AgeEntity";
 import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
+import { generateMapFilterQuerystring } from "@/app/map/_util/generateMapFilterQuerystring";
+import useModalStore from "@/shared/hooks/useModalStore";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { getMapInfo } from "@/app/map/_util/getMapInfo";
+import { classNames } from "@/shared/helpers/classNames";
 
 const KakaoMap = ({
   children,
@@ -140,14 +141,14 @@ const KakaoMap = ({
           onClickPositive: () => {
             stackRouterPush(router, {
               path: "/login",
-              screen: ScreenTYPE.LOGIN,
+              screen: WEBVIEW_SCREEN.LOGIN,
               isStack: false,
             });
           },
           onClickNegative: () => {
             stackRouterPush(router, {
               path: "/",
-              screen: ScreenTYPE.MAIN,
+              screen: WEBVIEW_SCREEN.MAIN,
               isStack: false,
             });
           },

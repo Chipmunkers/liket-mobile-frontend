@@ -6,7 +6,6 @@ import { classNames } from "@/utils/helpers";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Filter from "@/icons/filter.svg";
 import Chip from "@/components/Chip";
-import KakaoMap from "./_ui/KakaoMap";
 import { MapContentEntity } from "@/types/api/map";
 import { ButtonBase } from "@mui/material";
 import RightOption from "@/components/Header/RightOption";
@@ -23,6 +22,7 @@ import FilterDrawer from "@/app/map/_ui/FilterDrawer";
 import { Sido, SIDO_LIST } from "@/shared/consts/region/sido";
 import { Sigungu } from "@/shared/consts/region/sigungu";
 import LocationDrawer from "@/app/map/_ui/LocationDrawer";
+import KakaoMap from "@/app/map/_ui/KakaoMap";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
