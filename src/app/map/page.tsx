@@ -3,8 +3,6 @@
 import Header from "@/components/Header";
 import { useEffect, useState } from "react";
 import { classNames } from "@/utils/helpers";
-import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
-import Button from "@/components/Button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Filter from "@/icons/filter.svg";
 import Chip from "@/components/Chip";
@@ -13,7 +11,6 @@ import { MapContentEntity } from "@/types/api/map";
 import { ButtonBase } from "@mui/material";
 import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
 import ContentCardMedium from "@/entities/content/ContentCardMedium";
 import useCheckModalOpenForWebview from "@/app/map/_hooks/onMessageWebview";
 import BottomTab from "@/widgets/common/BottomTab";
@@ -24,7 +21,7 @@ import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
 import { MapFilter, SelectLocation } from "@/app/map/_types/types";
 import FilterDrawer from "@/app/map/_ui/FilterDrawer";
 import { Sido, SIDO_LIST } from "@/shared/consts/region/sido";
-import { Sigungu, SIGUNGU_LIST } from "@/shared/consts/region/sigungu";
+import { Sigungu } from "@/shared/consts/region/sigungu";
 import LocationDrawer from "@/app/map/_ui/LocationDrawer";
 
 export default function MapPage() {
