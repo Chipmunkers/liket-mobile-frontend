@@ -19,14 +19,12 @@ import { styles } from "../../../public/data/style";
 import customToast from "@/utils/customToast";
 import KakaoMap from "./components/KakaoMap";
 import { MapContentEntity } from "@/types/api/map";
-import MapContentInfo from "./components/ContentInfo";
 import { ButtonBase } from "@mui/material";
 import { Sido, sidoList } from "../../../public/data/sido";
 import { Sigungu, sigunguList } from "../../../public/data/sigungu";
 import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
-import { stackRouterBack } from "../../utils/stackRouter";
 import { setAppNavBack } from "../../utils/setAppNavState";
 import ContentCardMedium from "@/entities/content/ContentCardMedium";
 
