@@ -1,6 +1,9 @@
 import { ContentEntity } from "./culture-content";
 import { UserEntity } from "./user";
 
+/**
+ * @deprecated
+ */
 export interface ReviewEntity {
   idx: number;
   visitTime: string;

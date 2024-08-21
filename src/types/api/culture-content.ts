@@ -1,6 +1,9 @@
 import { LocationEntity } from "./location";
 import { AgeEntity, GenreEntity, StyleEntity } from "./tag";
 
+/**
+ * @deprecated
+ */
 export interface ContentEntity {
   idx: number;
   title: string;
@@ -27,6 +30,9 @@ export interface ContentEntity {
   acceptedAt: string;
 }
 
+/**
+ * @deprecated
+ */
 export interface SummaryContentEntity
   extends Pick<
     ContentEntity,
@@ -43,6 +49,9 @@ export interface SummaryContentEntity
     | "acceptedAt"
   > {}
 
+/**
+ * @deprecated
+ */
 export interface HotContentEntity extends GenreEntity {
   contentList: Pick<
     ContentEntity,

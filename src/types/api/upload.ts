@@ -1,3 +1,6 @@
+/**
+ * @deprecated
+ */
 export interface UploadedFileEntity {
   fullUrl: string;
   fileName: string;

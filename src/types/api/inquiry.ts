@@ -1,3 +1,6 @@
+/**
+ * @deprecated
+ */
 export interface SummaryInquiryEntity {
   isAnswered: boolean;
   idx: number;
