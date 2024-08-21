@@ -10,7 +10,6 @@ import CreateIcon from "@/icons/create.svg";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import CalendarIcon from "@/icons/calendar.svg";
-import MediumSelectButton from "@/components/SelectButton/MediumSelectButton";
 import { ButtonBase, TextareaAutosize } from "@mui/material";
 import dayjs from "dayjs";
 import { DateCalendar } from "@mui/x-date-pickers";
@@ -38,6 +37,7 @@ import Drawer from "@/shared/ui/Drawer";
 import InputButton from "@/shared/ui/Input/InputButton";
 import { useUploadContentImages } from "./_hooks/useUploadContentImages";
 import CheckBox from "@/shared/ui/CheckBox";
+import SelectButtonMedium from "@/shared/ui/SelectButton/SelectButtonMedium";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",
@@ -450,7 +450,7 @@ export default function Page() {
                   오픈날짜<span className="text-top">*</span>
                 </InputLabel>
                 <div className="mt-[12px]">
-                  <MediumSelectButton
+                  <SelectButtonMedium
                     text={getValues("startDate")}
                     placeholder="날짜 선택"
                     onClick={() => setIsStartDateSelectionDrawerOpen(true)}
@@ -463,7 +463,7 @@ export default function Page() {
                   종료날짜<span className="text-top">*</span>
                 </InputLabel>
                 <div className="mt-[12px]">
-                  <MediumSelectButton
+                  <SelectButtonMedium
                     text={getValues("endDate")}
                     placeholder="날짜 선택"
                     onClick={() => setIsEndDateSelectionDrawerOpen(true)}
