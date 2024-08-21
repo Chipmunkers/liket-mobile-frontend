@@ -1,6 +1,5 @@
 "use client";
 
-import { useDeleteAccount } from "@/service/delete";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -15,6 +14,7 @@ import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import customToast from "@/shared/helpers/customToast";
 import BottomButtonTab from "@/shared/ui/BottomButtonTab";
 import Button from "@/shared/ui/Button";
+import { useDeleteAccount } from "./_hooks/useDeleteAccount";
 
 export default function Page() {
   const queryClient = useQueryClient();
