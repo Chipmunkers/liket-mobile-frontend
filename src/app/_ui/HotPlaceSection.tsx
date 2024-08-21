@@ -1,14 +1,15 @@
 "use client";
 
 import RightArrow from "@/icons/right-arrow.svg";
-import { colors } from "@/utils/style";
 import Link from "next/link";
 import HotPlaceListItem from "@/components/HotplaceListItem";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
-import { HotContentEntity } from "../../types/api/culture-content";
-import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
 import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
+import { HotContentEntity } from "@/shared/types/api/content/HotContentEntity";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { colors } from "@/shared/style/color";
 
 const HotPlaceSection = (props: { contentList: HotContentEntity[] }) => {
   const { contentList } = props;
@@ -34,7 +35,7 @@ const HotPlaceSection = (props: { contentList: HotContentEntity[] }) => {
 
                   stackRouterPush(router, {
                     path: `/search?genre=${idx}&open=true&orderby=like`,
-                    screen: ScreenTYPE.SEARCH,
+                    screen: WEBVIEW_SCREEN.SEARCH,
                   });
                 }}
               >

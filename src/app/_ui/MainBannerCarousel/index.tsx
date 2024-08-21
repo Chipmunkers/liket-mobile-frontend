@@ -4,7 +4,6 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from "react-responsive-carousel";
 import { Props } from "./types";
 import DefaultImg from "@/shared/ui/DefaultImg";
-import Image from "next/image";
 
 const MainBannerCarousel = ({ srcList }: Props) => {
   return (
