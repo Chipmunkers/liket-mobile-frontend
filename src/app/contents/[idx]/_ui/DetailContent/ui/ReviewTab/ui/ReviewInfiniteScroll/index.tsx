@@ -1,11 +1,10 @@
-import StarRating from "@/components/StarRating";
-import Image from "next/image";
 import MenuIcon from "./icon/menu.svg";
 import dayjs from "dayjs";
 import { Carousel } from "react-responsive-carousel";
 import DefaultImg from "@/shared/ui/DefaultImg";
 import { Props } from "./types";
 import LikeReviewButton from "./ui/LikeReviewButton";
+import StarRating from "@/entities/review/StarRating";
 
 const ReviewInfiniteScroll = (props: Props) => {
   const {
@@ -26,12 +25,7 @@ const ReviewInfiniteScroll = (props: Props) => {
             <div className="flex justify-between h-[24px] items-center mb-[4px]">
               <div className="flex">
                 <div className="w-[18px] h-[18px] mr-[4px] rounded-full relative overflow-hidden">
-                  <Image
-                    src={"/icons/default-avatar.svg"}
-                    alt="아바타 이미지"
-                    fill
-                    objectFit="cover"
-                  />
+                  <DefaultImg src={review.author.profileImgPath || ""} />
                 </div>
                 <div className="text-body2">{review.author.nickname}</div>
               </div>
