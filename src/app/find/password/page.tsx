@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { PasswordResetEmailForm } from "@/app/signup/_components/EmailForm";
 import { useState } from "react";
-import PasswordForm from "@/app/signup/_components/PasswordForm";
+import PasswordForm from "@/app/signup/_ui/PasswordForm";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";

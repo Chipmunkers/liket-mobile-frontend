@@ -1,21 +1,20 @@
 "use client";
 
-import Control from "@/components/Control";
-import Header from "@/components/Header";
-import EmailForm from "./_components/EmailForm";
-import PasswordForm from "./_components/PasswordForm";
-import ProfileForm from "./_components/ProfileForm";
-import { useLocalSignup } from "@/service/signup/hooks";
-import authStore from "@/stores/authStore";
+import EmailForm from "./_ui/EmailForm";
+import PasswordForm from "./_ui/PasswordForm";
+import ProfileForm from "./_ui/ProfileForm";
 import { ProfileFormData } from "@/types/signup";
 import { setAuthToken } from "@/shared/helpers/axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AxiosError } from "axios";
 import customToast from "../../utils/customToast";
-import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
-import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
+import authStore from "@/shared/store/authStore";
+import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import PageController from "@/shared/ui/PageController";
+import { useLocalSignUp } from "./_hooks/useLocalSignUp";
 
 const INITIAL_FORM_STATE = {
   emailToken: "",
@@ -37,13 +36,13 @@ const SignUpPage = () => {
   };
   const setToken = authStore(({ setToken }) => setToken);
 
-  const { mutate, status } = useLocalSignup({
-    onSuccess: ({ data }) => {
+  const { mutate, status } = useLocalSignUp({
+    onSuccess: (data) => {
       setToken(data.token);
       setAuthToken(data.token);
       stackRouterPush(router, {
         path: "/",
-        screen: ScreenTYPE.MAIN,
+        screen: WEBVIEW_SCREEN.MAIN,
         isStack: false,
       });
     },
@@ -87,18 +86,18 @@ const SignUpPage = () => {
   return (
     <>
       <Header>
-        <LeftOption
+        <HeaderLeft
           option={{
             back: true,
           }}
         />
-        <MiddleText text={formIndex === 2 ? "프로필" : "회원가입"} />
+        <HeaderMiddle text={formIndex === 2 ? "프로필" : "회원가입"} />
       </Header>
       <main>
         <div className="my-[16px] gap-[8px] center">
           {[0, 1, 2].map((index) => {
             return (
-              <Control
+              <PageController
                 key={index}
                 onClick={() => {
                   // ! 완료된 순서대로 이 전으로 갈 수 있도록 변경해야함

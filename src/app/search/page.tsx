@@ -1,10 +1,7 @@
 "use client";
 
-import SearchHeader from "@/components/SearchHeader";
 import { useEffect, useState } from "react";
 import SmallDownArrow from "@/icons/down-arrow-small.svg";
-import CustomDrawer from "@/components/CustomDrawer";
-import Checkbox from "@/components/Checkbox";
 import { ButtonBase } from "@mui/material";
 import { useSearchParams } from "next/navigation";
 import { useGetContentAll } from "./_hooks/useGetContentAll";
@@ -27,6 +24,9 @@ import { classNames } from "@/shared/helpers/classNames";
 import { DefaultLoading } from "@/shared/ui/Loading";
 import { SelectButtonSmall } from "@/shared/ui/SelectButton";
 import ContentCardGroup from "@/widgets/content/ContentInfiniteGroup";
+import SearchHeader from "@/shared/ui/SearchHeader";
+import CheckBox from "@/shared/ui/CheckBox";
+import Drawer from "@/shared/ui/Drawer";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -138,7 +138,7 @@ export default function Page() {
         />
       </div>
       <div className="flex justify-between mx-[24px]">
-        <Checkbox
+        <CheckBox
           label="진행중인 컨텐츠만 보기"
           size="12px"
           isChecked={pagerble.open === "true"}
@@ -212,7 +212,7 @@ export default function Page() {
         )}
       </main>
       {/* 지역 선택 */}
-      <CustomDrawer
+      <Drawer
         open={isSidoDrawerOpen}
         onClose={() => setIsSidoDrawerOpen(false)}
       >
@@ -236,13 +236,10 @@ export default function Page() {
             </ButtonBase>
           </li>
         ))}
-      </CustomDrawer>
+      </Drawer>
 
       {/* 연령대 선택 */}
-      <CustomDrawer
-        open={isAgeDrawerOpen}
-        onClose={() => setIsAgeDrawerOpen(false)}
-      >
+      <Drawer open={isAgeDrawerOpen} onClose={() => setIsAgeDrawerOpen(false)}>
         <div className="center text-h2">연령대</div>
         {AGES.map(({ idx, name }) => (
           <li className="bottom-sheet-list" key={idx}>
@@ -265,10 +262,10 @@ export default function Page() {
             </ButtonBase>
           </li>
         ))}
-      </CustomDrawer>
+      </Drawer>
 
       {/* 스타일 선택 */}
-      <CustomDrawer
+      <Drawer
         open={isStyleDrawerOpen}
         onClose={() => {
           setIsStyleDrawerOpen(false);
@@ -325,7 +322,7 @@ export default function Page() {
             확인
           </ButtonBase>
         </div>
-      </CustomDrawer>
+      </Drawer>
     </>
   );
 }
