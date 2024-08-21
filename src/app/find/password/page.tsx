@@ -1,15 +1,13 @@
 "use client";
 
-import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
 import { PasswordResetEmailForm } from "@/app/signup/_components/EmailForm";
 import { useState } from "react";
 import PasswordForm from "@/app/signup/_components/PasswordForm";
-import { useResetPassword } from "@/service/reset/hooks";
-import RightOption from "@/components/Header/RightOption";
-import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
-import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
+import { useResetPassword } from "./_hooks/useResetPassword";
 
 export default function Page() {
   const [formIndex, setFormIndex] = useState(0);
@@ -24,7 +22,7 @@ export default function Page() {
     onSuccess: () => {
       stackRouterPush(router, {
         path: "/login/email",
-        screen: ScreenTYPE.EMAIL_LOGIN,
+        screen: WEBVIEW_SCREEN.EMAIL_LOGIN,
         isStack: false,
       });
     },
@@ -39,14 +37,14 @@ export default function Page() {
   return (
     <>
       <Header>
-        <LeftOption
+        <HeaderLeft
           option={{
             close: {
               onClick: () => router.back(),
             },
           }}
         />
-        <MiddleText text="비밀번호 재설정" />
+        <HeaderMiddle text="비밀번호 재설정" />
       </Header>
       {formIndex === 0 && <PasswordResetEmailForm updateForm={updateForm} />}
       {formIndex === 1 && (
