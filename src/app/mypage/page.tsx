@@ -1,8 +1,5 @@
 "use client";
 
-import CustomImage from "@/components/CustomImage";
-import Divider from "@/components/Divider";
-import FallbackContentImg from "@/components/FallbackContentImg";
 import LinkItem from "@/components/LinkItem";
 import RightArrow from "@/icons/right-arrow.svg";
 import { useMyPage } from "@/service/profile";
@@ -15,13 +12,16 @@ import { If, Then, Else } from "react-if";
 import ScrollContainer from "react-indiana-drag-scroll";
 import customToast from "@/utils/customToast";
 import VerticalDivider from "./icons/vertical-divider.svg";
-import { ScreenTYPE, stackRouterPush } from "@/utils/stackRouter";
 import AvatarUploader from "@/components/AvatarUploader";
-import { compressImage } from "@/utils/compressImg";
 import useUploadProfile from "./_hooks/useUploadProfile";
 import { AxiosError } from "axios";
 import useUpdateProfile from "./_hooks/useUpdateProfileImg";
 import BottomTab from "@/widgets/common/BottomTab";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { compressImage } from "@/app/create/review/_utils/compressImage";
+import DefaultImg from "@/shared/ui/DefaultImg";
+import Divider from "@/shared/ui/Divider";
 
 export default function Page() {
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function Page() {
 
     stackRouterPush(router, {
       path: "/login",
-      screen: ScreenTYPE.LOGIN,
+      screen: WEBVIEW_SCREEN.LOGIN,
       isStack: false,
     });
   }, [error, router]);
@@ -61,7 +61,7 @@ export default function Page() {
     if (uploadProfileImgError instanceof AxiosError) {
       if (uploadProfileImgError.response?.status === 401) {
         stackRouterPush(router, {
-          screen: ScreenTYPE.LOGIN,
+          screen: WEBVIEW_SCREEN.LOGIN,
           path: "/login?isTokenExpired=true",
           isStack: false,
         });
@@ -83,7 +83,7 @@ export default function Page() {
     if (updateUserProfileError instanceof AxiosError) {
       if (updateUserProfileError.response?.status === 401) {
         stackRouterPush(router, {
-          screen: ScreenTYPE.LOGIN,
+          screen: WEBVIEW_SCREEN.LOGIN,
           path: "/login",
           isStack: false,
         });
@@ -129,7 +129,7 @@ export default function Page() {
 
                     stackRouterPush(router, {
                       path: "/mypage/edit/profile",
-                      screen: ScreenTYPE.EDIT_PROFILE,
+                      screen: WEBVIEW_SCREEN.EDIT_PROFILE,
                     });
                   }}
                 >
@@ -150,7 +150,7 @@ export default function Page() {
                       onClick={() => {
                         stackRouterPush(router, {
                           path: "/like",
-                          screen: ScreenTYPE.LIKE,
+                          screen: WEBVIEW_SCREEN.LIKE,
                         });
                       }}
                     >
@@ -212,7 +212,7 @@ export default function Page() {
 
                 stackRouterPush(router, {
                   path: "/reviews",
-                  screen: ScreenTYPE.MY_REVIEW,
+                  screen: WEBVIEW_SCREEN.MY_REVIEW,
                 });
               }}
             >
@@ -225,11 +225,11 @@ export default function Page() {
             <If condition={reviewList.length > 0}>
               <Then>
                 <ScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] mt-[8px]">
-                  {reviewList.map(({ idx, thumbnail }) => {
+                  {reviewList.map((review) => {
                     return (
                       <Link
-                        href={`/reviews/${idx}`}
-                        key={idx}
+                        href={`/reviews/${review.idx}`}
+                        key={review.idx}
                         onClick={(e) => {
                           e.preventDefault();
 
@@ -237,20 +237,7 @@ export default function Page() {
                         }}
                       >
                         <div className="relative w-[112px] h-[178px]">
-                          <CustomImage
-                            src={
-                              process.env.NEXT_PUBLIC_IMAGE_SERVER + thumbnail
-                            }
-                            fallbackComponent={<FallbackContentImg />}
-                            width={112}
-                            height={178}
-                            alt={`리뷰 썸네일 이미지`}
-                            style={{
-                              width: 112,
-                              height: 178,
-                              objectFit: "cover",
-                            }}
-                          />
+                          <DefaultImg src={review.thumbnail} />
                         </div>
                       </Link>
                     );
@@ -273,7 +260,7 @@ export default function Page() {
 
                 stackRouterPush(router, {
                   path: "/likets",
-                  screen: ScreenTYPE.MY_LIKET,
+                  screen: WEBVIEW_SCREEN.MY_LIKET,
                 });
               }}
             >
@@ -286,28 +273,17 @@ export default function Page() {
             <If condition={liketList.length > 0}>
               <Then>
                 <ScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] mt-[8px]">
-                  {liketList.map(({ idx, imgPath }) => {
+                  {liketList.map((liket) => {
                     return (
                       <Link
-                        href={`/likets/${idx}`}
-                        key={idx}
+                        href={`/likets/${liket.idx}`}
+                        key={liket.idx}
                         onClick={(e) => {
                           e.preventDefault();
                         }}
                       >
                         <div className="relative w-[112px] h-[178px]">
-                          <CustomImage
-                            src={process.env.NEXT_PUBLIC_IMAGE_SERVER + imgPath}
-                            fallbackComponent={<FallbackContentImg />}
-                            width={112}
-                            height={178}
-                            alt={`라이켓 이미지`}
-                            style={{
-                              width: 112,
-                              height: 178,
-                              objectFit: "cover",
-                            }}
-                          />
+                          <DefaultImg src={liket.imgPath} />
                         </div>
                       </Link>
                     );
@@ -322,12 +298,13 @@ export default function Page() {
             </If>
           </div>
         </div>
-        <Divider width="100%" height="8px" margin="24px 0 0 0" />
+        // TODO: 원래 붙어 있던 마진 확인 필요
+        <Divider width="100%" height="8px" />
         <ButtonBase
           onClick={() => {
             stackRouterPush(router, {
               path: "/account",
-              screen: ScreenTYPE.ACCOUNT,
+              screen: WEBVIEW_SCREEN.ACCOUNT,
             });
           }}
         >
@@ -338,7 +315,7 @@ export default function Page() {
           onClick={(e) => {
             stackRouterPush(router, {
               path: "/requested-contents",
-              screen: ScreenTYPE.MY_REQUEST_CONTENT,
+              screen: WEBVIEW_SCREEN.MY_REQUEST_CONTENT,
             });
           }}
         >
@@ -348,7 +325,7 @@ export default function Page() {
           onClick={() => {
             stackRouterPush(router, {
               path: "/inquiries",
-              screen: ScreenTYPE.MY_INQUIRY,
+              screen: WEBVIEW_SCREEN.MY_INQUIRY,
             });
           }}
         >
@@ -359,7 +336,7 @@ export default function Page() {
           onClick={() => {
             stackRouterPush(router, {
               path: "/terms",
-              screen: ScreenTYPE.TERMS_LIST,
+              screen: WEBVIEW_SCREEN.TERMS_LIST,
             });
           }}
         >
