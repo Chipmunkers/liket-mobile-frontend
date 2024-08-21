@@ -1,6 +1,5 @@
 "use client";
 
-import Header from "@/components/Header";
 import LeftOption from "@/components/Header/LeftOption";
 import { Props } from "./types";
 import { useRouter } from "next/navigation";
@@ -13,6 +12,7 @@ import { STYLES } from "@/shared/consts/content/style";
 import BottomButtonTabWrapper from "@/shared/ui/BottomButtonTabWrapper";
 import ButtonGroup from "@/components/ButtonGroup";
 import Button from "@/shared/ui/Button";
+import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 
 const FilterDrawer = ({
   isOpen,
@@ -38,8 +38,8 @@ const FilterDrawer = ({
         transform: !!isOpen ? "translateY(0)" : "translateY(100%)",
       }}
     >
-      <Header key={"filter-header"}>
-        <LeftOption
+      <Header>
+        <HeaderLeft
           key={"filter-option"}
           option={{
             close: {
@@ -52,7 +52,7 @@ const FilterDrawer = ({
             },
           }}
         />
-        <MiddleText text="필터" />
+        <HeaderMiddle text="필터" />
       </Header>
       <div className="full-modal-main px-[24px] py-[16px] gap-[48px]">
         {/* 장르 선택 */}

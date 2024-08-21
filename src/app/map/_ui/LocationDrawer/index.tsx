@@ -1,16 +1,14 @@
 "use client";
 
-import Header from "@/components/Header";
-import LeftOption from "@/components/Header/LeftOption";
 import { useRouter } from "next/navigation";
 import { Props } from "./types";
-import MiddleText from "@/components/Header/MiddleText";
 import { SIDO_LIST } from "@/shared/consts/region/sido";
 import { classNames } from "@/shared/helpers/classNames";
 import { ButtonBase } from "@mui/material";
 import { SIGUNGU_LIST } from "@/shared/consts/region/sigungu";
 import BottomButtonTabWrapper from "@/shared/ui/BottomButtonTabWrapper";
 import Button from "@/shared/ui/Button";
+import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 
 const LocationDrawer = ({
   isOpen,
@@ -31,7 +29,7 @@ const LocationDrawer = ({
       }}
     >
       <Header key={"town-filter-header"}>
-        <LeftOption
+        <HeaderLeft
           option={{
             close: {
               onClick: () => {
@@ -42,7 +40,7 @@ const LocationDrawer = ({
             },
           }}
         />
-        <MiddleText text="지역설정" />
+        <HeaderMiddle text="지역설정" />
       </Header>
       <div className="full-modal-main">
         <div className="flex grow h-[100%]">
