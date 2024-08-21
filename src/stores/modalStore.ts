@@ -24,6 +24,9 @@ type Actions = {
   closeModal: (modalType: ModalType) => void;
 };
 
+/**
+ * @deprecated
+ */
 const useModalStore = create<State & Actions>()(
   immer((set) => ({
     modalInformation: {},

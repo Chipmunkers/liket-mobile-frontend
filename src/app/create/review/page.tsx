@@ -1,9 +1,5 @@
 "use client";
 
-import Header from "@/components/Header";
-import MediumSelectButton from "@/components/SelectButton/MediumSelectButton";
-import StarRating from "@/components/StarRating";
-import { colors } from "@/utils/style";
 import dayjs from "dayjs";
 import { ChangeEvent, useRef, useState } from "react";
 import SearchIcon from "@/icons/search.svg";
@@ -14,28 +10,31 @@ import DeleteIcon from "@/icons/circle-cross.svg";
 import CalendarIcon from "@/icons/calendar.svg";
 import customToast from "@/utils/customToast";
 import { usePathname, useRouter } from "next/navigation";
-import { useUploadReviewImages, useWriteReview } from "@/service/review";
-import { UploadedFileEntity } from "@/types/api/upload";
 import { TextareaAutosize } from "@mui/material";
 import ScrollContainer from "react-indiana-drag-scroll";
-import CustomImage from "@/components/CustomImage";
-import EmptyImage from "@/components/EmptyImage.tsx";
-import RightOption from "@/components/Header/RightOption";
-import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
-import {
-  ScreenTYPE,
-  stackRouterBack,
-  stackRouterPush,
-} from "@/utils/stackRouter";
-import { SummaryContentEntity } from "@/types/api/culture-content";
-import SearchContentDrawer from "./_components/SearchContent";
+import SearchContentDrawer from "./_ui/SearchContent";
 import { DateAndTime } from "./_types/DateAndTime";
-import DateDrawer from "./_components/DateDrawer";
-import TimeDrawer from "./_components/TimeDrawer";
+import DateDrawer from "./_ui/DateDrawer";
+import TimeDrawer from "./_ui/TimeDrawer";
 import useCheckLoginUser from "./_hooks/useCheckLoginUser";
 import { AxiosError } from "axios";
-import { compressImage } from "./_utils/compressImage";
+import {
+  Header,
+  HeaderLeft,
+  HeaderMiddle,
+  HeaderRight,
+} from "@/shared/ui/Header";
+import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
+import DefaultImg from "@/shared/ui/DefaultImg";
+import { UploadedFileEntity } from "@/shared/types/api/upload/UploadedFileEntity";
+import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import StarRating from "@/entities/review/StarRating";
+import SelectButtonMedium from "@/shared/ui/SelectButton/SelectButtonMedium";
+import { colors } from "@/shared/style/color";
+import { useUploadReviewImages } from "./_hooks/useUploadReviewImages";
+import { useCreateReview } from "./_hooks/useCreateReview";
+import { compressImage } from "@/shared/helpers/compressImage";
 
 const MAX_IMAGES_COUNT = 10;
 const MAX_REVIEW_LENGTH = 1000;
@@ -81,11 +80,11 @@ export default function Page() {
     },
   });
 
-  const { mutate: writeReview } = useWriteReview({
+  const { mutate: writeReview } = useCreateReview({
     onSuccess: () => {
       stackRouterPush(router, {
         path: `/contents/${selectedContent?.idx}`,
-        screen: ScreenTYPE.CONTENT_DETAIL,
+        screen: WEBVIEW_SCREEN.CONTENT_DETAIL,
         isStack: false,
       });
     },
@@ -149,13 +148,13 @@ export default function Page() {
   return (
     <>
       <Header>
-        <LeftOption
+        <HeaderLeft
           option={{
             back: { onClick: () => stackRouterBack(router) },
           }}
         />
-        <MiddleText text="작성" />
-        <RightOption
+        <HeaderMiddle text="작성" />
+        <HeaderRight
           option={{
             check: {
               disabled: !(
@@ -185,18 +184,7 @@ export default function Page() {
               {selectedContent ? (
                 <div className="flex">
                   <div className="h-[48px] w-[48px] relative">
-                    <CustomImage
-                      fallbackComponent={
-                        <EmptyImage width={"48"} height={"48"} />
-                      }
-                      src={
-                        process.env.NEXT_PUBLIC_IMAGE_SERVER +
-                        selectedContent.thumbnail
-                      }
-                      fill
-                      style={{ objectFit: "cover" }}
-                      alt={`${selectedContent.title}의 썸네일 이미지`}
-                    />
+                    <DefaultImg src={selectedContent.thumbnail} />
                   </div>
                   <div className="flex flex-col justify-center text-start ml-[12px]">
                     <div className="text-body2">{selectedContent.title}</div>
@@ -234,7 +222,7 @@ export default function Page() {
               <div className="text-grey-04 text-caption mb-[12px]">
                 방문 날짜<span className="text-top">*</span>
               </div>
-              <MediumSelectButton
+              <SelectButtonMedium
                 text={
                   dateInfo.selected
                     ? dayjs(dateInfo.selected).format("YYYY.MM.DD")
@@ -249,7 +237,7 @@ export default function Page() {
               <div className="text-grey-04 text-caption mb-[12px]">
                 방문 시간<span className="text-top">*</span>
               </div>
-              <MediumSelectButton
+              <SelectButtonMedium
                 text={
                   timeInfo.selected
                     ? dayjs(timeInfo.selected).format("HH:mm")

@@ -1,8 +1,9 @@
 import { useEffect } from "react";
-import { useGetMyInfo } from "@/hooks/useGetMyInfo";
-import useModalStore from "@/stores/modalStore";
-import { ScreenTYPE, stackRouterPush } from "@/utils/stackRouter";
 import { useRouter } from "next/navigation";
+import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import useModalStore from "@/shared/store/modalStore";
 
 const useCheckLoginUser = () => {
   const openModal = useModalStore(({ openModal }) => openModal);
@@ -18,14 +19,14 @@ const useCheckLoginUser = () => {
         onClickPositive: () => {
           stackRouterPush(router, {
             path: "/login",
-            screen: ScreenTYPE.LOGIN,
+            screen: WEBVIEW_SCREEN.LOGIN,
             isStack: false,
           });
         },
         onClickNegative: () => {
           stackRouterPush(router, {
             path: "/",
-            screen: ScreenTYPE.MAIN,
+            screen: WEBVIEW_SCREEN.MAIN,
             isStack: false,
           });
         },

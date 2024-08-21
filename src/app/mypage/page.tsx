@@ -19,7 +19,7 @@ import useUpdateProfile from "./_hooks/useUpdateProfileImg";
 import BottomTab from "@/widgets/common/BottomTab";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
-import { compressImage } from "@/app/create/review/_utils/compressImage";
+import { compressImage } from "@/shared/helpers/compressImage";
 import DefaultImg from "@/shared/ui/DefaultImg";
 import Divider from "@/shared/ui/Divider";
 

@@ -1,11 +1,11 @@
 "use client";
 
-import CustomDrawer from "@/components/CustomDrawer";
-import { SetState } from "@/types/react";
 import { DateCalendar } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { DateAndTime } from "../../_types/DateAndTime";
-import Button from "@/components/Button";
+import { SetState } from "@/shared/types/react";
+import Button from "@/shared/ui/Button";
+import Drawer from "@/shared/ui/Drawer";
 
 interface Props {
   isOpen: boolean;
@@ -18,7 +18,7 @@ const DateDrawer = (props: Props) => {
   const { isOpen, setIsOpen, date, setDate } = props;
 
   return (
-    <CustomDrawer open={isOpen} onClose={() => setIsOpen(false)}>
+    <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
       <DateCalendar
         value={date.before}
         maxDate={dayjs(new Date())}
@@ -29,10 +29,9 @@ const DateDrawer = (props: Props) => {
           });
         }}
       />
-      <div className="flex h-[98px] px-[24px]">
+      <div className="flex mb-[8px] px-[24px]">
         <Button
-          height={48}
-          fullWidth
+          className="flex-1 h-[48px]"
           onClick={() => {
             setDate({
               ...date,
@@ -45,7 +44,7 @@ const DateDrawer = (props: Props) => {
           확인
         </Button>
       </div>
-    </CustomDrawer>
+    </Drawer>
   );
 };
 

@@ -3,6 +3,9 @@ import axiosInstance from "@/shared/helpers/axios";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 
+/**
+ * @deprecated
+ */
 export const useUploadReviewImages = (
   props: UseMutationOptions<AxiosResponse, ResponseError, FormData>
 ) =>
@@ -17,6 +20,9 @@ export const useUploadReviewImages = (
     ...props,
   });
 
+/**
+ * @deprecated
+ */
 interface Payload {
   idx: number;
   imgList: string[];
@@ -25,6 +31,9 @@ interface Payload {
   visitTime: string;
 }
 
+/**
+ * @deprecated
+ */
 export const useWriteReview = (
   props: UseMutationOptions<AxiosResponse, ResponseError, Payload>
 ) =>
