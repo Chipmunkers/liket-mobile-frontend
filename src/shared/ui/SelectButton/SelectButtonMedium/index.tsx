@@ -5,7 +5,7 @@ import { ButtonBase } from "@mui/material";
 const SelectButtonMedium = ({
   Icon,
   text,
-  placeholder,
+  placeholder = "",
   className,
   onClick,
   readonly = false,

@@ -20,7 +20,7 @@ export type Props = {
   isChecked: boolean;
   isBoard?: boolean;
   marginBetweenTextAndCheckbox?: string;
-  onChange: (isChecked: boolean) => void;
+  onChange?: (isChecked: boolean) => void;
 
   /**
    * 버튼 용도가 아닌 클릭 용도인지 여부

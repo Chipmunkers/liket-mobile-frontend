@@ -12,7 +12,7 @@ export type Props = StrictPropsWithChildren<
      * 현재 길이. 최대 길이 비교를 위함
      */
     currentLength?: number;
-    htmlFor: string;
+    htmlFor?: string;
 
     /**
      * 필수 여부. 필수일 경우 이름 에스터리스크가 붙어서 표현됨

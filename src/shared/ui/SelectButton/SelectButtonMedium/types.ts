@@ -14,13 +14,15 @@ export type Props = SharedUiProps<{
 
   /**
    * Placeholder
+   *
+   * @default ""
    */
-  placeholder: string;
+  placeholder?: string;
 
   /**
    * 클릭 이벤트
    */
-  onClick: (e?: MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (e?: MouseEvent<HTMLButtonElement>) => void;
 
   /**
    * 클릭이 가능한지 여부

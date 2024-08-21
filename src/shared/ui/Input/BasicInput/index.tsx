@@ -10,8 +10,8 @@ const BasicInput = <T extends FieldValues>({
   register,
   ...props
 }: Props<T>) => {
-  const errors = formState.errors;
-  const isErrorExist = errors[field]?.message ? true : false;
+  const errors = formState?.errors;
+  const isErrorExist = errors?.[field]?.message ? true : false;
 
   return (
     <div className="relative">
@@ -26,10 +26,10 @@ const BasicInput = <T extends FieldValues>({
             : "focus:border-b-skyblue-01 pb-[15px]"
         )}
         id={field}
-        {...register(field, { onChange })}
+        {...(register && field ? register(field, { onChange }) : {})}
         {...props}
       />
-      {errors[field]?.message?.toString() && (
+      {errors?.[field]?.message?.toString() && (
         <strong
           className="text-button6 text-rosepink-01 h-[18px] bottom-0 absolute left-0 pt-[4px]"
           style={{

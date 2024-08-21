@@ -30,7 +30,7 @@ const CheckBox = ({
         onChange={(e) => {
           if (readonly) return;
 
-          onChange(e.target.checked);
+          onChange && onChange(e.target.checked);
         }}
       />
       <p
