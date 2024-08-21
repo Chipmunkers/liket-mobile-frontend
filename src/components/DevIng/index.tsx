@@ -11,6 +11,9 @@ import {
   stackRouterPush,
 } from "../../utils/stackRouter";
 
+/**
+ * @deprecated
+ */
 const DevIng = () => {
   const router = useRouter();
 

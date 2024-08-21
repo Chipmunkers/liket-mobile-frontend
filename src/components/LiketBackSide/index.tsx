@@ -12,6 +12,9 @@ interface Props {
   onClickReview: EmptyFunction;
 }
 
+/**
+ * @deprecated
+ */
 const Index = ({ isFront, review, onClickReview }: Props) => {
   return (
     <div

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Filter from "@/icons/filter.svg";
-import { MapContentEntity } from "@/types/api/map";
 import { ButtonBase } from "@mui/material";
 import ContentCardMedium from "@/entities/content/ContentCardMedium";
 import useCheckModalOpenForWebview from "@/app/map/_hooks/onMessageWebview";
@@ -21,6 +20,7 @@ import { classNames } from "@/shared/helpers/classNames";
 import FilterDrawer from "@/app/map/_ui/FilterDrawer";
 import LocationDrawer from "@/app/map/_ui/LocationDrawer";
 import KakaoMap from "@/app/map/_ui/KakaoMap";
+import { MapContentEntity } from "@/shared/types/api/map/MapContentEntity";
 
 export default function MapPage() {
   const searchParams = useSearchParams();

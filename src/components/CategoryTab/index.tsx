@@ -10,6 +10,9 @@ interface Props<T = any> {
   customTabNames?: T[];
 }
 
+/**
+ * @deprecated
+ */
 const index = ({
   small = true,
   list,

@@ -10,6 +10,9 @@ interface Props {
   onChangeType: (orderType: OrderType) => void;
 }
 
+/**
+ * @deprecated
+ */
 const Index = ({ onChangeType }: Props) => {
   const [orderType, setOrderType] = useState<OrderType>(ORDER_TYPE[0]);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);

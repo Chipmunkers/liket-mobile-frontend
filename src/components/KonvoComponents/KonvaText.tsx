@@ -16,6 +16,9 @@ interface Props {
   onSelect: EmptyFunction;
 }
 
+/**
+ * @deprecated
+ */
 const KonvaText = ({ shapeProps, isSelected, onSelect, onChange }: Props) => {
   const { x, y, text, fill } = shapeProps;
 

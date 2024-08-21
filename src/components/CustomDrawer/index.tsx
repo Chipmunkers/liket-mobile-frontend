@@ -15,6 +15,9 @@ const Index = ({ children, ...props }: Props) => {
 
 export default Index;
 
+/**
+ * @deprecated
+ */
 const Wrapper = styled(Drawer)(
   () =>
     ({

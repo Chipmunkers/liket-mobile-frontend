@@ -18,6 +18,9 @@ type InputWrapperProps = StrictPropsWithChildren<{
   margin?: string;
 }>;
 
+/**
+ * @deprecated
+ */
 export const InputWrapper = ({ children, margin = "" }: InputWrapperProps) => {
   return (
     <div

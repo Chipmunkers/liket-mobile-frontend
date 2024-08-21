@@ -17,7 +17,9 @@ interface WriteTabProps {
   onClickSticker: (sticker: IconType) => void;
   onClickColor: (color: ColorTokensType) => void;
 }
-
+/**
+ * @deprecated
+ */
 const WriteTab = ({
   selectedIndex,
   hidden,

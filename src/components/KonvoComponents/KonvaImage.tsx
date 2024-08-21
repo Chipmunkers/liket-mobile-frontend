@@ -13,6 +13,9 @@ interface Props {
   onSelect: EmptyFunction;
 }
 
+/**
+ * @deprecated
+ */
 const KonvaImage = ({ shapeProps, isSelected, onSelect, onChange }: Props) => {
   const imageRef = useRef<Konva.Image>(null);
   const trRef = useRef<Konva.Transformer>(null);

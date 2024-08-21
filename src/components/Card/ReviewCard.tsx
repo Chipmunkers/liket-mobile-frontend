@@ -8,6 +8,9 @@ import RightArrowIcon from "@/icons/right-arrow.svg";
 import { useRouter } from "next/navigation";
 import { stackRouterPush } from "../../utils/stackRouter";
 
+/**
+ * @deprecated
+ */
 const ReviewCard = (props: { review: ReviewEntity }) => {
   const { review } = props;
   const router = useRouter();

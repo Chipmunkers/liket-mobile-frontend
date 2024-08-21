@@ -8,7 +8,9 @@ interface CheckBoxWithLinkProps {
   onChangeCheckbox: (isChecked: boolean) => void;
   onClickListItem: () => void;
 }
-
+/**
+ * @deprecated
+ */
 const CheckBoxWithLink = ({
   rightArrow = false,
   isChecked,

@@ -13,7 +13,9 @@ interface Props {
 }
 
 const TEXT_AREA_HEIGHT = 48;
-
+/**
+ * @deprecated
+ */
 const Index = ({
   isOpen,
   maxLength,

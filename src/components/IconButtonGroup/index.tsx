@@ -12,6 +12,9 @@ interface IconButtonGroup {
   onClickIcon: (e: IconType) => void;
 }
 
+/**
+ * @deprecated
+ */
 const IconButtonGroup = ({
   icons,
   iconGap,

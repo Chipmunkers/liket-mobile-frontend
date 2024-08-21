@@ -4,6 +4,9 @@ import LazyComponent from "./LazyComponent";
 
 type ModalProviderProps = StrictPropsWithChildren;
 
+/**
+ * @deprecated
+ */
 const ModalProvider = ({ children }: ModalProviderProps) => {
   const modalList = useModalStore(({ modalList }) => modalList);
 

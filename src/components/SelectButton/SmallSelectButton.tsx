@@ -13,6 +13,9 @@ interface Props {
   rippleEffect?: boolean;
 }
 
+/**
+ * @deprecated
+ */
 const SmallSelectButton = ({
   withBorder = true,
   Icon,

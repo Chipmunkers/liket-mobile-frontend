@@ -6,6 +6,9 @@ interface ControlProps {
   onClick: EmptyFunction;
 }
 
+/**
+ * @deprecated
+ */
 const Control = ({ isSelected, onClick }: ControlProps) => {
   return (
     <button

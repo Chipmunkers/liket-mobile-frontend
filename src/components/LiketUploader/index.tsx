@@ -23,6 +23,9 @@ interface Props {
   onUploadImage: (dataUrl: HTMLImageElement) => void;
 }
 
+/**
+ * @deprecated
+ */
 const LiketUploader = ({
   uploadedImage,
   shapes,

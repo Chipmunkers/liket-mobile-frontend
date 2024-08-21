@@ -9,6 +9,9 @@ type FocusKeeperProps = StrictPropsWithChildren<{
   onEscape: () => void;
 }>;
 
+/**
+ * @deprecated
+ */
 const FocusKeeper = ({ children, ariaLabel, onEscape }: FocusKeeperProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const returnElementRef = useRef<Element | null>(null);

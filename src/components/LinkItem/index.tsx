@@ -6,6 +6,9 @@ interface Props {
   href: string;
 }
 
+/**
+ * @deprecated
+ */
 const LinkItem = ({ children, href }: Props) => {
   return (
     <Link

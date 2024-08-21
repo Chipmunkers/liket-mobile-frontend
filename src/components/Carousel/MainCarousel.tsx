@@ -8,6 +8,9 @@ interface CarouselProps {
   list: string[];
 }
 
+/**
+ * @deprecated
+ */
 const ResponsiveCarousel = ({ list }: CarouselProps) => {
   return (
     <Carousel

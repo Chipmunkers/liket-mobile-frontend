@@ -5,6 +5,9 @@ import ThumbIcon from "@/icons/thumb.svg";
 import StarRating from "@/components/StarRating";
 import { ReviewEntity } from "../../types/api/review";
 
+/**
+ * @deprecated
+ */
 const ReviewItem = (props: { review: ReviewEntity }) => {
   return (
     <li key={1} className="border-solid border-b-[1px] border-grey-01">

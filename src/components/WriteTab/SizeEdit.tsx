@@ -12,7 +12,9 @@ export type CardSizeType = keyof typeof CARD_SIZE;
 interface SizeEditProps {
   onClickChangeSize: (size: CardSizeType) => void;
 }
-
+/**
+ * @deprecated
+ */
 const SizeEdit = ({ onClickChangeSize }: SizeEditProps) => {
   const [selectedSize, setSelectedSize] = useState<CardSizeType>(
     CARD_SIZE.LARGE

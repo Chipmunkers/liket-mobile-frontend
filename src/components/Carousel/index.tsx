@@ -13,6 +13,9 @@ interface CarouselProps {
   list: string[];
 }
 
+/**
+ * @deprecated
+ */
 const Carousel = ({ list }: CarouselProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isSwiping, setIsSwiping] = useState(false);

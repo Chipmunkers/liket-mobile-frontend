@@ -2,6 +2,9 @@
 
 import { classNames } from "../../utils/helpers";
 
+/**
+ * @deprecated
+ */
 const DefaultLoading = (props: {
   color?: "white" | "skyblue-01" | "grey-01";
   dotSize?: string;

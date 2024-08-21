@@ -11,6 +11,9 @@ interface Props {
   onChange: (isChecked: boolean) => void;
 }
 
+/**
+ * @deprecated
+ */
 const Index = ({
   label,
   isChecked,

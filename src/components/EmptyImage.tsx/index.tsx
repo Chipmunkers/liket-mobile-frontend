@@ -1,5 +1,8 @@
 import EmptyImageIcon from "@/icons/empty-img.svg";
 
+/**
+ * @deprecated
+ */
 const EmptyImage = (
   props: { width: string; height: string } = { width: "100%", height: "100%" }
 ) => {

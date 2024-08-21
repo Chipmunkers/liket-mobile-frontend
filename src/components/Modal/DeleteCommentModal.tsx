@@ -8,6 +8,9 @@ type DeleteCommentModalProps = ModalInformation & {
   onClose: EmptyFunction;
 };
 
+/**
+ * @deprecated
+ */
 const DeleteCommentModal = ({
   isOpen,
   onClose,

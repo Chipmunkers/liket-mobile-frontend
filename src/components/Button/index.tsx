@@ -16,6 +16,10 @@ type ButtonProps = StrictPropsWithChildren<
   // ! 컴포넌트 땜방처리
   string | any
 >;
+
+/**
+ * @deprecated
+ */
 const Button = ({
   type = "button",
   disabled = false,

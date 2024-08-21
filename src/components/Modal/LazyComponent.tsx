@@ -9,6 +9,9 @@ interface LazyComponent {
   fileName: ModalType;
 }
 
+/**
+ * @deprecated
+ */
 export type ModalComponentProps = ModalInformation & {
   onClose: EmptyFunction;
 };

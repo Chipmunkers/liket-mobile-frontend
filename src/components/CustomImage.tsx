@@ -10,7 +10,9 @@ interface Props extends ImageProps {
   fallbackImg?: string;
   alt: string;
 }
-
+/**
+ * @deprecated
+ */
 const CustomImage = ({
   fallbackImg,
   fallbackComponent,

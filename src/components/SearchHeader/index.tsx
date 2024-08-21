@@ -20,7 +20,9 @@ interface SearchHeaderProps {
   className?: string;
   onBackButtonClick?: () => void;
 }
-
+/**
+ * @deprecated
+ */
 const SearchHeader = ({
   placeholder,
   onSearch,

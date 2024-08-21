@@ -4,6 +4,9 @@ import { ContentCard } from "../Card/ContentCard";
 import { Dispatch, SetStateAction, useState } from "react";
 import useHandleResizeScreen from "./_hooks/useHandleResizeScreen";
 
+/**
+ * @deprecated
+ */
 const ContentCardGroup = (props: {
   contentList: SummaryContentEntity[];
   setTarget?: Dispatch<SetStateAction<HTMLDivElement | null>>;

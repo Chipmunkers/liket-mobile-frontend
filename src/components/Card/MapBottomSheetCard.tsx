@@ -5,6 +5,9 @@ import dayjs from "dayjs";
 import ContentLikeBtn from "../ContentLikeBtn";
 import { MapContentEntity } from "../../types/api/map";
 
+/**
+ * @deprecated
+ */
 const MapBottomSheetCard = (props: { content: MapContentEntity }) => {
   const { content } = props;
 

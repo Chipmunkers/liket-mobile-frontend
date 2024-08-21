@@ -9,7 +9,9 @@ interface Props {
   className?: string;
   onClick: EmptyFunction;
 }
-
+/**
+ * @deprecated
+ */
 const Index = ({ Icon, text, placeholder, className, onClick }: Props) => {
   return (
     <button

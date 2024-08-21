@@ -3,6 +3,9 @@ import { ContentStateType } from "@/types/const";
 import { classNames } from "@/utils/helpers";
 import { CSSProperties } from "react";
 
+/**
+ * @deprecated
+ */
 export const variantToText = {
   active: "진행중",
   inactive: "비활성화",
@@ -34,6 +37,9 @@ type BadgeProps = StrictPropsWithChildren<
   string
 >;
 
+/**
+ * @deprecated
+ */
 const Badge = ({ variant, children, style }: BadgeProps) => {
   return (
     <span

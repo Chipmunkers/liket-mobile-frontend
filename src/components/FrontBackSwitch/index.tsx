@@ -8,6 +8,9 @@ interface Props {
   onClickSwitch: EmptyFunction;
 }
 
+/**
+ * @deprecated
+ */
 const FrontBackSwitch = ({ isFront, onClickSwitch }: Props) => {
   return (
     <div className="flex relative w-fit rounded-[16px] bg-grey-01">

@@ -7,6 +7,9 @@ type BottomButtonTabWrapperProps = StrictPropsWithChildren<{
   className?: string;
 }>;
 
+/**
+ * @deprecated
+ */
 const BottomButtonTabWrapper = ({
   children,
   shadow = false,

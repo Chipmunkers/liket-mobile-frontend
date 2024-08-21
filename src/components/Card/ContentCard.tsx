@@ -17,6 +17,9 @@ type ContentCardProps = {
   width?: string;
 };
 
+/**
+ * @deprecated
+ */
 export const ContentCard = (props: ContentCardProps) => {
   const { content, width, onClick } = props;
 

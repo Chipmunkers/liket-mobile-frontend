@@ -18,6 +18,9 @@ type CustomBottomSheetProps = StrictPropsWithChildren<
   ReactNode
 >;
 
+/**
+ * @deprecated
+ */
 const CustomBottomSheet = ({
   title,
   open,

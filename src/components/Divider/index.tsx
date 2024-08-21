@@ -7,6 +7,9 @@ interface DividerProps {
   orientation?: "horizontal" | "vertical";
 }
 
+/**
+ * @deprecated
+ */
 const Divider = ({
   height,
   width,

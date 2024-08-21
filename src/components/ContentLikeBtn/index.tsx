@@ -9,6 +9,9 @@ import { colors } from "@/utils/style";
 import { useLikeContent } from "./hooks/useLikeContent";
 import { useCancelLikeContent } from "./hooks/useCancelLikeContent";
 
+/**
+ * @deprecated
+ */
 const ContentLikeBtn = (props: {
   likeState: boolean;
   idx: number | string;

@@ -8,6 +8,9 @@ type LoginModalProps = ModalInformation & {
   onClose: EmptyFunction;
 };
 
+/**
+ * @deprecated
+ */
 const LoginModal = ({ isOpen, onClose, meta }: LoginModalProps) => {
   const handleCloseModal = () => {
     onClose();

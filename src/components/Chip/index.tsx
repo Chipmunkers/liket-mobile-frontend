@@ -10,6 +10,9 @@ type ChipProps = StrictPropsWithChildren<
   string
 >;
 
+/**
+ * @deprecated
+ */
 const Chip = ({ children, isSelected, onClick }: ChipProps) => {
   return (
     <ButtonBase

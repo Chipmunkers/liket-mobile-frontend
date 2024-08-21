@@ -6,6 +6,9 @@ interface GenreTileProps {
   genre: GenreType | "전체";
 }
 
+/**
+ * @deprecated
+ */
 const GenreTile = ({ genre }: GenreTileProps) => {
   return (
     <Link

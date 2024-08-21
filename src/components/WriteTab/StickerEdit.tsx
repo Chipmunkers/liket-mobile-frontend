@@ -3,7 +3,9 @@ import IconButtonGroup, { IconType } from "../IconButtonGroup";
 interface StickerEditProps {
   onClickSticker: (sticker: IconType) => void;
 }
-
+/**
+ * @deprecated
+ */
 const StickerEdit = ({ onClickSticker }: StickerEditProps) => {
   return (
     <div className="h-[80px]">

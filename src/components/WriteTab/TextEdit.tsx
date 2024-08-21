@@ -17,7 +17,9 @@ export type ColorTokensType = (typeof COLOR_TOKENS)[number];
 interface TextProps {
   onClickColor: (color: ColorTokensType) => void;
 }
-
+/**
+ * @deprecated
+ */
 const TextEdit = ({ onClickColor }: TextProps) => {
   const [clickedColor, setClickedColor] = useState<ColorTokensType>("#000");
 

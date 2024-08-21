@@ -12,6 +12,9 @@ type ModalProp = StrictPropsWithChildren<{
   onClose: () => void;
 }>;
 
+/**
+ * @deprecated
+ */
 const Modal = ({
   title,
   children,

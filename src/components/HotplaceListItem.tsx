@@ -2,7 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import CustomImage from "./CustomImage";
 import dayjs from "dayjs";
-
+/**
+ * @deprecated
+ */
 export interface HotPlaceItemProps {
   idx: number;
   title: string;
@@ -10,7 +12,9 @@ export interface HotPlaceItemProps {
   startDate: string;
   endDate: string;
 }
-
+/**
+ * @deprecated
+ */
 const HotPlaceListItem = ({
   idx,
   title,

@@ -6,6 +6,9 @@ import { PropsWithChildren } from "react";
 
 type Props = PropsWithChildren;
 
+/**
+ * @deprecated
+ */
 const MuiLocalizationProvider = ({ children }: Props) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>

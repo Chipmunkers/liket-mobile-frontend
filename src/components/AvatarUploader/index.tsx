@@ -8,6 +8,9 @@ interface AvatarUploaderProps {
   onUploadImage: (file: File, json: string) => void;
 }
 
+/**
+ * @deprecated
+ */
 const AvatarUploader = ({
   defaultAvatar = "/icons/default-avatar.svg",
   onUploadImage,
