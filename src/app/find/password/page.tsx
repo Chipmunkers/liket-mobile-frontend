@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { PasswordResetEmailForm } from "@/app/signup/_components/EmailForm";
+import { PasswordResetEmailForm } from "@/app/signup/_ui/EmailForm";
 import { useState } from "react";
 import PasswordForm from "@/app/signup/_ui/PasswordForm";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
