@@ -1,5 +1,4 @@
 import Divider from "@/components/Divider";
-import Header from "@/components/Header";
 import CustomScrollContainer from "@/components/CustomScrollContainer";
 import MainCarousel from "@/components/Carousel/MainCarousel";
 import SoonOpenContentSection from "./_ui/SoonOpenContentSection";
@@ -12,11 +11,10 @@ import { getBanners } from "./_hooks/getBanners";
 import { getHotContentsForServer } from "./_hooks/getHotContents";
 import ReviewCard from "../components/Card/ReviewCard";
 import { getHotReview } from "./_hooks/getHotReviews";
-import LeftOption from "@/components/Header/LeftOption";
-import RightOption from "@/components/Header/RightOption";
 import HotPlaceSection from "./_ui/HotPlaceSection";
-import { useEffect } from "react";
 import BottomTab from "@/widgets/common/BottomTab";
+import Header from "@/shared/ui/Header/Header";
+import { HeaderLeft, HeaderRight } from "@/shared/ui/Header";
 
 const Home = async () => {
   const { contentList: soonOpenContents } =
@@ -29,8 +27,8 @@ const Home = async () => {
   return (
     <>
       <Header checkUserAgent={true}>
-        <LeftOption logo />
-        <RightOption option={{ search: true, like: true }} />
+        <HeaderLeft logo />
+        <HeaderRight option={{ search: true, like: true }} />
       </Header>
       {/* 높이 값을 주면 마진 만큼 비어있는 공간으로 남게됨: 이유는 모름 */}
       <main className="mb-[48px]">

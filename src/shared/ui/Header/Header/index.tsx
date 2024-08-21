@@ -1,14 +1,8 @@
 "use client";
 
-import { StrictPropsWithChildren } from "@/types/common";
-import { classNames } from "@/utils/helpers";
-import { useIsWebView } from "../../hooks/useIsWebView";
-
-type Props = StrictPropsWithChildren<{
-  transparent?: boolean;
-  checkUserAgent?: boolean;
-  test?: string;
-}>;
+import { classNames } from "@/shared/helpers/classNames";
+import { useIsWebView } from "@/shared/hooks/useIsWebview";
+import { Props } from "./types";
 
 const Header = ({ children, transparent = false, checkUserAgent }: Props) => {
   const isWebview = useIsWebView();
