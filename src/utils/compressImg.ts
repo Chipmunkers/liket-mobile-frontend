@@ -1,5 +1,7 @@
 import imageCompression, { Options } from "browser-image-compression";
-
+/**
+ * @deprecated
+ */
 export const compressImage = async (file: File, option: Options) => {
   try {
     const compressedFile = await imageCompression(file, option);

@@ -1,15 +1,27 @@
 import { RefObject } from "react";
 import dayjs from "dayjs";
 
+/**
+ * @deprecated
+ */
 export const classNames = (...classes: (boolean | string)[]) =>
   classes.filter(Boolean).join(" ");
 
+/**
+ * @deprecated
+ */
 export const getKeys = Object.keys as <T extends object>(
   obj: T
 ) => Array<keyof T>;
 
+/**
+ * @deprecated
+ */
 export const getRefValue = <C>(ref: RefObject<C>) => ref.current as C;
 
+/**
+ * @deprecated
+ */
 export const generateRandomId = (length: number) => {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -22,6 +34,9 @@ export const generateRandomId = (length: number) => {
   return randomId;
 };
 
+/**
+ * @deprecated
+ */
 export const getPxLength = (text: string) => {
   const tempElem = document.createElement("span");
   tempElem.style.visibility = "hidden";
@@ -39,6 +54,9 @@ export const getPxLength = (text: string) => {
   return width;
 };
 
+/**
+ * @deprecated
+ */
 export const getStatus = (startDate: string, endDate: string) => {
   const today = dayjs();
   const start = dayjs(startDate);

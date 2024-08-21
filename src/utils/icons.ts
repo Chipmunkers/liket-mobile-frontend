@@ -1,3 +1,6 @@
+/**
+ * @deprecated
+ */
 export const Icons = [
   "꽃",
   "리본",
@@ -21,4 +24,7 @@ export const Icons = [
   "create",
 ] as const;
 
+/**
+ * @deprecated
+ */
 export type IconName = (typeof Icons)[number];

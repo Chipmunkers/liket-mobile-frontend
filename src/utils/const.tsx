@@ -2,7 +2,9 @@ import KaKao from "@/icons/logins/kakao.svg";
 import Naver from "@/icons/logins/naver.svg";
 import Apple from "@/icons/logins/apple.svg";
 import { ReactNode } from "react";
-
+/**
+ * @deprecated
+ */
 export const GENRES = [
   "팝업스토어",
   "전시회",
@@ -11,7 +13,9 @@ export const GENRES = [
   "콘서트",
   "페스티벌",
 ] as const;
-
+/**
+ * @deprecated
+ */
 export const CONTENT_STATES = [
   "active",
   "closed",
@@ -21,9 +25,13 @@ export const CONTENT_STATES = [
   "inactive",
   "hotplace",
 ] as const;
-
+/**
+ * @deprecated
+ */
 export const CITIES = ["서울특별시", "인천광역시", "경기도"] as const;
-
+/**
+ * @deprecated
+ */
 export const AGES = [
   "전체",
   "아이들",
@@ -32,7 +40,9 @@ export const AGES = [
   "30대",
   "40-50대",
 ] as const;
-
+/**
+ * @deprecated
+ */
 export const STYLES = [
   "혼자",
   "함께",
@@ -49,9 +59,13 @@ export const STYLES = [
   "힐링",
   "핫한",
 ] as const;
-
+/**
+ * @deprecated
+ */
 export const ORDERS = ["최신순", "인기순"] as const;
-
+/**
+ * @deprecated
+ */
 export const PROVIDER_ICON: {
   [key: string]: ReactNode;
 } = {

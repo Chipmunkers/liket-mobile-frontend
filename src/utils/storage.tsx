@@ -1,3 +1,6 @@
+/**
+ * @deprecated
+ */
 export const checkStorageAvailability = (
   type: "localStorage" | "sessionStorage"
 ) => {
@@ -29,6 +32,9 @@ export const checkStorageAvailability = (
   return [isAvailable, reason];
 };
 
+/**
+ * @deprecated
+ */
 export const checkedLocalStorage = {
   getItem: <T,>(key: string, defaultValue: T) => {
     const jsonValue = localStorage.getItem(key);
@@ -71,6 +77,12 @@ export const checkedSessionStorage = {
   },
 } as const;
 
+/**
+ * @deprecated
+ */
 export type CheckedLocalStorageType = typeof checkedLocalStorage;
 
+/**
+ * @deprecated
+ */
 export type CheckedSessionStorageType = typeof checkedSessionStorage;
