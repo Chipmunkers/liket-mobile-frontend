@@ -1,6 +1,5 @@
 "use client";
 
-import Checkbox from "@/components/Checkbox";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -38,6 +37,7 @@ import { STYLES } from "@/shared/consts/content/style";
 import Drawer from "@/shared/ui/Drawer";
 import InputButton from "@/shared/ui/Input/InputButton";
 import { useUploadContentImages } from "./_hooks/useUploadContentImages";
+import CheckBox from "@/shared/ui/CheckBox";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",
@@ -511,8 +511,9 @@ export default function Page() {
                 );
 
                 return (
-                  <Checkbox
+                  <CheckBox
                     key={item}
+                    readonly
                     isChecked={isChecked}
                     size="12px"
                     label={item}

@@ -1,7 +1,6 @@
 "use client";
 
 import Badge from "@/components/Badge/Badge";
-import Header from "@/components/Header";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -11,6 +10,7 @@ import { useGetContents } from "./hooks/useGetContents";
 import RightOption from "@/components/Header/RightOption";
 import LeftOption from "@/components/Header/LeftOption";
 import MiddleText from "@/components/Header/MiddleText";
+import { Header } from "@/shared/ui/Header";
 
 export default function Page() {
   const router = useRouter();
