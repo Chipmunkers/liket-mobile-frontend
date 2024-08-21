@@ -1,10 +1,9 @@
-import { ResponseError } from "@/types/api";
-import { ContentEntity } from "@/types/api/culture-content";
 import axiosInstance from "@/shared/helpers/axios";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+import { ContentEntity } from "@/shared/types/api/content/ContentEntity";
 
 export const useGetContentDetail = (
-  props: UseQueryOptions<ContentEntity, ResponseError> & {
+  props: UseQueryOptions<ContentEntity> & {
     idx: string | null;
   }
 ) => {

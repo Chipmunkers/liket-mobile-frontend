@@ -1,8 +1,8 @@
 import { ResponseError } from "@/types/api";
-import { Location } from "@/types/content";
 import axiosInstance from "@/shared/helpers/axios";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
+import { LocationEntity } from "@/shared/types/api/content/LocationEntity";
 
 interface CreateContentRequestDto {
   imgList: string[];
@@ -10,7 +10,7 @@ interface CreateContentRequestDto {
   ageIdx: number;
   styleIdxList: number[];
   title: string;
-  location: Location;
+  location: LocationEntity;
   description: string;
   websiteLink: string;
   startDate: string;
