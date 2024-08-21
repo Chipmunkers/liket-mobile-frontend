@@ -1,5 +1,5 @@
 import customFetch from "@/shared/helpers/fetch";
-import { ReviewEntity } from "@/types/api/review";
+import { ReviewEntity } from "@/shared/types/api/review/ReviewEntity";
 
 export const getHotReview = async (): Promise<ReviewEntity[]> =>
   (

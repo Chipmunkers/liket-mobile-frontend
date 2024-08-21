@@ -1,9 +1,10 @@
-import { HotContentEntity } from "@/types/api/culture-content";
 import { useQuery } from "@tanstack/react-query";
-import { AgeEntity, StyleEntity } from "@/types/api/tag";
-import { SummaryContentEntity } from "@/types/api/culture-content";
 import axiosInstance from "@/shared/helpers/axios";
 import customFetch from "@/shared/helpers/fetch";
+import { HotContentEntity } from "@/shared/types/api/content/HotContentEntity";
+import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
+import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
+import { AgeEntity } from "@/shared/types/api/tag/AgeEntity";
 
 export const getHotContentsForServer = async (): Promise<HotContentEntity[]> =>
   (

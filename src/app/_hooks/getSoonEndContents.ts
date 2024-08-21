@@ -1,7 +1,7 @@
-import { SummaryContentEntity } from "@/types/api/culture-content";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/shared/helpers/axios";
 import customFetch from "@/shared/helpers/fetch";
+import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 
 export const getSoonEndContentsForServer = async (): Promise<{
   contentList: SummaryContentEntity[];

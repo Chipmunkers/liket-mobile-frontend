@@ -1,8 +1,8 @@
 import customFetch from "@/shared/helpers/fetch";
-import { BannerListItem } from "@/types/banner";
+import { BannerEntity } from "@/shared/types/api/banner/BannerEntity";
 
 export const getBanners = async (): Promise<{
-  bannerList: BannerListItem[];
+  bannerList: BannerEntity[];
 }> =>
   (
     await customFetch(`/banner/all`, {
