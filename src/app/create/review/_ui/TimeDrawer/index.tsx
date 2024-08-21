@@ -1,31 +1,22 @@
 "use client";
 
-import CustomDrawer from "@/components/CustomDrawer";
-import { SetState } from "@/types/react";
-import { DateAndTime } from "../../_types/DateAndTime";
-import Button from "@/components/Button";
 import { MultiSectionDigitalClock } from "@mui/x-date-pickers";
-
-interface Props {
-  isOpen: boolean;
-  setIsOpen: SetState<boolean>;
-  time: DateAndTime;
-  setTime: SetState<DateAndTime>;
-}
+import { Props } from "./types";
+import Button from "@/shared/ui/Button";
+import Drawer from "@/shared/ui/Drawer";
 
 const TimeDrawer = (props: Props) => {
   const { isOpen, setIsOpen, time, setTime } = props;
 
   return (
-    <CustomDrawer open={isOpen} onClose={() => setIsOpen(false)}>
+    <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
       <MultiSectionDigitalClock
         value={time.before}
         onChange={(time) => setTime({ ...time, before: time })}
       />
       <div className="flex h-[98px] px-[24px]">
         <Button
-          height={48}
-          fullWidth
+          className="flex-1 h-[48px]"
           onClick={() => {
             setTime({
               ...time,
@@ -37,7 +28,7 @@ const TimeDrawer = (props: Props) => {
           확인
         </Button>
       </div>
-    </CustomDrawer>
+    </Drawer>
   );
 };
 

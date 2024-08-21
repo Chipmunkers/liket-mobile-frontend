@@ -1,6 +1,6 @@
 import axiosInstance from "@/shared/helpers/axios";
+import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { SummaryContentEntity } from "@/types/api/culture-content";
 import { useEffect, useState } from "react";
 
 export const GET_SEARCH_CONTENT_KEY_IN_CREATE_REVIEW_KEY =

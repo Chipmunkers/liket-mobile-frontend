@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import SearchHeader from "@/components/SearchHeader";
-import { SummaryContentEntity } from "@/types/api/culture-content";
-import { SetState } from "@/types/react";
 import { useGetSearchContents } from "./_hooks/useGetSearchContent";
-import ContentCardGroup from "@/components/ContentCardGroup";
 import { useRouter, useSearchParams } from "next/navigation";
+import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
+import { SetState } from "@/shared/types/react";
+import ContentCardGroup from "@/widgets/content/ContentInfiniteGroup";
 
 interface Props {
   setSelectedContent: SetState<SummaryContentEntity | undefined>;
