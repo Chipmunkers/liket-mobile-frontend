@@ -3,12 +3,12 @@
 import RightArrow from "@/icons/right-arrow.svg";
 import { colors } from "@/utils/style";
 import Link from "next/link";
-import CustomScrollContainer from "@/components/CustomScrollContainer";
 import HotPlaceListItem from "@/components/HotplaceListItem";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { HotContentEntity } from "../../types/api/culture-content";
 import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
+import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
 
 const HotPlaceSection = (props: { contentList: HotContentEntity[] }) => {
   const { contentList } = props;
@@ -22,7 +22,7 @@ const HotPlaceSection = (props: { contentList: HotContentEntity[] }) => {
           new Date()
         ).format("YYYY.MM.DD HH:00")}`}</div>
       </div>
-      <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
+      <CustomScrollContainer className="flex flex-row gap-[8px] w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
         {contentList.map(({ idx, name, contentList }) => {
           return (
             <div key={idx}>

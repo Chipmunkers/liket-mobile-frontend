@@ -1,5 +1,3 @@
-import Divider from "@/components/Divider";
-import CustomScrollContainer from "@/components/CustomScrollContainer";
 import MainCarousel from "@/components/Carousel/MainCarousel";
 import SoonOpenContentSection from "./_ui/SoonOpenContentSection";
 import SoonEndContentSection from "./_ui/SoonEndContentSection";
@@ -15,6 +13,8 @@ import HotPlaceSection from "./_ui/HotPlaceSection";
 import BottomTab from "@/widgets/common/BottomTab";
 import Header from "@/shared/ui/Header/Header";
 import { HeaderLeft, HeaderRight } from "@/shared/ui/Header";
+import Divider from "@/shared/ui/Divider";
+import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
 
 const Home = async () => {
   const { contentList: soonOpenContents } =

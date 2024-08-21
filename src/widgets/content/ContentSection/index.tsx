@@ -1,10 +1,9 @@
 "use client";
 
-import CustomScrollContainer from "@/components/CustomScrollContainer";
 import { Else, If, Then } from "react-if";
 import ContentCardLarge from "@/entities/content/ContentCardLarge";
-import LikeContentButton from "@/entities/content/LikeContentButton";
 import { Props } from "./types";
+import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
 
 const ContentCardSection = (props: Props) => {
   const { contentList, children } = props;
