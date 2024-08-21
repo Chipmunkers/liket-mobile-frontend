@@ -1,9 +1,8 @@
-import { ResponseError } from "@/types/api";
 import axiosInstance from "@/shared/helpers/axios";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 
-interface Payload {
+interface CreateInquiryDto {
   title: string;
   contents: string;
   imgList: string[];
@@ -15,8 +14,8 @@ export const useCreateInquiry = (
     AxiosResponse<{
       idx: number;
     }>,
-    ResponseError,
-    Payload
+    AxiosError,
+    CreateInquiryDto
   >
 ) =>
   useMutation({

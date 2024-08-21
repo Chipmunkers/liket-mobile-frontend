@@ -2,11 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useCreateInquiry } from "./hooks/useCreateInquiry";
-import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
-import RightOption from "@/components/Header/RightOption";
-import Header from "@/components/Header";
-import { Input, InputWrapper, Label } from "@/components/newInput";
 import customToast from "@/utils/customToast";
 import { ButtonBase, TextareaAutosize } from "@mui/material";
 import ScrollContainer from "react-indiana-drag-scroll";
@@ -19,10 +14,17 @@ import SmallDownArrow from "@/icons/down-arrow-small.svg";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useUploadInquiryImages } from "./hooks/useUploadImages";
-import MediumSelectButton from "@/components/SelectButton/MediumSelectButton";
 import CustomDrawer from "@/components/CustomDrawer";
-import { INQUIRY_TYPES } from "../../../../public/data/inquiry";
-import { classNames } from "@/utils/helpers";
+import {
+  Header,
+  HeaderLeft,
+  HeaderMiddle,
+  HeaderRight,
+} from "@/shared/ui/Header";
+import { BasicInput, InputLabel } from "@/shared/ui/Input";
+import { INQUIRY_TYPES } from "@/shared/consts/inquiry/type";
+import { classNames } from "@/shared/helpers/classNames";
+import SelectButtonMedium from "@/shared/ui/SelectButton/SelectButtonMedium";
 
 const MAX_IMAGES_COUNT = 10;
 
@@ -82,13 +84,13 @@ export default function Page() {
   return (
     <>
       <Header>
-        <LeftOption
+        <HeaderLeft
           option={{
             back: true,
           }}
         />
-        <MiddleText text="문의하기" />
-        <RightOption
+        <HeaderMiddle text="문의하기" />
+        <HeaderRight
           option={{
             check: {
               disabled: !formState.isValid,
@@ -102,34 +104,34 @@ export default function Page() {
       <main>
         <form>
           <div className="mx-[24px] mt-[16px]">
-            <InputWrapper>
-              <Label
+            <div>
+              <InputLabel
                 maxLength={40}
                 htmlFor="title"
-                currentLength={watch("title")?.length}
+                currentLength={watch("title")?.length || 0}
               >
                 제목<span className="text-top">*</span>
-              </Label>
-              <Input
+              </InputLabel>
+              <BasicInput
                 field="title"
                 maxLength={30}
                 placeholder="제목을 입력해주세요."
                 formState={formState}
                 register={register}
               />
-            </InputWrapper>
+            </div>
           </div>
           <div className="mt-[34px] mx-[24px]">
-            <Label htmlFor="open-date">
+            <InputLabel htmlFor="open-date">
               문의유형<span className="text-top">*</span>
-            </Label>
+            </InputLabel>
             <Controller
               name="inquiryType"
               control={control}
               render={({ field }) => {
                 return (
                   <div className="mt-[12px]">
-                    <MediumSelectButton
+                    <SelectButtonMedium
                       text={""}
                       className="w-full"
                       placeholder="문의 유형을 선택해주세요."
@@ -142,30 +144,30 @@ export default function Page() {
             />
           </div>
           <div className="px-[24px] mt-[34px]">
-            <InputWrapper>
-              <Label
+            <div>
+              <InputLabel
                 htmlFor="description"
                 maxLength={200}
-                currentLength={watch("description")?.length}
+                currentLength={watch("description")?.length || 0}
               >
                 문의 내용<span className="text-top">*</span>
-              </Label>
+              </InputLabel>
               <TextareaAutosize
                 maxLength={200}
                 placeholder="내용을 입력해주세요."
                 className="w-[100%] min-h-[132px] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0"
                 {...register("description")}
               />
-            </InputWrapper>
+            </div>
           </div>
           <div className="px-[24px] mt-[34px]">
-            <Label
+            <InputLabel
               htmlFor="photos"
               maxLength={10}
               currentLength={uploadedImages?.length}
             >
               사진<span className="text-top">*</span>
-            </Label>
+            </InputLabel>
             <ScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] mt-[8px]">
               <input
                 ref={inputRef}
