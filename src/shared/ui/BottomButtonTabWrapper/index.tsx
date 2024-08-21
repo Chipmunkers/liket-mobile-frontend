@@ -1,6 +1,9 @@
 import { classNames } from "@/shared/helpers/classNames";
 import { Props } from "./types";
 
+/**
+ * @deprecated
+ */
 const BottomButtonTabWrapper = ({
   children,
   shadow = false,

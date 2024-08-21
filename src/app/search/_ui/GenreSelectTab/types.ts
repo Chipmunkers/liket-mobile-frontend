@@ -1,5 +1,5 @@
-import { SearchPagerble } from "@/app/search/_types/pagerble";
-import { SetState } from "@/types/react";
+import { SearchPagerble } from "../../_types/pagerble";
+import { SetState } from "@/shared/types/react";
 
 export type Props = {
   pagerble: SearchPagerble;

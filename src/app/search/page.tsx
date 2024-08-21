@@ -2,23 +2,20 @@
 
 import SearchHeader from "@/components/SearchHeader";
 import { useEffect, useState } from "react";
-import SmallSelectButton from "@/components/SelectButton/SmallSelectButton";
 import SmallDownArrow from "@/icons/down-arrow-small.svg";
 import CustomDrawer from "@/components/CustomDrawer";
 import Checkbox from "@/components/Checkbox";
 import { ButtonBase } from "@mui/material";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useGetContentAll } from "./_hooks/useGetContentAll";
 import { AxiosError } from "axios";
 import ContentCardGroup from "@/components/ContentCardGroup";
-import { classNames } from "../../utils/helpers";
 import ReloadIcon from "@/icons/reload.svg";
-import DefaultLoading from "../../components/Loading/DefaultLoading";
-import { SearchPagerble } from "@/app/search/_types/pagerble";
-import { createQuerystring } from "@/app/search/_util/createQueryString";
-import useHandleMessageEvent from "@/app/search/_hooks/useHandleMesaageEvent";
-import { getQuerystring } from "@/app/search/_util/getQuerystring";
-import useCheckChangePagerble from "@/app/search/_hooks/useCheckChangePagerble";
+import { SearchPagerble } from "./_types/pagerble";
+import { createQuerystring } from "./_util/createQueryString";
+import useHandleMessageEvent from "./_hooks/useHandleMesaageEvent";
+import { getQuerystring } from "./_util/getQuerystring";
+import useCheckChangePagerble from "./_hooks/useCheckChangePagerble";
 import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
 import { useIsWebView } from "@/shared/hooks/useIsWebview";
 import { SIDO_LIST } from "@/shared/consts/region/sido";
@@ -26,7 +23,10 @@ import { AGES } from "@/shared/consts/content/age";
 import { STYLES } from "@/shared/consts/content/style";
 import customToast from "@/shared/helpers/customToast";
 import Chip from "@/shared/ui/Chip";
-import GenreSelectTab from "@/app/search/_ui/GenreSelectTab";
+import GenreSelectTab from "./_ui/GenreSelectTab";
+import { classNames } from "@/shared/helpers/classNames";
+import { DefaultLoading } from "@/shared/ui/Loading";
+import { SelectButtonSmall } from "@/shared/ui/SelectButton";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -77,7 +77,7 @@ export default function Page() {
       )}
 
       <div className="flex ml-[24px] mt-[8px] mb-[11px] gap-[8px]">
-        <SmallSelectButton
+        <SelectButtonSmall
           placeholder="지역"
           text={
             SIDO_LIST.find((sido) => sido.cd === pagerble.region)?.name || ""
@@ -95,7 +95,7 @@ export default function Page() {
             />
           }
         />
-        <SmallSelectButton
+        <SelectButtonSmall
           placeholder="연령대"
           text={
             AGES.find((age) => age.idx.toString() === pagerble.age)?.name || ""
@@ -111,7 +111,7 @@ export default function Page() {
             />
           }
         />
-        <SmallSelectButton
+        <SelectButtonSmall
           placeholder="스타일"
           text={pagerble.style
             .map(
@@ -150,7 +150,7 @@ export default function Page() {
           }
         />
         {pagerble.orderby === "time" || !pagerble.orderby ? (
-          <SmallSelectButton
+          <SelectButtonSmall
             rippleEffect={false}
             withBorder={false}
             placeholder="최신순"
@@ -165,7 +165,7 @@ export default function Page() {
             Icon={<SmallDownArrow />}
           />
         ) : (
-          <SmallSelectButton
+          <SelectButtonSmall
             rippleEffect={false}
             withBorder={false}
             placeholder="인기순"

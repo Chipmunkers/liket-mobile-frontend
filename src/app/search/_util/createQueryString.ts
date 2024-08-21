@@ -1,4 +1,4 @@
-import { SearchPagerble } from "@/app/search/_types/pagerble";
+import { SearchPagerble } from "../_types/pagerble";
 
 export const createQuerystring = (data: SearchPagerble): string => {
   const params = new URLSearchParams();

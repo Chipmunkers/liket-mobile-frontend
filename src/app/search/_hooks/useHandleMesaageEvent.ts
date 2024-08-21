@@ -1,4 +1,4 @@
-import { SearchPagerble } from "@/app/search/_types/pagerble";
+import { SearchPagerble } from "../_types/pagerble";
 import { WEBVIEW_EVENT_TYPE } from "@/shared/consts/webview/event";
 import { SetState } from "@/shared/types/react";
 import { useEffect } from "react";

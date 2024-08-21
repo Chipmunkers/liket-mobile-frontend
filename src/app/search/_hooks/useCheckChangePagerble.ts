@@ -1,5 +1,5 @@
-import { SearchPagerble } from "@/app/search/_types/pagerble";
-import { createQuerystring } from "@/app/search/_util/createQueryString";
+import { SearchPagerble } from "../_types/pagerble";
+import { createQuerystring } from "../_util/createQueryString";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
