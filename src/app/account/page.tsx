@@ -1,9 +1,5 @@
 "use client";
 
-import Divider from "@/components/Divider";
-import Header from "@/components/Header";
-import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
 import LinkItem from "@/components/LinkItem";
 import { useLogout } from "@/service/login/hooks";
 import authStore from "@/stores/authStore";
@@ -11,12 +7,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { setAuthToken } from "@/shared/helpers/axios";
 import { useQueryClient } from "@tanstack/react-query";
-import profileStore from "@/stores/profileStore";
 import { PROVIDER_ICON } from "@/utils/const";
 import { ButtonBase } from "@mui/material";
-import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
 import customToast from "../../utils/customToast";
 import { useGetMyInfo } from "@/hooks/useGetMyInfo";
+import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
+import Divider from "@/shared/ui/Divider";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
 export default function Page() {
   const router = useRouter();
@@ -29,7 +27,7 @@ export default function Page() {
       queryClient.resetQueries();
       stackRouterPush(router, {
         path: "/",
-        screen: ScreenTYPE.MAIN,
+        screen: WEBVIEW_SCREEN.MAIN,
         isStack: false,
       });
     },
@@ -49,8 +47,8 @@ export default function Page() {
   return (
     <>
       <Header>
-        <LeftOption option={{ back: true }} />
-        <MiddleText text="계정관리" />
+        <HeaderLeft option={{ back: true }} />
+        <HeaderMiddle text="계정관리" />
       </Header>
       <main>
         <div className="mt-[16px] px-[24px]">
@@ -65,7 +63,7 @@ export default function Page() {
           onClick={() => {
             stackRouterPush(router, {
               path: "/mypage/edit/password",
-              screen: ScreenTYPE.EDIT_MY_PASSWORD,
+              screen: WEBVIEW_SCREEN.EDIT_MY_PASSWORD,
             });
           }}
         >
@@ -87,7 +85,7 @@ export default function Page() {
 
               stackRouterPush(router, {
                 path: "/delete/account",
-                screen: ScreenTYPE.DELETE_ACCOUNT,
+                screen: WEBVIEW_SCREEN.DELETE_ACCOUNT,
               });
             }}
           >
