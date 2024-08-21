@@ -15,7 +15,6 @@ import MediumSelectButton from "@/components/SelectButton/MediumSelectButton";
 import { ButtonBase, TextareaAutosize } from "@mui/material";
 import dayjs from "dayjs";
 import { DateCalendar } from "@mui/x-date-pickers";
-import { useUploadContentImages } from "@/service/uploadImage";
 import Script from "next/script";
 import { useCreateContent } from "./_hooks/useCreateContent";
 import { useGetContentDetail } from "./_hooks/useGetContentDetail";
@@ -30,7 +29,7 @@ import Divider from "@/shared/ui/Divider";
 import { BasicInput, InputLabel } from "@/shared/ui/Input";
 import Chip from "@/shared/ui/Chip";
 import Button from "@/shared/ui/Button";
-import { findIdxsByNames } from "@/app/create/content/_util/findIdxsByNames";
+import { findIdxsByNames } from "./_util/findIdxsByNames";
 import { classNames } from "@/shared/helpers/classNames";
 import customToast from "@/shared/helpers/customToast";
 import { GENRES } from "@/shared/consts/content/genre";
@@ -38,6 +37,7 @@ import { AGES } from "@/shared/consts/content/age";
 import { STYLES } from "@/shared/consts/content/style";
 import Drawer from "@/shared/ui/Drawer";
 import InputButton from "@/shared/ui/Input/InputButton";
+import { useUploadContentImages } from "./_hooks/useUploadContentImages";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",

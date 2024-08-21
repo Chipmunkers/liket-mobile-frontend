@@ -2,7 +2,7 @@
 
 import Badge from "@/components/Badge/Badge";
 import Header from "@/components/Header";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import DevIng from "../../components/DevIng";
