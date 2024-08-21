@@ -15,11 +15,11 @@ import { GenreEntity } from "@/shared/types/api/tag/GenreEntity";
 import { AgeEntity } from "@/shared/types/api/tag/AgeEntity";
 import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
 import { generateMapFilterQuerystring } from "@/app/map/_util/generateMapFilterQuerystring";
-import useModalStore from "@/shared/hooks/useModalStore";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { getMapInfo } from "@/app/map/_util/getMapInfo";
 import { classNames } from "@/shared/helpers/classNames";
+import useModalStore from "@/shared/store/modalStore";
 
 const KakaoMap = ({
   children,
