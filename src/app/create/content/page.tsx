@@ -1,14 +1,6 @@
 "use client";
 
 import Checkbox from "@/components/Checkbox";
-import Divider from "@/components/Divider";
-import Header from "@/components/Header";
-import {
-  Input,
-  InputLikeButton,
-  InputWrapper,
-  Label,
-} from "@/components/newInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -21,26 +13,31 @@ import { useEffect, useRef, useState } from "react";
 import CalendarIcon from "@/icons/calendar.svg";
 import MediumSelectButton from "@/components/SelectButton/MediumSelectButton";
 import { ButtonBase, TextareaAutosize } from "@mui/material";
-import CustomDrawer from "@/components/CustomDrawer";
-import Chip from "@/components/Chip";
-import Button from "@/components/Button";
 import dayjs from "dayjs";
 import { DateCalendar } from "@mui/x-date-pickers";
-import { GenreType } from "@/types/const";
 import { useUploadContentImages } from "@/service/uploadImage";
-import customToast from "@/utils/customToast";
 import Script from "next/script";
-import { classNames } from "@/utils/helpers";
-import { ages } from "../../../../public/data/age";
-import { styles } from "../../../../public/data/style";
-import { useCreateContent } from "./hooks/useCreateContent";
-import { genres } from "../../../../public/data/genre";
-import { useGetContentDetail } from "./hooks/useGetContentDetail";
-import { useEditContent } from "./hooks/useEditContent";
-import RightOption from "@/components/Header/RightOption";
-import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
-import { stackRouterPush } from "../../../utils/stackRouter";
+import { useCreateContent } from "./_hooks/useCreateContent";
+import { useGetContentDetail } from "./_hooks/useGetContentDetail";
+import { useEditContent } from "./_hooks/useEditContent";
+import {
+  Header,
+  HeaderLeft,
+  HeaderMiddle,
+  HeaderRight,
+} from "@/shared/ui/Header";
+import Divider from "@/shared/ui/Divider";
+import { BasicInput, InputLabel } from "@/shared/ui/Input";
+import Chip from "@/shared/ui/Chip";
+import Button from "@/shared/ui/Button";
+import { findIdxsByNames } from "@/app/create/content/_util/findIdxsByNames";
+import { classNames } from "@/shared/helpers/classNames";
+import customToast from "@/shared/helpers/customToast";
+import { GENRES } from "@/shared/consts/content/genre";
+import { AGES } from "@/shared/consts/content/age";
+import { STYLES } from "@/shared/consts/content/style";
+import Drawer from "@/shared/ui/Drawer";
+import InputButton from "@/shared/ui/Input/InputButton";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",
@@ -280,8 +277,8 @@ export default function Page() {
       setValue("additional-address", location.detailAddress);
       setValue("description", description);
       setValue("age", age.name);
-      setValue("startDate", formatDateToYYYYMMDD(startDate));
-      setValue("endDate", formatDateToYYYYMMDD(endDate));
+      setValue("startDate", formateDate(startDate));
+      setValue("endDate", formateDate(endDate));
       setValue(
         "style",
         style.map(({ name }) => name)
@@ -317,9 +314,9 @@ export default function Page() {
   return (
     <>
       <Header>
-        <LeftOption option={{ back: true }} />
-        <MiddleText text="컨텐츠 등록 요청" />
-        <RightOption
+        <HeaderLeft option={{ back: true }} />
+        <HeaderMiddle text="컨텐츠 등록 요청" />
+        <HeaderRight
           option={{
             check: {
               disabled: !formState.isValid,
@@ -337,9 +334,9 @@ export default function Page() {
                   endDate,
                   imgList,
                 } = getValues();
-                const genreIdx = findIdxByName(genres, genre);
-                const ageIdx = findIdxByName(ages, age);
-                const styleIdxList = findIdxsByNames(styles, style);
+                const genreIdx = findIdxByName(GENRES, genre);
+                const ageIdx = findIdxByName(AGES, age);
+                const styleIdxList = findIdxsByNames(STYLES, style);
 
                 if (addressInformation && genreIdx && ageIdx && styleIdxList) {
                   const finalDataToSave = {
@@ -376,82 +373,82 @@ export default function Page() {
           className={classNames(`mt-[16px]`, !!isSearchModalOpen && "hidden")}
         >
           <div className="mx-[24px]">
-            <InputWrapper>
-              <Label
+            <div>
+              <InputLabel
                 maxLength={40}
                 htmlFor="title"
                 currentLength={watch("title").length}
               >
                 컨텐츠명<span className="text-top">*</span>
-              </Label>
-              <Input
+              </InputLabel>
+              <BasicInput
                 field="title"
                 maxLength={40}
                 placeholder="컨텐츠명을 입력해주세요."
                 formState={formState}
                 register={register}
               />
-            </InputWrapper>
+            </div>
           </div>
-          <Divider width="100%" height="8px" margin="16px 0" />
+          <Divider width="100%" height="8px" margin="34px 0" />
           <div className="mx-[24px]">
-            <InputWrapper margin="0 0 34px 0">
-              <Label htmlFor="genre">
+            <div className="flex-1 mb-[34px]">
+              <InputLabel htmlFor="genre">
                 장르<span className="text-top">*</span>
-              </Label>
-              <InputLikeButton
+              </InputLabel>
+              <InputButton
                 text={watch("genre")}
                 placeholder="장르를 선택해주세요."
                 onClick={() => setIsGenreSelectionDrawerOpen(true)}
               />
-            </InputWrapper>
-            <InputWrapper>
-              <Label htmlFor="address">
+            </div>
+            <div>
+              <InputLabel htmlFor="address">
                 주소<span className="text-top">*</span>
-              </Label>
-              <InputLikeButton
+              </InputLabel>
+              <InputButton
                 text={detailAddress}
                 placeholder="주소를 검색해주세요."
                 subButtonText="주소 검색"
                 onClick={handleClickSearchAddress}
               />
-            </InputWrapper>
-            <InputWrapper margin="8px 0 0 0">
-              <Input
+            </div>
+            <div className="mb-[34px]">
+              <BasicInput
                 field="additional-address"
                 placeholder="상세주소를 입력해주세요. (필수)"
                 register={register}
                 formState={formState}
               />
-            </InputWrapper>
-            <InputWrapper margin="34px 0 0 0">
-              <Label htmlFor="age">
+            </div>
+            <div className="mb-[34px]">
+              <InputLabel htmlFor="age">
                 연령대<span className="text-top">*</span>
-              </Label>
-              <InputLikeButton
+              </InputLabel>
+              <InputButton
                 text={watch("age")}
                 placeholder="연령대를 선택해주세요."
                 onClick={() => setIsAgeRangeSelectionDrawerOpen(true)}
               />
-            </InputWrapper>
-            <InputWrapper margin="34px 0 0 0">
-              <Label htmlFor="style">
+            </div>
+            <div>
+              <InputLabel htmlFor="style">
                 스타일<span className="text-top">*</span>
-              </Label>
-              <InputLikeButton
+              </InputLabel>
+              <InputButton
                 text={watch("style").join(", ")}
                 placeholder="스타일을 선택해주세요."
                 onClick={() => setIsStyleSelectionDrawerOpen(true)}
               />
-            </InputWrapper>
+            </div>
           </div>
           <Divider width="100%" height="8px" margin="24px 0 0" />
           <div className="mx-[24px]">
             <div className="flex justify-between flex-wrap mb-[34px]">
               <div className="mt-[16px]">
-                <Label htmlFor="open-date">
+                <InputLabel htmlFor="open-date">
                   오픈날짜<span className="text-top">*</span>
-                </Label>
+                </InputLabel>
                 <div className="mt-[12px]">
                   <MediumSelectButton
                     text={getValues("startDate")}
@@ -462,9 +459,9 @@ export default function Page() {
                 </div>
               </div>
               <div className="mt-[16px]">
-                <Label htmlFor="close-date">
+                <InputLabel htmlFor="close-date">
                   종료날짜<span className="text-top">*</span>
-                </Label>
+                </InputLabel>
                 <div className="mt-[12px]">
                   <MediumSelectButton
                     text={getValues("endDate")}
@@ -475,38 +472,38 @@ export default function Page() {
                 </div>
               </div>
             </div>
-            <InputWrapper>
-              <Label
+            <div className="mb-[34px]">
+              <InputLabel
                 htmlFor="openTime"
                 maxLength={40}
                 currentLength={watch("openTime").length}
               >
                 오픈시간<span className="text-top">*</span>
-              </Label>
-              <Input
+              </InputLabel>
+              <BasicInput
                 field="openTime"
                 formState={formState}
                 maxLength={40}
                 register={register}
                 placeholder="요일별 오픈시간을 입력해주세요."
               />
-            </InputWrapper>
-            <InputWrapper margin="34px 0">
-              <Label
+            </div>
+            <div className="mb-[34px]">
+              <InputLabel
                 htmlFor="websiteLink"
                 maxLength={2000}
                 currentLength={watch("websiteLink").length}
               >
                 웹사이트<span className="text-top">*</span>
-              </Label>
-              <Input
+              </InputLabel>
+              <BasicInput
                 field="websiteLink"
                 maxLength={2000}
                 placeholder="URL을 입력해주세요."
                 register={register}
                 formState={formState}
               />
-            </InputWrapper>
+            </div>
             <div className="flex justify-between">
               {CONDITIONS.map((item) => {
                 const isChecked = watch("condition").some(
@@ -538,15 +535,15 @@ export default function Page() {
               })}
             </div>
           </div>
-          <Divider width="100%" height="8px" margin="16px 0 24px 0" />
+          <Divider width="100%" height="8px" margin="16px 0" />
           <div className="px-[24px]">
-            <Label
+            <InputLabel
               htmlFor="photos"
               maxLength={10}
               currentLength={uploadedImgs.length}
             >
               사진<span className="text-top">*</span>
-            </Label>
+            </InputLabel>
             <ScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] mt-[8px]">
               <input
                 ref={inputRef}
@@ -613,27 +610,27 @@ export default function Page() {
               })}
             </ScrollContainer>
           </div>
-          <Divider width="100%" height="8px" margin="16px 0 24px 0" />
+          <Divider width="100%" height="8px" margin="16px 0" />
           <div className="px-[24px]">
-            <InputWrapper>
-              <Label
+            <div>
+              <InputLabel
                 htmlFor="description"
                 maxLength={1000}
                 currentLength={watch("description").length}
               >
                 상세정보<span className="text-top">*</span>
-              </Label>
+              </InputLabel>
               <TextareaAutosize
                 maxLength={1000}
                 placeholder="컨텐츠 소개나 이벤트 등에 대해 작성해주세요."
                 className="w-[100%] mb-[34px] min-h-[132px] h-[auto] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0"
                 {...register("description")}
               />
-            </InputWrapper>
+            </div>
           </div>
         </form>
       </main>
-      <CustomDrawer
+      <Drawer
         open={isStyleSelectionDrawerOpen}
         onClose={() => {
           setIsStyleSelectionDrawerOpen(false);
@@ -642,7 +639,7 @@ export default function Page() {
       >
         <div className="center text-h2">스타일</div>
         <ul className="my-[16px] w-[100%] flex px-[34px] flex-wrap gap-[8px]">
-          {styles.map(({ name, idx }) => {
+          {STYLES.map(({ name, idx }) => {
             return (
               <li key={idx}>
                 <Chip
@@ -671,8 +668,7 @@ export default function Page() {
         </ul>
         <div className="flex px-[24px] pb-[8px]">
           <Button
-            height={48}
-            fullWidth
+            className="h-[48px] w-[100%]"
             onClick={() => {
               setValue("style", tempStyles);
               setIsStyleSelectionDrawerOpen(false);
@@ -681,14 +677,14 @@ export default function Page() {
             확인
           </Button>
         </div>
-      </CustomDrawer>
-      <CustomDrawer
+      </Drawer>
+      <Drawer
         open={isAgeRangeSelectionDrawerOpen}
         onClose={() => setIsAgeRangeSelectionDrawerOpen(false)}
       >
         <div className="center text-h2">연령대</div>
         <ul>
-          {ages.map(({ idx, name }) => (
+          {AGES.map(({ idx, name }) => (
             <li className="bottom-sheet-list" key={idx}>
               <ButtonBase
                 onClick={() => {
@@ -705,14 +701,14 @@ export default function Page() {
             </li>
           ))}
         </ul>
-      </CustomDrawer>
-      <CustomDrawer
+      </Drawer>
+      <Drawer
         open={isGenreSelectionDrawerOpen}
         onClose={() => setIsGenreSelectionDrawerOpen(false)}
       >
         <div className="center text-h2">장르</div>
         <ul>
-          {genres.map(({ idx, name }) => (
+          {GENRES.map(({ idx, name }) => (
             <li className="bottom-sheet-list" key={idx}>
               <ButtonBase
                 onClick={() => {
@@ -729,8 +725,8 @@ export default function Page() {
             </li>
           ))}
         </ul>
-      </CustomDrawer>
-      <CustomDrawer
+      </Drawer>
+      <Drawer
         open={isStartDateSelectionDrawerOpen}
         onClose={() => {
           setTempStartDate(getValues("startDate"));
@@ -747,8 +743,7 @@ export default function Page() {
         />
         <div className="flex pb-[8px] px-[24px]">
           <Button
-            height={48}
-            fullWidth
+            className="h-[48px] w-[100%]"
             onClick={() => {
               tempStartDate && setValue("startDate", tempStartDate.toString());
               setIsStartDateSelectionDrawerOpen(false);
@@ -757,8 +752,8 @@ export default function Page() {
             확인
           </Button>
         </div>
-      </CustomDrawer>
-      <CustomDrawer
+      </Drawer>
+      <Drawer
         open={isEndDateSelectionDrawerOpen}
         onClose={() => {
           setTempEndDate(getValues("endDate"));
@@ -777,8 +772,7 @@ export default function Page() {
         />
         <div className="flex pb-[8px] px-[24px]">
           <Button
-            height={48}
-            fullWidth
+            className="h-[48px] w-[100%]"
             onClick={() => {
               tempEndDate && setValue("endDate", tempEndDate);
               setIsEndDateSelectionDrawerOpen(false);
@@ -787,7 +781,7 @@ export default function Page() {
             확인
           </Button>
         </div>
-      </CustomDrawer>
+      </Drawer>
       <div
         className="full-modal"
         style={{
@@ -795,14 +789,14 @@ export default function Page() {
         }}
       >
         <Header>
-          <LeftOption
+          <HeaderLeft
             option={{
               back: {
                 onClick: () => router.back(),
               },
             }}
           />
-          <MiddleText text="주소 검색" />
+          <HeaderMiddle text="주소 검색" />
         </Header>
         <div className="full-modal-main">
           <div id="search-list" className="flex grow h-[100%] mx-[24px]"></div>
@@ -811,25 +805,4 @@ export default function Page() {
       <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" />
     </>
   );
-}
-
-const findIdxsByNames = (
-  list: { idx: number; name: string }[],
-  names: string[]
-): (number | undefined)[] =>
-  names.map((name) => list.find((item) => item.name === name)?.idx);
-
-const findIdxByName = (
-  list: { idx: number; name: string }[],
-  name: string
-): number | undefined => list.find((item) => item.name === name)?.idx;
-
-function formatDateToYYYYMMDD(isoDate: string): string {
-  const date = new Date(isoDate);
-
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-
-  return `${year}.${month}.${day}`;
 }
