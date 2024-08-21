@@ -2,7 +2,6 @@
 
 import RightArrow from "@/icons/right-arrow.svg";
 import Link from "next/link";
-import HotPlaceListItem from "@/components/HotplaceListItem";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
@@ -10,6 +9,7 @@ import { HotContentEntity } from "@/shared/types/api/content/HotContentEntity";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { colors } from "@/shared/style/color";
+import ContentCardXSmall from "@/entities/content/ContentCardXSmall";
 
 const HotPlaceSection = (props: { contentList: HotContentEntity[] }) => {
   const { contentList } = props;
@@ -57,7 +57,7 @@ const HotPlaceSection = (props: { contentList: HotContentEntity[] }) => {
                         <div className="text-numbering1 mr-[18px] center align-middle">
                           {index + 1}
                         </div>
-                        <HotPlaceListItem {...content} />
+                        <ContentCardXSmall content={content} />
                       </li>
                     );
                   })}
