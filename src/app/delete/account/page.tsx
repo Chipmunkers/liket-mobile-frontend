@@ -1,26 +1,20 @@
 "use client";
 
-import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
-import Button from "@/components/Button";
-import ButtonGroup from "@/components/ButtonGroup";
-import CheckBoxWithLink from "@/components/CheckboxWithLink";
-import Header from "@/components/Header";
-import { InputWrapper, Label } from "@/components/newInput";
 import { useDeleteAccount } from "@/service/delete";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { setAuthToken } from "@/shared/helpers/axios";
-import authStore from "@/stores/authStore";
 import { useQueryClient } from "@tanstack/react-query";
-import customToast from "../../../utils/customToast";
-import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
-import {
-  ScreenTYPE,
-  stackRouterBack,
-  stackRouterPush,
-} from "../../../utils/stackRouter";
+import authStore from "@/shared/store/authStore";
+import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
+import CheckBox from "@/shared/ui/CheckBox";
+import { InputLabel } from "@/shared/ui/Input";
+import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import customToast from "@/shared/helpers/customToast";
+import BottomButtonTab from "@/shared/ui/BottomButtonTab";
+import Button from "@/shared/ui/Button";
 
 export default function Page() {
   const queryClient = useQueryClient();
@@ -32,7 +26,7 @@ export default function Page() {
       setToken("");
       stackRouterPush(router, {
         path: "/",
-        screen: ScreenTYPE.MAIN,
+        screen: WEBVIEW_SCREEN.MAIN,
         isStack: false,
       });
     },
@@ -57,8 +51,8 @@ export default function Page() {
   return (
     <>
       <Header>
-        <LeftOption option={{ back: true }} />
-        <MiddleText text="회원탈퇴" />
+        <HeaderLeft option={{ back: true }} />
+        <HeaderMiddle text="회원탈퇴" />
       </Header>
       <main>
         <div className="px-[24px] mt-[24px]">
@@ -69,56 +63,55 @@ export default function Page() {
           </div>
           <form className="grow">
             <div className="mt-[24px] flex flex-col gap-[16px]">
-              <CheckBoxWithLink
+              <CheckBox
                 isChecked={selectedIndex === 1}
-                onChangeCheckbox={() => handleChangeCheckbox(1)}
-                onClickListItem={() => {}}
-              >
-                앱 사용이 불편해요.
-              </CheckBoxWithLink>
-              <CheckBoxWithLink
+                onChange={() => handleChangeCheckbox(1)}
+                label="앱 사용이 불편해요"
+                labelClassName="text-body3 text-grey-black"
+                marginBetweenTextAndCheckbox="8px"
+              />
+              <CheckBox
                 isChecked={selectedIndex === 2}
-                onChangeCheckbox={() => handleChangeCheckbox(2)}
-                onClickListItem={() => {}}
-              >
-                사용하지 않는 앱이에요.
-              </CheckBoxWithLink>
-              <CheckBoxWithLink
+                onChange={() => handleChangeCheckbox(2)}
+                label="사용하지 않는 앱이에요."
+                labelClassName="text-body3 text-grey-black"
+                marginBetweenTextAndCheckbox="8px"
+              />
+              <CheckBox
                 isChecked={selectedIndex === 3}
-                onChangeCheckbox={() => handleChangeCheckbox(3)}
-                onClickListItem={() => {}}
-              >
-                컨텐츠가 별로 없어요.
-              </CheckBoxWithLink>
-              <CheckBoxWithLink
+                onChange={() => handleChangeCheckbox(3)}
+                label="컨텐츠가 별로 없어요."
+                labelClassName="text-body3 text-grey-black"
+                marginBetweenTextAndCheckbox="8px"
+              />
+              <CheckBox
                 isChecked={selectedIndex === 4}
-                onChangeCheckbox={() => handleChangeCheckbox(4)}
-                onClickListItem={() => {}}
-              >
-                다른 서비스를 이용해요.
-              </CheckBoxWithLink>
-              <CheckBoxWithLink
+                onChange={() => handleChangeCheckbox(4)}
+                label="다른 서비스를 이용해요."
+                labelClassName="text-body3 text-grey-black"
+                marginBetweenTextAndCheckbox="8px"
+              />
+              <CheckBox
                 isChecked={selectedIndex === 5}
-                onChangeCheckbox={() => handleChangeCheckbox(5)}
-                onClickListItem={() => {}}
-              >
-                다른 계정이 있거나, 재가입할 거에요.
-              </CheckBoxWithLink>
-              <CheckBoxWithLink
+                onChange={() => handleChangeCheckbox(5)}
+                label="다른 계정이 있거나, 재가입할 거에요."
+                labelClassName="text-body3 text-grey-black"
+                marginBetweenTextAndCheckbox="8px"
+              />
+              <CheckBox
                 isChecked={selectedIndex === 6}
-                onChangeCheckbox={() => handleChangeCheckbox(6)}
-                onClickListItem={() => {
-                  handleChangeCheckbox(6);
-                }}
-              >
-                기타
-              </CheckBoxWithLink>
+                onChange={() => handleChangeCheckbox(6)}
+                label="기타"
+                labelClassName="text-body3 text-grey-black"
+                marginBetweenTextAndCheckbox="8px"
+              />
             </div>
-            <InputWrapper margin="8px 0 0 0">
-              <Label
+            <div className="mt-[8px]">
+              <InputLabel
                 htmlFor="detail-info"
                 maxLength={200}
                 currentLength={text.length}
+                children={""}
               />
               <TextareaAutosize
                 value={text}
@@ -127,31 +120,27 @@ export default function Page() {
                 placeholder="다른 이유나 자세한 이유가 있다면 알려주세요."
                 className="w-[100%] mb-[34px] min-h-[132px] h-[auto] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0"
               />
-            </InputWrapper>
+            </div>
           </form>
         </div>
-        <BottomButtonTabWrapper shadow>
-          <ButtonGroup gap={16}>
-            <Button
-              height={48}
-              onClick={() => {
-                stackRouterBack(router);
-              }}
-              variant="ghost"
-              fullWidth
-            >
-              취소
-            </Button>
-            <Button
-              disabled={selectedIndex === -1}
-              height={48}
-              onClick={() => handleSubmit()}
-              fullWidth
-            >
-              탈퇴하기
-            </Button>
-          </ButtonGroup>
-        </BottomButtonTabWrapper>
+        <BottomButtonTab shadow>
+          <Button
+            className="flex-1 h-[48px] mr-[16px]"
+            onClick={() => {
+              stackRouterBack(router);
+            }}
+            variant="ghost"
+          >
+            취소
+          </Button>
+          <Button
+            className="flex-1 h-[48px]"
+            disabled={selectedIndex === -1}
+            onClick={() => handleSubmit()}
+          >
+            탈퇴하기
+          </Button>
+        </BottomButtonTab>
       </main>
     </>
   );

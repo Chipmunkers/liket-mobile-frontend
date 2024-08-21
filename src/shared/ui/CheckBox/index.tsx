@@ -11,6 +11,7 @@ const CheckBox = ({
   marginBetweenTextAndCheckbox = "0px",
   onChange,
   readonly = false,
+  labelClassName = "",
 }: Props) => {
   return (
     <label
@@ -48,7 +49,8 @@ const CheckBox = ({
       <div
         className={classNames(
           "ml-[4px] text-body3 select-none",
-          isBoard && "text-body2"
+          isBoard && "text-body2",
+          labelClassName
         )}
       >
         {label}

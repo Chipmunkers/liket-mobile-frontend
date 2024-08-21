@@ -28,4 +28,11 @@ export type Props = {
    * @default false
    */
   readonly?: boolean;
+
+  /**
+   * Label className
+   *
+   * @default ""
+   */
+  labelClassName?: string;
 };
