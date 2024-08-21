@@ -1,5 +1,8 @@
 import { KeyValuePair, ResolvableTo } from "tailwindcss/types/config";
 
+/**
+ * @deprecated
+ */
 type FontSize = ResolvableTo<
   KeyValuePair<
     string,
@@ -16,6 +19,9 @@ type FontSize = ResolvableTo<
   >
 >;
 
+/**
+ * @deprecated
+ */
 const TypographyScale: FontSize = {
   h1: [
     "18px",
@@ -88,7 +94,9 @@ const TypographyScale: FontSize = {
     },
   ],
 };
-
+/**
+ * @deprecated
+ */
 const ButtonScale: FontSize = {
   button1: ["16px", { fontWeight: 700 }],
   button2: ["16px", { fontWeight: 400 }],
@@ -97,7 +105,9 @@ const ButtonScale: FontSize = {
   button5: ["12px", { fontWeight: 700 }],
   button6: ["12px", { fontWeight: 400 }],
 };
-
+/**
+ * @deprecated
+ */
 const colors = {
   grey: {
     black: "rgba(0, 0, 0, 1)",
@@ -122,9 +132,13 @@ const colors = {
   blue: "#3b85ca",
   purple: "#45098c",
 };
-
+/**
+ * @deprecated
+ */
 export const PAGE_CONTENT_MAX_WIDTH = "600px";
-
+/**
+ * @deprecated
+ */
 export const variantToStyleMap = {
   primary:
     "bg-skyblue-01 text-white hover:bg-skyblue-02 active:bg-skyblue-03 focus:outline-skyblue-02 focus:outline-offset-[1px] focus:outline-[2px]",
@@ -133,15 +147,23 @@ export const variantToStyleMap = {
   ghost:
     "border-solid border-grey-02 border-[1px] hover:border-grey-02 active:border-skyblue-01 active:text-skyblue-01 active:border-[2px] focus:outline-[2px] focus:outline-offset-[1px] focus:outline-skyblue-02",
 };
-
+/**
+ * @deprecated
+ */
 export const variantWithDisabledStyleMap = {
   primary: "bg-grey-01 text-grey-02",
   secondary: "bg-grey-01 text-grey-02",
   ghost: "text-grey-02 border-solid border-grey-01 border-[2px]",
 };
-
+/**
+ * @deprecated
+ */
 export type TypographyVariant = keyof typeof TypographyScale;
-
+/**
+ * @deprecated
+ */
 export type ButtonVariant = keyof typeof ButtonScale;
-
+/**
+ * @deprecated
+ */
 export { TypographyScale, ButtonScale, colors };
