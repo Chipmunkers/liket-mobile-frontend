@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axiosInstance from "@/shared/helpers/axios";
-import { ReviewEntity } from "@/types/api/review";
+import { ReviewEntity } from "@/shared/types/api/review/ReviewEntity";
 
 export const useGetReviewAllByContentIdx = (
   idx: string,

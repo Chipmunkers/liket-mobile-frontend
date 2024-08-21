@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { Carousel } from "react-responsive-carousel";
 import DefaultImg from "@/shared/ui/DefaultImg";
 import { Props } from "./types";
-import LikeReviewButton from "@/app/contents/[idx]/_ui/DetailContent/ui/ReviewTab/ui/ReviewInfiniteScroll/ui/LikeReviewButton";
+import LikeReviewButton from "./ui/LikeReviewButton";
 
 const ReviewInfiniteScroll = (props: Props) => {
   const {
