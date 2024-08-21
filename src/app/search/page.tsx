@@ -9,7 +9,6 @@ import { ButtonBase } from "@mui/material";
 import { useSearchParams } from "next/navigation";
 import { useGetContentAll } from "./_hooks/useGetContentAll";
 import { AxiosError } from "axios";
-import ContentCardGroup from "@/components/ContentCardGroup";
 import ReloadIcon from "@/icons/reload.svg";
 import { SearchPagerble } from "./_types/pagerble";
 import { createQuerystring } from "./_util/createQueryString";
@@ -27,6 +26,7 @@ import GenreSelectTab from "./_ui/GenreSelectTab";
 import { classNames } from "@/shared/helpers/classNames";
 import { DefaultLoading } from "@/shared/ui/Loading";
 import { SelectButtonSmall } from "@/shared/ui/SelectButton";
+import ContentCardGroup from "@/widgets/content/ContentInfiniteGroup";
 
 export default function Page() {
   const searchParams = useSearchParams();
