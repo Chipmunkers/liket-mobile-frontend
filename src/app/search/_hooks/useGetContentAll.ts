@@ -3,11 +3,11 @@ import axiosInstance from "@/utils/axios";
 import { SummaryContentEntity } from "../../../types/api/culture-content";
 import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
-import useModalStore from "@/shared/hooks/useModalStore";
 import { useRouter } from "next/navigation";
 import customToast from "@/shared/helpers/customToast";
 import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import useModalStore from "@/shared/store/modalStore";
 
 export const GET_CONTENT_ALL_KEY = "content-search-key";
 

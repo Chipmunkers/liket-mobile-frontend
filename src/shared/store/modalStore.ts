@@ -1,6 +1,6 @@
+import { getKeys } from "@/shared/helpers/getKeys";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { getKeys } from "@/utils/helpers";
 
 export type ModalType = "LoginModal" | "DeleteCommentModal";
 

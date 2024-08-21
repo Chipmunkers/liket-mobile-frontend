@@ -7,7 +7,7 @@ import SmallDownArrow from "@/icons/down-arrow-small.svg";
 import CustomDrawer from "@/components/CustomDrawer";
 import Checkbox from "@/components/Checkbox";
 import { ButtonBase } from "@mui/material";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useGetContentAll } from "./_hooks/useGetContentAll";
 import { AxiosError } from "axios";
 import ContentCardGroup from "@/components/ContentCardGroup";

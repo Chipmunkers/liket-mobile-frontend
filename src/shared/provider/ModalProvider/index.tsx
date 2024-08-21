@@ -1,10 +1,10 @@
-import useModalStore from "@/stores/modalStore";
-import { StrictPropsWithChildren } from "@/types/common";
-import LazyComponent from "./LazyComponent";
+"use client";
 
-type ModalProviderProps = StrictPropsWithChildren;
+import LazyComponent from "@/shared/ui/Modal/ui/LazyComponent";
+import { Props } from "./types";
+import useModalStore from "@/shared/store/modalStore";
 
-const ModalProvider = ({ children }: ModalProviderProps) => {
+const ModalProvider = ({ children }: Props) => {
   const modalList = useModalStore(({ modalList }) => modalList);
 
   return (
