@@ -1,6 +1,6 @@
 import { ResponseError } from "@/types/api";
 import { UploadedFileEntity } from "@/types/api/upload";
-import axiosInstance from "@/utils/axios";
+import axiosInstance from "@/shared/helpers/axios";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 

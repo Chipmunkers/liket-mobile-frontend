@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import axiosInstance from "@/utils/axios";
+import axiosInstance from "@/shared/helpers/axios";
 import { SummaryContentEntity } from "@/types/api/culture-content";
 import { Genre } from "@/types/content";
 

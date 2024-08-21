@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import axiosInstance from "@/utils/axios";
+import axiosInstance from "@/shared/helpers/axios";
 import { UserEntity } from "../types/api/user";
 import { ResponseError } from "@/types/api";
 

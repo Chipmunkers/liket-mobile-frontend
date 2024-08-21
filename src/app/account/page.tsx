@@ -9,7 +9,7 @@ import { useLogout } from "@/service/login/hooks";
 import authStore from "@/stores/authStore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { setAuthToken } from "@/utils/axios";
+import { setAuthToken } from "@/shared/helpers/axios";
 import { useQueryClient } from "@tanstack/react-query";
 import profileStore from "@/stores/profileStore";
 import { PROVIDER_ICON } from "@/utils/const";

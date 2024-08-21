@@ -2,7 +2,7 @@ import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { LoginParam } from "./model";
 import queryOptions from "./options";
 import { AxiosError, AxiosResponse } from "axios";
-import axios from "@/utils/axios";
+import axios from "@/shared/helpers/axios";
 
 export const useLogin = (
   props: UseMutationOptions<

@@ -1,9 +1,9 @@
 import { HotContentEntity } from "@/types/api/culture-content";
-import customFetch from "@/utils/fetch";
 import { useQuery } from "@tanstack/react-query";
 import { AgeEntity, StyleEntity } from "@/types/api/tag";
 import { SummaryContentEntity } from "@/types/api/culture-content";
-import axiosInstance from "@/utils/axios";
+import axiosInstance from "@/shared/helpers/axios";
+import customFetch from "@/shared/helpers/fetch";
 
 export const getHotContentsForServer = async (): Promise<HotContentEntity[]> =>
   (

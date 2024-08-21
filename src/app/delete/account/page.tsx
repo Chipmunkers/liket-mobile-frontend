@@ -10,7 +10,7 @@ import { useDeleteAccount } from "@/service/delete";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { setAuthToken } from "@/utils/axios";
+import { setAuthToken } from "@/shared/helpers/axios";
 import authStore from "@/stores/authStore";
 import { useQueryClient } from "@tanstack/react-query";
 import customToast from "../../../utils/customToast";

@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Link from "next/link";
 import authStore from "@/stores/authStore";
-import { setAuthToken } from "@/utils/axios";
+import { setAuthToken } from "@/shared/helpers/axios";
 import customToast from "@/utils/customToast";
 import DefaultLoading from "@/components/Loading/DefaultLoading";
 import LeftOption from "@/components/Header/LeftOption";

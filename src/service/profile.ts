@@ -1,6 +1,6 @@
 import { ProfileStoreState } from "@/stores/profileStore";
 import { ResponseError } from "@/types/api";
-import axiosInstance from "@/utils/axios";
+import axiosInstance from "@/shared/helpers/axios";
 import {
   useMutation,
   UseMutationOptions,

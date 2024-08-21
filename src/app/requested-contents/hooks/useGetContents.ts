@@ -1,5 +1,5 @@
 import { ContentEntity } from "@/types/api/culture-content";
-import axiosInstance from "@/utils/axios";
+import axiosInstance from "@/shared/helpers/axios";
 import { skipToken, useInfiniteQuery } from "@tanstack/react-query";
 
 export const useGetContents = (idx: number | undefined) => {

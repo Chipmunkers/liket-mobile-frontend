@@ -1,6 +1,6 @@
 import { ResponseError } from "@/types/api";
 import { ContentEntity } from "@/types/api/culture-content";
-import axiosInstance from "@/utils/axios";
+import axiosInstance from "@/shared/helpers/axios";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 
 export const useGetContentDetail = (

@@ -8,7 +8,7 @@ import ProfileForm from "./_components/ProfileForm";
 import { useLocalSignup } from "@/service/signup/hooks";
 import authStore from "@/stores/authStore";
 import { ProfileFormData } from "@/types/signup";
-import { setAuthToken } from "@/utils/axios";
+import { setAuthToken } from "@/shared/helpers/axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AxiosError } from "axios";

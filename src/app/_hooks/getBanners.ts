@@ -1,5 +1,5 @@
+import customFetch from "@/shared/helpers/fetch";
 import { BannerListItem } from "@/types/banner";
-import customFetch from "@/utils/fetch";
 
 export const getBanners = async (): Promise<{
   bannerList: BannerListItem[];

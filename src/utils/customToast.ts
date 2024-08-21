@@ -8,6 +8,9 @@ const defaultStyle = {
   color: "#fff",
 };
 
+/**
+ * @deprecated
+ */
 const customToast = (message: string, duration?: number) =>
   toast(message, { style: defaultStyle, duration: duration || 2000 });
 

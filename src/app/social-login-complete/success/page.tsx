@@ -2,7 +2,7 @@
 
 import { useReIssueToken } from "@/service/login/hooks";
 import authStore from "@/stores/authStore";
-import { setAuthToken } from "@/utils/axios";
+import { setAuthToken } from "@/shared/helpers/axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";

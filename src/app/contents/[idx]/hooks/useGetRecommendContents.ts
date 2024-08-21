@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { SummaryContentEntity } from "@/types/api/culture-content";
-import axiosInstance from "@/utils/axios";
+import axiosInstance from "@/shared/helpers/axios";
 
 export const useGetRecommendContents = () =>
   useQuery({

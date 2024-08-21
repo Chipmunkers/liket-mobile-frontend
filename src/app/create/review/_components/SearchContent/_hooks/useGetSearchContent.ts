@@ -1,4 +1,4 @@
-import axiosInstance from "@/utils/axios";
+import axiosInstance from "@/shared/helpers/axios";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { SummaryContentEntity } from "@/types/api/culture-content";
 import { useEffect, useState } from "react";
