@@ -4,6 +4,9 @@ import { NextRouter } from "next/router";
 // 스크린: React Native 화면 단위
 // 페이지: Web 화면 단위
 
+/**
+ * @deprecated
+ */
 export const ScreenTYPE = {
   MAIN: "Main",
   SEARCH: "Search",
@@ -30,6 +33,9 @@ export const ScreenTYPE = {
   APPLE_LOGIN: "Apple Login",
 } as const;
 
+/**
+ * @deprecated
+ */
 export const WebViewEventType = {
   ROUTER_EVENT: "ROUTER_EVENT",
   NAV_BACK: "NAV_BACK",
@@ -39,6 +45,8 @@ export const WebViewEventType = {
 
 /**
  * 스택 라우팅 옵션
+ *
+ * @deprecated
  */
 export interface StackRouterPushOption {
   /**
@@ -77,6 +85,8 @@ export interface StackRouterPushOption {
 /**
  * 앱에서 띄운 웹뷰인지 판단하는 메서드
  * RN에서 WebView 컴포넌트의 onMessage가 undefined일 경우 window.ReactNativeWebView가 undefined임을 주의
+ *
+ * @deprecated
  */
 const isApp = () => {
   let isApp = false;
@@ -91,6 +101,7 @@ const isApp = () => {
 /**
  * React Native Router로 이벤트를 보내는 메서드
  *
+ * @deprecated
  * @param path 웹뷰 경로, back 일 경우 뒤로가기 액션이 실행됨
  * @param option
  */
@@ -115,6 +126,7 @@ const sendRouterEvent = <T extends "back" | string>(
  * 웹뷰: 스크린을 뒤로 이동시킴
  * 웹: 일반적인 라우팅
  *
+ * @deprecated
  * @param router useRouter 훅 인스턴스
  */
 export const stackRouterBack = (router: NextRouter | AppRouterInstance) => {
@@ -130,6 +142,7 @@ export const stackRouterBack = (router: NextRouter | AppRouterInstance) => {
  * 웹뷰: 스크린을 이동시키며 해당 스크린의 웹뷰로 입력한 path를 띄움
  * 웹: 일반적인 라우팅
  *
+ * @deprecated
  * @param router useRouter 훅 인스턴스
  * @param path 스크린에서 띄울 웹뷰의 화면 경로
  * @param option 스크린 이동에 대한 옵션

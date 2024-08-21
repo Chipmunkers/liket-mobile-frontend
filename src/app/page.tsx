@@ -6,7 +6,6 @@ import { getSoonOpenContentsForServer } from "./_hooks/getSoonOpenContents";
 import { getSoonEndContentsForServer } from "./_hooks/getSoonEndContents";
 import { getBanners } from "./_hooks/getBanners";
 import { getHotContentsForServer } from "./_hooks/getHotContents";
-import ReviewCard from "../components/Card/ReviewCard";
 import { getHotReview } from "./_hooks/getHotReviews";
 import HotPlaceSection from "./_ui/HotPlaceSection";
 import BottomTab from "@/widgets/common/BottomTab";
@@ -15,6 +14,7 @@ import { HeaderLeft, HeaderRight } from "@/shared/ui/Header";
 import Divider from "@/shared/ui/Divider";
 import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
 import MainBannerCarousel from "@/app/_ui/MainBannerCarousel";
+import ReviewCard from "@/entities/review/ReviewCard";
 
 const Home = async () => {
   const { contentList: soonOpenContents } =
