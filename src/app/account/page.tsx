@@ -2,7 +2,6 @@
 
 import LinkItem from "@/components/LinkItem";
 import { useLogout } from "@/service/login/hooks";
-import authStore from "@/stores/authStore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { setAuthToken } from "@/shared/helpers/axios";
@@ -15,6 +14,7 @@ import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import Divider from "@/shared/ui/Divider";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import authStore from "@/shared/store/authStore";
 
 export default function Page() {
   const router = useRouter();

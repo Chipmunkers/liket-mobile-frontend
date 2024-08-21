@@ -1,13 +1,11 @@
 "use client";
 
-import { Input, InputWrapper, Label } from "@/components/newInput";
 import { useLogin } from "@/service/login/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Link from "next/link";
-import authStore from "@/stores/authStore";
 import { setAuthToken } from "@/shared/helpers/axios";
 import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
@@ -16,6 +14,8 @@ import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import BottomButtonTab from "@/shared/ui/BottomButtonTab";
 import Button from "@/shared/ui/Button";
 import { DefaultLoading } from "@/shared/ui/Loading";
+import { BasicInput, InputLabel } from "@/shared/ui/Input";
+import authStore from "@/shared/store/authStore";
 
 const schema = z.object({
   email: z.string().email("올바른 이메일을 입력해주세요."),
@@ -92,25 +92,25 @@ export default function Page() {
       >
         <div className="px-[24px]">
           <div>
-            <InputWrapper margin="0 0 34px 0">
-              <Label htmlFor="email">이메일</Label>
-              <Input
+            <div className="mb-[48px]">
+              <InputLabel htmlFor="email">이메일</InputLabel>
+              <BasicInput
                 field="email"
                 placeholder="이메일 입력"
                 formState={formState}
                 register={register}
               />
-            </InputWrapper>
-            <InputWrapper margin="0 0 47px 0">
-              <Label htmlFor="pw">비밀번호</Label>
-              <Input
+            </div>
+            <div className="mb-[48px]">
+              <InputLabel htmlFor="pw">비밀번호</InputLabel>
+              <BasicInput
                 field="pw"
                 type="password"
                 placeholder="비밀번호 입력"
                 register={register}
                 formState={formState}
               />
-            </InputWrapper>
+            </div>
           </div>
           <div className="flex flex-row-reverse">
             <Link
@@ -133,7 +133,7 @@ export default function Page() {
           <Button
             disabled={!formState.isValid || status === "pending"}
             onClick={() => onSubmit()}
-            className="h-[48px]"
+            className="h-[48px] w-[100%]"
           >
             {status === "pending" ? <DefaultLoading dotSize="8px" /> : "로그인"}
           </Button>
