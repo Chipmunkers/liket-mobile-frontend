@@ -8,13 +8,13 @@ import { setAuthToken } from "@/shared/helpers/axios";
 import { useQueryClient } from "@tanstack/react-query";
 import { PROVIDER_ICON } from "@/utils/const";
 import { ButtonBase } from "@mui/material";
-import { useGetMyInfo } from "@/hooks/useGetMyInfo";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import Divider from "@/shared/ui/Divider";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import authStore from "@/shared/store/authStore";
 import customToast from "@/shared/helpers/customToast";
+import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
 
 export default function Page() {
   const router = useRouter();

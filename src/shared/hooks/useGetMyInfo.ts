@@ -1,11 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/shared/helpers/axios";
-import { UserEntity } from "../types/api/user";
 import { ResponseError } from "@/types/api";
+import { UserEntity } from "@/shared/types/api/user/UserEntity";
+
+export const USE_GET_MY_INFO_QUERY_KEY = "USE_GET_MY_INFO_QUERY_KEY";
 
 export const useGetMyInfo = () =>
   useQuery<UserEntity, ResponseError>({
-    queryKey: ["get-my-info-for-login"],
+    queryKey: [USE_GET_MY_INFO_QUERY_KEY],
     queryFn: async () => {
       const { data } = await axiosInstance.get("/apis/user/login");
 

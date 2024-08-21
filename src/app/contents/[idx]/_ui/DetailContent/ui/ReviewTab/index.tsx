@@ -4,24 +4,24 @@ import Divider from "@/components/Divider";
 import BottomArrowIcon from "@/icons/down-arrow-small.svg";
 import StarRating from "@/components/StarRating";
 import { useEffect, useState } from "react";
-import { ContentEntity } from "@/types/api/culture-content";
 import { useQueryClient } from "@tanstack/react-query";
-import { useGetReviewAllByContentIdx } from "../hooks/useGetReviewAllByContentIdx";
-import { useGetMyInfo } from "../../../../hooks/useGetMyInfo";
 import CustomDrawer from "@/components/CustomDrawer";
-import { useDeleteReview } from "../hooks/useDeleteReview";
-import customToast from "../../../../utils/customToast";
+import { useDeleteReview } from "./hooks/useDeleteReview";
 import { AxiosError } from "axios";
-import useMoveLoginPage from "../../../../hooks/useMoveLoginPage";
-import ReloadIcon from "../icon/review-reload.svg";
-import ReviewInfiniteScroll from "./ReviewInfiniteScroll";
-import EmptyReview from "./EmptyReview";
+import ReloadIcon from "./icon/review-reload.svg";
 import { ButtonBase } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
-import DefaultLoading from "../../../../components/Loading/DefaultLoading";
-import { classNames } from "../../../../utils/helpers";
+import { DefaultLoading } from "@/shared/ui/Loading";
+import { classNames } from "@/shared/helpers/classNames";
+import { ContentEntity } from "@/shared/types/api/content/ContentEntity";
+import customToast from "@/shared/helpers/customToast";
+import { useGetReviewAllByContentIdx } from "./hooks/useGetReviewAllByContentIdx";
+import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
+import EmptyReview from "./ui/EmptyReview";
+import useMoveLoginPage from "@/shared/hooks/useMoveLoginPage";
+import ReviewInfiniteScroll from "./ui/ReviewInfiniteScroll";
 
-const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
+const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
   const [isReviewMenuDrawerOpen, setIsReviewMenuDrawerOpen] = useState(false);
   const [selectReviewIdx, setSelectReviewIdx] = useState<number>();
 
@@ -209,4 +209,4 @@ const ContentReviewInfo = (props: { idx: string; content: ContentEntity }) => {
   );
 };
 
-export default ContentReviewInfo;
+export default ReviewTab;

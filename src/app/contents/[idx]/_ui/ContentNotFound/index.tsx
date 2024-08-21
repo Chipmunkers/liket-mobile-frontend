@@ -1,9 +1,9 @@
 "use client";
 
-import CustomScrollContainer from "@/components/CustomScrollContainer";
-import { useGetRecommendContents } from "../hooks/useGetRecommendContents";
-import { ContentCard } from "@/components/Card/ContentCard";
+import { useGetRecommendContents } from "./hooks/useGetRecommendContents";
 import Divider from "@/components/Divider";
+import ContentCardLarge from "@/entities/content/ContentCardLarge";
+import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
 
 const ContentNotFound = () => {
   const { data } = useGetRecommendContents();
@@ -23,7 +23,7 @@ const ContentNotFound = () => {
           </h2>
           <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
             {data.contentList.map((content, index) => {
-              return <ContentCard key={index} content={content} />;
+              return <ContentCardLarge key={index} content={content} />;
             })}
           </CustomScrollContainer>
         </section>

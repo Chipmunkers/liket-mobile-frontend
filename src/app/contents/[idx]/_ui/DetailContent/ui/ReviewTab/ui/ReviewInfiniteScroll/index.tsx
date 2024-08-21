@@ -1,21 +1,13 @@
 import StarRating from "@/components/StarRating";
 import Image from "next/image";
-import MenuIcon from "../icon/menu.svg";
+import MenuIcon from "./icon/menu.svg";
 import dayjs from "dayjs";
 import { Carousel } from "react-responsive-carousel";
-import ReviewLikeBtn from "./ReviewLikeBtn";
-import { ReviewEntity } from "@/types/api/review";
-import { UserEntity } from "@/types/api/user";
-import CustomImage from "../../../../components/CustomImage";
-import EmptyImage from "../../../../components/EmptyImage.tsx";
+import DefaultImg from "@/shared/ui/DefaultImg";
+import { Props } from "./types";
+import LikeReviewButton from "@/app/contents/[idx]/_ui/DetailContent/ui/ReviewTab/ui/ReviewInfiniteScroll/ui/LikeReviewButton";
 
-const ReviewInfiniteScroll = (props: {
-  reviewList: ReviewEntity[];
-  setIsReviewMenuDrawerOpen: (data: boolean) => void;
-  setSelectReviewIdx: (idx: number) => void;
-  loginUser?: UserEntity;
-  setTarget: (target: HTMLDivElement | null) => void;
-}) => {
+const ReviewInfiniteScroll = (props: Props) => {
   const {
     setIsReviewMenuDrawerOpen,
     setSelectReviewIdx,
@@ -44,7 +36,7 @@ const ReviewInfiniteScroll = (props: {
                 <div className="text-body2">{review.author.nickname}</div>
               </div>
               <div className="flex items-center">
-                <ReviewLikeBtn
+                <LikeReviewButton
                   likeCount={review.likeCount}
                   likeState={review.likeState}
                   idx={review.idx}
@@ -87,22 +79,7 @@ const ReviewInfiniteScroll = (props: {
                         aspectRatio: "1/1",
                       }}
                     >
-                      <CustomImage
-                        src={process.env.NEXT_PUBLIC_IMAGE_SERVER + imgPath}
-                        alt="리뷰 이미지"
-                        className="select-none object-cover"
-                        fallbackComponent={
-                          <EmptyImage width="100%" height="100%" />
-                        }
-                        fill
-                      />
-                      {/* <Image
-                        priority
-                        fill
-                        alt="리뷰 이미지"
-                        src={process.env.NEXT_PUBLIC_IMAGE_SERVER + imgPath}
-                        className="select-none object-cover"
-                      /> */}
+                      <DefaultImg src={imgPath} />
                     </div>
                   ))}
                 </Carousel>

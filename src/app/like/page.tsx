@@ -15,7 +15,7 @@ import ContentCardGroup from "@/components/ContentCardGroup";
 import { useQueryClient } from "@tanstack/react-query";
 import customToast from "@/utils/customToast";
 import ReloadIcon from "@/icons/reload.svg";
-import useMoveLoginPage from "../../hooks/useMoveLoginPage";
+import useMoveLoginPage from "../../shared/hooks/useMoveLoginPage";
 import { AxiosError } from "axios";
 import EmptyLike from "./components/EmptyLike";
 import DefaultLoading from "../../components/Loading/DefaultLoading";

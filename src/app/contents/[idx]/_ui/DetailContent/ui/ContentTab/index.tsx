@@ -1,10 +1,10 @@
-import Divider from "@/components/Divider";
-import { colors } from "@/utils/style";
 import RightArrowIcon from "@/icons/right-arrow.svg";
-import { ContentEntity } from "@/types/api/culture-content";
 import { CustomOverlayMap, Map, useKakaoLoader } from "react-kakao-maps-sdk";
+import { Props } from "./types";
+import Divider from "@/shared/ui/Divider";
+import { colors } from "@/shared/style/color";
 
-const ContentDetailInfo = (props: { content: ContentEntity }) => {
+const ContentTab = (props: Props) => {
   const [loading, error] = useKakaoLoader({
     appkey: process.env.NEXT_PUBLIC_MAP_API_KEY || "",
     retries: 2,
@@ -66,4 +66,4 @@ const ContentDetailInfo = (props: { content: ContentEntity }) => {
   );
 };
 
-export default ContentDetailInfo;
+export default ContentTab;

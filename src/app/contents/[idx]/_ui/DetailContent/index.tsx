@@ -1,6 +1,5 @@
 "use client";
 
-import { ContentEntity } from "@/types/api/culture-content";
 import Badge, { variantToText } from "@/components/Badge/Badge";
 import CategoryTab from "@/components/CategoryTab";
 import Divider from "@/components/Divider";
@@ -12,21 +11,20 @@ import EntranceFeeIcon from "@/icons/entrance-fee.svg";
 import dayjs from "dayjs";
 import { getStatus } from "@/utils/helpers";
 import ContentCarousel from "@/components/Carousel/ContentCarousel";
-import ContentLikeBtn from "@/components/ContentLikeBtn";
 import { useEffect, useState } from "react";
-import ContentDetailInfo from "./ContentDetailInfo";
-import ContentReviewInfo from "./ContentReviewInfo";
-import { useGetCultureContentByIdx } from "../hooks/useGetContentByIdx";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { Props } from "./types";
+import ContentTab from "@/app/contents/[idx]/_ui/DetailContent/ui/ContentTab";
+import LikeContentButton from "@/entities/content/LikeContentButton";
+import { useGetCultureContentByIdx } from "@/app/contents/[idx]/_ui/DetailContent/hooks/useGetContentByIdx";
+import ReviewTab from "@/app/contents/[idx]/_ui/DetailContent/ui/ReviewTab";
 
-const DetailContent = (props: { content: ContentEntity }) => {
+const DetailContent = (props: Props) => {
   const searchParams = useSearchParams();
 
   const [selectedTab, setSelectedTab] = useState<"content" | "review">(
     searchParams.get("tab") === "review" ? "review" : "content"
   );
-
-  const router = useRouter();
 
   const { data: content } = useGetCultureContentByIdx(
     props.content.idx,
@@ -64,7 +62,7 @@ const DetailContent = (props: { content: ContentEntity }) => {
                   .join("")}`}</div>
               </div>
             </div>
-            <ContentLikeBtn
+            <LikeContentButton
               likeState={content.likeState}
               idx={content.idx}
               likeCount={content.likeCount}
@@ -114,9 +112,9 @@ const DetailContent = (props: { content: ContentEntity }) => {
         }}
       />
       {selectedTab === "content" ? (
-        <ContentDetailInfo content={content} />
+        <ContentTab content={content} />
       ) : (
-        <ContentReviewInfo idx={content.idx.toString()} content={content} />
+        <ReviewTab idx={content.idx.toString()} content={content} />
       )}
     </main>
   );

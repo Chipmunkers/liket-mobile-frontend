@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import ArrowIcon from "../icon/review-arrow.svg";
+import ArrowIcon from "./icon/review-arrow.svg";
 import { useRouter } from "next/navigation";
-import { ScreenTYPE, stackRouterPush } from "../../../../utils/stackRouter";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { Props } from "./types";
 
-const EmptyReview = (props: { idx: number }) => {
+const EmptyReview = (props: Props) => {
   const router = useRouter();
 
   return (
@@ -22,7 +24,7 @@ const EmptyReview = (props: { idx: number }) => {
 
           stackRouterPush(router, {
             path: `/create/review?content=${props.idx}`,
-            screen: ScreenTYPE.CREATE_REVIEW,
+            screen: WEBVIEW_SCREEN.CREATE_REVIEW,
           });
         }}
       >

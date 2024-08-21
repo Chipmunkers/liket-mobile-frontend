@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { ContentEntity } from "@/types/api/culture-content";
 import axiosInstance from "@/shared/helpers/axios";
+import { ContentEntity } from "@/shared/types/api/content/ContentEntity";
 
 export const useGetCultureContentByIdx = (
   idx: number,

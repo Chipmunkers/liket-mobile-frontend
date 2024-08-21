@@ -1,16 +1,13 @@
 import ThumbIcon from "@/icons/thumb.svg";
 import EmptyThumbIcon from "@/icons/empty-thumb.svg";
 import { useEffect, useState } from "react";
-import { useLikeReview } from "../hooks/useLikeReview";
-import { useCancelLikeReview } from "../hooks/useCancelLikeReview";
+import { useLikeReview } from "./hooks/useLikeReview";
+import { useCancelLikeReview } from "./hooks/useCancelLikeReview";
 import { AxiosError } from "axios";
-import customToast from "../../../../utils/customToast";
+import { Props } from "./types";
+import customToast from "@/shared/helpers/customToast";
 
-const ReviewLikeBtn = (props: {
-  likeState: boolean;
-  likeCount: number;
-  idx: number;
-}) => {
+const LikeReviewButton = (props: Props) => {
   const [like, setLike] = useState(props.likeState);
   const [likeCount, setLikeCount] = useState(props.likeCount);
 
@@ -33,6 +30,7 @@ const ReviewLikeBtn = (props: {
       customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
     },
   });
+
   const { mutate: cancelLikeReviewApi } = useCancelLikeReview(props.idx, {
     onSuccess: () => {
       setLike(false);
@@ -70,4 +68,4 @@ const ReviewLikeBtn = (props: {
   );
 };
 
-export default ReviewLikeBtn;
+export default LikeReviewButton;
