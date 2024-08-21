@@ -1,6 +1,6 @@
-import { ContentEntity } from "@/types/api/culture-content";
 import axiosInstance from "@/shared/helpers/axios";
-import { skipToken, useInfiniteQuery } from "@tanstack/react-query";
+import { ContentEntity } from "@/shared/types/api/content/ContentEntity";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 export const useGetContents = (idx: number | undefined) => {
   const res = useInfiniteQuery({
