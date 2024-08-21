@@ -17,6 +17,7 @@ const DefaultImg = ({
   cover = true,
   width = "100%",
   height = "100%",
+  select = false,
   src,
   ...props
 }: Props) => {
@@ -52,6 +53,7 @@ const DefaultImg = ({
     >
       {!isErrorEmit && (
         <Image
+          className={classNames(!select ? "select-none" : "")}
           src={srcHost + src}
           onError={handleError}
           alt={alt}

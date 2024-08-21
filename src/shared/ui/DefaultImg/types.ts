@@ -43,6 +43,13 @@ export type DefaultProps = {
    * @default ""
    */
   alt?: string;
+
+  /**
+   * 이미지 선택 가능 여부
+   *
+   * @default false
+   */
+  select?: boolean;
 };
 
 export type PropsWithFallbackImg = DefaultProps & {
