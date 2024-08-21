@@ -1,5 +1,8 @@
 import { ContentEntity } from "./culture-content";
 
+/**
+ * @deprecated
+ */
 export interface ClusteredContentEntity {
   code: string;
   lng: number;
@@ -7,6 +10,9 @@ export interface ClusteredContentEntity {
   count: number;
 }
 
+/**
+ * @deprecated
+ */
 export interface MapContentEntity
   extends Pick<
     ContentEntity,

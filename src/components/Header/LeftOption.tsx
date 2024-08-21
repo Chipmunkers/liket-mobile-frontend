@@ -27,6 +27,9 @@ type LeftOptionProps = XOR<
   >
 >;
 
+/**
+ * @deprecated
+ */
 const LeftOption = ({
   logo,
   townName,

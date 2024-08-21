@@ -27,7 +27,9 @@ type RightOptionProps = XOR<
     };
   }
 >;
-
+/**
+ * @deprecated
+ */
 const RightOption = ({ text, option }: RightOptionProps) => {
   const router = useRouter();
 

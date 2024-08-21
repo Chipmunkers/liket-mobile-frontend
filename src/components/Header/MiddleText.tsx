@@ -1,7 +1,9 @@
 interface MiddleTextProps {
   text: string;
 }
-
+/**
+ * @deprecated
+ */
 const MiddleText = ({ text }: MiddleTextProps) => {
   return (
     <h1

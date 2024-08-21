@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { classNames } from "@/utils/helpers";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Filter from "@/icons/filter.svg";
-import Chip from "@/components/Chip";
 import { MapContentEntity } from "@/types/api/map";
 import { ButtonBase } from "@mui/material";
 import ContentCardMedium from "@/entities/content/ContentCardMedium";
@@ -15,12 +13,14 @@ import { GenreEntity } from "@/shared/types/api/tag/GenreEntity";
 import { AgeEntity } from "@/shared/types/api/tag/AgeEntity";
 import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
 import { MapFilter, SelectLocation } from "@/app/map/_types/types";
-import FilterDrawer from "@/app/map/_ui/FilterDrawer";
 import { Sido, SIDO_LIST } from "@/shared/consts/region/sido";
 import { Sigungu } from "@/shared/consts/region/sigungu";
+import { Header, HeaderLeft, HeaderRight } from "@/shared/ui/Header";
+import Chip from "@/shared/ui/Chip";
+import { classNames } from "@/shared/helpers/classNames";
+import FilterDrawer from "@/app/map/_ui/FilterDrawer";
 import LocationDrawer from "@/app/map/_ui/LocationDrawer";
 import KakaoMap from "@/app/map/_ui/KakaoMap";
-import { Header, HeaderLeft, HeaderRight } from "@/shared/ui/Header";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
