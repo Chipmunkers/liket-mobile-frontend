@@ -1,7 +1,6 @@
 import { MouseEvent } from "react";
-import { SharedUiProps, StrictPropsWithChildren } from "../../types/react";
-
-export type ButtonVariant = "primary" | "secondary" | "ghost";
+import { SharedUiProps, StrictPropsWithChildren } from "@/shared/types/react";
+import { Variant } from "@/shared/style/variant";
 
 export type Props = StrictPropsWithChildren<
   SharedUiProps<{
@@ -24,7 +23,7 @@ export type Props = StrictPropsWithChildren<
      *
      * @default primary
      */
-    variant?: ButtonVariant;
+    variant?: Variant;
 
     /**
      * 전체 넓이 여부

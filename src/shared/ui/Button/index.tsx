@@ -1,7 +1,7 @@
 import { ButtonBase } from "@mui/material";
-import { classNames } from "@/utils/helpers";
 import { Props } from "./types";
-import { DISABLE_STYLES, ENABLE_STYLES } from "./consts/styles";
+import { disabledVariantToStyle, variantToStyle } from "@/shared/style/variant";
+import { classNames } from "@/shared/helpers/classNames";
 
 const Button = ({
   type = "button",
@@ -18,7 +18,9 @@ const Button = ({
       disabled={disabled}
       className={classNames(
         "center text-button1 rounded-[28px]",
-        disabled ? `${DISABLE_STYLES[variant]}` : `${ENABLE_STYLES[variant]}`,
+        disabled
+          ? `${disabledVariantToStyle[variant]}`
+          : `${variantToStyle[variant]}`,
         fullWidth && "flex-1",
         className || ""
       )}
