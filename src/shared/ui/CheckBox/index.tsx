@@ -12,13 +12,15 @@ const CheckBox = ({
   onChange,
   readonly = false,
   labelClassName = "",
+  className = "",
 }: Props) => {
   return (
     <label
       className={classNames(
         "flex items-center ",
         size == "12px" ? "text-caption text-grey-04" : "text-body3 color-body3",
-        readonly ? "" : "cursor-pointer"
+        readonly ? "" : "cursor-pointer",
+        className
       )}
       style={{
         fontSize: size,

@@ -20,7 +20,6 @@ export const useGetDetailTos = ({
   tosIdx: number | undefined;
 }) => {
   return useQuery({
-    // TODO: skipToken으로 인한 타입 대응 못함. 추상화 필요.
     queryKey: [...queryOptions.queryKey, tosIdx],
     queryFn:
       typeof tosIdx === "number"

@@ -1,4 +1,6 @@
-export type Props = {
+import { SharedUiProps } from "@/shared/types/react";
+
+export type Props = SharedUiProps<{
   /**
    * 라벨 이름
    *
@@ -35,4 +37,4 @@ export type Props = {
    * @default ""
    */
   labelClassName?: string;
-};
+}>;

@@ -513,7 +513,6 @@ export default function Page() {
                 return (
                   <CheckBox
                     key={item}
-                    readonly
                     isChecked={isChecked}
                     size="12px"
                     label={item}
