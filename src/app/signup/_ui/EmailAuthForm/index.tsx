@@ -42,9 +42,9 @@ const EmailAuthForm = ({ updateForm }: Props) => {
 
   return (
     <>
-      <form className="flex flex-col grow pt-[16px] px-[24px]">
+      <form className="flex flex-col grow px-[24px]">
         <div className="grow">
-          <div className="mt-[34px]">
+          <div className="mt-[16px]">
             <InputLabel htmlFor="email">이메일</InputLabel>
             <BasicInput
               field="email"
@@ -61,7 +61,7 @@ const EmailAuthForm = ({ updateForm }: Props) => {
             />
           </div>
           {isSendAuthCode ? (
-            <div className="mt-[47px] relative">
+            <div className="mt-[34px] relative">
               <InputLabel htmlFor="token">인증번호</InputLabel>
               <BasicInput
                 field="token"
