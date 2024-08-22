@@ -14,7 +14,7 @@ import { useLocalSignUp } from "./_hooks/useLocalSignUp";
 import EmailAuthForm from "./_ui/EmailAuthForm";
 import { INITIAL_FORM_STATE } from "./_const/initialForm";
 import { ProfileFormData, UpdateFormFunc } from "./types";
-import ProfileForm from "@/app/signup/_ui/ProfileForm";
+import ProfileForm from "./_ui/ProfileForm";
 import customToast from "@/shared/helpers/customToast";
 
 const SignUpPage = () => {
