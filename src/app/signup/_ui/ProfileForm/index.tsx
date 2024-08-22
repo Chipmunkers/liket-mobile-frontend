@@ -13,6 +13,8 @@ import { DefaultLoading } from "@/shared/ui/Loading";
 import Drawer from "@/shared/ui/Drawer";
 import { Props } from "./types";
 import { profileSchema } from "./schema";
+import ProfileImgUploader from "@/shared/ui/ProfileImgUploader";
+import { compressImage } from "@/shared/helpers/compressImage";
 
 const ProfileForm = ({
   currentFormInformation = PROFILE_FORM_DEFAULT_VALUES,
@@ -57,20 +59,11 @@ const ProfileForm = ({
       <form className="flex flex-col grow px-[24px]">
         <div className="grow">
           <div className="center mb-[34px]">
-            {/* <AvatarUploader
-              defaultAvatar={
-                currentFormInformation.file
-                  ? process.env.NEXT_PUBLIC_IMAGE_SERVER +
-                    currentFormInformation.file
-                  : ""
+            <ProfileImgUploader
+              onUpload={async (file) =>
+                setUploadedImageFile(await compressImage(file))
               }
-              onUploadImage={(file, base64String) => {
-                if (!file) return;
-
-                setValue("file", base64String);
-                setUploadedImageFile(file);
-              }}
-            /> */}
+            />
           </div>
           <div className="mt-[16px]">
             <InputLabel htmlFor="email" required>

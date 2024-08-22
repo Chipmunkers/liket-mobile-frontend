@@ -20,7 +20,7 @@ import ProfileForm from "@/app/signup/_ui/ProfileForm";
 const SignUpPage = () => {
   const router = useRouter();
   const [formInformation, setFormInformation] = useState(INITIAL_FORM_STATE);
-  const [formIndex, setFormIndex] = useState(0);
+  const [formIndex, setFormIndex] = useState(2);
   const updateForm: UpdateFormFunc = (insertedFormData) => {
     setFormInformation({ ...formInformation, ...insertedFormData });
     setFormIndex(formIndex + 1);
