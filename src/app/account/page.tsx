@@ -1,12 +1,10 @@
 "use client";
 
-import LinkItem from "@/components/LinkItem";
 import { useLogout } from "@/service/login/hooks";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { setAuthToken } from "@/shared/helpers/axios";
 import { useQueryClient } from "@tanstack/react-query";
-import { PROVIDER_ICON } from "@/utils/const";
 import { ButtonBase } from "@mui/material";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import Divider from "@/shared/ui/Divider";
@@ -15,11 +13,15 @@ import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import authStore from "@/shared/store/authStore";
 import customToast from "@/shared/helpers/customToast";
 import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
+import LinkItem from "@/shared/ui/Link/LinkItem";
+import Kakao from "@/shared/icon/user/kakao.svg";
+import Naver from "@/shared/icon/user/naver.svg";
+import Apple from "@/shared/icon/user/apple.svg";
+import { SOCIAL_PROVIDER } from "@/shared/consts/user/social";
 
 export default function Page() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data } = useGetMyInfo();
   const { mutate } = useLogout({
     onSuccess: () => {
       setAuthToken("");
@@ -38,11 +40,11 @@ export default function Page() {
   const setToken = authStore(({ setToken }) => setToken);
   const handleClickLogout = () => mutate();
 
-  if (!data) {
+  const { data: user } = useGetMyInfo();
+
+  if (!user) {
     return <></>;
   }
-
-  const { provider, email } = data;
 
   return (
     <>
@@ -54,8 +56,10 @@ export default function Page() {
         <div className="mt-[16px] px-[24px]">
           <div className="text-caption text-grey-04">이메일</div>
           <div className="flex h-[48px] w-[100%] items-center justify-between">
-            <div className="ml-[8px] text-body3">{email}</div>
-            {PROVIDER_ICON[provider]}
+            <div className="ml-[8px] text-body3">{user.email}</div>
+            {user.provider === SOCIAL_PROVIDER.KAKAO && <Kakao />}
+            {user.provider === SOCIAL_PROVIDER.APPLE && <Apple />}
+            {user.provider === SOCIAL_PROVIDER.NAVER && <Naver />}
           </div>
         </div>
         <Divider width="100%" height="8px" margin="16px 0 0 0" />
@@ -67,7 +71,12 @@ export default function Page() {
             });
           }}
         >
-          <LinkItem href="/mypage/edit/password">비밀번호 변경</LinkItem>
+          <LinkItem
+            screen={WEBVIEW_SCREEN.EDIT_MY_PASSWORD}
+            href="/mypage/edit/password"
+          >
+            비밀번호 변경
+          </LinkItem>
         </ButtonBase>
 
         <ButtonBase

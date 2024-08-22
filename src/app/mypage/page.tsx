@@ -1,7 +1,6 @@
 "use client";
 
 import RightArrow from "@/icons/right-arrow.svg";
-import profileStore from "@/stores/profileStore";
 import { ButtonBase } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -23,11 +22,8 @@ import { DefaultLoading } from "@/shared/ui/Loading";
 
 export default function Page() {
   const router = useRouter();
-  const setProfile = profileStore(({ setProfile }) => setProfile);
   const { data, error } = useGetMyInfo({
-    onSuccess: (data) => {
-      setProfile(data);
-    },
+    onSuccess: (data) => {},
   });
 
   const [profileImgPath, setProfileImgPath] = useState(
