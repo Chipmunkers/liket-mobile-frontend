@@ -1,6 +1,5 @@
 "use client";
 
-import Badge, { variantToText } from "@/components/Badge/Badge";
 import CategoryTab from "@/components/CategoryTab";
 import Divider from "@/components/Divider";
 import Link from "next/link";
@@ -9,15 +8,17 @@ import ReservationIcon from "@/icons/reservation.svg";
 import PetIcon from "@/icons/pet.svg";
 import EntranceFeeIcon from "@/icons/entrance-fee.svg";
 import dayjs from "dayjs";
-import { getStatus } from "@/utils/helpers";
 import ContentCarousel from "@/components/Carousel/ContentCarousel";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Props } from "./types";
-import ContentTab from "@/app/contents/[idx]/_ui/DetailContent/ui/ContentTab";
+import ContentTab from "./ui/ContentTab";
 import LikeContentButton from "@/entities/content/LikeContentButton";
-import { useGetCultureContentByIdx } from "@/app/contents/[idx]/_ui/DetailContent/hooks/useGetContentByIdx";
-import ReviewTab from "@/app/contents/[idx]/_ui/DetailContent/ui/ReviewTab";
+import { useGetCultureContentByIdx } from "./hooks/useGetContentByIdx";
+import ReviewTab from "./ui/ReviewTab";
+import { getStatus } from "@/shared/helpers/getStatus";
+import { CONTENT_STATES } from "@/shared/consts/content/state";
+import Badge from "@/shared/ui/Badge";
 
 const DetailContent = (props: Props) => {
   const searchParams = useSearchParams();
@@ -41,13 +42,13 @@ const DetailContent = (props: Props) => {
       <div className="px-[24px] py-[24px]">
         <div className="flex items-center">
           <Badge
-            variant={getStatus(content.startDate, content.endDate)}
-            style={{ marginRight: "9px" }}
+            state={getStatus(content.startDate, content.endDate)}
+            className="mr-[9px]"
           >
-            {variantToText[getStatus(content.startDate, content.endDate)]}
+            {CONTENT_STATES[getStatus(content.startDate, content.endDate)].name}
           </Badge>
           {content.likeCount >= 5 ? (
-            <Badge variant={"hotplace"}>{variantToText["hotplace"]}</Badge>
+            <Badge state={"hotplace"}>{CONTENT_STATES["hotplace"].name}</Badge>
           ) : null}
         </div>
         <div className="mt-[16px]">

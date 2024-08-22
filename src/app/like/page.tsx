@@ -6,7 +6,6 @@ import { ButtonBase } from "@mui/material";
 import { Genre } from "@/types/content";
 import { useGetLikeContent } from "./_hooks/useGetLikeContent";
 import { useQueryClient } from "@tanstack/react-query";
-import customToast from "@/utils/customToast";
 import ReloadIcon from "@/icons/reload.svg";
 import useMoveLoginPage from "@/shared/hooks/useMoveLoginPage";
 import { AxiosError } from "axios";
@@ -19,6 +18,7 @@ import CheckBox from "@/shared/ui/CheckBox";
 import ContentCardGroup from "@/widgets/content/ContentInfiniteGroup";
 import Drawer from "@/shared/ui/Drawer";
 import { GENRES } from "@/shared/consts/content/genre";
+import customToast from "@/shared/helpers/customToast";
 
 export default function Page() {
   const [isGenreDrawerOpen, setIsGenreDrawerOpen] = useState(false);
