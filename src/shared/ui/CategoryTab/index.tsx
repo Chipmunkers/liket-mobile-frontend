@@ -1,4 +1,3 @@
-import { CSSProperties, Dispatch, MouseEvent, SetStateAction } from "react";
 import { Props } from "./types";
 import { classNames } from "@/shared/helpers/classNames";
 
