@@ -36,7 +36,7 @@ const ContentCardSection = (props: Props) => {
       <h2 className="pl-[24px] mb-[8px]">
         <div className="bg-grey-01 rounded-[4px] w-[258px] h-[24px]"></div>
       </h2>
-      <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] touch-action-none [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
+      <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden w-[100%] touch-action-none [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
         {Array(5)
           .fill(0)
           .map((elem, i) => (
