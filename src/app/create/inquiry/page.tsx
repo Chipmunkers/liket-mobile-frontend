@@ -14,7 +14,6 @@ import SmallDownArrow from "@/icons/down-arrow-small.svg";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useUploadInquiryImages } from "./hooks/useUploadImages";
-import CustomDrawer from "@/components/CustomDrawer";
 import {
   Header,
   HeaderLeft,
@@ -25,6 +24,7 @@ import { BasicInput, InputLabel } from "@/shared/ui/Input";
 import { INQUIRY_TYPES } from "@/shared/consts/inquiry/type";
 import { classNames } from "@/shared/helpers/classNames";
 import SelectButtonMedium from "@/shared/ui/SelectButton/SelectButtonMedium";
+import Drawer from "@/shared/ui/Drawer";
 
 const MAX_IMAGES_COUNT = 10;
 
@@ -233,7 +233,7 @@ export default function Page() {
         control={control}
         render={({ field }) => {
           return (
-            <CustomDrawer
+            <Drawer
               open={isTypeSelectionModalOpen}
               onClose={() => setIsTypeSelectionModalOpen(false)}
             >
@@ -261,7 +261,7 @@ export default function Page() {
                   );
                 })}
               </ul>
-            </CustomDrawer>
+            </Drawer>
           );
         }}
       />

@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import SearchHeader from "@/components/SearchHeader";
 import { useGetSearchContents } from "./_hooks/useGetSearchContent";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 import { SetState } from "@/shared/types/react";
 import ContentCardGroup from "@/widgets/content/ContentInfiniteGroup";
+import SearchHeader from "@/shared/ui/SearchHeader";
 
 interface Props {
   setSelectedContent: SetState<SummaryContentEntity | undefined>;

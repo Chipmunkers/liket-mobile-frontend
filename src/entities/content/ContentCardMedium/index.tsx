@@ -1,14 +1,15 @@
 "user client";
 
 import Link from "next/link";
-import Badge from "@/components/Badge/Badge";
 import dayjs from "dayjs";
-import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
 import { useRouter } from "next/navigation";
 import { Props } from "./types";
 import DefaultImg from "@/shared/ui/DefaultImg";
 import LikeContentButton from "@/entities/content/LikeContentButton";
 import { classNames } from "@/shared/helpers/classNames";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import Badge from "@/shared/ui/Badge";
 
 const ContentCardMedium = ({ content, onClick, className }: Props) => {
   const router = useRouter();
@@ -27,7 +28,7 @@ const ContentCardMedium = ({ content, onClick, className }: Props) => {
 
           stackRouterPush(router, {
             path: `/contents/${content.idx}`,
-            screen: ScreenTYPE.CONTENT_DETAIL,
+            screen: WEBVIEW_SCREEN.CONTENT_DETAIL,
           });
         }}
       >
@@ -35,7 +36,7 @@ const ContentCardMedium = ({ content, onClick, className }: Props) => {
           <DefaultImg src={content.thumbnail} />
         </div>
         <div>
-          <Badge variant={"active"}>진행중</Badge>
+          <Badge state={"active"}>진행중</Badge>
           <div className="text-body4 text-skyblue-01">{content.genre.name}</div>
           <h2 className="text-body2">{content.title}</h2>
           <div className="text-body5 text-grey-04">

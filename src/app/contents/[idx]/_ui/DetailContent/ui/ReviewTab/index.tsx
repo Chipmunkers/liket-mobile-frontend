@@ -1,11 +1,8 @@
 "use client";
 
-import Divider from "@/components/Divider";
 import BottomArrowIcon from "@/icons/down-arrow-small.svg";
-import StarRating from "@/components/StarRating";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import CustomDrawer from "@/components/CustomDrawer";
 import { useDeleteReview } from "./hooks/useDeleteReview";
 import { AxiosError } from "axios";
 import ReloadIcon from "./icon/review-reload.svg";
@@ -20,6 +17,9 @@ import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
 import EmptyReview from "./ui/EmptyReview";
 import useMoveLoginPage from "@/shared/hooks/useMoveLoginPage";
 import ReviewInfiniteScroll from "./ui/ReviewInfiniteScroll";
+import StarRating from "@/entities/review/StarRating";
+import Divider from "@/shared/ui/Divider";
+import Drawer from "@/shared/ui/Drawer";
 
 const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
   const [isReviewMenuDrawerOpen, setIsReviewMenuDrawerOpen] = useState(false);
@@ -176,7 +176,7 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
           </button>
         </div>
       )}
-      <CustomDrawer
+      <Drawer
         open={isReviewMenuDrawerOpen}
         onClose={() => setIsReviewMenuDrawerOpen(false)}
       >
@@ -204,7 +204,7 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
             삭제
           </ButtonBase>
         </li>
-      </CustomDrawer>
+      </Drawer>
     </>
   );
 };

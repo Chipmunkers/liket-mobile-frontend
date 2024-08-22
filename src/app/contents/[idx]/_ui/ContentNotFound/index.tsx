@@ -1,9 +1,9 @@
 "use client";
 
 import { useGetRecommendContents } from "./hooks/useGetRecommendContents";
-import Divider from "@/components/Divider";
 import ContentCardLarge from "@/entities/content/ContentCardLarge";
 import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
+import Divider from "@/shared/ui/Divider";
 
 const ContentNotFound = () => {
   const { data } = useGetRecommendContents();
