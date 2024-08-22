@@ -5,7 +5,6 @@ import { classNames } from "@/shared/helpers/classNames";
 import PlusIcon from "./icon/PlusIcon.svg";
 import DefaultProfileIcon from "@/shared/icon/user/DefaultProfileIcon.svg";
 import Image from "next/image";
-import { compressImage } from "@/shared/helpers/compressImage";
 
 const ProfileImgUploader = ({ onUpload, upload, className = "" }: Props) => {
   const [ImgSrc, setImgSrc] = useState<string>();
