@@ -1,6 +1,5 @@
 "use client";
 
-import LinkItem from "@/components/LinkItem";
 import RightArrow from "@/icons/right-arrow.svg";
 import { useMyPage } from "@/service/profile";
 import profileStore from "@/stores/profileStore";
@@ -22,6 +21,7 @@ import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { compressImage } from "@/shared/helpers/compressImage";
 import DefaultImg from "@/shared/ui/DefaultImg";
 import Divider from "@/shared/ui/Divider";
+import LinkItem from "@/shared/ui/Link/LinkItem";
 
 export default function Page() {
   const router = useRouter();
@@ -308,7 +308,9 @@ export default function Page() {
             });
           }}
         >
-          <LinkItem href="/account">계정 관리</LinkItem>
+          <LinkItem screen={WEBVIEW_SCREEN.ACCOUNT} href="/account">
+            계정 관리
+          </LinkItem>
         </ButtonBase>
         <Divider width="100%" height="8px" />
         <ButtonBase
@@ -319,7 +321,12 @@ export default function Page() {
             });
           }}
         >
-          <LinkItem href="/requested-contents">컨텐츠 등록 요청</LinkItem>
+          <LinkItem
+            screen={WEBVIEW_SCREEN.MY_REQUEST_CONTENT}
+            href="/requested-contents"
+          >
+            컨텐츠 등록 요청
+          </LinkItem>
         </ButtonBase>
         <ButtonBase
           onClick={() => {
@@ -329,7 +336,9 @@ export default function Page() {
             });
           }}
         >
-          <LinkItem href="/inquires">1:1문의</LinkItem>
+          <LinkItem screen={WEBVIEW_SCREEN.MY_INQUIRY} href="/inquires">
+            1:1문의
+          </LinkItem>
         </ButtonBase>
         <Divider width="100%" height="8px" />
         <ButtonBase
@@ -340,7 +349,9 @@ export default function Page() {
             });
           }}
         >
-          <LinkItem href="/terms">약관/정책</LinkItem>
+          <LinkItem screen={WEBVIEW_SCREEN.TERMS_LIST} href="/terms">
+            약관/정책
+          </LinkItem>
         </ButtonBase>
         <div className="flex justify-between items-center w-[100%] h-[48px] px-[24px]">
           <div className="text-h2">버전</div>
