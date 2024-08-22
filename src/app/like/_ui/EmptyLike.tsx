@@ -1,9 +1,9 @@
 "use client";
 
+import Divider from "@/shared/ui/Divider";
 import { useGetRecommendContents } from "../hooks/useGetRecommendContents";
-import Divider from "@/components/Divider";
-import { ContentCard } from "@/components/Card/ContentCard";
-import CustomScrollContainer from "@/components/CustomScrollContainer";
+import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
+import ContentCardLarge from "@/entities/content/ContentCardLarge";
 
 const EmptyLike = () => {
   const { data } = useGetRecommendContents();
@@ -25,7 +25,7 @@ const EmptyLike = () => {
           </h2>
           <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
             {data.contentList.map((content, index) => {
-              return <ContentCard key={index} content={content} />;
+              return <ContentCardLarge key={index} content={content} />;
             })}
           </CustomScrollContainer>
         </section>

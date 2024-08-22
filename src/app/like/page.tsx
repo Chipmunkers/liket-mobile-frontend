@@ -1,28 +1,24 @@
 "use client";
 
-import DevIng from "@/components/DevIng";
-import Header from "@/components/Header";
-import SmallSelectButton from "@/components/SelectButton/SmallSelectButton";
 import SmallDownArrow from "@/icons/down-arrow-small.svg";
-import CustomDrawer from "@/components/CustomDrawer";
 import { useEffect, useState } from "react";
 import { genres } from "@/../public/data/genre";
 import { ButtonBase } from "@mui/material";
 import { Genre } from "@/types/content";
-import Checkbox from "@/components/Checkbox";
 import { useGetLikeContent } from "./hooks/useGetLikeContent";
-import ContentCardGroup from "@/components/ContentCardGroup";
 import { useQueryClient } from "@tanstack/react-query";
 import customToast from "@/utils/customToast";
 import ReloadIcon from "@/icons/reload.svg";
 import useMoveLoginPage from "../../shared/hooks/useMoveLoginPage";
 import { AxiosError } from "axios";
-import EmptyLike from "./components/EmptyLike";
-import DefaultLoading from "../../components/Loading/DefaultLoading";
-import RightOption from "@/components/Header/RightOption";
-import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
-import { classNames } from "@/utils/helpers";
+import EmptyLike from "./_ui/EmptyLike";
+import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
+import { SelectButtonSmall } from "@/shared/ui/SelectButton";
+import { classNames } from "@/shared/helpers/classNames";
+import { DefaultLoading } from "@/shared/ui/Loading";
+import CheckBox from "@/shared/ui/CheckBox";
+import ContentCardGroup from "@/widgets/content/ContentInfiniteGroup";
+import Drawer from "@/shared/ui/Drawer";
 
 export default function Page() {
   const [isGenreDrawerOpen, setIsGenreDrawerOpen] = useState(false);
@@ -96,12 +92,12 @@ export default function Page() {
   return (
     <>
       <Header>
-        <LeftOption option={{ back: true }} />
-        <MiddleText text="좋아요" />
+        <HeaderLeft option={{ back: true }} />
+        <HeaderMiddle text="좋아요" />
       </Header>
       <main className="flex flex-col items-center">
         <div className="flex justify-between h-[40px] w-[100%] items-center px-[24px]">
-          <SmallSelectButton
+          <SelectButtonSmall
             placeholder="장르"
             text={contentPagerble?.genre?.name || ""}
             onClick={() => setIsGenreDrawerOpen(true)}
@@ -116,7 +112,7 @@ export default function Page() {
             }
           />
           <div>
-            <Checkbox
+            <CheckBox
               label="진행중인 컨텐츠만 보기"
               size="12px"
               isChecked={contentPagerble.onlyopen}
@@ -154,7 +150,7 @@ export default function Page() {
           </div>
         )}
       </main>
-      <CustomDrawer
+      <Drawer
         open={isGenreDrawerOpen}
         onClose={() => setIsGenreDrawerOpen(false)}
       >
@@ -189,7 +185,7 @@ export default function Page() {
             </li>
           );
         })}
-      </CustomDrawer>
+      </Drawer>
     </>
   );
 }
