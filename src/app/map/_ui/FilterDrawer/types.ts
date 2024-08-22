@@ -1,8 +1,8 @@
 import { MapFilter } from "@/app/map/_types/types";
 import { AgeEntity } from "@/shared/types/api/tag/AgeEntity";
 import { GenreEntity } from "@/shared/types/api/tag/GenreEntity";
-import { StyleEntity } from "@/types/api/tag";
-import { SetState } from "@/types/react";
+import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
+import { SetState } from "@/shared/types/react";
 
 export type Props = {
   isOpen: boolean;

@@ -1,16 +1,13 @@
 "use client";
 
-import LeftOption from "@/components/Header/LeftOption";
 import { Props } from "./types";
 import { useRouter } from "next/navigation";
-import MiddleText from "@/components/Header/MiddleText";
 import { GENRES } from "@/shared/consts/content/genre";
 import Chip from "@/shared/ui/Chip";
 import { AGES } from "@/shared/consts/content/age";
 import customToast from "@/shared/helpers/customToast";
 import { STYLES } from "@/shared/consts/content/style";
 import BottomButtonTabWrapper from "@/shared/ui/BottomButtonTabWrapper";
-import ButtonGroup from "@/components/ButtonGroup";
 import Button from "@/shared/ui/Button";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 

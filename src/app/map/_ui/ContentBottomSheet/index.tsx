@@ -2,12 +2,12 @@
 
 import ContentCardMedium from "@/entities/content/ContentCardMedium";
 import { Props } from "./types";
-import CustomBottomSheet from "@/components/BottomSheet";
+import CustomBottomSheet from "@/shared/ui/BottomSheet";
 
 const ContentBottomSheet = ({ contentList }: Props) => {
   return (
     <CustomBottomSheet
-      open={true}
+      isOpen={true}
       defaultSnap={20}
       snapPoints={({ maxHeight }) => [
         20,

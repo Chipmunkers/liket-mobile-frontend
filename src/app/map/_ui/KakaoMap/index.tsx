@@ -8,18 +8,19 @@ import {
 } from "react";
 import { CustomOverlayMap, Map, useKakaoLoader } from "react-kakao-maps-sdk";
 import axiosInstance from "@/shared/helpers/axios";
-import { ClusteredContentEntity, MapContentEntity } from "@/types/api/map";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { GenreEntity } from "@/shared/types/api/tag/GenreEntity";
 import { AgeEntity } from "@/shared/types/api/tag/AgeEntity";
 import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
-import { generateMapFilterQuerystring } from "@/app/map/_util/generateMapFilterQuerystring";
+import { generateMapFilterQuerystring } from "../../_util/generateMapFilterQuerystring";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { getMapInfo } from "@/app/map/_util/getMapInfo";
 import { classNames } from "@/shared/helpers/classNames";
 import useModalStore from "@/shared/store/modalStore";
+import { MapContentEntity } from "@/shared/types/api/map/MapContentEntity";
+import { ClusteredContentEntity } from "@/shared/types/api/map/ClusteredContentEntity";
 
 const KakaoMap = ({
   children,

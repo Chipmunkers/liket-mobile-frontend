@@ -1,4 +1,4 @@
-import { SelectLocation } from "@/app/map/_types/types";
+import { SelectLocation } from "../../_types/types";
 import { Sido } from "@/shared/consts/region/sido";
 import { Sigungu } from "@/shared/consts/region/sigungu";
 import { SetState } from "@/shared/types/react";
