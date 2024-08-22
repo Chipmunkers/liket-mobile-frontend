@@ -1,6 +1,5 @@
 "use client";
 
-import EmailForm from "./_ui/EmailForm";
 import PasswordForm from "./_ui/PasswordForm";
 import ProfileForm from "./_ui/ProfileForm";
 import { ProfileFormData } from "@/types/signup";
@@ -15,22 +14,15 @@ import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import PageController from "@/shared/ui/PageController";
 import { useLocalSignUp } from "./_hooks/useLocalSignUp";
-
-const INITIAL_FORM_STATE = {
-  emailToken: "",
-  email: "",
-  pw: "",
-  nickname: "",
-  gender: "",
-  birth: "",
-  file: "",
-};
+import EmailAuthForm from "./_ui/EmailAuthForm";
+import { INITIAL_FORM_STATE } from "./_const/initialForm";
+import { UpdateFormFunc } from "@/app/signup/types";
 
 const SignUpPage = () => {
   const router = useRouter();
   const [formInformation, setFormInformation] = useState(INITIAL_FORM_STATE);
   const [formIndex, setFormIndex] = useState(0);
-  const updateForm = (insertedFormData: Partial<typeof INITIAL_FORM_STATE>) => {
+  const updateForm: UpdateFormFunc = (insertedFormData) => {
     setFormInformation({ ...formInformation, ...insertedFormData });
     setFormIndex(formIndex + 1);
   };
@@ -107,7 +99,7 @@ const SignUpPage = () => {
             );
           })}
         </div>
-        {formIndex === 0 && <EmailForm updateForm={updateForm} />}
+        {formIndex === 0 && <EmailAuthForm updateForm={updateForm} />}
         {formIndex === 1 && (
           <PasswordForm
             isResetForm={false}

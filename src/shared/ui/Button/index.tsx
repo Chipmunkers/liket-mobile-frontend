@@ -11,6 +11,7 @@ const Button = ({
   children,
   onClick,
   className,
+  style = {},
 }: Props) => {
   return (
     <ButtonBase
@@ -25,6 +26,7 @@ const Button = ({
         className || ""
       )}
       onClick={(e) => onClick && onClick(e)}
+      style={style}
     >
       {children}
     </ButtonBase>

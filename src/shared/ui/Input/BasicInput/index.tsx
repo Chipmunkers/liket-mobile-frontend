@@ -1,6 +1,7 @@
 import { classNames } from "@/shared/helpers/classNames";
 import { FieldValues } from "react-hook-form";
 import { Props } from "./types";
+import Button from "@/shared/ui/Button";
 
 const BasicInput = <T extends FieldValues>({
   field,
@@ -8,13 +9,18 @@ const BasicInput = <T extends FieldValues>({
   required,
   onChange,
   register,
+  className = "",
+  buttonText,
+  buttonOnClick,
+  buttonClassName = "",
+  buttonDisabled = false,
   ...props
 }: Props<T>) => {
   const errors = formState?.errors;
   const isErrorExist = errors?.[field]?.message ? true : false;
 
   return (
-    <div className="relative">
+    <div className={classNames("relative", className)}>
       <input
         aria-invalid={!!isErrorExist}
         aria-required={!!required}
@@ -39,6 +45,20 @@ const BasicInput = <T extends FieldValues>({
         >
           {errors[field]?.message?.toString()}
         </strong>
+      )}
+      {buttonText && (
+        <Button
+          variant={buttonDisabled ? "secondary" : "ghost"}
+          className={classNames(
+            "text-button4 absolute right-0 top-[50%] translate-y-[-50%] px-[8px] ",
+            buttonClassName
+          )}
+          disabled={buttonDisabled}
+          style={{ paddingTop: "2px", paddingBottom: "0px" }}
+          onClick={buttonOnClick}
+        >
+          {buttonText}
+        </Button>
       )}
     </div>
   );
