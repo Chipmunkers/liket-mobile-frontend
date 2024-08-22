@@ -5,7 +5,6 @@ import { setAuthToken } from "@/shared/helpers/axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AxiosError } from "axios";
-import customToast from "../../utils/customToast";
 import authStore from "@/shared/store/authStore";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
@@ -16,11 +15,12 @@ import EmailAuthForm from "./_ui/EmailAuthForm";
 import { INITIAL_FORM_STATE } from "./_const/initialForm";
 import { ProfileFormData, UpdateFormFunc } from "./types";
 import ProfileForm from "@/app/signup/_ui/ProfileForm";
+import customToast from "@/shared/helpers/customToast";
 
 const SignUpPage = () => {
   const router = useRouter();
   const [formInformation, setFormInformation] = useState(INITIAL_FORM_STATE);
-  const [formIndex, setFormIndex] = useState(2);
+  const [formIndex, setFormIndex] = useState(0);
   const updateForm: UpdateFormFunc = (insertedFormData) => {
     setFormInformation({ ...formInformation, ...insertedFormData });
     setFormIndex(formIndex + 1);
