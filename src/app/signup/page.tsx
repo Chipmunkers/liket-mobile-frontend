@@ -1,8 +1,6 @@
 "use client";
 
 import PasswordForm from "./_ui/PasswordForm";
-import ProfileForm from "./_ui/ProfileForm";
-import { ProfileFormData } from "@/types/signup";
 import { setAuthToken } from "@/shared/helpers/axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -16,7 +14,8 @@ import PageController from "@/shared/ui/PageController";
 import { useLocalSignUp } from "./_hooks/useLocalSignUp";
 import EmailAuthForm from "./_ui/EmailAuthForm";
 import { INITIAL_FORM_STATE } from "./_const/initialForm";
-import { UpdateFormFunc } from "@/app/signup/types";
+import { ProfileFormData, UpdateFormFunc } from "./types";
+import ProfileForm from "@/app/signup/_ui/ProfileForm";
 
 const SignUpPage = () => {
   const router = useRouter();
