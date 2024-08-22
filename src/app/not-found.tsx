@@ -1,15 +1,11 @@
 "use client";
 
-import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
-import ButtonGroup from "@/components/ButtonGroup";
 import ExclamationIcon from "@/icons/circle-exclamation.svg";
 import { useRouter } from "next/navigation";
-import Button from "../components/Button";
-import {
-  ScreenTYPE,
-  stackRouterBack,
-  stackRouterPush,
-} from "../utils/stackRouter";
+import BottomButtonTab from "@/shared/ui/BottomButtonTab";
+import Button from "@/shared/ui/Button";
+import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
 export default function Page() {
   const router = useRouter();
@@ -28,32 +24,28 @@ export default function Page() {
           <div>변경 혹은 삭제되어 페이지를 찾을 수 없습니다.</div>
         </div>
       </main>
-      <BottomButtonTabWrapper>
-        <ButtonGroup gap={8}>
-          <Button
-            variant="ghost"
-            height={48}
-            fullWidth
-            onClick={() => stackRouterBack(router)}
-          >
-            이전 페이지
-          </Button>
-          <Button
-            variant="primary"
-            fullWidth
-            height={48}
-            onClick={() =>
-              stackRouterPush(router, {
-                path: "/",
-                screen: ScreenTYPE.MAIN,
-                isStack: false,
-              })
-            }
-          >
-            메인으로 가기
-          </Button>
-        </ButtonGroup>
-      </BottomButtonTabWrapper>
+      <BottomButtonTab>
+        <Button
+          variant="ghost"
+          className="flex-1 h-[48px] mr-[16px]"
+          onClick={() => stackRouterBack(router)}
+        >
+          이전 페이지
+        </Button>
+        <Button
+          variant="primary"
+          className="flex-1 h-[48px]"
+          onClick={() =>
+            stackRouterPush(router, {
+              path: "/",
+              screen: WEBVIEW_SCREEN.MAIN,
+              isStack: false,
+            })
+          }
+        >
+          메인으로 가기
+        </Button>
+      </BottomButtonTab>
     </>
   );
 }
