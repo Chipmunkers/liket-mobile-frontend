@@ -2,14 +2,13 @@
 
 import SmallDownArrow from "@/icons/down-arrow-small.svg";
 import { useEffect, useState } from "react";
-import { genres } from "@/../public/data/genre";
 import { ButtonBase } from "@mui/material";
 import { Genre } from "@/types/content";
-import { useGetLikeContent } from "./hooks/useGetLikeContent";
+import { useGetLikeContent } from "./_hooks/useGetLikeContent";
 import { useQueryClient } from "@tanstack/react-query";
 import customToast from "@/utils/customToast";
 import ReloadIcon from "@/icons/reload.svg";
-import useMoveLoginPage from "../../shared/hooks/useMoveLoginPage";
+import useMoveLoginPage from "@/shared/hooks/useMoveLoginPage";
 import { AxiosError } from "axios";
 import EmptyLike from "./_ui/EmptyLike";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
@@ -19,6 +18,7 @@ import { DefaultLoading } from "@/shared/ui/Loading";
 import CheckBox from "@/shared/ui/CheckBox";
 import ContentCardGroup from "@/widgets/content/ContentInfiniteGroup";
 import Drawer from "@/shared/ui/Drawer";
+import { GENRES } from "@/shared/consts/content/genre";
 
 export default function Page() {
   const [isGenreDrawerOpen, setIsGenreDrawerOpen] = useState(false);
@@ -155,7 +155,7 @@ export default function Page() {
         onClose={() => setIsGenreDrawerOpen(false)}
       >
         <div className="center text-h2">장르</div>
-        {genres.map((genre) => {
+        {GENRES.map((genre) => {
           return (
             <li key={genre.idx} className="bottom-sheet-list">
               <ButtonBase

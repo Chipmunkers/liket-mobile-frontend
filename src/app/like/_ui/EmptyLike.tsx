@@ -1,7 +1,7 @@
 "use client";
 
 import Divider from "@/shared/ui/Divider";
-import { useGetRecommendContents } from "../hooks/useGetRecommendContents";
+import { useGetRecommendContents } from "../_hooks/useGetRecommendContents";
 import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
 import ContentCardLarge from "@/entities/content/ContentCardLarge";
 
