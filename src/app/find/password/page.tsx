@@ -2,12 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import PasswordForm from "@/app/signup/_ui/PasswordForm";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import { useResetPassword } from "./_hooks/useResetPassword";
 import EmailAuthForm from "./_ui/EmailAuthForm";
+import PasswordForm from "./_ui/PasswordForm";
 
 export default function Page() {
   const [formIndex, setFormIndex] = useState(0);
