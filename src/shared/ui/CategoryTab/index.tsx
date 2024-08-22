@@ -1,0 +1,44 @@
+import { CSSProperties, Dispatch, MouseEvent, SetStateAction } from "react";
+import { Props } from "./types";
+import { classNames } from "@/shared/helpers/classNames";
+
+const CategoryTab = ({
+  small = true,
+  list,
+  selectedTab,
+  wrapperStyle,
+  onClickTab,
+  customTabNames,
+}: Props) => {
+  return (
+    <ul
+      style={wrapperStyle}
+      className={classNames(
+        "flex w-[100%] px-[24px] border-b-[1px] border-grey-01",
+        small ? "h-[32px]" : "h-[40px]"
+      )}
+    >
+      {list.map((tab, i) => (
+        <li
+          key={tab}
+          className={classNames(
+            "grow h-[100%]",
+            selectedTab === tab
+              ? "text-skyblue-01 border-b-[2px] border-skyblue-01 text-button3"
+              : "text-button4 text-grey-03 pb-[2px]",
+            small ? "text-button4" : "text-button3"
+          )}
+        >
+          <button
+            className="w-[100%] h-[100%] center"
+            onClick={() => onClickTab(tab)}
+          >
+            {customTabNames?.[i] || tab}
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+export default CategoryTab;

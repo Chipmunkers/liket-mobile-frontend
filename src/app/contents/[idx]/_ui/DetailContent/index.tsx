@@ -1,7 +1,5 @@
 "use client";
 
-import CategoryTab from "@/components/CategoryTab";
-import Divider from "@/components/Divider";
 import Link from "next/link";
 import ParkingIcon from "@/icons/parking.svg";
 import ReservationIcon from "@/icons/reservation.svg";
@@ -19,6 +17,8 @@ import ReviewTab from "./ui/ReviewTab";
 import { getStatus } from "@/shared/helpers/getStatus";
 import { CONTENT_STATES } from "@/shared/consts/content/state";
 import Badge from "@/shared/ui/Badge";
+import CategoryTab from "@/shared/ui/CategoryTab";
+import Divider from "@/shared/ui/Divider";
 
 const DetailContent = (props: Props) => {
   const searchParams = useSearchParams();
