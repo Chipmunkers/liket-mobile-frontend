@@ -2,7 +2,6 @@ import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import axiosInstance from "@/shared/helpers/axios";
 import customToast from "@/shared/helpers/customToast";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
-import { SetState } from "@/shared/types/react";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
@@ -22,9 +21,10 @@ export const useLogin = ({
   const router = useRouter();
 
   return useMutation<{ token: string }, AxiosError, Dto>({
-    mutationFn: async ({ email, pw }) => {
+    mutationFn: async (body) => {
       const { data } = await axiosInstance.post<{ token: string }>(
-        "/api/auth/local"
+        "/apis/auth/local",
+        body
       );
 
       return data;
@@ -40,7 +40,7 @@ export const useLogin = ({
     },
     onError: (err) => {
       if (err.response?.status === 400) {
-        customToast("데이터의 형태가 잘못되었습니다.");
+        customToast("아이디 또는 비밀번호가 잘못되었습니다.");
         return;
       }
 

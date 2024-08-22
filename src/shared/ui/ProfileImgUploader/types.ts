@@ -1,3 +1,4 @@
+import { UploadedFileEntity } from "@/shared/types/api/upload/UploadedFileEntity";
 import { SharedUiProps } from "@/shared/types/react";
 
 export type Props = SharedUiProps<{
@@ -9,9 +10,16 @@ export type Props = SharedUiProps<{
   onUpload?: (file: File) => void;
 
   /**
-   * 업로드 여부. true일 경우 POST /upload/profile-img API를 호출함
+   * 업로드 시 사진 미리보기 여부
    *
-   * @default false
+   * @default true
    */
-  upload?: boolean;
+  preview?: boolean;
+
+  /**
+   * 초기 이미지
+   *
+   * @default ""
+   */
+  src?: string;
 }>;

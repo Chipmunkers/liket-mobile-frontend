@@ -6,8 +6,15 @@ import PlusIcon from "./icon/PlusIcon.svg";
 import DefaultProfileIcon from "@/shared/icon/user/DefaultProfileIcon.svg";
 import Image from "next/image";
 
-const ProfileImgUploader = ({ onUpload, upload, className = "" }: Props) => {
-  const [ImgSrc, setImgSrc] = useState<string>();
+const ProfileImgUploader = ({
+  onUpload,
+  className = "",
+  src = "",
+  preview = true,
+}: Props) => {
+  const [ImgSrc, setImgSrc] = useState<string>(
+    src ? process.env.NEXT_PUBLIC_IMAGE_SERVER + src : src
+  );
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -37,6 +44,11 @@ const ProfileImgUploader = ({ onUpload, upload, className = "" }: Props) => {
         className="hidden"
         onChange={async (e) => {
           const files = e.target.files;
+
+          if (!preview) {
+            onUpload && files?.[0] && onUpload(files[0]);
+            return;
+          }
 
           if (files) {
             const reader = new FileReader();
