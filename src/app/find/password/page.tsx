@@ -1,13 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { PasswordResetEmailForm } from "@/app/signup/_ui/EmailForm";
 import { useState } from "react";
 import PasswordForm from "@/app/signup/_ui/PasswordForm";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import { useResetPassword } from "./_hooks/useResetPassword";
+import EmailAuthForm from "./_ui/EmailAuthForm";
 
 export default function Page() {
   const [formIndex, setFormIndex] = useState(0);
@@ -46,7 +46,7 @@ export default function Page() {
         />
         <HeaderMiddle text="비밀번호 재설정" />
       </Header>
-      {formIndex === 0 && <PasswordResetEmailForm updateForm={updateForm} />}
+      {formIndex === 0 && <EmailAuthForm updateForm={updateForm} />}
       {formIndex === 1 && (
         <PasswordForm
           isResetForm
