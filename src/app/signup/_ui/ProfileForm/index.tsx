@@ -3,9 +3,7 @@ import { CalendarIcon, YearCalendar } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { PROFILE_FORM_DEFAULT_VALUES } from "@/app/signup/_ui/ProfileForm/consts/initialForm";
-import { ProfileFormData } from "@/app/signup/types";
+import { PROFILE_FORM_DEFAULT_VALUES } from "./consts/initialForm";
 import { BasicInput, InputLabel } from "@/shared/ui/Input";
 import Chip from "@/shared/ui/Chip";
 import { SelectButtonMedium } from "@/shared/ui/SelectButton";
@@ -14,7 +12,7 @@ import Button from "@/shared/ui/Button";
 import { DefaultLoading } from "@/shared/ui/Loading";
 import Drawer from "@/shared/ui/Drawer";
 import { Props } from "./types";
-import { profileSchema } from "@/app/signup/_ui/ProfileForm/schema";
+import { profileSchema } from "./schema";
 
 const ProfileForm = ({
   currentFormInformation = PROFILE_FORM_DEFAULT_VALUES,
