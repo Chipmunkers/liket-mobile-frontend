@@ -1,11 +1,11 @@
-import { ResponseError } from "@/types/api";
 import axiosInstance from "@/shared/helpers/axios";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 export const useChangePassword = (
   props: UseMutationOptions<
     unknown,
-    ResponseError,
+    AxiosError,
     {
       currPw: string;
       resetPw: string;
@@ -13,6 +13,8 @@ export const useChangePassword = (
   >
 ) =>
   useMutation({
-    mutationFn: (param) => axiosInstance.post("/apis/user/pw/reset", param),
+    mutationFn: async (param) => {
+      await axiosInstance.post("/apis/user/pw/reset", param);
+    },
     ...props,
   });
