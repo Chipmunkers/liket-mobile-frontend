@@ -44,6 +44,9 @@ interface ProfileForm {
   status: "error" | "idle" | "pending" | "success";
 }
 
+/**
+ * @deprecated
+ */
 const ProfileForm = ({
   currentFormInformation = FORM_DEFAULT_VALUES,
   nextButtonText,

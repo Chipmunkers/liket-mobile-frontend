@@ -26,6 +26,9 @@ interface PasswordFormProps {
   onClickNextButton: (pw: string) => void;
 }
 
+/**
+ * @deprecated
+ */
 const PasswordForm = ({
   isResetForm,
   nextButtonText,
@@ -124,7 +127,9 @@ interface PasswordChangeFormProps {
   nextButtonText: string;
   onClickNextButton: (oldPw: string, newPw: string) => void;
 }
-
+/**
+ * @deprecated
+ */
 export const PasswordChangeForm = ({
   nextButtonText,
   onClickNextButton,

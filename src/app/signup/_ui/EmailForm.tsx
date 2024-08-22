@@ -28,6 +28,9 @@ interface EmailFormProps {
   updateForm: (insertedFormData: { email: string; emailToken: string }) => void;
 }
 
+/**
+ * @deprecated
+ */
 const EmailForm = ({ updateForm }: EmailFormProps) => {
   const time = new Date();
   time.setSeconds(time.getSeconds() + 180);
@@ -207,7 +210,9 @@ const passwordResetEmailVerificationScheme = z.object({
 interface PasswordResetEmailFormProps {
   updateForm: (insertedFormData: { email: string; emailToken: string }) => void;
 }
-
+/**
+ * @deprecated
+ */
 export const PasswordResetEmailForm = ({
   updateForm,
 }: PasswordResetEmailFormProps) => {
