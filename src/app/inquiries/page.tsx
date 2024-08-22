@@ -1,12 +1,14 @@
 "use client";
 
-import Header from "@/components/Header";
-import LeftOption from "@/components/Header/LeftOption";
-import RightOption from "@/components/Header/RightOption";
-import DevIng from "../../components/DevIng";
-import MiddleText from "@/components/Header/MiddleText";
 import { useRouter } from "next/navigation";
-import { useGetInquiries } from "./hooks/useGetInquiries";
+import { useGetInquiries } from "./_hooks/useGetInquiries";
+import {
+  Header,
+  HeaderLeft,
+  HeaderMiddle,
+  HeaderRight,
+} from "@/shared/ui/Header";
+import DevIng from "@/widgets/common/DevIng";
 
 export default function Page() {
   const router = useRouter();
@@ -17,9 +19,9 @@ export default function Page() {
   return (
     <>
       <Header>
-        <LeftOption logo />
-        <MiddleText text="문의 내역" />
-        <RightOption
+        <HeaderLeft logo />
+        <HeaderMiddle text="문의 내역" />
+        <HeaderRight
           option={{
             create: {
               onClick: () => router.push("/create/inquiry"),
