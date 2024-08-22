@@ -251,7 +251,7 @@ export default function Page() {
               </Else>
             </If>
           </div>
-          <div className="flex flex-col mt-[24px]">
+          <div className="flex flex-col mt-[24px] mb-[24px]">
             <Link
               className="flex items-center"
               href="/likets"
@@ -273,21 +273,19 @@ export default function Page() {
             <If condition={liketList.length > 0}>
               <Then>
                 <ScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] mt-[8px]">
-                  {liketList.map((liket) => {
-                    return (
-                      <Link
-                        href={`/likets/${liket.idx}`}
-                        key={liket.idx}
-                        onClick={(e) => {
-                          e.preventDefault();
-                        }}
-                      >
-                        <div className="relative w-[112px] h-[178px]">
-                          <DefaultImg src={liket.imgPath} />
-                        </div>
-                      </Link>
-                    );
-                  })}
+                  {liketList.map((liket) => (
+                    <Link
+                      href={`/likets/${liket.idx}`}
+                      key={liket.idx}
+                      onClick={(e) => {
+                        e.preventDefault();
+                      }}
+                    >
+                      <div className="relative w-[112px] h-[178px]">
+                        <DefaultImg src={liket.imgPath} />
+                      </div>
+                    </Link>
+                  ))}
                 </ScrollContainer>
               </Then>
               <Else>
@@ -298,7 +296,6 @@ export default function Page() {
             </If>
           </div>
         </div>
-        // TODO: 원래 붙어 있던 마진 확인 필요
         <Divider width="100%" height="8px" />
         <ButtonBase
           onClick={() => {
