@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useCreateInquiry } from "./hooks/useCreateInquiry";
-import customToast from "@/utils/customToast";
 import { ButtonBase, TextareaAutosize } from "@mui/material";
 import ScrollContainer from "react-indiana-drag-scroll";
 import CreateIcon from "@/icons/create.svg";
@@ -25,6 +24,7 @@ import { INQUIRY_TYPES } from "@/shared/consts/inquiry/type";
 import { classNames } from "@/shared/helpers/classNames";
 import SelectButtonMedium from "@/shared/ui/SelectButton/SelectButtonMedium";
 import Drawer from "@/shared/ui/Drawer";
+import customToast from "@/shared/helpers/customToast";
 
 const MAX_IMAGES_COUNT = 10;
 
