@@ -1,8 +1,8 @@
 "use client";
 
-import { useEditProfile } from "@/service/profile";
+import customToast from "@/shared/helpers/customToast";
+import { useEditProfile } from "./_hooks/useEditProfile";
 import profileStore from "@/stores/profileStore";
-import customToast from "@/utils/customToast";
 import DevIng from "@/widgets/common/DevIng";
 
 export default function Page() {
