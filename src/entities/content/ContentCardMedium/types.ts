@@ -1,6 +1,5 @@
+import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 import { EntityUiProps } from "@/shared/types/react";
-import { SummaryContentEntity } from "@/types/api/culture-content";
-import { MouseEvent } from "react";
 
 export type Props = EntityUiProps<{
   content: Pick<

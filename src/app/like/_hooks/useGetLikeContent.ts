@@ -1,11 +1,11 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axiosInstance from "@/shared/helpers/axios";
-import { SummaryContentEntity } from "@/types/api/culture-content";
-import { Genre } from "@/types/content";
+import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
+import { GenreEntity } from "@/shared/types/api/tag/GenreEntity";
 
 export const useGetLikeContent = (option: {
   onlyopen: boolean;
-  genre?: Genre;
+  genre?: GenreEntity;
 }) =>
   useInfiniteQuery({
     queryKey: [`like-content-all`, option],

@@ -38,6 +38,7 @@ import InputButton from "@/shared/ui/Input/InputButton";
 import { useUploadContentImages } from "./_hooks/useUploadContentImages";
 import CheckBox from "@/shared/ui/CheckBox";
 import SelectButtonMedium from "@/shared/ui/SelectButton/SelectButtonMedium";
+import { SelectedAddress } from "./types";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",

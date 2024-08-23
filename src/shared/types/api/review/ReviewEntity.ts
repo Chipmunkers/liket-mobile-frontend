@@ -1,5 +1,5 @@
+import { ContentEntity } from "@/shared/types/api/content/ContentEntity";
 import { UserEntity } from "@/shared/types/api/user/UserEntity";
-import { ContentEntity } from "@/types/api/culture-content";
 
 export interface ReviewEntity {
   idx: number;

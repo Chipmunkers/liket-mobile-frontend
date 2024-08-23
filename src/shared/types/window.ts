@@ -6,5 +6,6 @@ declare global {
     ReactNativeWebView: {
       postMessage(msg: string): void;
     };
+    daum: any;
   }
 }

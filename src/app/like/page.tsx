@@ -3,7 +3,6 @@
 import SmallDownArrow from "@/icons/down-arrow-small.svg";
 import { useEffect, useState } from "react";
 import { ButtonBase } from "@mui/material";
-import { Genre } from "@/types/content";
 import { useGetLikeContent } from "./_hooks/useGetLikeContent";
 import { useQueryClient } from "@tanstack/react-query";
 import ReloadIcon from "@/icons/reload.svg";
@@ -19,12 +18,13 @@ import ContentCardGroup from "@/widgets/content/ContentInfiniteGroup";
 import Drawer from "@/shared/ui/Drawer";
 import { GENRES } from "@/shared/consts/content/genre";
 import customToast from "@/shared/helpers/customToast";
+import { GenreEntity } from "@/shared/types/api/tag/GenreEntity";
 
 export default function Page() {
   const [isGenreDrawerOpen, setIsGenreDrawerOpen] = useState(false);
 
   const [contentPagerble, setContentPagerble] = useState<{
-    genre?: Genre;
+    genre?: GenreEntity;
     onlyopen: boolean;
   }>({ onlyopen: false });
 
