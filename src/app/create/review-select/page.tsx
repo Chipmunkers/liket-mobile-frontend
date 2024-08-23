@@ -1,20 +1,16 @@
 "use client";
 
-import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
-import Button from "@/components/Button";
-import Header from "@/components/Header";
-import StarRating from "@/components/StarRating";
-import { classNames } from "@/utils/helpers";
+import StarRating from "@/entities/review/StarRating";
+import { classNames } from "@/shared/helpers/classNames";
+import Button from "@/shared/ui/Button";
+import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import dayjs from "dayjs";
 import Image from "next/image";
 import { useState } from "react";
-import RightOption from "@/components/Header/RightOption";
-import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
 
 export default function Page() {
   const [selectedId, setSelectedId] = useState(0);
-  const [reviews, setReveiws] = useState([
+  const [reviews, setReviews] = useState([
     {
       id: 1,
       thumbnail: "https://picsum.photos/48/48?random=1",
@@ -141,14 +137,14 @@ export default function Page() {
   return (
     <>
       <Header>
-        <LeftOption
+        <HeaderLeft
           option={{
             back: {
               onClick: () => {},
             },
           }}
         />
-        <MiddleText text="리뷰 선택" />
+        <HeaderMiddle text="리뷰 선택" />
       </Header>
       <main>
         <ul className="flex flex-col grow">
@@ -194,16 +190,15 @@ export default function Page() {
             );
           })}
         </ul>
-        <BottomButtonTabWrapper>
+        <div>
           <Button
-            height={48}
+            className="flex-1 h-[48px]"
             onClick={() => {}}
-            fullWidth
             disabled={!selectedId}
           >
             다음
           </Button>
-        </BottomButtonTabWrapper>
+        </div>
       </main>
     </>
   );

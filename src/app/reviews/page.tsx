@@ -1,6 +1,6 @@
 "use client";
 
-import DevIng from "../../components/DevIng";
+import DevIng from "@/widgets/common/DevIng";
 
 export default function Page() {
   return <DevIng />;

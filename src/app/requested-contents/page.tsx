@@ -1,16 +1,17 @@
 "use client";
 
-import Badge from "@/components/Badge/Badge";
-import Header from "@/components/Header";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import DevIng from "../../components/DevIng";
-import { useGetMyInfo } from "@/hooks/useGetMyInfo";
-import { useGetContents } from "./hooks/useGetContents";
-import RightOption from "@/components/Header/RightOption";
-import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
+import { useGetContents } from "./_hooks/useGetContents";
+import {
+  Header,
+  HeaderLeft,
+  HeaderMiddle,
+  HeaderRight,
+} from "@/shared/ui/Header";
+import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
+import Badge from "@/shared/ui/Badge";
 
 export default function Page() {
   const router = useRouter();
@@ -44,14 +45,12 @@ export default function Page() {
     };
   }, [target, hasNextPage, isFetching]);
 
-  return <DevIng />;
-
   return (
     <>
       <Header>
-        <LeftOption option={{ back: true }} />
-        <MiddleText text="컨텐츠 등록 요청 내역" />
-        <RightOption
+        <HeaderLeft option={{ back: true }} />
+        <HeaderMiddle text="컨텐츠 등록 요청 내역" />
+        <HeaderRight
           option={{ create: { onClick: () => router.push("/create/content") } }}
         />
       </Header>
@@ -92,7 +91,7 @@ export default function Page() {
                         </div>
                       </div>
                       <div className="flex items-center">
-                        <Badge variant={acceptedAt ? "active" : "waiting"}>
+                        <Badge state={acceptedAt ? "active" : "waiting"}>
                           {acceptedAt ? "등록완료" : "등록대기"}
                         </Badge>
                       </div>

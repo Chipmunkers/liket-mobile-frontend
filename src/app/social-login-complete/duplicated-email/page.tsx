@@ -1,11 +1,11 @@
 "use client";
 
-import Header from "@/components/Header";
 import { useRouter, useSearchParams } from "next/navigation";
 import KaKaoIcon from "@/icons/logins/kakao.svg";
 import { Case, Default, Switch } from "react-if";
-import LeftOption from "@/components/Header/LeftOption";
-import { ScreenTYPE, stackRouterPush } from "../../../utils/stackRouter";
+import { Header, HeaderLeft } from "@/shared/ui/Header";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
 export default function Page() {
   const router = useRouter();
@@ -20,13 +20,13 @@ export default function Page() {
   return (
     <>
       <Header>
-        <LeftOption
+        <HeaderLeft
           option={{
             back: {
               onClick: () => {
                 stackRouterPush(router, {
                   path: "/login",
-                  screen: ScreenTYPE.LOGIN,
+                  screen: WEBVIEW_SCREEN.LOGIN,
                   isStack: false,
                 });
               },

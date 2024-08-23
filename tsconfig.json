@@ -20,11 +20,9 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@/types/*": ["./src/types/*"],
-      "@/utils/*": ["./src/utils/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/stores/*": ["./src/stores/*"],
-      "@/icons/*": ["./public/icons/*"]
+      "@/icons/*": ["./src/shared/icon/legacy/*"],
+      "@/shared": ["./src/shared/*"],
+      "@/entities": ["./src/entities/*"]
     },
     "types": ["kakao.maps.d.ts"]
   },

@@ -1,7 +1,5 @@
-import { getTosItem } from "@/apis/terms";
-import Header from "@/components/Header";
-import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
+import { useGetTosByIdx } from "@/app/terms/[idx]/_hooks/useGetTosByIdx";
+import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 
 interface PageProps {
   params: {
@@ -10,16 +8,17 @@ interface PageProps {
 }
 
 export default async function Page({ params: { idx } }: PageProps) {
-  const { title, contents } = await getTosItem(idx);
+  const { title, contents } = await useGetTosByIdx(idx);
+
   return (
     <>
       <Header>
-        <LeftOption
+        <HeaderLeft
           option={{
             back: true,
           }}
         />
-        <MiddleText text={title} />
+        <HeaderMiddle text={title} />
       </Header>
       <main className="px-[24px] pt-[24px] mb-[24px]">{contents}</main>
     </>

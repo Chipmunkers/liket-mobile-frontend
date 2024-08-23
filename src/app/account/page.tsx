@@ -1,27 +1,27 @@
 "use client";
 
-import Divider from "@/components/Divider";
-import Header from "@/components/Header";
-import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
-import LinkItem from "@/components/LinkItem";
-import { useLogout } from "@/service/login/hooks";
-import authStore from "@/stores/authStore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { setAuthToken } from "@/utils/axios";
+import { setAuthToken } from "@/shared/helpers/axios";
 import { useQueryClient } from "@tanstack/react-query";
-import profileStore from "@/stores/profileStore";
-import { PROVIDER_ICON } from "@/utils/const";
 import { ButtonBase } from "@mui/material";
-import { ScreenTYPE, stackRouterPush } from "../../utils/stackRouter";
-import customToast from "../../utils/customToast";
-import { useGetMyInfo } from "@/hooks/useGetMyInfo";
+import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
+import Divider from "@/shared/ui/Divider";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import authStore from "@/shared/store/authStore";
+import customToast from "@/shared/helpers/customToast";
+import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
+import LinkItem from "@/shared/ui/Link/LinkItem";
+import Kakao from "@/shared/icon/user/kakao.svg";
+import Naver from "@/shared/icon/user/naver.svg";
+import Apple from "@/shared/icon/user/apple.svg";
+import { SOCIAL_PROVIDER } from "@/shared/consts/user/social";
+import { useLogout } from "./_hooks/useLogout";
 
 export default function Page() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data } = useGetMyInfo();
   const { mutate } = useLogout({
     onSuccess: () => {
       setAuthToken("");
@@ -29,7 +29,7 @@ export default function Page() {
       queryClient.resetQueries();
       stackRouterPush(router, {
         path: "/",
-        screen: ScreenTYPE.MAIN,
+        screen: WEBVIEW_SCREEN.MAIN,
         isStack: false,
       });
     },
@@ -40,24 +40,26 @@ export default function Page() {
   const setToken = authStore(({ setToken }) => setToken);
   const handleClickLogout = () => mutate();
 
-  if (!data) {
+  const { data: user } = useGetMyInfo();
+
+  if (!user) {
     return <></>;
   }
-
-  const { provider, email } = data;
 
   return (
     <>
       <Header>
-        <LeftOption option={{ back: true }} />
-        <MiddleText text="계정관리" />
+        <HeaderLeft option={{ back: true }} />
+        <HeaderMiddle text="계정관리" />
       </Header>
       <main>
         <div className="mt-[16px] px-[24px]">
           <div className="text-caption text-grey-04">이메일</div>
           <div className="flex h-[48px] w-[100%] items-center justify-between">
-            <div className="ml-[8px] text-body3">{email}</div>
-            {PROVIDER_ICON[provider]}
+            <div className="ml-[8px] text-body3">{user.email}</div>
+            {user.provider === SOCIAL_PROVIDER.KAKAO && <Kakao />}
+            {user.provider === SOCIAL_PROVIDER.APPLE && <Apple />}
+            {user.provider === SOCIAL_PROVIDER.NAVER && <Naver />}
           </div>
         </div>
         <Divider width="100%" height="8px" margin="16px 0 0 0" />
@@ -65,11 +67,16 @@ export default function Page() {
           onClick={() => {
             stackRouterPush(router, {
               path: "/mypage/edit/password",
-              screen: ScreenTYPE.EDIT_MY_PASSWORD,
+              screen: WEBVIEW_SCREEN.EDIT_MY_PASSWORD,
             });
           }}
         >
-          <LinkItem href="/mypage/edit/password">비밀번호 변경</LinkItem>
+          <LinkItem
+            screen={WEBVIEW_SCREEN.EDIT_MY_PASSWORD}
+            href="/mypage/edit/password"
+          >
+            비밀번호 변경
+          </LinkItem>
         </ButtonBase>
 
         <ButtonBase
@@ -87,7 +94,7 @@ export default function Page() {
 
               stackRouterPush(router, {
                 path: "/delete/account",
-                screen: ScreenTYPE.DELETE_ACCOUNT,
+                screen: WEBVIEW_SCREEN.DELETE_ACCOUNT,
               });
             }}
           >

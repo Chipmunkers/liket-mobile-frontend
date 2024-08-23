@@ -1,24 +1,26 @@
 "use client";
 
-import Checkbox from "@/components/Checkbox";
-import Divider from "@/components/Divider";
-import Header from "@/components/Header";
-import MediumSelectButton from "@/components/SelectButton/MediumSelectButton";
-import { Input, InputWrapper, Label } from "@/components/newInput";
 import CalendarIcon from "@/icons/calendar.svg";
 import ScrollContainer from "react-indiana-drag-scroll";
 import Image from "next/image";
-import { useGetContentDetail } from "./hooks/useGetContentDetail";
-import RightOption from "@/components/Header/RightOption";
-import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
+import { useGetContentDetail } from "./_hooks/useGetContentDetail";
 import { useState } from "react";
-import CustomDrawer from "@/components/CustomDrawer";
 import ButtonBase from "@mui/material/ButtonBase/ButtonBase";
 import { useRouter } from "next/navigation";
-import { useRemoveContent } from "./hooks/useRemoveContent";
-import { AxiosError } from "axios";
-import customToast from "@/utils/customToast";
+import { useRemoveContent } from "./_hooks/useRemoveContent";
+import {
+  Header,
+  HeaderLeft,
+  HeaderMiddle,
+  HeaderRight,
+} from "@/shared/ui/Header";
+import Divider from "@/shared/ui/Divider";
+import SelectButtonMedium from "@/shared/ui/SelectButton/SelectButtonMedium";
+import customToast from "@/shared/helpers/customToast";
+import Drawer from "@/shared/ui/Drawer";
+import { BasicInput, InputLabel } from "@/shared/ui/Input";
+import CheckBox from "@/shared/ui/CheckBox";
+import { formatDate } from "./_utils/formatDate";
 
 export default function Page({ params }: { params: { id: string } }) {
   const { data } = useGetContentDetail(params?.id);
@@ -73,10 +75,10 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <>
       <Header>
-        <LeftOption option={{ back: true }} />
-        <MiddleText text="컨텐츠 등록 요청" />
+        <HeaderLeft option={{ back: true }} />
+        <HeaderMiddle text="컨텐츠 등록 요청" />
         {!acceptedAt && (
-          <RightOption
+          <HeaderRight
             option={{
               menu: {
                 onClick: () => {
@@ -89,70 +91,73 @@ export default function Page({ params }: { params: { id: string } }) {
       </Header>
       <main>
         <div className="px-[24px] mt-[16px]">
-          <Label.AsReadOnly>컨텐츠명</Label.AsReadOnly>
-          <Input.AsReadOnly>{title}</Input.AsReadOnly>
+          <InputLabel>컨텐츠명</InputLabel>
+          <BasicInput readOnly>{title}</BasicInput>
         </div>
         <Divider width="100%" height="8px" margin="16px 0" />
         <div className="px-[24px]">
           <div>
-            <Label.AsReadOnly>장르</Label.AsReadOnly>
-            <Input.AsReadOnly>{genre.name}</Input.AsReadOnly>
+            <InputLabel>장르</InputLabel>
+            <BasicInput readOnly>{genre.name}</BasicInput>
           </div>
           <div className="my-[34px]">
-            <Label.AsReadOnly>주소</Label.AsReadOnly>
-            <Input.AsReadOnly>
+            <InputLabel>주소</InputLabel>
+            <BasicInput readOnly>
               {location.address + " " + location.detailAddress}
-            </Input.AsReadOnly>
+            </BasicInput>
           </div>
           <div>
-            <Label.AsReadOnly>연령대</Label.AsReadOnly>
-            <Input.AsReadOnly>{age.name}</Input.AsReadOnly>
+            <InputLabel>연령대</InputLabel>
+            <BasicInput readOnly>{age.name}</BasicInput>
           </div>
           <div className="mt-[34px]">
-            <Label.AsReadOnly>스타일</Label.AsReadOnly>
-            <Input.AsReadOnly>
+            <InputLabel>스타일</InputLabel>
+            <BasicInput readOnly>
               {style
                 .map(({ name }) => {
                   return name;
                 })
                 .join(", ")}
-            </Input.AsReadOnly>
+            </BasicInput>
           </div>
         </div>
         <Divider width="100%" height="8px" margin="16px 0" />
         <div className="px-[24px]">
           <div className="flex justify-between mb-[34px]">
             <div>
-              <Label.AsReadOnly>오픈날짜</Label.AsReadOnly>
+              <InputLabel>오픈날짜</InputLabel>
               <div className="mt-[12px]">
-                <MediumSelectButton.AsReadOnly
+                <SelectButtonMedium
+                  readonly
                   Icon={<CalendarIcon />}
-                  text={formatDateToYYYYMMDD(startDate)}
+                  text={formatDate(startDate)}
                 />
               </div>
             </div>
             <div>
-              <Label.AsReadOnly>종료날짜</Label.AsReadOnly>
+              <InputLabel>종료날짜</InputLabel>
               <div className="mt-[12px]">
-                <MediumSelectButton.AsReadOnly
+                <SelectButtonMedium
+                  readonly
                   Icon={<CalendarIcon />}
-                  text={formatDateToYYYYMMDD(endDate)}
+                  text={formatDate(endDate)}
                 />
               </div>
             </div>
           </div>
           <div>
-            <Label.AsReadOnly>오픈시간</Label.AsReadOnly>
-            <Input.AsReadOnly>{openTime}</Input.AsReadOnly>
+            <InputLabel>오픈시간</InputLabel>
+            <BasicInput readOnly>{openTime}</BasicInput>
           </div>
           <div className="my-[34px]">
-            <Label.AsReadOnly>웹사이트</Label.AsReadOnly>
-            <Input.AsReadOnly>{websiteLink}</Input.AsReadOnly>
+            <InputLabel>웹사이트</InputLabel>
+            <BasicInput readOnly>{websiteLink}</BasicInput>
           </div>
           <div className="flex justify-between">
             {["입장료", "예약", "반려동물", "주차"].map((item) => {
               return (
-                <Checkbox.AsReadOnly
+                <CheckBox
+                  readonly
                   key={item}
                   isChecked={condition[item]}
                   label={item}
@@ -164,9 +169,13 @@ export default function Page({ params }: { params: { id: string } }) {
         </div>
         <Divider width="100%" height="8px" margin="16px 0" />
         <div className="px-[24px]">
-          <Label htmlFor="photos" maxLength={10} currentLength={imgList.length}>
+          <InputLabel
+            htmlFor="photos"
+            maxLength={10}
+            currentLength={imgList.length}
+          >
             사진
-          </Label>
+          </InputLabel>
           <ScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] mt-[8px]">
             {imgList.map((url) => {
               return (
@@ -183,15 +192,15 @@ export default function Page({ params }: { params: { id: string } }) {
         </div>
         <Divider width="100%" height="8px" margin="16px 0" />
         <div className="px-[24px]">
-          <InputWrapper>
-            <Label.AsReadOnly>상세정보</Label.AsReadOnly>
+          <div>
+            <InputLabel>상세정보</InputLabel>
             <div className="w-[100%] mb-[34px] min-h-[132px] h-[auto] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0">
               {description}
             </div>
-          </InputWrapper>
+          </div>
         </div>
       </main>
-      <CustomDrawer
+      <Drawer
         open={isMenuDrawerOpen}
         onClose={() => setIsMenuDrawerOpen(false)}
       >
@@ -215,17 +224,7 @@ export default function Page({ params }: { params: { id: string } }) {
             삭제
           </ButtonBase>
         </ul>
-      </CustomDrawer>
+      </Drawer>
     </>
   );
-}
-
-function formatDateToYYYYMMDD(isoDate: string): string {
-  const date = new Date(isoDate);
-
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-
-  return `${year}.${month}.${day}`;
 }

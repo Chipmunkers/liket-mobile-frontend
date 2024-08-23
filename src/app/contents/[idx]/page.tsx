@@ -1,10 +1,8 @@
-import Header from "@/components/Header";
-import customFetch from "@/utils/fetch";
 import ErrorPage from "../../error";
-import DetailContent from "./components/DetailContent";
-import ContentNotFound from "./components/ContentNotFound";
-import RightOption from "@/components/Header/RightOption";
-import LeftOption from "@/components/Header/LeftOption";
+import DetailContent from "./_ui/DetailContent";
+import ContentNotFound from "./_ui/ContentNotFound";
+import customFetch from "@/shared/helpers/fetch";
+import { Header, HeaderLeft, HeaderRight } from "@/shared/ui/Header";
 
 interface PageProps {
   params: {
@@ -23,12 +21,12 @@ export default async function Page({ params: { idx } }: PageProps) {
     return (
       <>
         <Header>
-          <LeftOption
+          <HeaderLeft
             option={{
               back: true,
             }}
           />
-          <RightOption
+          <HeaderRight
             option={{
               search: {},
             }}
@@ -43,12 +41,12 @@ export default async function Page({ params: { idx } }: PageProps) {
     return (
       <>
         <Header>
-          <LeftOption
+          <HeaderLeft
             option={{
               back: true,
             }}
           />
-          <RightOption
+          <HeaderRight
             option={{
               search: {},
             }}

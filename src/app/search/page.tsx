@@ -1,223 +1,61 @@
 "use client";
 
-import SearchHeader from "@/components/SearchHeader";
 import { useEffect, useState } from "react";
-import SmallSelectButton from "@/components/SelectButton/SmallSelectButton";
 import SmallDownArrow from "@/icons/down-arrow-small.svg";
-import CustomDrawer from "@/components/CustomDrawer";
-import Chip from "@/components/Chip";
-import Checkbox from "@/components/Checkbox";
 import { ButtonBase } from "@mui/material";
-import { Sido, sidoList } from "../../../public/data/sido";
-import { Genre, Style } from "../../types/content";
-import { useRouter, useSearchParams } from "next/navigation";
-import { ages } from "../../../public/data/age";
-import { styles } from "../../../public/data/style";
-import customToast from "../../utils/customToast";
-import { genres } from "../../../public/data/genre";
-import CustomScrollContainer from "@/components/CustomScrollContainer";
-import { useQueryClient } from "@tanstack/react-query";
-import {
-  GET_CONTENT_ALL_KEY,
-  useGetContentAll,
-} from "./hooks/useGetContentAll";
+import { useSearchParams } from "next/navigation";
+import { useGetContentAll } from "./_hooks/useGetContentAll";
 import { AxiosError } from "axios";
-import ContentCardGroup from "@/components/ContentCardGroup";
-import useModalStore from "@/stores/modalStore";
-import { classNames } from "../../utils/helpers";
 import ReloadIcon from "@/icons/reload.svg";
-import DefaultLoading from "../../components/Loading/DefaultLoading";
-import {
-  ScreenTYPE,
-  stackRouterBack,
-  stackRouterPush,
-  WebViewEventType,
-} from "../../utils/stackRouter";
-import { useIsWebView } from "../../hooks/useIsWebView";
-
-interface Pagerble {
-  region: string | null;
-  style: string[];
-  age: string | null;
-  genre: string | null;
-  open: string | null;
-  orderby: string | null;
-  search: string | null;
-}
+import { SearchPagerble } from "./_types/pagerble";
+import { createQuerystring } from "./_util/createQueryString";
+import useHandleMessageEvent from "./_hooks/useHandleMesaageEvent";
+import { getQuerystring } from "./_util/getQuerystring";
+import useCheckChangePagerble from "./_hooks/useCheckChangePagerble";
+import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
+import { useIsWebView } from "@/shared/hooks/useIsWebview";
+import { SIDO_LIST } from "@/shared/consts/region/sido";
+import { AGES } from "@/shared/consts/content/age";
+import { STYLES } from "@/shared/consts/content/style";
+import customToast from "@/shared/helpers/customToast";
+import Chip from "@/shared/ui/Chip";
+import GenreSelectTab from "./_ui/GenreSelectTab";
+import { classNames } from "@/shared/helpers/classNames";
+import { DefaultLoading } from "@/shared/ui/Loading";
+import { SelectButtonSmall } from "@/shared/ui/SelectButton";
+import ContentCardGroup from "@/widgets/content/ContentInfiniteGroup";
+import SearchHeader from "@/shared/ui/SearchHeader";
+import CheckBox from "@/shared/ui/CheckBox";
+import Drawer from "@/shared/ui/Drawer";
 
 export default function Page() {
   const searchParams = useSearchParams();
 
-  const getQueryString = (): Pagerble => {
-    return {
-      style: searchParams.getAll("style"),
-      region: searchParams.get("region"),
-      genre: searchParams.get("genre"),
-      age: searchParams.get("age"),
-      open: searchParams.get("open"),
-      orderby: searchParams.get("orderby"),
-      search: searchParams.get("search"),
-    };
-  };
+  const [pagerble, setPagerble] = useState<SearchPagerble>(
+    getQuerystring(searchParams)
+  );
 
-  const createQuerystring = (data: Pagerble): string => {
-    const params = new URLSearchParams();
+  useEffect(() => {
+    setPagerble(getQuerystring(searchParams));
+  }, [searchParams]);
 
-    if (data.region) {
-      params.set("region", data.region);
-    }
+  useHandleMessageEvent(setPagerble);
+  useCheckChangePagerble(pagerble);
 
-    if (data.genre) {
-      params.set("genre", data.genre);
-    }
-
-    if (data.age) {
-      params.set("age", data.age);
-    }
-
-    if (data.open) {
-      params.set("open", data.open);
-    }
-
-    if (data.orderby) {
-      params.set("orderby", data.orderby);
-    }
-
-    if (data.search) {
-      params.set("search", data.search);
-    }
-
-    if (data.style && data.style.length > 0) {
-      data.style.forEach((style) => {
-        params.append("style", style);
-      });
-    }
-
-    return params.toString();
-  };
-
-  const [pagerble, setPagerble] = useState<Pagerble>(getQueryString());
-
-  const { data, fetchNextPage, isFetching, refetch, error, hasNextPage } =
-    useGetContentAll(createQuerystring(getQueryString()));
+  const { data, refetch, error, setTarget } = useGetContentAll(
+    createQuerystring(getQuerystring(searchParams))
+  );
 
   // * Drawer
   const [isSidoDrawerOpen, setIsSidoDrawerOpen] = useState(false);
   const [isAgeDrawerOpen, setIsAgeDrawerOpen] = useState(false);
   const [isStyleDrawerOpen, setIsStyleDrawerOpen] = useState(false);
-  const [isOrderDrawerOpen, setIsOrderDrawerOpen] = useState(false);
-
-  const router = useRouter();
 
   // * Style
-  const [selectStyles, setSelectStyles] = useState<Style[]>([]);
-
-  useEffect(() => {
-    setPagerble(getQueryString());
-  }, [searchParams]);
-
-  // * 옵션 변경 시 리뷰 쿼리 데이터 초기화
-  const queryClient = useQueryClient();
-  const resetContent = () => {
-    queryClient.removeQueries({
-      queryKey: [GET_CONTENT_ALL_KEY],
-    });
-    queryClient.setQueryData([GET_CONTENT_ALL_KEY], {
-      pages: [],
-      pageParams: [],
-    });
-  };
-
-  useEffect(() => {
-    if (!pagerble) return;
-
-    // pagerble이 바뀌면 경로 변경
-    router.replace("/search?" + createQuerystring(pagerble));
-  }, [pagerble]);
-
-  // * 무한 스크롤 타겟
-  const [target, setTarget] = useState<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (!target) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !isFetching && !error) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 1 }
-    );
-
-    observer.observe(target);
-    return () => {
-      observer.unobserve(target);
-    };
-  }, [target, hasNextPage, isFetching]);
-
-  const openModal = useModalStore(({ openModal }) => openModal);
+  const [selectStyles, setSelectStyles] = useState<StyleEntity[]>([]);
 
   // * 웹뷰 확인 코드
   const isWebview = useIsWebView();
-
-  const webviewMessageEvent = (e: MessageEvent) => {
-    const data: { type: string; genre?: number; search?: string } = JSON.parse(
-      e.data
-    );
-
-    if (data.type === WebViewEventType.SEARCH_SUBMIT) {
-      if (data.genre !== undefined) {
-        setPagerble((pagerble) => ({
-          ...pagerble,
-          genre: data.genre === 0 ? null : (data.genre || 0).toString(),
-        }));
-        return;
-      }
-
-      if (typeof data.search === "string") {
-        setPagerble((pagerble) => ({
-          ...pagerble,
-          search: data.search || null,
-        }));
-        return;
-      }
-    }
-  };
-
-  useEffect(() => {
-    // ios
-    window.addEventListener("message", webviewMessageEvent);
-
-    // android
-    //document.addEventListener("message", (e) => alert(e.data));
-
-    return () => window.removeEventListener("message", webviewMessageEvent);
-  }, []);
-
-  useEffect(() => {
-    if (!error) return;
-
-    if (error instanceof AxiosError) {
-      if (error.response?.status === 401) {
-        openModal("LoginModal", {
-          onClickPositive: () => {
-            stackRouterPush(router, {
-              path: "/login",
-              screen: ScreenTYPE.LOGIN,
-              isStack: false,
-            });
-          },
-          onClickNegative: () => {
-            stackRouterBack(router);
-          },
-        });
-        return;
-      }
-    }
-
-    customToast("에러가 발생했습니다. 다시 시도해주세요.");
-  }, [error]);
 
   return (
     <>
@@ -234,66 +72,15 @@ export default function Page() {
             }}
             placeholder="검색어를 입력해주세요."
           />
-          <CustomScrollContainer className="flex flex-row mt-[8px] [&>*:first-child]:ml-[24px] border-b-[1px] border-b-grey-01">
-            <ul className="flex h-[32px] ">
-              <li
-                key={"all_category"}
-                className={classNames(
-                  "h-[100%] w-[80px]",
-                  pagerble.genre === null
-                    ? "text-skyblue-01 border-b-[2px] border-skyblue-01 text-button3"
-                    : "text-button4 text-grey-03 pb-[2px]"
-                )}
-              >
-                <ButtonBase
-                  disableRipple={true}
-                  className="w-[100%] h-[100%] center"
-                  onClick={() => {
-                    setPagerble({
-                      ...pagerble,
-                      genre: null,
-                    });
-                  }}
-                >
-                  전체
-                </ButtonBase>
-              </li>
-              {genres.map((genre) => {
-                return (
-                  <li
-                    key={genre.idx}
-                    className={classNames(
-                      "h-[100%] w-[80px]",
-                      pagerble.genre === genre.idx.toString()
-                        ? "text-skyblue-01 border-b-[2px] border-skyblue-01 text-button3"
-                        : "text-button4 text-grey-03 pb-[2px]"
-                    )}
-                  >
-                    <ButtonBase
-                      disableRipple={true}
-                      className="w-[100%] h-[100%] center"
-                      onClick={() => {
-                        setPagerble({
-                          ...pagerble,
-                          genre: genre.idx.toString(),
-                        });
-                      }}
-                    >
-                      {genre.name}
-                    </ButtonBase>
-                  </li>
-                );
-              })}
-            </ul>
-          </CustomScrollContainer>
+          <GenreSelectTab pagerble={pagerble} setPagerble={setPagerble} />
         </>
       )}
 
       <div className="flex ml-[24px] mt-[8px] mb-[11px] gap-[8px]">
-        <SmallSelectButton
+        <SelectButtonSmall
           placeholder="지역"
           text={
-            sidoList.find((sido) => sido.cd === pagerble.region)?.name || ""
+            SIDO_LIST.find((sido) => sido.cd === pagerble.region)?.name || ""
           }
           onClick={() => {
             setIsSidoDrawerOpen(true);
@@ -301,40 +88,40 @@ export default function Page() {
           Icon={
             <SmallDownArrow
               className={classNames(
-                sidoList.find((sido) => sido.cd === pagerble.region)
+                SIDO_LIST.find((sido) => sido.cd === pagerble.region)
                   ? "fill-white"
                   : "fill-grey-black"
               )}
             />
           }
         />
-        <SmallSelectButton
+        <SelectButtonSmall
           placeholder="연령대"
           text={
-            ages.find((age) => age.idx.toString() === pagerble.age)?.name || ""
+            AGES.find((age) => age.idx.toString() === pagerble.age)?.name || ""
           }
           onClick={() => setIsAgeDrawerOpen(true)}
           Icon={
             <SmallDownArrow
               className={classNames(
-                ages.find((age) => age.idx.toString() === pagerble.age)
+                AGES.find((age) => age.idx.toString() === pagerble.age)
                   ? "fill-white"
                   : "fill-grey-black"
               )}
             />
           }
         />
-        <SmallSelectButton
+        <SelectButtonSmall
           placeholder="스타일"
           text={pagerble.style
             .map(
               (styleIdx) =>
-                styles.find((style) => style.idx.toString() === styleIdx)
+                STYLES.find((style) => style.idx.toString() === styleIdx)
                   ?.name || ""
             )
             .join("·")}
           onClick={() => {
-            const findStyles = styles.filter((style) =>
+            const findStyles = STYLES.filter((style) =>
               pagerble.style.includes(style.idx.toString())
             );
 
@@ -351,7 +138,7 @@ export default function Page() {
         />
       </div>
       <div className="flex justify-between mx-[24px]">
-        <Checkbox
+        <CheckBox
           label="진행중인 컨텐츠만 보기"
           size="12px"
           isChecked={pagerble.open === "true"}
@@ -363,7 +150,7 @@ export default function Page() {
           }
         />
         {pagerble.orderby === "time" || !pagerble.orderby ? (
-          <SmallSelectButton
+          <SelectButtonSmall
             rippleEffect={false}
             withBorder={false}
             placeholder="최신순"
@@ -378,7 +165,7 @@ export default function Page() {
             Icon={<SmallDownArrow />}
           />
         ) : (
-          <SmallSelectButton
+          <SelectButtonSmall
             rippleEffect={false}
             withBorder={false}
             placeholder="인기순"
@@ -425,12 +212,12 @@ export default function Page() {
         )}
       </main>
       {/* 지역 선택 */}
-      <CustomDrawer
+      <Drawer
         open={isSidoDrawerOpen}
         onClose={() => setIsSidoDrawerOpen(false)}
       >
         <div className="center text-h2">지역</div>
-        {sidoList.map((sido) => (
+        {SIDO_LIST.map((sido) => (
           <li className="bottom-sheet-list" key={`${sido.cd}`}>
             <ButtonBase
               onClick={() => {
@@ -449,15 +236,12 @@ export default function Page() {
             </ButtonBase>
           </li>
         ))}
-      </CustomDrawer>
+      </Drawer>
 
       {/* 연령대 선택 */}
-      <CustomDrawer
-        open={isAgeDrawerOpen}
-        onClose={() => setIsAgeDrawerOpen(false)}
-      >
+      <Drawer open={isAgeDrawerOpen} onClose={() => setIsAgeDrawerOpen(false)}>
         <div className="center text-h2">연령대</div>
-        {ages.map(({ idx, name }) => (
+        {AGES.map(({ idx, name }) => (
           <li className="bottom-sheet-list" key={idx}>
             <ButtonBase
               onClick={() => {
@@ -478,10 +262,10 @@ export default function Page() {
             </ButtonBase>
           </li>
         ))}
-      </CustomDrawer>
+      </Drawer>
 
       {/* 스타일 선택 */}
-      <CustomDrawer
+      <Drawer
         open={isStyleDrawerOpen}
         onClose={() => {
           setIsStyleDrawerOpen(false);
@@ -489,7 +273,7 @@ export default function Page() {
       >
         <div className="center text-h2">스타일</div>
         <ul className="my-[16px] w-[100%] flex px-[34px] flex-wrap gap-[8px]">
-          {styles.map((style) => {
+          {STYLES.map((style) => {
             return (
               <li key={style.idx} className="">
                 <Chip
@@ -538,48 +322,7 @@ export default function Page() {
             확인
           </ButtonBase>
         </div>
-      </CustomDrawer>
-
-      {/* <CustomDrawer
-        open={isOrderDrawerOpen}
-        onClose={() => setIsOrderDrawerOpen(false)}
-      >
-        <div className="center text-h2">정렬</div>
-        <li className="bottom-sheet-list">
-          <ButtonBase
-            onClick={() => {
-              setPagerble({
-                ...pagerble,
-                orderby: "time",
-              });
-              setIsOrderDrawerOpen(false);
-            }}
-            className={classNames(
-              "bottom-sheet-button flex justify-start px-[24px]",
-              pagerble.orderby === "time" ? "text-skyblue-01 text-body1" : ""
-            )}
-          >
-            최신순
-          </ButtonBase>
-        </li>
-        <li className="bottom-sheet-list">
-          <ButtonBase
-            onClick={() => {
-              setPagerble({
-                ...pagerble,
-                orderby: "like",
-              });
-              setIsOrderDrawerOpen(false);
-            }}
-            className={classNames(
-              "bottom-sheet-button flex justify-start px-[24px]",
-              pagerble.orderby === "like" ? "text-skyblue-01 text-body1" : ""
-            )}
-          >
-            인기순
-          </ButtonBase>
-        </li>
-      </CustomDrawer> */}
+      </Drawer>
     </>
   );
 }

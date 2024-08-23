@@ -1,33 +1,26 @@
 "use client";
 
-import Header from "@/components/Header";
-import LinkableTab from "@/components/LinkableTab";
 import { useEffect, useState } from "react";
-import { classNames } from "@/utils/helpers";
-import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
-import Button from "@/components/Button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import CustomBottomSheet from "@/components/BottomSheet";
-import MapBottomSheetCard from "@/components/Card/MapBottomSheetCard";
 import Filter from "@/icons/filter.svg";
-import ButtonGroup from "@/components/ButtonGroup";
-import Chip from "@/components/Chip";
-import { genres } from "../../../public/data/genre";
-import { Age, Genre, Style } from "@/types/content";
-import { ages } from "../../../public/data/age";
-import { styles } from "../../../public/data/style";
-import customToast from "@/utils/customToast";
-import KakaoMap from "./components/KakaoMap";
-import { MapContentEntity } from "@/types/api/map";
-import MapContentInfo from "./components/ContentInfo";
 import { ButtonBase } from "@mui/material";
-import { Sido, sidoList } from "../../../public/data/sido";
-import { Sigungu, sigunguList } from "../../../public/data/sigungu";
-import RightOption from "@/components/Header/RightOption";
-import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
-import { stackRouterBack } from "../../utils/stackRouter";
-import { setAppNavBack } from "../../utils/setAppNavState";
+import ContentCardMedium from "@/entities/content/ContentCardMedium";
+import BottomTab from "@/widgets/common/BottomTab";
+import { GenreEntity } from "@/shared/types/api/tag/GenreEntity";
+import { AgeEntity } from "@/shared/types/api/tag/AgeEntity";
+import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
+import { Sido, SIDO_LIST } from "@/shared/consts/region/sido";
+import { Sigungu } from "@/shared/consts/region/sigungu";
+import { Header, HeaderLeft, HeaderRight } from "@/shared/ui/Header";
+import Chip from "@/shared/ui/Chip";
+import { classNames } from "@/shared/helpers/classNames";
+import { MapContentEntity } from "@/shared/types/api/map/MapContentEntity";
+import useCheckModalOpenForWebview from "./_hooks/onMessageWebview";
+import ContentBottomSheet from "./_ui/ContentBottomSheet";
+import { MapFilter, SelectLocation } from "./_types/types";
+import FilterDrawer from "./_ui/FilterDrawer";
+import LocationDrawer from "./_ui/LocationDrawer";
+import KakaoMap from "./_ui/KakaoMap";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -37,17 +30,7 @@ export default function MapPage() {
   const isTownSelectionModalOpen = searchParams.get("isTownSelectionModalOpen");
   const isFilterModalOpen = searchParams.get("isFilterModalOpen");
 
-  useEffect(() => {
-    setAppNavBack(isTownSelectionModalOpen === "true");
-  }, [isTownSelectionModalOpen]);
-
-  useEffect(() => {
-    setAppNavBack(isFilterModalOpen === "true");
-  }, [isFilterModalOpen]);
-
-  const onClickTownSelection = () => {
-    router.replace(`${pathname}?isTownSelectionModalOpen=true`);
-  };
+  useCheckModalOpenForWebview(isTownSelectionModalOpen, isFilterModalOpen);
 
   // * 현재 보여지고 있는 컨텐츠 목록
   const [contentList, setContentList] = useState<MapContentEntity[]>([]);
@@ -55,33 +38,25 @@ export default function MapPage() {
   // * 선택된 컨텐츠
   const [clickedContent, setClickedContent] = useState<MapContentEntity>();
 
-  // * 필터링: 선택된 장르
-  const [selectedGenre, setSelectedGenre] = useState<Genre>();
-
-  // * 필터링: 선택된 연령대
-  const [selectedAge, setSelectedAge] = useState<Age>();
-
-  // * 필터링: 선택된 스타일들
-  const [selectedStyles, setSelectedStyles] = useState<Style[]>([]);
+  // * 필터링 선택
+  const [selectedGenre, setSelectedGenre] = useState<GenreEntity>();
+  const [selectedAge, setSelectedAge] = useState<AgeEntity>();
+  const [selectedStyles, setSelectedStyles] = useState<StyleEntity[]>([]);
 
   // * 최종적으로 필터링 목록
-  const [mapFilter, setMapFilter] = useState<{
-    genre: Genre | undefined;
-    age: Age | undefined;
-    styles: Style[];
-  }>({
+  const [mapFilter, setMapFilter] = useState<MapFilter>({
     genre: undefined,
     age: undefined,
     styles: [],
   });
 
   // * 지역 선택
-  const [selectSido, setSelectSido] = useState<Sido>(sidoList[0]);
+  const [selectSido, setSelectSido] = useState<Sido>(SIDO_LIST[0]);
   const [selectSigungu, setSelectSigungu] = useState<Sigungu | null>(null);
-  const [selectLocation, setSelectLocation] = useState<{
-    sido: Sido;
-    sigungu: Sigungu | null;
-  }>({ sido: selectSido, sigungu: selectSigungu });
+  const [selectLocation, setSelectLocation] = useState<SelectLocation>({
+    sido: selectSido,
+    sigungu: selectSigungu,
+  });
 
   const isSetMapFilter = (): boolean => {
     return !!(mapFilter.genre || mapFilter.age || mapFilter.styles.length);
@@ -102,16 +77,18 @@ export default function MapPage() {
 
   return (
     <>
-      <Header key={"header"}>
-        <LeftOption
+      <Header>
+        <HeaderLeft
           townName={
             selectLocation.sigungu
               ? selectLocation.sido.name + " " + selectLocation.sigungu.name
               : selectLocation.sido.name
           }
-          onClickTownSelection={onClickTownSelection}
+          onClickTownSelection={() => {
+            router.replace(`${pathname}?isTownSelectionModalOpen=true`);
+          }}
         />
-        <RightOption option={{ search: true, like: true }} />
+        <HeaderRight option={{ search: true, like: true }} />
       </Header>
       <main>
         <KakaoMap
@@ -124,6 +101,7 @@ export default function MapPage() {
           setLatLng={setLatLng}
         >
           <div className="absolute z-[2] mt-[16px] ml-[24px] w-100 flex items-center">
+            {/* 필터링 아이콘 */}
             <ButtonBase
               className={classNames(
                 "rounded-full w-[36px] h-[36px] shadow-[0_0_8px_0_rgba(0,0,0,0.16)]",
@@ -138,6 +116,8 @@ export default function MapPage() {
                 fill="white"
               />
             </ButtonBase>
+
+            {/* 필터링 칩 */}
             {mapFilter.genre || mapFilter.age || mapFilter.styles.length ? (
               <div className="flex items-center">
                 {mapFilter.genre ? (
@@ -150,282 +130,65 @@ export default function MapPage() {
                     <Chip isSelected={true}>{mapFilter.age.name}</Chip>
                   </div>
                 ) : null}
-                {mapFilter.styles.map(({ name }) => {
-                  return (
-                    <div className="ml-[8px]" key={name}>
-                      <Chip isSelected={true}>{name}</Chip>
-                    </div>
-                  );
-                })}
+                {mapFilter.styles.map(({ name }) => (
+                  <div className="ml-[8px]" key={name}>
+                    <Chip isSelected={true}>{name}</Chip>
+                  </div>
+                ))}
               </div>
             ) : null}
           </div>
         </KakaoMap>
-        {clickedContent ? <MapContentInfo content={clickedContent} /> : null}
+
+        {/* 컨텐츠 바텀 시트 */}
         {!clickedContent && contentList.length !== 0 ? (
-          <CustomBottomSheet
-            open={true}
-            defaultSnap={20}
-            snapPoints={({ maxHeight }) => [
-              20,
-              maxHeight / 2 - 45,
-              maxHeight - 68 - 48 - 74,
-            ]}
-          >
-            <ul>
-              {contentList.map((content) => {
-                return (
-                  <li key={content.idx}>
-                    <MapBottomSheetCard content={content} />
-                  </li>
-                );
-              })}
-            </ul>
-          </CustomBottomSheet>
+          <ContentBottomSheet
+            contentList={contentList.map((content) => ({
+              ...content,
+              thumbnail: content.imgList[0],
+            }))}
+          />
+        ) : null}
+
+        {/* 클릭한 컨텐츠 */}
+        {clickedContent ? (
+          <div className="bottom-[--bottom-tab-height] absolute z-10 w-[calc(100%-16px)] left-[8px] mb-[8px]">
+            <div className="p-[16px] bg-white rounded-[24px]">
+              <ContentCardMedium
+                content={{
+                  ...clickedContent,
+                  thumbnail: clickedContent.imgList[0],
+                }}
+              />
+            </div>
+          </div>
         ) : null}
       </main>
-      <LinkableTab />
-      <div
-        className="full-modal"
-        style={{
-          transform: !!isFilterModalOpen ? "translateY(0)" : "translateY(100%)",
-        }}
-      >
-        <Header key={"filter-header"}>
-          <LeftOption
-            key={"filter-option"}
-            option={{
-              close: {
-                onClick: () => {
-                  setSelectedGenre(mapFilter.genre);
-                  setSelectedAge(mapFilter.age);
-                  setSelectedStyles(mapFilter.styles);
-                  router.replace("/map");
-                },
-              },
-            }}
-          />
-          <MiddleText text="필터" />
-        </Header>
-        <div className="full-modal-main px-[24px] py-[16px] gap-[48px]">
-          {/* 장르 선택 */}
-          <div key={"genre_filter"}>
-            <div className="text-h2 mb-[15px]">장르</div>
-            <ul className="flex flex-wrap gap-[8px]">
-              {genres.map((genre) => (
-                <li key={genre.idx}>
-                  <Chip
-                    isSelected={selectedGenre?.idx === genre.idx}
-                    onClick={() => {
-                      if (selectedGenre?.idx === genre.idx)
-                        return setSelectedGenre(undefined);
-                      setSelectedGenre(genre);
-                    }}
-                  >
-                    {genre.name}
-                  </Chip>
-                </li>
-              ))}
-            </ul>
-          </div>
 
-          {/* 연령대 선택 */}
-          <div key={"age_filter"}>
-            <div className="text-h2 mb-[15px]">연령대</div>
-            <ul className="flex flex-wrap gap-[8px]">
-              {ages.map((age) => (
-                <li key={age.idx}>
-                  <Chip
-                    isSelected={selectedAge?.idx === age.idx}
-                    onClick={() => {
-                      if (selectedAge?.idx === age.idx)
-                        return setSelectedAge(undefined);
-                      setSelectedAge(age);
-                    }}
-                  >
-                    {age.name}
-                  </Chip>
-                </li>
-              ))}
-            </ul>
-          </div>
+      <FilterDrawer
+        isOpen={!!isFilterModalOpen}
+        selectGenre={selectedGenre}
+        selectStyles={selectedStyles}
+        selectAge={selectedAge}
+        setStyle={setSelectedStyles}
+        setAge={setSelectedAge}
+        setGenre={setSelectedGenre}
+        mapFilter={mapFilter}
+        setMapFilter={setMapFilter}
+      />
 
-          {/* 스타일 */}
-          <div key={"style_filter"}>
-            <div className="text-h2 mb-[15px]">스타일</div>
-            <ul className="flex flex-wrap gap-[8px]">
-              {styles.map((style) => (
-                <li key={style.idx}>
-                  <Chip
-                    isSelected={selectedStyles
-                      .map((style) => style.idx)
-                      .includes(style.idx)}
-                    onClick={() => {
-                      const alreadyExistStyleIdxs = selectedStyles.map(
-                        (style) => style.idx
-                      );
+      {/* 지역 모달 */}
+      <LocationDrawer
+        isOpen={!!isTownSelectionModalOpen}
+        selectSido={selectSido}
+        setSelectSido={setSelectSido}
+        selectSigungu={selectSigungu}
+        setSelectSigungu={setSelectSigungu}
+        selectLocation={selectLocation}
+        setSelectLocation={setSelectLocation}
+      />
 
-                      if (alreadyExistStyleIdxs.includes(style.idx)) {
-                        // * 이미 선택된 스타일의 경우 선택되지 않은 것으로 표시
-                        return setSelectedStyles([
-                          ...selectedStyles.filter(
-                            (selectedStyle) => selectedStyle.idx !== style.idx
-                          ),
-                        ]);
-                      }
-
-                      if (alreadyExistStyleIdxs.length >= 3) {
-                        return customToast(
-                          "스타일은 최대 3개까지 선택할 수 있습니다."
-                        );
-                      }
-
-                      setSelectedStyles([...selectedStyles, style]);
-                    }}
-                  >
-                    {style.name}
-                  </Chip>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <BottomButtonTabWrapper>
-          <ButtonGroup gap={16}>
-            <Button
-              height={48}
-              onClick={() => {
-                setSelectedGenre(undefined);
-                setSelectedAge(undefined);
-                setSelectedStyles([]);
-                setMapFilter({
-                  genre: undefined,
-                  age: undefined,
-                  styles: [],
-                });
-                router.replace("/map");
-              }}
-              variant="ghost"
-              fullWidth
-            >
-              초기화
-            </Button>
-            <Button
-              height={48}
-              onClick={() => {
-                setMapFilter({
-                  genre: selectedGenre,
-                  age: selectedAge,
-                  styles: selectedStyles,
-                });
-                router.replace("/map");
-              }}
-              fullWidth
-            >
-              적용하기
-            </Button>
-          </ButtonGroup>
-        </BottomButtonTabWrapper>
-      </div>
-      <div
-        className="full-modal"
-        style={{
-          transform: !!isTownSelectionModalOpen
-            ? "translateY(0)"
-            : "translateY(100%)",
-        }}
-      >
-        <Header key={"town-filter-header"}>
-          <LeftOption
-            option={{
-              close: {
-                onClick: () => {
-                  setSelectSido(selectLocation.sido);
-                  setSelectSigungu(selectLocation.sigungu);
-                  router.replace("/map");
-                },
-              },
-            }}
-          />
-          <MiddleText text="지역설정" />
-        </Header>
-        <div className="full-modal-main">
-          <div className="flex grow h-[100%]">
-            <div className="h-[100%] w-[50%] bg-grey-01">
-              <ul className="flex flex-col w-[100%]">
-                {sidoList.map((sido, index) => {
-                  return (
-                    <li
-                      key={`city_${index}`}
-                      className={classNames(
-                        "center h-[48px]",
-                        selectSido.cd === sido.cd
-                          ? "bg-white text-skyblue-01"
-                          : "bg-grey-01 text-grey-04"
-                      )}
-                    >
-                      <ButtonBase
-                        className="w-[100%] h-[100%]"
-                        onClick={() => setSelectSido(sido)}
-                      >
-                        {sido.fullName}
-                      </ButtonBase>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-            <div className="w-[50%]">
-              <ul className="flex flex-col w-[100%] h-[100%] overflow-y-auto">
-                {sigunguList
-                  .filter((sigungu) => sigungu.bjd_cd.startsWith(selectSido.cd))
-                  .map((sigungu, index) => {
-                    return (
-                      <li
-                        key={index}
-                        className={classNames(
-                          "center h-[48px] shrink-0",
-                          selectSigungu?.cd === sigungu.cd && "text-skyblue-01"
-                        )}
-                      >
-                        <ButtonBase
-                          className="w-[100%] h-[100%]"
-                          onClick={() => setSelectSigungu(sigungu)}
-                        >
-                          {sigungu.name}
-                        </ButtonBase>
-                      </li>
-                    );
-                  })}
-              </ul>
-            </div>
-          </div>
-        </div>
-        <BottomButtonTabWrapper shadow className="bg-white">
-          <Button
-            height={48}
-            onClick={() => {
-              if (
-                !selectSigungu ||
-                !selectSigungu.bjd_cd.startsWith(selectSido.cd)
-              ) {
-                setSelectSigungu(null);
-                setSelectLocation({
-                  sido: selectSido,
-                  sigungu: null,
-                });
-              } else {
-                setSelectLocation({ sido: selectSido, sigungu: selectSigungu });
-              }
-
-              router.replace("/map");
-            }}
-            fullWidth
-          >
-            설정하기
-          </Button>
-        </BottomButtonTabWrapper>
-      </div>
+      <BottomTab />
     </>
   );
 }

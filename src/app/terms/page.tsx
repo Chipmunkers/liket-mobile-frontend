@@ -1,21 +1,19 @@
-import { getTosList } from "@/apis/terms";
-import Header from "@/components/Header";
-import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
-import TosItem from "./components/TosItem";
+import { useGetTosAll } from "@/app/terms/_hooks/useGetTosAll";
+import TosItem from "./_ui/TosItem";
+import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 
 export default async function Page() {
-  const { tosList } = await getTosList();
+  const { tosList } = await useGetTosAll();
 
   return (
     <>
       <Header>
-        <LeftOption
+        <HeaderLeft
           option={{
             back: true,
           }}
         />
-        <MiddleText text="약관/정책" />
+        <HeaderMiddle text="약관/정책" />
       </Header>
       <main>
         {tosList.map((tos) => (

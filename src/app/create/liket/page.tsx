@@ -1,24 +1,26 @@
 "use client";
 
-import FrontBackSwitch from "@/components/FrontBackSwitch";
-import Header from "@/components/Header";
-import { StrictShapeConfig } from "@/types/konva";
-import { classNames } from "@/utils/helpers";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import CircleCross from "@/icons/circle-cross.svg";
-import TextEnteringModal from "@/components/TextEnteringModal";
 import { useRouter } from "next/navigation";
-import LiketBackSide from "@/components/LiketBackSide";
 import { Else, If, Then } from "react-if";
-import useWriteTab from "@/hooks/useWriteTab";
-import useCreateLiket from "@/hooks/useCreateLiket";
-import WriteTab from "@/components/WriteTab";
-import RightOption from "@/components/Header/RightOption";
-import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
+import useWriteTab from "./_hooks/useWriteTab";
+import useCreateLiket from "./_hooks/useCreateLiket";
+import {
+  Header,
+  HeaderLeft,
+  HeaderMiddle,
+  HeaderRight,
+} from "@/shared/ui/Header";
+import { classNames } from "@/shared/helpers/classNames";
+import FrontBackSwitch from "./_ui/FrontBackSwitch";
+import BackSide from "./_ui/BackSide";
+import TextEnteringModal from "./_ui/TextEnteringModal";
+import WriteTab from "./_ui/WriteTab";
+import { StrictShapeConfig } from "./types";
 
-const NoSSRLiketUploader = dynamic(() => import("@/components/LiketUploader"), {
+const NoSSRLiketUploader = dynamic(() => import("./_ui/LiketUploader"), {
   ssr: false,
 });
 
@@ -72,13 +74,13 @@ export default function Page() {
       <Header>
         {!isTextEnteringOpen && (
           <>
-            <LeftOption
+            <HeaderLeft
               option={{
                 back: true,
               }}
             />
-            <MiddleText text="라이켓 제작" />
-            <RightOption
+            <HeaderMiddle text="라이켓 제작" />
+            <HeaderRight
               option={{
                 check: {
                   disabled: !uploadedImage,
@@ -96,7 +98,7 @@ export default function Page() {
             onClickSwitch={handleClickSwitchFrontBack}
           />
         </div>
-        <LiketBackSide
+        <BackSide
           isFront={isFront}
           review={review}
           onClickReview={handleClickWriteReview}

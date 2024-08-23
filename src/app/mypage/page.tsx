@@ -1,103 +1,59 @@
 "use client";
 
-import CustomImage from "@/components/CustomImage";
-import Divider from "@/components/Divider";
-import FallbackContentImg from "@/components/FallbackContentImg";
-import LinkItem from "@/components/LinkItem";
-import LinkableTab from "@/components/LinkableTab";
 import RightArrow from "@/icons/right-arrow.svg";
-import { useMyPage } from "@/service/profile";
-import profileStore from "@/stores/profileStore";
 import { ButtonBase } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { If, Then, Else } from "react-if";
 import ScrollContainer from "react-indiana-drag-scroll";
-import customToast from "@/utils/customToast";
 import VerticalDivider from "./icons/vertical-divider.svg";
-import { ScreenTYPE, stackRouterPush } from "@/utils/stackRouter";
-import AvatarUploader from "@/components/AvatarUploader";
-import { compressImage } from "@/utils/compressImg";
-import useUploadProfile from "./_hooks/useUploadProfile";
-import { AxiosError } from "axios";
-import useUpdateProfile from "./_hooks/useUpdateProfileImg";
+import BottomTab from "@/widgets/common/BottomTab";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import DefaultImg from "@/shared/ui/DefaultImg";
+import Divider from "@/shared/ui/Divider";
+import LinkItem from "@/shared/ui/Link/LinkItem";
+import customToast from "@/shared/helpers/customToast";
+import ProfileImgUploader from "@/shared/ui/ProfileImgUploader";
+import { useUploadProfileImg } from "./_hooks/useUploadProfileImg";
+import { useGetMyInfo } from "@/app/mypage/_hooks/useGetMyInfo";
+import { DefaultLoading } from "@/shared/ui/Loading";
 
 export default function Page() {
   const router = useRouter();
-  const setProfile = profileStore(({ setProfile }) => setProfile);
-  const { data, error } = useMyPage({
-    onSuccess: (profile) => setProfile(profile),
+  const { data, error } = useGetMyInfo({
+    onSuccess: (data) => {},
   });
 
+  const [profileImgPath, setProfileImgPath] = useState(
+    data?.profileImgPath || ""
+  );
+
+  // * 프로필 이미지 state 관리
+  useEffect(() => {
+    if (!data) return;
+
+    setProfileImgPath(data.profileImgPath);
+  }, [data]);
+
+  // * 내 정보 보기 에러 처리
   useEffect(() => {
     if (!error) return;
 
     stackRouterPush(router, {
       path: "/login",
-      screen: ScreenTYPE.LOGIN,
+      screen: WEBVIEW_SCREEN.LOGIN,
       isStack: false,
     });
   }, [error, router]);
 
-  const {
-    mutate: uploadProfileImg,
-    error: uploadProfileImgError,
-    data: uploadResult,
-  } = useUploadProfile();
-
-  const { mutate: updateUserProfile, error: updateUserProfileError } =
-    useUpdateProfile();
-
-  useEffect(() => {
-    if (!uploadResult) return;
-
-    updateUserProfile(uploadResult.filePath);
-  }, [uploadResult]);
-
-  useEffect(() => {
-    if (!uploadProfileImgError) return;
-
-    if (uploadProfileImgError instanceof AxiosError) {
-      if (uploadProfileImgError.response?.status === 401) {
-        stackRouterPush(router, {
-          screen: ScreenTYPE.LOGIN,
-          path: "/login?isTokenExpired=true",
-          isStack: false,
-        });
-        return;
-      }
-
-      if (uploadProfileImgError.response?.status === 400) {
-        customToast("png또는 jpg파일만 업로드할 수 있습니다.");
-        return;
-      }
-
-      customToast("예상하지 못한 에러가 발생했습니다.");
-    }
-  }, [uploadProfileImgError]);
-
-  useEffect(() => {
-    if (!updateUserProfileError) return;
-
-    if (updateUserProfileError instanceof AxiosError) {
-      if (updateUserProfileError.response?.status === 401) {
-        stackRouterPush(router, {
-          screen: ScreenTYPE.LOGIN,
-          path: "/login",
-          isStack: false,
-        });
-        return;
-      }
-
-      if (updateUserProfileError.response?.status === 400) {
-        customToast("png또는 jpg파일만 업로드할 수 있습니다.");
-        return;
-      }
-
-      customToast("예상하지 못한 에러가 발생했습니다.");
-    }
-  }, [updateUserProfileError]);
+  const { mutate: uploadProfileImg, status: uploadStatus } =
+    useUploadProfileImg({
+      onSuccess: (data) => {
+        setProfileImgPath(data.filePath);
+      },
+    });
 
   if (!data) {
     return <></>;
@@ -108,7 +64,6 @@ export default function Page() {
     reviewList,
     liketCount,
     liketList,
-    profileImgPath,
     nickname,
     email,
     likeCount,
@@ -129,7 +84,7 @@ export default function Page() {
 
                     stackRouterPush(router, {
                       path: "/mypage/edit/profile",
-                      screen: ScreenTYPE.EDIT_PROFILE,
+                      screen: WEBVIEW_SCREEN.EDIT_PROFILE,
                     });
                   }}
                 >
@@ -150,7 +105,7 @@ export default function Page() {
                       onClick={() => {
                         stackRouterPush(router, {
                           path: "/like",
-                          screen: ScreenTYPE.LIKE,
+                          screen: WEBVIEW_SCREEN.LIKE,
                         });
                       }}
                     >
@@ -181,25 +136,20 @@ export default function Page() {
             </div>
             <div className="">
               <div className="w-[80px] h-[80px] rounded-full relative">
-                <AvatarUploader
-                  defaultAvatar={
-                    data.profileImgPath
-                      ? process.env.NEXT_PUBLIC_IMAGE_SERVER +
-                        data.profileImgPath
-                      : ""
-                  }
-                  onUploadImage={async (file, base64String) => {
-                    const formData = new FormData();
-                    formData.append(
-                      "file",
-                      await compressImage(file, {
-                        maxSizeMB: 1,
-                      })
-                    );
-
-                    uploadProfileImg(formData);
-                  }}
-                />
+                {uploadStatus === "pending" ? (
+                  <div className="bg-grey-01 rounded-full w-[100%] h-[100%]">
+                    <DefaultLoading dotSize="8px" />
+                  </div>
+                ) : (
+                  <ProfileImgUploader
+                    key={profileImgPath}
+                    preview={false}
+                    src={profileImgPath}
+                    onUpload={async (file) => {
+                      uploadProfileImg(file);
+                    }}
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -212,7 +162,7 @@ export default function Page() {
 
                 stackRouterPush(router, {
                   path: "/reviews",
-                  screen: ScreenTYPE.MY_REVIEW,
+                  screen: WEBVIEW_SCREEN.MY_REVIEW,
                 });
               }}
             >
@@ -224,33 +174,20 @@ export default function Page() {
             </Link>
             <If condition={reviewList.length > 0}>
               <Then>
-                <ScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] mt-[8px]">
-                  {reviewList.map(({ idx, thumbnail }) => {
+                <ScrollContainer className="flex flex-row gap-[8px] w-[100%] mt-[8px]">
+                  {reviewList.map((review) => {
                     return (
                       <Link
-                        href={`/reviews/${idx}`}
-                        key={idx}
+                        href={`/reviews/${review.idx}`}
+                        key={review.idx}
                         onClick={(e) => {
                           e.preventDefault();
 
                           // TODO: 추후에 /contents/${idx}?review=${review.idx} 로 변경
                         }}
                       >
-                        <div className="relative w-[112px] h-[178px]">
-                          <CustomImage
-                            src={
-                              process.env.NEXT_PUBLIC_IMAGE_SERVER + thumbnail
-                            }
-                            fallbackComponent={<FallbackContentImg />}
-                            width={112}
-                            height={178}
-                            alt={`리뷰 썸네일 이미지`}
-                            style={{
-                              width: 112,
-                              height: 178,
-                              objectFit: "cover",
-                            }}
-                          />
+                        <div className="relative w-[112px] h-[112px]">
+                          <DefaultImg src={review.thumbnail} />
                         </div>
                       </Link>
                     );
@@ -264,7 +201,7 @@ export default function Page() {
               </Else>
             </If>
           </div>
-          <div className="flex flex-col mt-[24px]">
+          <div className="flex flex-col mt-[24px] mb-[24px]">
             <Link
               className="flex items-center"
               href="/likets"
@@ -273,7 +210,7 @@ export default function Page() {
 
                 stackRouterPush(router, {
                   path: "/likets",
-                  screen: ScreenTYPE.MY_LIKET,
+                  screen: WEBVIEW_SCREEN.MY_LIKET,
                 });
               }}
             >
@@ -286,32 +223,19 @@ export default function Page() {
             <If condition={liketList.length > 0}>
               <Then>
                 <ScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] mt-[8px]">
-                  {liketList.map(({ idx, imgPath }) => {
-                    return (
-                      <Link
-                        href={`/likets/${idx}`}
-                        key={idx}
-                        onClick={(e) => {
-                          e.preventDefault();
-                        }}
-                      >
-                        <div className="relative w-[112px] h-[178px]">
-                          <CustomImage
-                            src={process.env.NEXT_PUBLIC_IMAGE_SERVER + imgPath}
-                            fallbackComponent={<FallbackContentImg />}
-                            width={112}
-                            height={178}
-                            alt={`라이켓 이미지`}
-                            style={{
-                              width: 112,
-                              height: 178,
-                              objectFit: "cover",
-                            }}
-                          />
-                        </div>
-                      </Link>
-                    );
-                  })}
+                  {liketList.map((liket) => (
+                    <Link
+                      href={`/likets/${liket.idx}`}
+                      key={liket.idx}
+                      onClick={(e) => {
+                        e.preventDefault();
+                      }}
+                    >
+                      <div className="relative w-[112px] h-[178px]">
+                        <DefaultImg src={liket.imgPath} />
+                      </div>
+                    </Link>
+                  ))}
                 </ScrollContainer>
               </Then>
               <Else>
@@ -322,55 +246,66 @@ export default function Page() {
             </If>
           </div>
         </div>
-        <Divider width="100%" height="8px" margin="24px 0 0 0" />
+        <Divider width="100%" height="8px" />
         <ButtonBase
           onClick={() => {
             stackRouterPush(router, {
               path: "/account",
-              screen: ScreenTYPE.ACCOUNT,
+              screen: WEBVIEW_SCREEN.ACCOUNT,
             });
           }}
         >
-          <LinkItem href="/account">계정 관리</LinkItem>
+          <LinkItem screen={WEBVIEW_SCREEN.ACCOUNT} href="/account">
+            계정 관리
+          </LinkItem>
         </ButtonBase>
         <Divider width="100%" height="8px" />
         <ButtonBase
           onClick={(e) => {
             stackRouterPush(router, {
               path: "/requested-contents",
-              screen: ScreenTYPE.MY_REQUEST_CONTENT,
+              screen: WEBVIEW_SCREEN.MY_REQUEST_CONTENT,
             });
           }}
         >
-          <LinkItem href="/requested-contents">컨텐츠 등록 요청</LinkItem>
+          <LinkItem
+            screen={WEBVIEW_SCREEN.MY_REQUEST_CONTENT}
+            href="/requested-contents"
+          >
+            컨텐츠 등록 요청
+          </LinkItem>
         </ButtonBase>
         <ButtonBase
           onClick={() => {
             stackRouterPush(router, {
               path: "/inquiries",
-              screen: ScreenTYPE.MY_INQUIRY,
+              screen: WEBVIEW_SCREEN.MY_INQUIRY,
             });
           }}
         >
-          <LinkItem href="/inquires">1:1문의</LinkItem>
+          <LinkItem screen={WEBVIEW_SCREEN.MY_INQUIRY} href="/inquires">
+            1:1문의
+          </LinkItem>
         </ButtonBase>
         <Divider width="100%" height="8px" />
         <ButtonBase
           onClick={() => {
             stackRouterPush(router, {
               path: "/terms",
-              screen: ScreenTYPE.TERMS_LIST,
+              screen: WEBVIEW_SCREEN.TERMS_LIST,
             });
           }}
         >
-          <LinkItem href="/terms">약관/정책</LinkItem>
+          <LinkItem screen={WEBVIEW_SCREEN.TERMS_LIST} href="/terms">
+            약관/정책
+          </LinkItem>
         </ButtonBase>
         <div className="flex justify-between items-center w-[100%] h-[48px] px-[24px]">
           <div className="text-h2">버전</div>
           <div className="text-body2 text-grey-04">1.0</div>
         </div>
       </main>
-      <LinkableTab shadow />
+      <BottomTab shadow={true} />
     </>
   );
 }

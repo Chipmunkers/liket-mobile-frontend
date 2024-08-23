@@ -1,22 +1,18 @@
 "use client";
 
-import Header from "@/components/Header";
-import Divider from "@/components/Divider";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import customToast from "@/utils/customToast";
 import { ButtonBase } from "@mui/material";
 import KakaoLogo from "./icon/kakao-logo.svg";
 import AppleLogo from "./icon/apple-logo.svg";
 import NaverLogo from "./icon/naver-logo.svg";
 import Logo from "./icon/logo.svg";
-import LeftOption from "@/components/Header/LeftOption";
-import {
-  ScreenTYPE,
-  stackRouterBack,
-  stackRouterPush,
-} from "../../utils/stackRouter";
+import { Header, HeaderLeft } from "@/shared/ui/Header";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import Divider from "@/shared/ui/Divider";
+import customToast from "@/shared/helpers/customToast";
 
 export default function Page() {
   const router = useRouter();
@@ -31,13 +27,13 @@ export default function Page() {
   return (
     <>
       <Header>
-        <LeftOption
+        <HeaderLeft
           option={{
             close: {
               onClick: () => {
                 stackRouterPush(router, {
                   path: "/",
-                  screen: ScreenTYPE.MAIN,
+                  screen: WEBVIEW_SCREEN.MAIN,
                   isStack: false,
                 });
               },
@@ -59,7 +55,7 @@ export default function Page() {
 
                 stackRouterPush(router, {
                   path: process.env.NEXT_PUBLIC_API_SERVER + "/auth/kakao",
-                  screen: ScreenTYPE.KAKAO_LOGIN,
+                  screen: WEBVIEW_SCREEN.KAKAO_LOGIN,
                 });
               }}
             >
@@ -80,7 +76,7 @@ export default function Page() {
 
                 stackRouterPush(router, {
                   path: process.env.NEXT_PUBLIC_API_SERVER + "/auth/apple",
-                  screen: ScreenTYPE.APPLE_LOGIN,
+                  screen: WEBVIEW_SCREEN.APPLE_LOGIN,
                 });
               }}
             >
@@ -101,7 +97,7 @@ export default function Page() {
 
                 stackRouterPush(router, {
                   path: process.env.NEXT_PUBLIC_API_SERVER + "/auth/naver",
-                  screen: ScreenTYPE.NAVER_LOGIN,
+                  screen: WEBVIEW_SCREEN.NAVER_LOGIN,
                 });
               }}
             >
@@ -128,7 +124,7 @@ export default function Page() {
               e.preventDefault();
               stackRouterPush(router, {
                 path: "/login/email",
-                screen: ScreenTYPE.EMAIL_LOGIN,
+                screen: WEBVIEW_SCREEN.EMAIL_LOGIN,
               });
             }}
           >
@@ -143,7 +139,7 @@ export default function Page() {
 
               stackRouterPush(router, {
                 path: "/signup",
-                screen: ScreenTYPE.SIGN_UP,
+                screen: WEBVIEW_SCREEN.SIGN_UP,
               });
             }}
           >

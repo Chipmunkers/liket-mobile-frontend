@@ -1,26 +1,20 @@
 "use client";
 
-import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
-import Button from "@/components/Button";
-import Header from "@/components/Header";
-import { Input, InputWrapper, Label } from "@/components/newInput";
-import { useLogin } from "@/service/login/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Link from "next/link";
-import authStore from "@/stores/authStore";
-import { setAuthToken } from "@/utils/axios";
-import customToast from "@/utils/customToast";
-import DefaultLoading from "@/components/Loading/DefaultLoading";
-import LeftOption from "@/components/Header/LeftOption";
-import MiddleText from "@/components/Header/MiddleText";
-import {
-  ScreenTYPE,
-  stackRouterBack,
-  stackRouterPush,
-} from "../../../utils/stackRouter";
+import { setAuthToken } from "@/shared/helpers/axios";
+import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
+import BottomButtonTab from "@/shared/ui/BottomButtonTab";
+import Button from "@/shared/ui/Button";
+import { DefaultLoading } from "@/shared/ui/Loading";
+import { BasicInput, InputLabel } from "@/shared/ui/Input";
+import authStore from "@/shared/store/authStore";
+import { useLogin } from "./_hooks/useLogin";
 
 const schema = z.object({
   email: z.string().email("올바른 이메일을 입력해주세요."),
@@ -29,33 +23,7 @@ const schema = z.object({
 
 export default function Page() {
   const setToken = authStore(({ setToken }) => setToken);
-  const { mutate, status } = useLogin({
-    onSuccess: ({ data }) => {
-      setAuthToken(data.token);
-      setToken(data.token);
-      stackRouterPush(router, {
-        path: "/",
-        screen: ScreenTYPE.MAIN,
-        isStack: false,
-      });
-    },
-    onError: ({ response }) => {
-      if (response?.status === 400) {
-        customToast("데이터의 형태가 잘못되었습니다.");
-        return;
-      }
-
-      if (response?.status === 401) {
-        customToast("비밀번호가 잘못되었습니다.");
-        return;
-      }
-
-      if (response?.status === 418) {
-        customToast("정지된 사용자입니다.");
-        return;
-      }
-    },
-  });
+  const { mutate, status } = useLogin({ setToken, setAuthToken });
 
   const router = useRouter();
 
@@ -82,14 +50,14 @@ export default function Page() {
   return (
     <>
       <Header>
-        <LeftOption
+        <HeaderLeft
           option={{
             back: {
               onClick: () => stackRouterBack(router),
             },
           }}
         />
-        <MiddleText text="로그인" />
+        <HeaderMiddle text="로그인" />
       </Header>
       <form
         className="flex flex-col grow pt-[16px]"
@@ -97,25 +65,25 @@ export default function Page() {
       >
         <div className="px-[24px]">
           <div>
-            <InputWrapper margin="0 0 34px 0">
-              <Label htmlFor="email">이메일</Label>
-              <Input
+            <div className="mb-[48px]">
+              <InputLabel htmlFor="email">이메일</InputLabel>
+              <BasicInput
                 field="email"
                 placeholder="이메일 입력"
                 formState={formState}
                 register={register}
               />
-            </InputWrapper>
-            <InputWrapper margin="0 0 47px 0">
-              <Label htmlFor="pw">비밀번호</Label>
-              <Input
+            </div>
+            <div className="mb-[48px]">
+              <InputLabel htmlFor="pw">비밀번호</InputLabel>
+              <BasicInput
                 field="pw"
                 type="password"
                 placeholder="비밀번호 입력"
                 register={register}
                 formState={formState}
               />
-            </InputWrapper>
+            </div>
           </div>
           <div className="flex flex-row-reverse">
             <Link
@@ -126,7 +94,7 @@ export default function Page() {
 
                 stackRouterPush(router, {
                   path: "/find/password",
-                  screen: ScreenTYPE.FIND_PASSWORD,
+                  screen: WEBVIEW_SCREEN.FIND_PASSWORD,
                 });
               }}
             >
@@ -134,16 +102,15 @@ export default function Page() {
             </Link>
           </div>
         </div>
-        <BottomButtonTabWrapper shadow>
+        <BottomButtonTab shadow>
           <Button
-            fullWidth
             disabled={!formState.isValid || status === "pending"}
-            height={48}
             onClick={() => onSubmit()}
+            className="h-[48px] w-[100%]"
           >
             {status === "pending" ? <DefaultLoading dotSize="8px" /> : "로그인"}
           </Button>
-        </BottomButtonTabWrapper>
+        </BottomButtonTab>
       </form>
     </>
   );

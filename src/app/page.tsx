@@ -1,22 +1,20 @@
-import Divider from "@/components/Divider";
-import Header from "@/components/Header";
-import LinkableTab from "@/components/LinkableTab";
-import CustomScrollContainer from "@/components/CustomScrollContainer";
-import MainCarousel from "@/components/Carousel/MainCarousel";
-import SoonOpenContentSection from "./_components/SoonOpenContentSection";
-import SoonEndContentSection from "./_components/SoonEndContentSection";
-import HotStyleSection from "./_components/HotStyleSection";
-import HotAgeSection from "./_components/HotAgeSection";
+import SoonOpenContentSection from "./_ui/SoonOpenContentSection";
+import SoonEndContentSection from "./_ui/SoonEndContentSection";
+import HotStyleSection from "./_ui/HotStyleSection";
+import HotAgeSection from "./_ui/HotAgeSection";
 import { getSoonOpenContentsForServer } from "./_hooks/getSoonOpenContents";
 import { getSoonEndContentsForServer } from "./_hooks/getSoonEndContents";
 import { getBanners } from "./_hooks/getBanners";
 import { getHotContentsForServer } from "./_hooks/getHotContents";
-import ReviewCard from "../components/Card/ReviewCard";
 import { getHotReview } from "./_hooks/getHotReviews";
-import LeftOption from "@/components/Header/LeftOption";
-import RightOption from "@/components/Header/RightOption";
-import HotPlaceSection from "./_components/HotPlaceSection";
-import { useEffect } from "react";
+import HotPlaceSection from "./_ui/HotPlaceSection";
+import BottomTab from "@/widgets/common/BottomTab";
+import Header from "@/shared/ui/Header/Header";
+import { HeaderLeft, HeaderRight } from "@/shared/ui/Header";
+import Divider from "@/shared/ui/Divider";
+import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
+import MainBannerCarousel from "@/app/_ui/MainBannerCarousel";
+import ReviewCard from "@/entities/review/ReviewCard";
 
 const Home = async () => {
   const { contentList: soonOpenContents } =
@@ -26,18 +24,16 @@ const Home = async () => {
   const hotContentList = await getHotContentsForServer();
   const reviews = await getHotReview();
 
-  console.log(reviews);
-
   return (
     <>
       <Header checkUserAgent={true}>
-        <LeftOption logo />
-        <RightOption option={{ search: true, like: true }} />
+        <HeaderLeft logo />
+        <HeaderRight option={{ search: true, like: true }} />
       </Header>
       {/* 높이 값을 주면 마진 만큼 비어있는 공간으로 남게됨: 이유는 모름 */}
       <main className="mb-[48px]">
         {/* 배너 */}
-        <MainCarousel list={bannerList.map(({ imgPath }) => imgPath)} />
+        <MainBannerCarousel srcList={bannerList.map((img) => img.imgPath)} />
 
         {/* 인기 스타일  문화생활 컨텐츠*/}
         <HotStyleSection />
@@ -73,7 +69,7 @@ const Home = async () => {
           </>
         ) : null}
       </main>
-      <LinkableTab shadow />
+      <BottomTab shadow={true} />
     </>
   );
 };
