@@ -3,6 +3,9 @@ import { Props } from "./types";
 import { classNames } from "@/shared/helpers/classNames";
 import ContentCardLarge from "@/entities/content/ContentCardLarge";
 import useHandleResizeScreen from "./hooks/useHandleResizeScreen";
+import { useRouter } from "next/navigation";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
 const ContentCardGroup = (props: Props) => {
   // * Props
@@ -13,6 +16,8 @@ const ContentCardGroup = (props: Props) => {
 
   // * Hooks
   useHandleResizeScreen(setIsNarrow);
+
+  const router = useRouter();
 
   return (
     <>
@@ -29,7 +34,15 @@ const ContentCardGroup = (props: Props) => {
               content={content}
               width="100%"
               onClick={() => {
-                onContentClick && onContentClick(content);
+                if (onContentClick) {
+                  onContentClick(content);
+                  return;
+                }
+
+                stackRouterPush(router, {
+                  path: "/contents/" + content.idx,
+                  screen: WEBVIEW_SCREEN.CONTENT_DETAIL,
+                });
               }}
             />
           </div>

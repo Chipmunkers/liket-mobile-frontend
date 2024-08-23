@@ -14,6 +14,8 @@ export type Props = WidgetUiProps<{
 
   /**
    * 컨텐츠 클릭 이벤트
+   *
+   * @default "클릭 시 해당 컨텐츠 자세히보기 페이지로 이동"
    */
   onContentClick?: (content: SummaryContentEntity) => void;
 }>;
