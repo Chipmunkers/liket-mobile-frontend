@@ -9,7 +9,7 @@ import TextEnteringModal from "@/components/TextEnteringModal"; // TODO: 수정�
 import { useRouter } from "next/navigation";
 import LiketBackSide from "@/components/LiketBackSide";
 import { Else, If, Then } from "react-if";
-import useWriteTab from "@/hooks/useWriteTab"; // TODO: 수정필요
+import useWriteTab from "./_hooks/useWriteTab";
 import useCreateLiket from "@/hooks/useCreateLiket"; // TODO: 수정필요
 import WriteTab from "@/components/WriteTab"; // TODO: 수정필요
 import {
