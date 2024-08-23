@@ -183,7 +183,9 @@ export default function Page() {
                         onClick={(e) => {
                           e.preventDefault();
 
-                          // TODO: 추후에 /contents/${idx}?review=${review.idx} 로 변경
+                          stackRouterPush(router, {
+                            path: `/contents/${review.cultureContent.idx}?review=${review.idx}&tab=review`,
+                          });
                         }}
                       >
                         <div className="relative w-[112px] h-[112px]">
@@ -247,34 +249,16 @@ export default function Page() {
           </div>
         </div>
         <Divider width="100%" height="8px" />
-        <ButtonBase
-          onClick={() => {
-            stackRouterPush(router, {
-              path: "/account",
-              screen: WEBVIEW_SCREEN.ACCOUNT,
-            });
-          }}
-        >
-          <LinkItem screen={WEBVIEW_SCREEN.ACCOUNT} href="/account">
-            계정 관리
-          </LinkItem>
-        </ButtonBase>
+        <LinkItem screen={WEBVIEW_SCREEN.ACCOUNT} href="/account">
+          계정 관리
+        </LinkItem>
         <Divider width="100%" height="8px" />
-        <ButtonBase
-          onClick={(e) => {
-            stackRouterPush(router, {
-              path: "/requested-contents",
-              screen: WEBVIEW_SCREEN.MY_REQUEST_CONTENT,
-            });
-          }}
+        <LinkItem
+          screen={WEBVIEW_SCREEN.MY_REQUEST_CONTENT}
+          href="/requested-contents"
         >
-          <LinkItem
-            screen={WEBVIEW_SCREEN.MY_REQUEST_CONTENT}
-            href="/requested-contents"
-          >
-            컨텐츠 등록 요청
-          </LinkItem>
-        </ButtonBase>
+          컨텐츠 등록 요청
+        </LinkItem>
         <ButtonBase
           onClick={() => {
             stackRouterPush(router, {
@@ -288,18 +272,9 @@ export default function Page() {
           </LinkItem>
         </ButtonBase>
         <Divider width="100%" height="8px" />
-        <ButtonBase
-          onClick={() => {
-            stackRouterPush(router, {
-              path: "/terms",
-              screen: WEBVIEW_SCREEN.TERMS_LIST,
-            });
-          }}
-        >
-          <LinkItem screen={WEBVIEW_SCREEN.TERMS_LIST} href="/terms">
-            약관/정책
-          </LinkItem>
-        </ButtonBase>
+        <LinkItem screen={WEBVIEW_SCREEN.TERMS_LIST} href="/terms">
+          약관/정책
+        </LinkItem>
         <div className="flex justify-between items-center w-[100%] h-[48px] px-[24px]">
           <div className="text-h2">버전</div>
           <div className="text-body2 text-grey-04">1.0</div>

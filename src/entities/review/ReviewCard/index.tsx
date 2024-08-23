@@ -39,7 +39,7 @@ const ReviewCard = (props: { review: ReviewEntity }) => {
           <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-grey-black to-transparent"></div>
         </div> */}
         <div className="absolute flex flex-row mt-[12px] ml-[12px] top-0">
-          <div className="relative w-[18px] h-[18px] overflow-hidden rounded-full">
+          <div className="relative w-[18px] h-[18px] overflow-hidden rounded-full border-[1px] border-grey-02">
             <DefaultImg src={review.author.profileImgPath || ""} />
           </div>
           <div className="text-body2 text-white ml-[4px]">
