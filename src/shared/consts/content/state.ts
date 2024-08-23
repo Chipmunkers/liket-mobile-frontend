@@ -3,13 +3,13 @@ export const CONTENT_STATES = {
     name: "진행중",
   },
   closed: {
-    name: "비활성화",
+    name: "종료",
   },
   waiting: {
     name: "등록대기",
   },
   willActive: {
-    name: "진행예정",
+    name: "오픈예정",
   },
   willClosed: {
     name: "종료예정",
