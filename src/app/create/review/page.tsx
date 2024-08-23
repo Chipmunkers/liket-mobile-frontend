@@ -8,7 +8,6 @@ import Image from "next/image";
 import ClockIcon from "@/icons/clock.svg";
 import DeleteIcon from "@/icons/circle-cross.svg";
 import CalendarIcon from "@/icons/calendar.svg";
-import customToast from "@/utils/customToast";
 import { usePathname, useRouter } from "next/navigation";
 import { TextareaAutosize } from "@mui/material";
 import ScrollContainer from "react-indiana-drag-scroll";
@@ -35,6 +34,7 @@ import { colors } from "@/shared/style/color";
 import { useUploadReviewImages } from "./_hooks/useUploadReviewImages";
 import { useCreateReview } from "./_hooks/useCreateReview";
 import { compressImage } from "@/shared/helpers/compressImage";
+import customToast from "@/shared/helpers/customToast";
 
 const MAX_IMAGES_COUNT = 10;
 const MAX_REVIEW_LENGTH = 1000;

@@ -1,6 +1,6 @@
 import { ButtonBase } from "@mui/material";
 import { Props } from "./types";
-import { classNames } from "@/utils/helpers";
+import { classNames } from "@/shared/helpers/classNames";
 
 const DrawerItem = ({ children, onClick, className }: Props) => {
   return (

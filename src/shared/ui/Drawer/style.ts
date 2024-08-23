@@ -1,4 +1,4 @@
-import { colors } from "@/utils/style";
+import { colors } from "@/shared/style/color";
 import styled from "@emotion/styled";
 import Drawer from "@mui/material/Drawer/Drawer";
 

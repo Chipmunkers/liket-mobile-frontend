@@ -5,13 +5,13 @@ import LikeIcon from "@/icons/like.svg";
 import CreateIcon from "@/icons/create.svg";
 import MenuIcon from "@/icons/menu.svg";
 import CheckIcon from "@/icons/check.svg";
-import { colors } from "@/utils/style";
 import Link from "next/link";
 import { ButtonBase } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { Props } from "./types";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { colors } from "@/shared/style/color";
 
 const HeaderRight = ({ text, option }: Props) => {
   const router = useRouter();

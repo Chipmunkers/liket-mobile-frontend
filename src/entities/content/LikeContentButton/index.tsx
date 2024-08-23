@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import customToast from "@/utils/customToast";
 import FilledHeartIcon from "@/shared/icon/content/FilledHeart.svg";
 import EmptyHeaderIcon from "@/shared/icon/content/EmptyHeart.svg";
-import { colors } from "@/utils/style";
 import { useLikeContent } from "./hooks/useLikeContent";
 import { useCancelLikeContent } from "./hooks/useCancelLikeContent";
 import { Props } from "./types";
+import customToast from "@/shared/helpers/customToast";
+import { colors } from "@/shared/style/color";
 
 const LikeContentButton = (props: Props) => {
   const [like, setLike] = useState(props.likeState);

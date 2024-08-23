@@ -1,6 +1,6 @@
-import { classNames } from "@/utils/helpers";
 import { ButtonBase } from "@mui/material";
 import { Props } from "./types";
+import { classNames } from "@/shared/helpers/classNames";
 
 const Chip = ({ children, isSelected, onClick, className }: Props) => {
   return (
