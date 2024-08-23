@@ -21,6 +21,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-smooth: never;
+    -webkit-touch-callout: none;
   }
 
   main {
