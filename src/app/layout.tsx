@@ -7,6 +7,7 @@ import ToastProvider from "./_ui/ToasterProvider";
 import ModalProvider from "@/shared/provider/ModalProvider";
 import QueryProvider from "@/shared/provider/QueryProvider";
 import MuiLocalizationProvider from "@/shared/provider/MuiLocalizationProvider";
+import { classNames } from "@/shared/helpers/classNames";
 
 dayjs.locale("ko");
 
@@ -67,8 +68,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko">
-      <body className={appleGothic.className}>
+    <html lang="ko" className="bg-grey-01">
+      <body className={classNames(appleGothic.className, "bg-white")}>
         <ModalProvider>
           <QueryProvider>
             <MuiLocalizationProvider>
