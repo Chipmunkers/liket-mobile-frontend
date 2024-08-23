@@ -1,22 +1,19 @@
-import { IconType } from "@/components/IconButtonGroup";
-import { CardSizeType } from "@/components/WriteTab/SizeEdit";
-import { ColorTokensType } from "@/components/WriteTab/TextEdit";
+import { CardSizeType, ColorTokensType, IconType } from "../../liket/types";
+import { getXPos, yPos } from "../_util/position";
+import { generateRandomId } from "@/shared/helpers/random";
+import { SetState } from "@/shared/types/react";
 import { StrictShapeConfig } from "@/types/konva";
-import { getXPos, yPos } from "@/utils/create-liket";
-import { generateRandomId } from "@/utils/helpers";
-import { Dispatch, SetStateAction, useState } from "react";
-
-interface UseWriteTabParam {
-  shapes: StrictShapeConfig[];
-  setShapes: Dispatch<SetStateAction<StrictShapeConfig[]>>;
-  selectedShapeId: string;
-}
+import { useState } from "react";
 
 const useWriteTab = ({
   shapes,
   setShapes,
   selectedShapeId,
-}: UseWriteTabParam) => {
+}: {
+  shapes: StrictShapeConfig[];
+  setShapes: SetState<StrictShapeConfig[]>;
+  selectedShapeId: string;
+}) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isTextEnteringOnFrontSide, setIsTextEnteringOnFrontSide] =
     useState(false);

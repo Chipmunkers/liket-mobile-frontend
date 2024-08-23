@@ -1,26 +1,12 @@
-import { classNames } from "@/utils/helpers";
+import { CARD_SIZE } from "@/app/create/liket/_consts/size";
+import { CardSizeType } from "@/app/create/liket/types";
+import { classNames } from "@/shared/helpers/classNames";
 import { useState } from "react";
-
-/**
- * @deprecated
- */
-const CARD_SIZE = {
-  LARGE: "LARGE",
-  MEDIUM: "MEDIUM",
-  SMALL: "SMALL",
-} as const;
-
-/**
- * @deprecated
- */
-export type CardSizeType = keyof typeof CARD_SIZE;
 
 interface SizeEditProps {
   onClickChangeSize: (size: CardSizeType) => void;
 }
-/**
- * @deprecated
- */
+
 const SizeEdit = ({ onClickChangeSize }: SizeEditProps) => {
   const [selectedSize, setSelectedSize] = useState<CardSizeType>(
     CARD_SIZE.LARGE

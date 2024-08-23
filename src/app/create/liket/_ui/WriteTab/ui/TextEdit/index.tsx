@@ -1,32 +1,10 @@
-import { classNames } from "@/utils/helpers";
 import { useState } from "react";
+import { Props } from "./types";
+import { ColorTokensType } from "../../../../types";
+import { COLOR_TOKENS } from "../../../../_consts/color";
+import { classNames } from "@/shared/helpers/classNames";
 
-/**
- * @deprecated
- */
-const COLOR_TOKENS = [
-  "#000",
-  "#fff",
-  "#e0483f",
-  "#ec682c",
-  "#f5d949",
-  "#4eab87",
-  "#3b85ca",
-  "#45098c",
-] as const;
-
-/**
- * @deprecated
- */
-export type ColorTokensType = (typeof COLOR_TOKENS)[number];
-
-interface TextProps {
-  onClickColor: (color: ColorTokensType) => void;
-}
-/**
- * @deprecated
- */
-const TextEdit = ({ onClickColor }: TextProps) => {
+const TextEdit = ({ onClickColor }: Props) => {
   const [clickedColor, setClickedColor] = useState<ColorTokensType>("#000");
 
   return (

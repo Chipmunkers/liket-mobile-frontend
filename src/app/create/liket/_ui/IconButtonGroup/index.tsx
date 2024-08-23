@@ -1,29 +1,8 @@
-import { IconName } from "@/utils/icons";
 import Image from "next/image";
+import { Props } from "./types";
+import { IconType } from "../../types";
 
-/**
- * @deprecated
- */
-export type IconType =
-  | IconName
-  | { name: IconName; isDisabled?: boolean; isActive?: boolean };
-
-interface IconButtonGroup {
-  icons: IconType[];
-  iconSize: number;
-  iconGap?: number;
-  onClickIcon: (e: IconType) => void;
-}
-
-/**
- * @deprecated
- */
-const IconButtonGroup = ({
-  icons,
-  iconGap,
-  iconSize,
-  onClickIcon,
-}: IconButtonGroup) => {
+const IconButtonGroup = ({ icons, iconGap, iconSize, onClickIcon }: Props) => {
   return (
     <ul
       style={{

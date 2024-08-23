@@ -1,17 +1,13 @@
 "use client";
 
-import FrontBackSwitch from "@/components/FrontBackSwitch"; // TODO: 수정필요
 import { StrictShapeConfig } from "@/types/konva";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import CircleCross from "@/icons/circle-cross.svg";
-import TextEnteringModal from "@/components/TextEnteringModal"; // TODO: 수정필요
 import { useRouter } from "next/navigation";
-import LiketBackSide from "@/components/LiketBackSide";
 import { Else, If, Then } from "react-if";
 import useWriteTab from "./_hooks/useWriteTab";
-import useCreateLiket from "@/hooks/useCreateLiket"; // TODO: 수정필요
-import WriteTab from "@/components/WriteTab"; // TODO: 수정필요
+import useCreateLiket from "./_hooks/useCreateLiket";
 import {
   Header,
   HeaderLeft,
@@ -19,6 +15,10 @@ import {
   HeaderRight,
 } from "@/shared/ui/Header";
 import { classNames } from "@/shared/helpers/classNames";
+import FrontBackSwitch from "./_ui/FrontBackSwitch";
+import BackSide from "./_ui/BackSide";
+import TextEnteringModal from "./_ui/TextEnteringModal";
+import WriteTab from "./_ui/WriteTab";
 
 const NoSSRLiketUploader = dynamic(() => import("@/components/LiketUploader"), {
   ssr: false,
@@ -98,7 +98,7 @@ export default function Page() {
             onClickSwitch={handleClickSwitchFrontBack}
           />
         </div>
-        <LiketBackSide
+        <BackSide
           isFront={isFront}
           review={review}
           onClickReview={handleClickWriteReview}
