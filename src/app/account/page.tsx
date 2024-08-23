@@ -63,21 +63,12 @@ export default function Page() {
           </div>
         </div>
         <Divider width="100%" height="8px" margin="16px 0 0 0" />
-        <ButtonBase
-          onClick={() => {
-            stackRouterPush(router, {
-              path: "/mypage/edit/password",
-              screen: WEBVIEW_SCREEN.EDIT_MY_PASSWORD,
-            });
-          }}
+        <LinkItem
+          screen={WEBVIEW_SCREEN.EDIT_MY_PASSWORD}
+          href="/mypage/edit/password"
         >
-          <LinkItem
-            screen={WEBVIEW_SCREEN.EDIT_MY_PASSWORD}
-            href="/mypage/edit/password"
-          >
-            비밀번호 변경
-          </LinkItem>
-        </ButtonBase>
+          비밀번호 변경
+        </LinkItem>
 
         <ButtonBase
           className="text-h2 w-[100%] h-[48px] flex items-center px-[24px] justify-start"
