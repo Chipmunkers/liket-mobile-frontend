@@ -1,6 +1,5 @@
 "use client";
 
-import { useLogout } from "@/service/login/hooks";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { setAuthToken } from "@/shared/helpers/axios";
@@ -18,6 +17,7 @@ import Kakao from "@/shared/icon/user/kakao.svg";
 import Naver from "@/shared/icon/user/naver.svg";
 import Apple from "@/shared/icon/user/apple.svg";
 import { SOCIAL_PROVIDER } from "@/shared/consts/user/social";
+import { useLogout } from "./_hooks/useLogout";
 
 export default function Page() {
   const router = useRouter();
