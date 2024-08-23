@@ -1,7 +1,6 @@
-import { useIsWebView } from "@/hooks/useIsWebView";
 import { WEBVIEW_EVENT_TYPE } from "@/shared/consts/webview/event";
 import { setAppNavBack } from "@/shared/helpers/setAppNavState";
-import { SetState } from "@/types/react";
+import { SetState } from "@/shared/types/react";
 import { useEffect } from "react";
 
 const useMessageWebview = (isOpen: boolean, setIsOpen: SetState<boolean>) => {

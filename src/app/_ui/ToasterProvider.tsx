@@ -1,6 +1,6 @@
 "use client";
 
-import { useIsWebView } from "@/hooks/useIsWebView";
+import { useIsWebView } from "@/shared/hooks/useIsWebview";
 import { Toaster } from "react-hot-toast";
 
 const ToastProvider = () => {
