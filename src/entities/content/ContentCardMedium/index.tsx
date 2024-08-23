@@ -18,7 +18,7 @@ const ContentCardMedium = ({ content, onClick, className }: Props) => {
     <div className={classNames("w-[100%] bg-white", className || "")}>
       <Link
         href={`/contents/${content.idx}`}
-        className="relative flex m-4"
+        className="relative flex"
         onClick={(e) => {
           e.preventDefault();
 
