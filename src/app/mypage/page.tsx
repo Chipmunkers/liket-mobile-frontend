@@ -174,7 +174,7 @@ export default function Page() {
             </Link>
             <If condition={reviewList.length > 0}>
               <Then>
-                <ScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] mt-[8px]">
+                <ScrollContainer className="flex flex-row gap-[8px] w-[100%] mt-[8px]">
                   {reviewList.map((review) => {
                     return (
                       <Link
@@ -186,7 +186,7 @@ export default function Page() {
                           // TODO: 추후에 /contents/${idx}?review=${review.idx} 로 변경
                         }}
                       >
-                        <div className="relative w-[112px] h-[178px]">
+                        <div className="relative w-[112px] h-[112px]">
                           <DefaultImg src={review.thumbnail} />
                         </div>
                       </Link>
