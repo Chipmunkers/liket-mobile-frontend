@@ -4,12 +4,8 @@ import { Layer, Image, Stage } from "react-konva";
 import { useEffect, useRef } from "react";
 import { KonvaEventObject } from "konva/lib/Node";
 import KonvaText from "./_ui/KonvaText";
-import { StrictShapeConfig } from "@/types/konva";
-import {
-  BACKGROUND_CARD_SIZES,
-  STAGE_SIZE,
-} from "@/app/create/liket/_consts/size";
-import { Props } from "./types";
+import { BACKGROUND_CARD_SIZES, STAGE_SIZE } from "../../_consts/size";
+import { Props, StrictShapeConfig } from "./types";
 import KonvaImage from "./_ui/KonvaImage";
 
 const LiketUploader = ({
