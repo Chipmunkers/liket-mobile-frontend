@@ -1,6 +1,6 @@
-import { FeatureUiProps, SetState } from "@/shared/types/react";
+import { WidgetUiProps, SetState } from "@/shared/types/react";
 
-export type Props = FeatureUiProps<{
+export type Props = WidgetUiProps<{
   /**
    * 열려있는지 여부
    */

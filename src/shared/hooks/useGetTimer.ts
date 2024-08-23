@@ -11,14 +11,7 @@ export const useGetTimer = (limitSecond: number, timeoutEvent?: () => void) => {
   const time = new Date();
   time.setSeconds(time.getSeconds() + limitSecond);
 
-  const {
-    hours,
-    minutes,
-    seconds,
-    isRunning,
-    start,
-    restart: useTimerRestart,
-  } = useTimer({
+  const { hours, minutes, seconds, isRunning, start, restart } = useTimer({
     expiryTimestamp: time,
     autoStart: false,
   });
@@ -27,13 +20,13 @@ export const useGetTimer = (limitSecond: number, timeoutEvent?: () => void) => {
     if (!hours && !minutes && !seconds) timeoutEvent && timeoutEvent();
   }, [hours, minutes, seconds]);
 
-  const restart = () => {
+  const restartTimer = () => {
     const time = new Date();
 
     time.setSeconds(time.getSeconds() + limitSecond);
 
-    useTimerRestart(time);
+    restart(time);
   };
 
-  return { minutes, seconds, isRunning, start, restart, time };
+  return { minutes, seconds, isRunning, start, restart: restartTimer, time };
 };

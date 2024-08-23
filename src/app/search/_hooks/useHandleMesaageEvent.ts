@@ -28,17 +28,17 @@ const useHandleMessageEvent = (setPagerble: SetState<SearchPagerble>) => {
         return;
       }
     }
-
-    useEffect(() => {
-      // ios
-      window.addEventListener("message", webviewMessageEvent);
-
-      // android
-      //document.addEventListener("message", (e) => alert(e.data));
-
-      return () => window.removeEventListener("message", webviewMessageEvent);
-    }, []);
   };
+
+  useEffect(() => {
+    // ios
+    window.addEventListener("message", webviewMessageEvent);
+
+    // android
+    //document.addEventListener("message", (e) => alert(e.data));
+
+    return () => window.removeEventListener("message", webviewMessageEvent);
+  }, []);
 };
 
 export default useHandleMessageEvent;

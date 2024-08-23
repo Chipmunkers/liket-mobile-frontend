@@ -111,8 +111,9 @@ export default function Page() {
                 htmlFor="detail-info"
                 maxLength={200}
                 currentLength={text.length}
-                children={""}
-              />
+              >
+                {""}
+              </InputLabel>
               <TextareaAutosize
                 value={text}
                 maxLength={200}

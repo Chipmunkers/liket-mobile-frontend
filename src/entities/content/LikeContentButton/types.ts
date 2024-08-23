@@ -1,6 +1,6 @@
-import { FeatureUiProps } from "@/shared/types/react";
+import { EntityUiProps } from "@/shared/types/react";
 
-export type Props = FeatureUiProps<{
+export type Props = EntityUiProps<{
   /**
    * 클릭 시 좋아요가 추가 될 컨텐츠
    * 비어있다면 클릭이 되지 않음

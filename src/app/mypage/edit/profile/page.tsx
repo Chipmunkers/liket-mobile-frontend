@@ -3,7 +3,7 @@
 import { useEditProfile } from "@/service/profile";
 import profileStore from "@/stores/profileStore";
 import customToast from "@/utils/customToast";
-import DevIng from "../../../../components/DevIng";
+import DevIng from "@/widgets/common/DevIng";
 
 export default function Page() {
   const { mutate } = useEditProfile({

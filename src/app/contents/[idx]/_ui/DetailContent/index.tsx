@@ -6,7 +6,6 @@ import ReservationIcon from "@/icons/reservation.svg";
 import PetIcon from "@/icons/pet.svg";
 import EntranceFeeIcon from "@/icons/entrance-fee.svg";
 import dayjs from "dayjs";
-import ContentCarousel from "@/components/Carousel/ContentCarousel";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Props } from "./types";
@@ -19,6 +18,7 @@ import { CONTENT_STATES } from "@/shared/consts/content/state";
 import Badge from "@/shared/ui/Badge";
 import CategoryTab from "@/shared/ui/CategoryTab";
 import Divider from "@/shared/ui/Divider";
+import ContentImgCarousel from "@/widgets/content/ContentImgCarousel";
 
 const DetailContent = (props: Props) => {
   const searchParams = useSearchParams();
@@ -38,7 +38,7 @@ const DetailContent = (props: Props) => {
 
   return (
     <main className="mb-[24px]">
-      <ContentCarousel list={content.imgList} />
+      <ContentImgCarousel list={content.imgList} />
       <div className="px-[24px] py-[24px]">
         <div className="flex items-center">
           <Badge
