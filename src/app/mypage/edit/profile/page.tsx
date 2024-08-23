@@ -2,7 +2,6 @@
 
 import customToast from "@/shared/helpers/customToast";
 import { useEditProfile } from "./_hooks/useEditProfile";
-import profileStore from "@/stores/profileStore";
 import DevIng from "@/widgets/common/DevIng";
 
 export default function Page() {
@@ -11,15 +10,6 @@ export default function Page() {
       customToast("저장되었습니다");
     },
   });
-
-  const { nickname, profileImgPath, gender, birth } = profileStore(
-    ({ nickname, gender, birth, profileImgPath }) => ({
-      nickname,
-      gender,
-      birth,
-      profileImgPath,
-    })
-  );
 
   return <DevIng />;
 

@@ -1,8 +1,8 @@
-import { MyPageInformation } from "@/service/profile";
+import { MyInfoEntity } from "@/shared/types/api/user/MyInfoEntity";
 import { create } from "zustand";
 
 export type ProfileStoreState = Pick<
-  MyPageInformation,
+  MyInfoEntity,
   "gender" | "nickname" | "birth" | "email" | "profileImgPath" | "provider"
 >;
 
