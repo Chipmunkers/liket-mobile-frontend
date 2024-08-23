@@ -1,13 +1,12 @@
-import { ResponseError } from "@/types/api";
 import axiosInstance from "@/shared/helpers/axios";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 
 export const useEditContent = ({
   idx,
   onSuccess,
   onError,
-}: UseMutationOptions<AxiosResponse, ResponseError> & {
+}: UseMutationOptions<AxiosResponse, AxiosError> & {
   idx: string | null;
 }) =>
   useMutation({

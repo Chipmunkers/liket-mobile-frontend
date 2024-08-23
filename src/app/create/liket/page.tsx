@@ -1,6 +1,5 @@
 "use client";
 
-import { StrictShapeConfig } from "@/types/konva";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import CircleCross from "@/icons/circle-cross.svg";
@@ -19,6 +18,7 @@ import FrontBackSwitch from "./_ui/FrontBackSwitch";
 import BackSide from "./_ui/BackSide";
 import TextEnteringModal from "./_ui/TextEnteringModal";
 import WriteTab from "./_ui/WriteTab";
+import { StrictShapeConfig } from "./types";
 
 const NoSSRLiketUploader = dynamic(() => import("./_ui/LiketUploader"), {
   ssr: false,

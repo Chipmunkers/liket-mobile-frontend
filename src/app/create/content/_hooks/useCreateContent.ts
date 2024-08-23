@@ -1,7 +1,6 @@
-import { ResponseError } from "@/types/api";
 import axiosInstance from "@/shared/helpers/axios";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { LocationEntity } from "@/shared/types/api/content/LocationEntity";
 
 interface CreateContentRequestDto {
@@ -23,11 +22,7 @@ interface CreateContentRequestDto {
 }
 
 export const useCreateContent = (
-  props: UseMutationOptions<
-    AxiosResponse,
-    ResponseError,
-    CreateContentRequestDto
-  >
+  props: UseMutationOptions<AxiosResponse, AxiosError, CreateContentRequestDto>
 ) =>
   useMutation({
     mutationFn: (param) =>

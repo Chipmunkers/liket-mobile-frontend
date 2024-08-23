@@ -1,8 +1,8 @@
+import { StrictShapeConfig } from "../types";
 import { CardSizeType, ColorTokensType, IconType } from "../../liket/types";
 import { getXPos, yPos } from "../_util/position";
 import { generateRandomId } from "@/shared/helpers/random";
 import { SetState } from "@/shared/types/react";
-import { StrictShapeConfig } from "@/types/konva";
 import { useState } from "react";
 
 const useWriteTab = ({

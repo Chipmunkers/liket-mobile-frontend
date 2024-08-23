@@ -1,4 +1,4 @@
-import { StrictShapeConfig } from "../../types";
+import { StrictShapeConfig } from "../../../../types";
 
 export type Props = {
   shapeProps: StrictShapeConfig;

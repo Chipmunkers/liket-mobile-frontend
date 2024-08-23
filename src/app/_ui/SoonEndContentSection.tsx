@@ -1,6 +1,6 @@
 "use client";
 
-import { SummaryContentEntity } from "@/types/api/culture-content";
+import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 import { useGetSoonEndContent } from "../_hooks/getSoonEndContents";
 import ContentCardSection from "@/widgets/content/ContentSection";
 

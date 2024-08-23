@@ -5,8 +5,9 @@ import { useEffect, useRef } from "react";
 import { KonvaEventObject } from "konva/lib/Node";
 import KonvaText from "./_ui/KonvaText";
 import { BACKGROUND_CARD_SIZES, STAGE_SIZE } from "../../_consts/size";
-import { Props, StrictShapeConfig } from "./types";
+import { Props } from "./types";
 import KonvaImage from "./_ui/KonvaImage";
+import { StrictShapeConfig } from "../../types";
 
 const LiketUploader = ({
   uploadedImage,
