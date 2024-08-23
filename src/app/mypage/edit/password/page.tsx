@@ -1,12 +1,12 @@
 "use client";
 
-import { useChangePassword } from "@/service/changePassword";
 import { useRouter } from "next/navigation";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import customToast from "@/shared/helpers/customToast";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import PasswordForm from "@/app/mypage/edit/password/_ui/PasswordForm";
+import { useChangePassword } from "./_hooks/useChangePassword";
 
 export default function Page() {
   const router = useRouter();
