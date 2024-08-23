@@ -20,7 +20,7 @@ import BackSide from "./_ui/BackSide";
 import TextEnteringModal from "./_ui/TextEnteringModal";
 import WriteTab from "./_ui/WriteTab";
 
-const NoSSRLiketUploader = dynamic(() => import("@/components/LiketUploader"), {
+const NoSSRLiketUploader = dynamic(() => import("./_ui/LiketUploader"), {
   ssr: false,
 });
 
