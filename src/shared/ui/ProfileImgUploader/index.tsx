@@ -20,7 +20,7 @@ const ProfileImgUploader = ({
   return (
     <div className={classNames("w-[80px] h-[80px] relative", className)}>
       <div
-        className="w-[100%] h-[100%] rounded-full relative overflow-hidden cursor-pointer"
+        className="w-[100%] h-[100%] rounded-full relative overflow-hidden cursor-pointer border-[1px] border-grey-02"
         onClick={() => {
           getRefValue(inputRef).click();
         }}
