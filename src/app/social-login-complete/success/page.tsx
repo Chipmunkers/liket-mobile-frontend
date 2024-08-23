@@ -1,6 +1,6 @@
 "use client";
 
-import { useReIssueToken } from "@/service/login/hooks";
+import { useReissueToken } from "./_hooks/useReissueToken";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { setAuthToken } from "@/shared/helpers/axios";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
@@ -12,10 +12,10 @@ export default function Page() {
   const setToken = authStore(({ setToken }) => setToken);
   const router = useRouter();
 
-  const { mutate } = useReIssueToken({
-    onSuccess: ({ data }) => {
-      setAuthToken(data);
-      setToken(data);
+  const { mutate } = useReissueToken({
+    onSuccess: (token) => {
+      setAuthToken(token);
+      setToken(token);
       stackRouterPush(router, {
         path: "/",
         screen: WEBVIEW_SCREEN.MAIN,
