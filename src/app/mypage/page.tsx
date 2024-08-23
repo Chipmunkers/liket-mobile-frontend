@@ -183,7 +183,9 @@ export default function Page() {
                         onClick={(e) => {
                           e.preventDefault();
 
-                          // TODO: 추후에 /contents/${idx}?review=${review.idx} 로 변경
+                          stackRouterPush(router, {
+                            path: `/contents/${review.cultureContent.idx}?review=${review.idx}&tab=review`,
+                          });
                         }}
                       >
                         <div className="relative w-[112px] h-[112px]">

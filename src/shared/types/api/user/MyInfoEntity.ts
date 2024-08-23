@@ -3,7 +3,7 @@ import { ReviewEntity } from "@/shared/types/api/review/ReviewEntity";
 
 export interface MyInfoEntity {
   reviewCount: number;
-  reviewList: Pick<ReviewEntity, "idx" | "thumbnail">[];
+  reviewList: Pick<ReviewEntity, "idx" | "thumbnail" | "cultureContent">[];
   liketCount: number;
   liketList: Pick<LiketEntity, "idx" | "imgPath">[];
   idx: number;
