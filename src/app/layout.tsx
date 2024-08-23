@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
-import MuiLocalizationProvider from "@/components/MuiLocalizationProvider";
-import QueryProvider from "@/components/QueryProvider";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import ToastProvider from "./_ui/ToasterProvider";
 import ModalProvider from "@/shared/provider/ModalProvider";
+import QueryProvider from "@/shared/provider/QueryProvider";
+import MuiLocalizationProvider from "@/shared/provider/MuiLocalizationProvider";
 
 dayjs.locale("ko");
 
