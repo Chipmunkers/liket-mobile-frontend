@@ -40,6 +40,8 @@ import { compressImage } from "@/shared/helpers/compressImage";
 import DefaultImg from "@/shared/ui/DefaultImg";
 import { findIdxByName } from "./_util/findIdxByName";
 import { findIdxsByNames } from "./_util/findIdxsByNames";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",
@@ -84,7 +86,11 @@ export default function Page() {
   const { mutate: createContent, status: createContentStatus } =
     useCreateContent({
       onSuccess: ({ data }) => {
-        //router.replace(`/requested-contents/${data.idx}`);
+        stackRouterPush(router, {
+          path: `/requested-contents/${data.idx}`,
+          screen: WEBVIEW_SCREEN.REQUESTED_CONTENT_DETAIL,
+          isStack: false,
+        });
       },
     });
 
@@ -97,8 +103,6 @@ export default function Page() {
   const [tempStyles, setTempStyles] = useState<string[]>([]);
   const [tempStartDate, setTempStartDate] = useState<string>();
   const [tempEndDate, setTempEndDate] = useState<string>();
-
-  const thisYear = new Date().getFullYear() - 1;
 
   const handleClickSearchAddress = () => {
     setCurrentScroll(
