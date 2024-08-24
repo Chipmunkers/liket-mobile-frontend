@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import ScrollContainer from "react-indiana-drag-scroll";
 import DeleteIcon from "@/icons/circle-cross.svg";
 import CreateIcon from "@/icons/create.svg";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import CalendarIcon from "@/icons/calendar.svg";
 import { ButtonBase, TextareaAutosize } from "@mui/material";
@@ -14,8 +13,6 @@ import dayjs from "dayjs";
 import { DateCalendar } from "@mui/x-date-pickers";
 import Script from "next/script";
 import { useCreateContent } from "./_hooks/useCreateContent";
-import { useGetContentDetail } from "./_hooks/useGetContentDetail";
-import { useEditContent } from "./_hooks/useEditContent";
 import {
   Header,
   HeaderLeft,
@@ -26,7 +23,6 @@ import Divider from "@/shared/ui/Divider";
 import { BasicInput, InputLabel } from "@/shared/ui/Input";
 import Chip from "@/shared/ui/Chip";
 import Button from "@/shared/ui/Button";
-import { findIdxsByNames } from "./_util/findIdxsByNames";
 import { classNames } from "@/shared/helpers/classNames";
 import customToast from "@/shared/helpers/customToast";
 import { GENRES } from "@/shared/consts/content/genre";
@@ -42,6 +38,8 @@ import { DEFAULT_VALUE, schema, ValidateSchema } from "./schema";
 import { LocationEntity } from "@/shared/types/api/content/LocationEntity";
 import { compressImage } from "@/shared/helpers/compressImage";
 import DefaultImg from "@/shared/ui/DefaultImg";
+import { findIdxByName } from "./_util/findIdxByName";
+import { findIdxsByNames } from "./_util/findIdxsByNames";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",
@@ -83,14 +81,15 @@ export default function Page() {
 
   const { formState, watch, register, setValue, getValues, trigger } = methods;
 
-  const { mutate: createContent } = useCreateContent({
-    onSuccess: ({ data }) => {
-      router.replace(`/requested-contents/${data.idx}`);
-    },
-    onError: () => {
-      // TODO: 에러 핸들링
-    },
-  });
+  const { mutate: createContent, status: createContentStatus } =
+    useCreateContent({
+      onSuccess: ({ data }) => {
+        //router.replace(`/requested-contents/${data.idx}`);
+      },
+      onError: () => {
+        // TODO: 에러 핸들링
+      },
+    });
 
   const [isStyleDrawerOpen, setIsStyleDrawerOpen] = useState(false);
   const [isAgeDrawerOpen, setIsAgeDrawerOpen] = useState(false);
@@ -187,6 +186,9 @@ export default function Page() {
             check: {
               disabled: !formState.isValid,
               onClick: () => {
+                if (["success", "pending"].includes(createContentStatus))
+                  return;
+
                 const {
                   age,
                   style,
@@ -205,7 +207,7 @@ export default function Page() {
                 const styleIdxList = findIdxsByNames(STYLES, style);
 
                 if (address && genreIdx && ageIdx && styleIdxList) {
-                  const finalDataToSave = {
+                  createContent({
                     isPet: condition.includes("반려동물"),
                     isFee: condition.includes("입장료"),
                     isParking: condition.includes("주차"),
@@ -224,10 +226,7 @@ export default function Page() {
                       ...address,
                       detailAddress: getValues("additional-address"),
                     },
-                  };
-                  // editedContentIdx
-                  //   ? editContent(finalDataToSave)
-                  //   : createContent(finalDataToSave);
+                  });
                 }
               },
             },
@@ -351,7 +350,7 @@ export default function Page() {
                 formState={formState}
                 maxLength={40}
                 register={register}
-                placeholder="요일별 오픈시간을 입력해주세요."
+                placeholder="평일 오후 2시 ~ 오후 9시 / 주말 오후 2시 ~ 오후 7시"
               />
             </div>
             <div className="mb-[34px]">
@@ -365,7 +364,7 @@ export default function Page() {
               <BasicInput
                 field="websiteLink"
                 maxLength={2000}
-                placeholder="URL을 입력해주세요."
+                placeholder="https://liket.site"
                 register={register}
                 formState={formState}
               />
@@ -660,7 +659,7 @@ export default function Page() {
           <HeaderLeft
             option={{
               back: {
-                onClick: () => router.back(),
+                onClick: () => router.replace("/create/content"),
               },
             }}
           />
