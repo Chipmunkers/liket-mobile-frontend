@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     url: "https://dev.liket.site",
     images: [
       {
-        url: "/opengraph-image.png",
+        url: "https://dev.liket.site/opengraph-image.png",
       },
     ],
   },
