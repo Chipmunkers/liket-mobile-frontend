@@ -38,7 +38,7 @@ import { useUploadContentImages } from "./_hooks/useUploadContentImages";
 import CheckBox from "@/shared/ui/CheckBox";
 import SelectButtonMedium from "@/shared/ui/SelectButton/SelectButtonMedium";
 import { SelectedAddress } from "./types";
-import { schema } from "./schema";
+import { DEFAULT_VALUE, schema, ValidateSchema } from "./schema";
 import { LocationEntity } from "@/shared/types/api/content/LocationEntity";
 
 enum AnalyzeType {
@@ -51,11 +51,11 @@ const CONDITIONS = ["입장료", "예약", "반려동물", "주차"];
 
 export default function Page() {
   const searchParam = useSearchParams();
-  const editedContentIdx = searchParam.get("idx");
   const isSearchModalOpen = searchParam.get("isSearchModalOpen");
 
   const [uploadedImgs, setUploadedImgs] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+
   const { mutate: uploadContentImages } = useUploadContentImages({
     onSuccess: ({ data }) => {
       const newData = data.map(({ filePath }) => filePath);
@@ -65,6 +65,7 @@ export default function Page() {
       trigger("imgList");
     },
   });
+
   const pathname = usePathname();
   const router = useRouter();
   const [detailAddress, setDetailAddress] = useState("");
@@ -72,37 +73,9 @@ export default function Page() {
   const [address, setAddress] = useState<LocationEntity>();
   const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder>();
 
-  const methods = useForm<{
-    title: string;
-    genre: string;
-    address: string;
-    age: string;
-    style: string[];
-    "additional-address": string;
-    openTime: string;
-    websiteLink: string;
-    condition: string[];
-    description: string;
-    startDate: string;
-    endDate: string;
-    imgList: string[];
-  }>({
+  const methods = useForm<ValidateSchema>({
     mode: "onBlur",
-    defaultValues: {
-      title: "",
-      genre: "",
-      address: "",
-      age: "",
-      style: [],
-      "additional-address": "",
-      openTime: "",
-      websiteLink: "",
-      condition: [],
-      description: "",
-      startDate: "",
-      endDate: "",
-      imgList: [],
-    },
+    defaultValues: DEFAULT_VALUE,
     resolver: zodResolver(schema),
   });
 
@@ -626,8 +599,6 @@ export default function Page() {
           onChange={(date) =>
             setTempStartDate(dayjs(date).format("YYYY.MM.DD").toString())
           }
-          minDate={dayjs(`${dayjs().year() - 100}`)}
-          maxDate={tempEndDate ? dayjs(tempEndDate) : dayjs()}
         />
         <div className="flex pb-[8px] px-[24px]">
           <Button
@@ -653,10 +624,6 @@ export default function Page() {
           onChange={(date) =>
             setTempEndDate(dayjs(date).format("YYYY.MM.DD").toString())
           }
-          minDate={
-            tempStartDate ? dayjs(tempStartDate) : dayjs(`${thisYear - 100}`)
-          }
-          maxDate={dayjs(new Date())}
         />
         <div className="flex pb-[8px] px-[24px]">
           <Button
