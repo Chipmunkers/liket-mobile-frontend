@@ -24,7 +24,9 @@ export const useGetRequestedContent = (idx: number | undefined) => {
 
       const { data } = await axiosInstance.get<{
         contentList: SummaryContentEntity[];
-      }>(`/apis/culture-content/all?user=${idx}&page=${pageParam}`);
+      }>(
+        `/apis/culture-content/all?user=${idx}&page=${pageParam}&orderby=create`
+      );
 
       return {
         contentList: data.contentList,
@@ -53,8 +55,6 @@ export const useGetRequestedContent = (idx: number | undefined) => {
       });
       return;
     }
-
-    console.log(error);
 
     customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
   }, [res.error]);
