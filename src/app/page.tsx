@@ -15,6 +15,7 @@ import Divider from "@/shared/ui/Divider";
 import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
 import MainBannerCarousel from "@/app/_ui/MainBannerCarousel";
 import ReviewCard from "@/entities/review/ReviewCard";
+import { shuffle } from "@/shared/helpers/shuffle";
 
 const Home = async () => {
   const { contentList: soonOpenContents } =
@@ -30,7 +31,6 @@ const Home = async () => {
         <HeaderLeft logo />
         <HeaderRight option={{ search: true, like: true }} />
       </Header>
-      {/* 높이 값을 주면 마진 만큼 비어있는 공간으로 남게됨: 이유는 모름 */}
       <main className="mb-[48px]">
         {/* 배너 */}
         <MainBannerCarousel srcList={bannerList.map((img) => img.imgPath)} />
@@ -49,10 +49,10 @@ const Home = async () => {
         <Divider height="8px" width="100%" margin="24px 0" />
 
         {/* 오픈 예정 컨텐츠 */}
-        <SoonOpenContentSection contentList={soonOpenContents} />
+        <SoonOpenContentSection contentList={shuffle(soonOpenContents)} />
 
         {/* 종료 예정 컨텐츠 */}
-        <SoonEndContentSection contentList={soonEndContents} />
+        <SoonEndContentSection contentList={shuffle(soonEndContents)} />
 
         {reviews.length ? (
           <>
@@ -61,7 +61,7 @@ const Home = async () => {
             <section className="mb-[24px] text-h2">
               <h2 className="pl-[24px] mb-[8px]">최근 인기 리뷰</h2>
               <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-                {reviews.map((review, index) => (
+                {shuffle(reviews).map((review, index) => (
                   <ReviewCard key={index} review={review} />
                 ))}
               </CustomScrollContainer>

@@ -161,6 +161,7 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
             />
           ))}
       </div>
+      {/* TODO: shared ui에 reload button으로 변경해야함 */}
       {error && (
         <div className="flex justify-center mt-[24px]">
           <button

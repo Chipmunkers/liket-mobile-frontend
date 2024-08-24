@@ -22,6 +22,7 @@ export const WEBVIEW_SCREEN = {
   NAVER_LOGIN: "Naver Login",
   KAKAO_LOGIN: "Kakao Login",
   APPLE_LOGIN: "Apple Login",
+  REQUESTED_CONTENT_DETAIL: "Requested Content Detail",
 } as const;
 
 export type WebviewScreen = keyof typeof WEBVIEW_SCREEN;

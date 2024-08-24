@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import ScrollContainer from "react-indiana-drag-scroll";
 import DeleteIcon from "@/icons/circle-cross.svg";
 import CreateIcon from "@/icons/create.svg";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import CalendarIcon from "@/icons/calendar.svg";
 import { ButtonBase, TextareaAutosize } from "@mui/material";
@@ -23,6 +24,7 @@ import Divider from "@/shared/ui/Divider";
 import { BasicInput, InputLabel } from "@/shared/ui/Input";
 import Chip from "@/shared/ui/Chip";
 import Button from "@/shared/ui/Button";
+import { findIdxsByNames } from "./_util/findIdxsByNames";
 import { classNames } from "@/shared/helpers/classNames";
 import customToast from "@/shared/helpers/customToast";
 import { GENRES } from "@/shared/consts/content/genre";
@@ -35,21 +37,12 @@ import CheckBox from "@/shared/ui/CheckBox";
 import SelectButtonMedium from "@/shared/ui/SelectButton/SelectButtonMedium";
 import { SelectedAddress } from "./types";
 import { DEFAULT_VALUE, schema, ValidateSchema } from "./schema";
-import { LocationEntity } from "@/shared/types/api/content/LocationEntity";
-import { compressImage } from "@/shared/helpers/compressImage";
-import DefaultImg from "@/shared/ui/DefaultImg";
-import { findIdxByName } from "./_util/findIdxByName";
-import { findIdxsByNames } from "./_util/findIdxsByNames";
-import { stackRouterPush } from "@/shared/helpers/stackRouter";
-import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { CONDITIONS, MAX_IMAGES_COUNT } from "./_consts/content";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",
   EXACT = "EXACT",
 }
-
-const MAX_IMAGES_COUNT = 10;
-const CONDITIONS = ["입장료", "예약", "반려동물", "주차"];
 
 export default function Page() {
   const searchParam = useSearchParams();
@@ -57,7 +50,6 @@ export default function Page() {
 
   const [uploadedImgs, setUploadedImgs] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-
   const { mutate: uploadContentImages } = useUploadContentImages({
     onSuccess: ({ data }) => {
       const newData = data.map(({ filePath }) => filePath);
@@ -67,42 +59,54 @@ export default function Page() {
       trigger("imgList");
     },
   });
-
   const pathname = usePathname();
   const router = useRouter();
   const [detailAddress, setDetailAddress] = useState("");
   const [currentScroll, setCurrentScroll] = useState(0);
-  const [address, setAddress] = useState<LocationEntity>();
+  const [addressInformation, setAddressInformation] = useState<{
+    detailAddress: string;
+    address: string;
+    region1Depth: string;
+    region2Depth: string;
+    positionX: number;
+    positionY: number;
+    hCode: string;
+    bCode: string;
+  }>();
   const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder>();
 
-  const methods = useForm<ValidateSchema>({
-    mode: "onBlur",
-    defaultValues: DEFAULT_VALUE,
-    resolver: zodResolver(schema),
-  });
-
-  const { formState, watch, register, setValue, getValues, trigger } = methods;
-
-  const { mutate: createContent, status: createContentStatus } =
-    useCreateContent({
-      onSuccess: ({ data }) => {
-        stackRouterPush(router, {
-          path: `/requested-contents/${data.idx}`,
-          screen: WEBVIEW_SCREEN.REQUESTED_CONTENT_DETAIL,
-          isStack: false,
-        });
-      },
+  const { formState, watch, register, setValue, getValues, trigger } =
+    useForm<ValidateSchema>({
+      mode: "onBlur",
+      defaultValues: DEFAULT_VALUE,
+      resolver: zodResolver(schema),
     });
 
-  const [isStyleDrawerOpen, setIsStyleDrawerOpen] = useState(false);
-  const [isAgeDrawerOpen, setIsAgeDrawerOpen] = useState(false);
-  const [isGenreDrawerOpen, setIsGenreDrawerOpen] = useState(false);
-  const [isStartDateDrawerOpen, setIsStartDateDrawerOpen] = useState(false);
-  const [isEndDateDrawerOpen, setIsEndDateDrawerOpen] = useState(false);
+  const { mutate: createContent } = useCreateContent({
+    onSuccess: ({ data }) => {
+      router.replace(`/requested-contents/${data.idx}`);
+    },
+    onError: () => {
+      // TODO: 에러 핸들링
+    },
+  });
+
+  const [isStyleSelectionDrawerOpen, setIsStyleSelectionDrawerOpen] =
+    useState(false);
+  const [isAgeRangeSelectionDrawerOpen, setIsAgeRangeSelectionDrawerOpen] =
+    useState(false);
+  const [isGenreSelectionDrawerOpen, setIsGenreSelectionDrawerOpen] =
+    useState(false);
+  const [isStartDateSelectionDrawerOpen, setIsStartDateSelectionDrawerOpen] =
+    useState(false);
+  const [isEndDateSelectionDrawerOpen, setIsEndDateSelectionDrawerOpen] =
+    useState(false);
 
   const [tempStyles, setTempStyles] = useState<string[]>([]);
   const [tempStartDate, setTempStartDate] = useState<string>();
   const [tempEndDate, setTempEndDate] = useState<string>();
+
+  const thisYear = new Date().getFullYear() - 1;
 
   const handleClickSearchAddress = () => {
     setCurrentScroll(
@@ -130,7 +134,7 @@ export default function Page() {
 
                 setDetailAddress(address);
                 setValue("address", address);
-                setAddress({
+                setAddressInformation({
                   detailAddress: "",
                   address: address_name,
                   bCode: b_code,
@@ -187,9 +191,6 @@ export default function Page() {
             check: {
               disabled: !formState.isValid,
               onClick: () => {
-                if (["success", "pending"].includes(createContentStatus))
-                  return;
-
                 const {
                   age,
                   style,
@@ -207,7 +208,7 @@ export default function Page() {
                 const ageIdx = findIdxByName(AGES, age);
                 const styleIdxList = findIdxsByNames(STYLES, style);
 
-                if (address && genreIdx && ageIdx && styleIdxList) {
+                if (addressInformation && genreIdx && ageIdx && styleIdxList) {
                   createContent({
                     isPet: condition.includes("반려동물"),
                     isFee: condition.includes("입장료"),
@@ -224,7 +225,7 @@ export default function Page() {
                     endDate: endDate.replace(/\./g, "-"),
                     imgList: imgList,
                     location: {
-                      ...address,
+                      ...addressInformation,
                       detailAddress: getValues("additional-address"),
                     },
                   });
@@ -265,7 +266,7 @@ export default function Page() {
               <InputButton
                 text={watch("genre")}
                 placeholder="장르를 선택해주세요."
-                onClick={() => setIsGenreDrawerOpen(true)}
+                onClick={() => setIsGenreSelectionDrawerOpen(true)}
               />
             </div>
             <div>
@@ -294,7 +295,7 @@ export default function Page() {
               <InputButton
                 text={watch("age")}
                 placeholder="연령대를 선택해주세요."
-                onClick={() => setIsAgeDrawerOpen(true)}
+                onClick={() => setIsAgeRangeSelectionDrawerOpen(true)}
               />
             </div>
             <div>
@@ -304,7 +305,7 @@ export default function Page() {
               <InputButton
                 text={watch("style").join(", ")}
                 placeholder="스타일을 선택해주세요."
-                onClick={() => setIsStyleDrawerOpen(true)}
+                onClick={() => setIsStyleSelectionDrawerOpen(true)}
               />
             </div>
           </div>
@@ -319,7 +320,7 @@ export default function Page() {
                   <SelectButtonMedium
                     text={getValues("startDate")}
                     placeholder="날짜 선택"
-                    onClick={() => setIsStartDateDrawerOpen(true)}
+                    onClick={() => setIsStartDateSelectionDrawerOpen(true)}
                     Icon={<CalendarIcon />}
                   />
                 </div>
@@ -332,7 +333,7 @@ export default function Page() {
                   <SelectButtonMedium
                     text={getValues("endDate")}
                     placeholder="날짜 선택"
-                    onClick={() => setIsEndDateDrawerOpen(true)}
+                    onClick={() => setIsEndDateSelectionDrawerOpen(true)}
                     Icon={<CalendarIcon />}
                   />
                 </div>
@@ -351,7 +352,7 @@ export default function Page() {
                 formState={formState}
                 maxLength={40}
                 register={register}
-                placeholder="평일 오후 2시 ~ 오후 9시 / 주말 오후 2시 ~ 오후 7시"
+                placeholder="요일별 오픈시간을 입력해주세요."
               />
             </div>
             <div className="mb-[34px]">
@@ -365,7 +366,7 @@ export default function Page() {
               <BasicInput
                 field="websiteLink"
                 maxLength={2000}
-                placeholder="https://liket.site"
+                placeholder="URL을 입력해주세요."
                 register={register}
                 formState={formState}
               />
@@ -416,12 +417,8 @@ export default function Page() {
                 type="file"
                 multiple
                 className="hidden grow"
-                onChange={async (e) => {
-                  const uploadedFileCount = e.target.files?.length || 0;
-                  if (
-                    uploadedImgs.length + uploadedFileCount >
-                    MAX_IMAGES_COUNT
-                  ) {
+                onChange={(e) => {
+                  if (uploadedImgs.length > MAX_IMAGES_COUNT) {
                     customToast("이미지는 최대 10개까지만 업로드 가능합니다.");
 
                     return;
@@ -431,10 +428,7 @@ export default function Page() {
                     const formData = new FormData();
 
                     for (let i = 0; i < e.target.files.length; i++) {
-                      formData.append(
-                        "files",
-                        await compressImage(e.target.files[i])
-                      );
+                      formData.append("files", e.target.files[i]);
                     }
 
                     uploadContentImages(formData);
@@ -453,11 +447,15 @@ export default function Page() {
               </button>
               {uploadedImgs.map((filePath) => {
                 return (
-                  <div
+                  <li
                     key={filePath}
                     className="w-[96px] h-[96px] relative shrink-0"
                   >
-                    <DefaultImg src={filePath} alt="업로드된 이미지" />
+                    <Image
+                      src={process.env.NEXT_PUBLIC_IMAGE_SERVER + filePath}
+                      fill
+                      alt="업로드된 이미지"
+                    />
                     <button
                       type="button"
                       aria-label="현재 선택된 이미지 삭제"
@@ -474,7 +472,7 @@ export default function Page() {
                     >
                       <DeleteIcon width="24px" height="24px" />
                     </button>
-                  </div>
+                  </li>
                 );
               })}
             </ScrollContainer>
@@ -499,10 +497,12 @@ export default function Page() {
           </div>
         </form>
       </main>
+
+      {/* 스타일 */}
       <Drawer
-        open={isStyleDrawerOpen}
+        open={isStyleSelectionDrawerOpen}
         onClose={() => {
-          setIsStyleDrawerOpen(false);
+          setIsStyleSelectionDrawerOpen(false);
           setTempStyles(getValues("style"));
         }}
       >
@@ -526,11 +526,6 @@ export default function Page() {
                       newStyles = [...tempStyles, name];
                     }
 
-                    if (newStyles.length >= 4) {
-                      customToast("스타일은 최대 3개까지 선택할 수 있습니다.");
-                      return;
-                    }
-
                     setTempStyles(newStyles);
                   }}
                 >
@@ -544,20 +539,20 @@ export default function Page() {
           <Button
             className="h-[48px] w-[100%]"
             onClick={() => {
-              if (tempStyles.length > 3) {
-                customToast("스타일은 최대 3개까지 선택할 수 있습니다.");
-                return;
-              }
-
               setValue("style", tempStyles);
-              setIsStyleDrawerOpen(false);
+              setIsStyleSelectionDrawerOpen(false);
             }}
           >
             확인
           </Button>
         </div>
       </Drawer>
-      <Drawer open={isAgeDrawerOpen} onClose={() => setIsAgeDrawerOpen(false)}>
+
+      {/* 연령대 */}
+      <Drawer
+        open={isAgeRangeSelectionDrawerOpen}
+        onClose={() => setIsAgeRangeSelectionDrawerOpen(false)}
+      >
         <div className="center text-h2">연령대</div>
         <ul>
           {AGES.map(({ idx, name }) => (
@@ -565,7 +560,7 @@ export default function Page() {
               <ButtonBase
                 onClick={() => {
                   setValue("age", name);
-                  setIsAgeDrawerOpen(false);
+                  setIsAgeRangeSelectionDrawerOpen(false);
                 }}
                 className={classNames(
                   "bottom-sheet-button flex justify-start px-[24px]",
@@ -578,9 +573,11 @@ export default function Page() {
           ))}
         </ul>
       </Drawer>
+
+      {/* 장르 */}
       <Drawer
-        open={isGenreDrawerOpen}
-        onClose={() => setIsGenreDrawerOpen(false)}
+        open={isGenreSelectionDrawerOpen}
+        onClose={() => setIsGenreSelectionDrawerOpen(false)}
       >
         <div className="center text-h2">장르</div>
         <ul>
@@ -589,7 +586,7 @@ export default function Page() {
               <ButtonBase
                 onClick={() => {
                   setValue("genre", name);
-                  setIsGenreDrawerOpen(false);
+                  setIsGenreSelectionDrawerOpen(false);
                 }}
                 className={classNames(
                   "bottom-sheet-button flex justify-start px-[24px]",
@@ -602,10 +599,13 @@ export default function Page() {
           ))}
         </ul>
       </Drawer>
+
+      {/* 오픈날짜 */}
       <Drawer
-        open={isStartDateDrawerOpen}
+        open={isStartDateSelectionDrawerOpen}
         onClose={() => {
-          setIsStartDateDrawerOpen(false);
+          setTempStartDate(getValues("startDate"));
+          setIsStartDateSelectionDrawerOpen(false);
         }}
       >
         <DateCalendar
@@ -613,23 +613,28 @@ export default function Page() {
           onChange={(date) =>
             setTempStartDate(dayjs(date).format("YYYY.MM.DD").toString())
           }
+          minDate={dayjs(`${dayjs().year() - 100}`)}
+          maxDate={tempEndDate ? dayjs(tempEndDate) : dayjs()}
         />
         <div className="flex pb-[8px] px-[24px]">
           <Button
             className="h-[48px] w-[100%]"
             onClick={() => {
               tempStartDate && setValue("startDate", tempStartDate.toString());
-              setIsStartDateDrawerOpen(false);
+              setIsStartDateSelectionDrawerOpen(false);
             }}
           >
             확인
           </Button>
         </div>
       </Drawer>
+
+      {/* 종료 날짜 */}
       <Drawer
-        open={isEndDateDrawerOpen}
+        open={isEndDateSelectionDrawerOpen}
         onClose={() => {
-          setIsEndDateDrawerOpen(false);
+          setTempEndDate(getValues("endDate"));
+          setIsEndDateSelectionDrawerOpen(false);
         }}
       >
         <DateCalendar
@@ -637,13 +642,17 @@ export default function Page() {
           onChange={(date) =>
             setTempEndDate(dayjs(date).format("YYYY.MM.DD").toString())
           }
+          minDate={
+            tempStartDate ? dayjs(tempStartDate) : dayjs(`${thisYear - 100}`)
+          }
+          maxDate={dayjs(new Date())}
         />
         <div className="flex pb-[8px] px-[24px]">
           <Button
             className="h-[48px] w-[100%]"
             onClick={() => {
               tempEndDate && setValue("endDate", tempEndDate);
-              setIsEndDateDrawerOpen(false);
+              setIsEndDateSelectionDrawerOpen(false);
             }}
           >
             확인
@@ -660,7 +669,7 @@ export default function Page() {
           <HeaderLeft
             option={{
               back: {
-                onClick: () => router.replace("/create/content"),
+                onClick: () => router.back(),
               },
             }}
           />

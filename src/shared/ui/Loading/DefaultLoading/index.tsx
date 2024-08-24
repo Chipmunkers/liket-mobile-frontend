@@ -1,5 +1,7 @@
 import { classNames } from "@/shared/helpers/classNames";
 import { Props } from "./types";
+import { CSSProperties } from "react";
+import { extractColor } from "./util/extractColor";
 
 const DefaultLoading = ({
   dotSize = "12px",
@@ -7,6 +9,12 @@ const DefaultLoading = ({
   center = true,
   className = "",
 }: Props) => {
+  const style: CSSProperties = {
+    width: dotSize,
+    height: dotSize,
+    backgroundColor: extractColor(color),
+  };
+
   return (
     <div>
       <ul
@@ -19,25 +27,16 @@ const DefaultLoading = ({
         )}
       >
         <li
-          className={classNames(
-            `w-[${dotSize}] h-[${dotSize}]`,
-            "rounded-full animate-bounce1",
-            `bg-${color}`
-          )}
+          className={classNames("rounded-full animate-bounce1")}
+          style={style}
         ></li>
         <li
-          className={classNames(
-            `w-[${dotSize}] h-[${dotSize}]`,
-            "rounded-full animate-bounce2",
-            `bg-${color}`
-          )}
+          className={classNames("rounded-full animate-bounce2")}
+          style={style}
         ></li>
         <li
-          className={classNames(
-            `w-[${dotSize}] h-[${dotSize}]`,
-            "rounded-full animate-bounce3",
-            `bg-${color}`
-          )}
+          className={classNames("rounded-full animate-bounce3")}
+          style={style}
         ></li>
       </ul>
     </div>

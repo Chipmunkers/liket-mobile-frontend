@@ -67,7 +67,8 @@ const HeaderRight = ({ text, option }: Props) => {
     );
 
     const Create = create && (
-      <button
+      <ButtonBase
+        className="w-[48px] h-[48px] rounded-full"
         key="create_button"
         onClick={() => {
           if (typeof create === "object") {
@@ -76,7 +77,7 @@ const HeaderRight = ({ text, option }: Props) => {
         }}
       >
         <CreateIcon />
-      </button>
+      </ButtonBase>
     );
 
     const Menu = menu && (
