@@ -60,6 +60,10 @@ export const metadata: Metadata = {
     initialScale: 1,
     maximumScale: 1,
   },
+  keywords: ["라이켓", "LIKET"],
+  openGraph: {
+    images: ["/opengraph-image.png"],
+  },
 };
 
 export default function RootLayout({
