@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import ScrollContainer from "react-indiana-drag-scroll";
-import { z } from "zod";
 import DeleteIcon from "@/icons/circle-cross.svg";
 import CreateIcon from "@/icons/create.svg";
 import Image from "next/image";
@@ -16,7 +15,6 @@ import { DateCalendar } from "@mui/x-date-pickers";
 import Script from "next/script";
 import { useCreateContent } from "./_hooks/useCreateContent";
 import { useGetContentDetail } from "./_hooks/useGetContentDetail";
-import { useEditContent } from "./_hooks/useEditContent";
 import {
   Header,
   HeaderLeft,
@@ -39,30 +37,13 @@ import { useUploadContentImages } from "./_hooks/useUploadContentImages";
 import CheckBox from "@/shared/ui/CheckBox";
 import SelectButtonMedium from "@/shared/ui/SelectButton/SelectButtonMedium";
 import { SelectedAddress } from "./types";
+import { schema } from "./schema";
+import { CONDITIONS, MAX_IMAGES_COUNT } from "./_consts/content";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",
   EXACT = "EXACT",
 }
-
-const MAX_IMAGES_COUNT = 10;
-const CONDITIONS = ["입장료", "예약", "반려동물", "주차"];
-
-const schema = z.object({
-  title: z.string().min(1, "필수로 입력돼야합니다."),
-  genre: z.string().min(1, "필수로 입력돼야합니다."),
-  address: z.string().min(1, "필수로 입력돼야합니다."),
-  age: z.string().min(1, "필수로 입력돼야합니다."),
-  style: z.array(z.string()),
-  "additional-address": z.string().min(1, "필수로 입력돼야합니다."),
-  openTime: z.string().min(1, "필수로 입력돼야합니다."),
-  websiteLink: z.string().min(1, "필수로 입력돼야합니다."),
-  condition: z.array(z.string()),
-  description: z.string().min(1, "필수로 입력돼야합니다."),
-  startDate: z.string().min(1, "필수로 입력돼야합니다."),
-  endDate: z.string().min(1, "필수로 입력돼야합니다."),
-  imgList: z.array(z.string()).min(1, "이미지가 최소 하나 이상 필요합니다."),
-});
 
 export default function Page() {
   const searchParam = useSearchParams();
@@ -71,12 +52,6 @@ export default function Page() {
     idx: editedContentIdx,
     queryKey: ["requested-content-detail", editedContentIdx],
     enabled: !!editedContentIdx,
-  });
-  const { mutate: editContent } = useEditContent({
-    idx: editedContentIdx,
-    onSuccess: () => {
-      router.replace("/requested-contents/" + editedContentIdx);
-    },
   });
 
   const [uploadedImgs, setUploadedImgs] = useState<string[]>([]);
