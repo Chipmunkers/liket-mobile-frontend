@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import ScrollContainer from "react-indiana-drag-scroll";
-import { z } from "zod";
 import DeleteIcon from "@/icons/circle-cross.svg";
 import CreateIcon from "@/icons/create.svg";
 import Image from "next/image";
@@ -39,6 +38,8 @@ import { useUploadContentImages } from "./_hooks/useUploadContentImages";
 import CheckBox from "@/shared/ui/CheckBox";
 import SelectButtonMedium from "@/shared/ui/SelectButton/SelectButtonMedium";
 import { SelectedAddress } from "./types";
+import { schema } from "./schema";
+import { LocationEntity } from "@/shared/types/api/content/LocationEntity";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",
@@ -48,36 +49,10 @@ enum AnalyzeType {
 const MAX_IMAGES_COUNT = 10;
 const CONDITIONS = ["입장료", "예약", "반려동물", "주차"];
 
-const schema = z.object({
-  title: z.string().min(1, "필수로 입력돼야합니다."),
-  genre: z.string().min(1, "필수로 입력돼야합니다."),
-  address: z.string().min(1, "필수로 입력돼야합니다."),
-  age: z.string().min(1, "필수로 입력돼야합니다."),
-  style: z.array(z.string()),
-  "additional-address": z.string().min(1, "필수로 입력돼야합니다."),
-  openTime: z.string().min(1, "필수로 입력돼야합니다."),
-  websiteLink: z.string().min(1, "필수로 입력돼야합니다."),
-  condition: z.array(z.string()),
-  description: z.string().min(1, "필수로 입력돼야합니다."),
-  startDate: z.string().min(1, "필수로 입력돼야합니다."),
-  endDate: z.string().min(1, "필수로 입력돼야합니다."),
-  imgList: z.array(z.string()).min(1, "이미지가 최소 하나 이상 필요합니다."),
-});
-
 export default function Page() {
   const searchParam = useSearchParams();
   const editedContentIdx = searchParam.get("idx");
-  const { data: contentDetail, isFetched } = useGetContentDetail({
-    idx: editedContentIdx,
-    queryKey: ["requested-content-detail", editedContentIdx],
-    enabled: !!editedContentIdx,
-  });
-  const { mutate: editContent } = useEditContent({
-    idx: editedContentIdx,
-    onSuccess: () => {
-      router.replace("/requested-contents/" + editedContentIdx);
-    },
-  });
+  const isSearchModalOpen = searchParam.get("isSearchModalOpen");
 
   const [uploadedImgs, setUploadedImgs] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -94,16 +69,7 @@ export default function Page() {
   const router = useRouter();
   const [detailAddress, setDetailAddress] = useState("");
   const [currentScroll, setCurrentScroll] = useState(0);
-  const [addressInformation, setAddressInformation] = useState<{
-    detailAddress: string;
-    address: string;
-    region1Depth: string;
-    region2Depth: string;
-    positionX: number;
-    positionY: number;
-    hCode: string;
-    bCode: string;
-  }>();
+  const [address, setAddress] = useState<LocationEntity>();
   const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder>();
 
   const methods = useForm<{
@@ -141,7 +107,7 @@ export default function Page() {
   });
 
   const { formState, watch, register, setValue, getValues, trigger } = methods;
-  const isSearchModalOpen = searchParam.get("isSearchModalOpen");
+
   const { mutate: createContent } = useCreateContent({
     onSuccess: ({ data }) => {
       router.replace(`/requested-contents/${data.idx}`);
@@ -151,16 +117,11 @@ export default function Page() {
     },
   });
 
-  const [isStyleSelectionDrawerOpen, setIsStyleSelectionDrawerOpen] =
-    useState(false);
-  const [isAgeRangeSelectionDrawerOpen, setIsAgeRangeSelectionDrawerOpen] =
-    useState(false);
-  const [isGenreSelectionDrawerOpen, setIsGenreSelectionDrawerOpen] =
-    useState(false);
-  const [isStartDateSelectionDrawerOpen, setIsStartDateSelectionDrawerOpen] =
-    useState(false);
-  const [isEndDateSelectionDrawerOpen, setIsEndDateSelectionDrawerOpen] =
-    useState(false);
+  const [isStyleDrawerOpen, setIsStyleDrawerOpen] = useState(false);
+  const [isAgeDrawerOpen, setIsAgeDrawerOpen] = useState(false);
+  const [isGenreDrawerOpen, setIsGenreDrawerOpen] = useState(false);
+  const [isStartDateDrawerOpen, setIsStartDateDrawerOpen] = useState(false);
+  const [isEndDateDrawerOpen, setIsEndDateDrawerOpen] = useState(false);
 
   const [tempStyles, setTempStyles] = useState<string[]>([]);
   const [tempStartDate, setTempStartDate] = useState<string>();
@@ -194,7 +155,7 @@ export default function Page() {
 
                 setDetailAddress(address);
                 setValue("address", address);
-                setAddressInformation({
+                setAddress({
                   detailAddress: "",
                   address: address_name,
                   bCode: b_code,
@@ -224,76 +185,6 @@ export default function Page() {
 
     router.replace(`${pathname}?isSearchModalOpen=true`);
   };
-
-  useEffect(() => {
-    if (contentDetail && isFetched) {
-      const {
-        title,
-        genre,
-        location,
-        startDate,
-        endDate,
-        age,
-        style,
-        openTime,
-        websiteLink,
-        description,
-        isFee,
-        isParking,
-        isPet,
-        isReservation,
-        imgList,
-      } = contentDetail;
-
-      const condition = ["에약", "주차", "입장료", "반려동물"].reduce(
-        (prev, cur) => {
-          if (prev.length === 1 && prev[0] === "") {
-            prev.pop();
-          }
-
-          if (cur === "예약" && isReservation) {
-            prev.push("예약");
-          }
-
-          if (cur === "주차" && isParking) {
-            prev.push("주차");
-          }
-
-          if (cur === "반려동물" && isPet) {
-            prev.push("반려동물");
-          }
-
-          if (cur === "입장료" && isFee) {
-            prev.push("입장료");
-          }
-
-          return prev;
-        },
-        [""]
-      );
-      setValue("address", location.address);
-      setValue("title", title);
-      setValue("genre", genre.name);
-      setValue("additional-address", location.detailAddress);
-      setValue("description", description);
-      setValue("age", age.name);
-      setValue("startDate", formateDate(startDate));
-      setValue("endDate", formateDate(endDate));
-      setValue(
-        "style",
-        style.map(({ name }) => name)
-      );
-      setValue("openTime", openTime);
-      setValue("websiteLink", websiteLink);
-      setValue("condition", condition);
-
-      setDetailAddress(location.address);
-      setAddressInformation(location);
-      setUploadedImgs([...imgList]);
-      setValue("imgList", [...imgList]);
-      trigger();
-    }
-  }, [contentDetail, isFetched, setValue]);
 
   useEffect(() => {
     const $mapScript = document.createElement("script");
@@ -338,7 +229,7 @@ export default function Page() {
                 const ageIdx = findIdxByName(AGES, age);
                 const styleIdxList = findIdxsByNames(STYLES, style);
 
-                if (addressInformation && genreIdx && ageIdx && styleIdxList) {
+                if (address && genreIdx && ageIdx && styleIdxList) {
                   const finalDataToSave = {
                     isPet: condition.includes("반려동물"),
                     isFee: condition.includes("입장료"),
@@ -355,7 +246,7 @@ export default function Page() {
                     endDate: endDate.replace(/\./g, "-"),
                     imgList: imgList,
                     location: {
-                      ...addressInformation,
+                      ...address,
                       detailAddress: getValues("additional-address"),
                     },
                   };
@@ -399,7 +290,7 @@ export default function Page() {
               <InputButton
                 text={watch("genre")}
                 placeholder="장르를 선택해주세요."
-                onClick={() => setIsGenreSelectionDrawerOpen(true)}
+                onClick={() => setIsGenreDrawerOpen(true)}
               />
             </div>
             <div>
@@ -428,7 +319,7 @@ export default function Page() {
               <InputButton
                 text={watch("age")}
                 placeholder="연령대를 선택해주세요."
-                onClick={() => setIsAgeRangeSelectionDrawerOpen(true)}
+                onClick={() => setIsAgeDrawerOpen(true)}
               />
             </div>
             <div>
@@ -438,7 +329,7 @@ export default function Page() {
               <InputButton
                 text={watch("style").join(", ")}
                 placeholder="스타일을 선택해주세요."
-                onClick={() => setIsStyleSelectionDrawerOpen(true)}
+                onClick={() => setIsStyleDrawerOpen(true)}
               />
             </div>
           </div>
@@ -453,7 +344,7 @@ export default function Page() {
                   <SelectButtonMedium
                     text={getValues("startDate")}
                     placeholder="날짜 선택"
-                    onClick={() => setIsStartDateSelectionDrawerOpen(true)}
+                    onClick={() => setIsStartDateDrawerOpen(true)}
                     Icon={<CalendarIcon />}
                   />
                 </div>
@@ -466,7 +357,7 @@ export default function Page() {
                   <SelectButtonMedium
                     text={getValues("endDate")}
                     placeholder="날짜 선택"
-                    onClick={() => setIsEndDateSelectionDrawerOpen(true)}
+                    onClick={() => setIsEndDateDrawerOpen(true)}
                     Icon={<CalendarIcon />}
                   />
                 </div>
@@ -631,9 +522,9 @@ export default function Page() {
         </form>
       </main>
       <Drawer
-        open={isStyleSelectionDrawerOpen}
+        open={isStyleDrawerOpen}
         onClose={() => {
-          setIsStyleSelectionDrawerOpen(false);
+          setIsStyleDrawerOpen(false);
           setTempStyles(getValues("style"));
         }}
       >
@@ -671,17 +562,14 @@ export default function Page() {
             className="h-[48px] w-[100%]"
             onClick={() => {
               setValue("style", tempStyles);
-              setIsStyleSelectionDrawerOpen(false);
+              setIsStyleDrawerOpen(false);
             }}
           >
             확인
           </Button>
         </div>
       </Drawer>
-      <Drawer
-        open={isAgeRangeSelectionDrawerOpen}
-        onClose={() => setIsAgeRangeSelectionDrawerOpen(false)}
-      >
+      <Drawer open={isAgeDrawerOpen} onClose={() => setIsAgeDrawerOpen(false)}>
         <div className="center text-h2">연령대</div>
         <ul>
           {AGES.map(({ idx, name }) => (
@@ -689,7 +577,7 @@ export default function Page() {
               <ButtonBase
                 onClick={() => {
                   setValue("age", name);
-                  setIsAgeRangeSelectionDrawerOpen(false);
+                  setIsAgeDrawerOpen(false);
                 }}
                 className={classNames(
                   "bottom-sheet-button flex justify-start px-[24px]",
@@ -703,8 +591,8 @@ export default function Page() {
         </ul>
       </Drawer>
       <Drawer
-        open={isGenreSelectionDrawerOpen}
-        onClose={() => setIsGenreSelectionDrawerOpen(false)}
+        open={isGenreDrawerOpen}
+        onClose={() => setIsGenreDrawerOpen(false)}
       >
         <div className="center text-h2">장르</div>
         <ul>
@@ -713,7 +601,7 @@ export default function Page() {
               <ButtonBase
                 onClick={() => {
                   setValue("genre", name);
-                  setIsGenreSelectionDrawerOpen(false);
+                  setIsGenreDrawerOpen(false);
                 }}
                 className={classNames(
                   "bottom-sheet-button flex justify-start px-[24px]",
@@ -727,10 +615,10 @@ export default function Page() {
         </ul>
       </Drawer>
       <Drawer
-        open={isStartDateSelectionDrawerOpen}
+        open={isStartDateDrawerOpen}
         onClose={() => {
           setTempStartDate(getValues("startDate"));
-          setIsStartDateSelectionDrawerOpen(false);
+          setIsStartDateDrawerOpen(false);
         }}
       >
         <DateCalendar
@@ -746,7 +634,7 @@ export default function Page() {
             className="h-[48px] w-[100%]"
             onClick={() => {
               tempStartDate && setValue("startDate", tempStartDate.toString());
-              setIsStartDateSelectionDrawerOpen(false);
+              setIsStartDateDrawerOpen(false);
             }}
           >
             확인
@@ -754,10 +642,10 @@ export default function Page() {
         </div>
       </Drawer>
       <Drawer
-        open={isEndDateSelectionDrawerOpen}
+        open={isEndDateDrawerOpen}
         onClose={() => {
           setTempEndDate(getValues("endDate"));
-          setIsEndDateSelectionDrawerOpen(false);
+          setIsEndDateDrawerOpen(false);
         }}
       >
         <DateCalendar
@@ -775,7 +663,7 @@ export default function Page() {
             className="h-[48px] w-[100%]"
             onClick={() => {
               tempEndDate && setValue("endDate", tempEndDate);
-              setIsEndDateSelectionDrawerOpen(false);
+              setIsEndDateDrawerOpen(false);
             }}
           >
             확인

@@ -497,6 +497,8 @@ export default function Page() {
           </div>
         </form>
       </main>
+
+      {/* 스타일 */}
       <Drawer
         open={isStyleSelectionDrawerOpen}
         onClose={() => {
@@ -545,6 +547,8 @@ export default function Page() {
           </Button>
         </div>
       </Drawer>
+
+      {/* 연령대 */}
       <Drawer
         open={isAgeRangeSelectionDrawerOpen}
         onClose={() => setIsAgeRangeSelectionDrawerOpen(false)}
@@ -569,6 +573,8 @@ export default function Page() {
           ))}
         </ul>
       </Drawer>
+
+      {/* 장르 */}
       <Drawer
         open={isGenreSelectionDrawerOpen}
         onClose={() => setIsGenreSelectionDrawerOpen(false)}
@@ -593,6 +599,8 @@ export default function Page() {
           ))}
         </ul>
       </Drawer>
+
+      {/* 오픈날짜 */}
       <Drawer
         open={isStartDateSelectionDrawerOpen}
         onClose={() => {
@@ -620,6 +628,8 @@ export default function Page() {
           </Button>
         </div>
       </Drawer>
+
+      {/* 종료 날짜 */}
       <Drawer
         open={isEndDateSelectionDrawerOpen}
         onClose={() => {
