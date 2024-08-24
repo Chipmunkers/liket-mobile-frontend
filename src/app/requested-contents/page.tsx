@@ -12,6 +12,7 @@ import {
 } from "@/shared/ui/Header";
 import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
 import Badge from "@/shared/ui/Badge";
+import DefaultImg from "@/shared/ui/DefaultImg";
 
 export default function Page() {
   const router = useRouter();
@@ -72,13 +73,7 @@ export default function Page() {
                     >
                       <div className="flex">
                         <div className="w-[64px] h-[64px] mr-[12px] relative">
-                          <Image
-                            src={
-                              process.env.NEXT_PUBLIC_IMAGE_SERVER + thumbnail
-                            }
-                            fill
-                            alt="컨텐츠 이미지"
-                          />
+                          <DefaultImg src={thumbnail} alt="컨텐츠 썸네일" />
                         </div>
                         <div className="flex flex-col justify-between">
                           <div className="text-body4 text-skyblue-01">
