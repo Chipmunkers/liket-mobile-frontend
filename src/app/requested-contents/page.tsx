@@ -44,7 +44,7 @@ export default function Page() {
         />
       </Header>
       <main className="px-[24px]">
-        {!data && <DefaultLoading />}
+        {(!data || !myInformationData) && !error && <DefaultLoading />}
         {data?.pages[0].contentList.length === 0 && myInformationData ? (
           <div className="empty">컨텐츠 등록 요청 내역이 없습니다.</div>
         ) : (
