@@ -2,7 +2,7 @@ import axiosInstance from "@/shared/helpers/axios";
 import { ContentEntity } from "@/shared/types/api/content/ContentEntity";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-export const useGetContents = (idx: number | undefined) => {
+export const useGetRequestedContent = (idx: number | undefined) => {
   const res = useInfiniteQuery({
     queryKey: ["requested-contents", idx],
     queryFn: async ({ pageParam = 1 }) => {

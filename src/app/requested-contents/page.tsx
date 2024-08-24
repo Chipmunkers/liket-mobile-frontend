@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useGetContents } from "./_hooks/useGetContents";
+import { useGetRequestedContent } from "./_hooks/useGetRequestedContent";
 import {
   Header,
   HeaderLeft,
@@ -10,8 +10,6 @@ import {
   HeaderRight,
 } from "@/shared/ui/Header";
 import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
-import Badge from "@/shared/ui/Badge";
-import DefaultImg from "@/shared/ui/DefaultImg";
 import ContentCardSmall from "@/entities/content/ContentCardSmall";
 import { DefaultLoading } from "@/shared/ui/Loading";
 
@@ -19,7 +17,7 @@ export default function Page() {
   const router = useRouter();
   const { data: myInformationData, error: myInformationError } = useGetMyInfo();
   const { data, fetchNextPage, isFetching, refetch, error, hasNextPage } =
-    useGetContents(myInformationData?.idx);
+    useGetRequestedContent(myInformationData?.idx);
 
   const [target, setTarget] = useState<HTMLDivElement | null>(null);
 
@@ -66,7 +64,7 @@ export default function Page() {
             {data?.pages
               .map((page) => page.contentList)
               .flat()
-              ?.map((content) => (
+              .map((content) => (
                 <li key={content.idx}>
                   <ContentCardSmall content={content} />
                 </li>
