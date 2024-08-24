@@ -12,6 +12,7 @@ import {
 import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
 import ContentCardSmall from "@/entities/content/ContentCardSmall";
 import { DefaultLoading } from "@/shared/ui/Loading";
+import ReloadButton from "@/shared/ui/ReloadButton";
 
 export default function Page() {
   const router = useRouter();
@@ -71,6 +72,11 @@ export default function Page() {
               ))}
             <div ref={setTarget} />
           </ul>
+        )}
+        {error && (
+          <ReloadButton className="my-[24px]" onClick={refetch}>
+            새로 고침
+          </ReloadButton>
         )}
       </main>
     </>
