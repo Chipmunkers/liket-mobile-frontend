@@ -61,7 +61,7 @@ const Home = async () => {
             <section className="mb-[24px] text-h2">
               <h2 className="pl-[24px] mb-[8px]">최근 인기 리뷰</h2>
               <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-                {reviews.map((review, index) => (
+                {shuffle(reviews).map((review, index) => (
                   <ReviewCard key={index} review={review} />
                 ))}
               </CustomScrollContainer>
