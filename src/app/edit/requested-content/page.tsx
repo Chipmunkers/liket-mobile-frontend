@@ -14,7 +14,6 @@ import dayjs from "dayjs";
 import { DateCalendar } from "@mui/x-date-pickers";
 import Script from "next/script";
 import { useCreateContent } from "./_hooks/useCreateContent";
-import { useGetContentDetail } from "./_hooks/useGetContentDetail";
 import {
   Header,
   HeaderLeft,
@@ -37,7 +36,7 @@ import { useUploadContentImages } from "./_hooks/useUploadContentImages";
 import CheckBox from "@/shared/ui/CheckBox";
 import SelectButtonMedium from "@/shared/ui/SelectButton/SelectButtonMedium";
 import { SelectedAddress } from "./types";
-import { schema } from "./schema";
+import { DEFAULT_VALUE, schema, ValidateSchema } from "./schema";
 import { CONDITIONS, MAX_IMAGES_COUNT } from "./_consts/content";
 
 enum AnalyzeType {
@@ -47,12 +46,7 @@ enum AnalyzeType {
 
 export default function Page() {
   const searchParam = useSearchParams();
-  const editedContentIdx = searchParam.get("idx");
-  const { data: contentDetail, isFetched } = useGetContentDetail({
-    idx: editedContentIdx,
-    queryKey: ["requested-content-detail", editedContentIdx],
-    enabled: !!editedContentIdx,
-  });
+  const isSearchModalOpen = searchParam.get("isSearchModalOpen");
 
   const [uploadedImgs, setUploadedImgs] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -81,42 +75,13 @@ export default function Page() {
   }>();
   const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder>();
 
-  const methods = useForm<{
-    title: string;
-    genre: string;
-    address: string;
-    age: string;
-    style: string[];
-    "additional-address": string;
-    openTime: string;
-    websiteLink: string;
-    condition: string[];
-    description: string;
-    startDate: string;
-    endDate: string;
-    imgList: string[];
-  }>({
-    mode: "onBlur",
-    defaultValues: {
-      title: "",
-      genre: "",
-      address: "",
-      age: "",
-      style: [],
-      "additional-address": "",
-      openTime: "",
-      websiteLink: "",
-      condition: [],
-      description: "",
-      startDate: "",
-      endDate: "",
-      imgList: [],
-    },
-    resolver: zodResolver(schema),
-  });
+  const { formState, watch, register, setValue, getValues, trigger } =
+    useForm<ValidateSchema>({
+      mode: "onBlur",
+      defaultValues: DEFAULT_VALUE,
+      resolver: zodResolver(schema),
+    });
 
-  const { formState, watch, register, setValue, getValues, trigger } = methods;
-  const isSearchModalOpen = searchParam.get("isSearchModalOpen");
   const { mutate: createContent } = useCreateContent({
     onSuccess: ({ data }) => {
       router.replace(`/requested-contents/${data.idx}`);
@@ -201,76 +166,6 @@ export default function Page() {
   };
 
   useEffect(() => {
-    if (contentDetail && isFetched) {
-      const {
-        title,
-        genre,
-        location,
-        startDate,
-        endDate,
-        age,
-        style,
-        openTime,
-        websiteLink,
-        description,
-        isFee,
-        isParking,
-        isPet,
-        isReservation,
-        imgList,
-      } = contentDetail;
-
-      const condition = ["에약", "주차", "입장료", "반려동물"].reduce(
-        (prev, cur) => {
-          if (prev.length === 1 && prev[0] === "") {
-            prev.pop();
-          }
-
-          if (cur === "예약" && isReservation) {
-            prev.push("예약");
-          }
-
-          if (cur === "주차" && isParking) {
-            prev.push("주차");
-          }
-
-          if (cur === "반려동물" && isPet) {
-            prev.push("반려동물");
-          }
-
-          if (cur === "입장료" && isFee) {
-            prev.push("입장료");
-          }
-
-          return prev;
-        },
-        [""]
-      );
-      setValue("address", location.address);
-      setValue("title", title);
-      setValue("genre", genre.name);
-      setValue("additional-address", location.detailAddress);
-      setValue("description", description);
-      setValue("age", age.name);
-      setValue("startDate", formateDate(startDate));
-      setValue("endDate", formateDate(endDate));
-      setValue(
-        "style",
-        style.map(({ name }) => name)
-      );
-      setValue("openTime", openTime);
-      setValue("websiteLink", websiteLink);
-      setValue("condition", condition);
-
-      setDetailAddress(location.address);
-      setAddressInformation(location);
-      setUploadedImgs([...imgList]);
-      setValue("imgList", [...imgList]);
-      trigger();
-    }
-  }, [contentDetail, isFetched, setValue]);
-
-  useEffect(() => {
     const $mapScript = document.createElement("script");
     $mapScript.async = false;
     $mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_API_KEY}&autoload=false&libraries=services`;
@@ -314,7 +209,7 @@ export default function Page() {
                 const styleIdxList = findIdxsByNames(STYLES, style);
 
                 if (addressInformation && genreIdx && ageIdx && styleIdxList) {
-                  const finalDataToSave = {
+                  createContent({
                     isPet: condition.includes("반려동물"),
                     isFee: condition.includes("입장료"),
                     isParking: condition.includes("주차"),
@@ -333,10 +228,7 @@ export default function Page() {
                       ...addressInformation,
                       detailAddress: getValues("additional-address"),
                     },
-                  };
-                  // editedContentIdx
-                  //   ? editContent(finalDataToSave)
-                  //   : createContent(finalDataToSave);
+                  });
                 }
               },
             },
