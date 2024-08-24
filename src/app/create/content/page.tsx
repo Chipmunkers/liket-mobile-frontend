@@ -40,6 +40,8 @@ import SelectButtonMedium from "@/shared/ui/SelectButton/SelectButtonMedium";
 import { SelectedAddress } from "./types";
 import { DEFAULT_VALUE, schema, ValidateSchema } from "./schema";
 import { LocationEntity } from "@/shared/types/api/content/LocationEntity";
+import { compressImage } from "@/shared/helpers/compressImage";
+import DefaultImg from "@/shared/ui/DefaultImg";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",
@@ -414,8 +416,12 @@ export default function Page() {
                 type="file"
                 multiple
                 className="hidden grow"
-                onChange={(e) => {
-                  if (uploadedImgs.length > MAX_IMAGES_COUNT) {
+                onChange={async (e) => {
+                  const uploadedFileCount = e.target.files?.length || 0;
+                  if (
+                    uploadedImgs.length + uploadedFileCount >
+                    MAX_IMAGES_COUNT
+                  ) {
                     customToast("이미지는 최대 10개까지만 업로드 가능합니다.");
 
                     return;
@@ -425,7 +431,10 @@ export default function Page() {
                     const formData = new FormData();
 
                     for (let i = 0; i < e.target.files.length; i++) {
-                      formData.append("files", e.target.files[i]);
+                      formData.append(
+                        "files",
+                        await compressImage(e.target.files[i])
+                      );
                     }
 
                     uploadContentImages(formData);
@@ -444,15 +453,11 @@ export default function Page() {
               </button>
               {uploadedImgs.map((filePath) => {
                 return (
-                  <li
+                  <div
                     key={filePath}
                     className="w-[96px] h-[96px] relative shrink-0"
                   >
-                    <Image
-                      src={process.env.NEXT_PUBLIC_IMAGE_SERVER + filePath}
-                      fill
-                      alt="업로드된 이미지"
-                    />
+                    <DefaultImg src={filePath} alt="업로드된 이미지" />
                     <button
                       type="button"
                       aria-label="현재 선택된 이미지 삭제"
@@ -469,7 +474,7 @@ export default function Page() {
                     >
                       <DeleteIcon width="24px" height="24px" />
                     </button>
-                  </li>
+                  </div>
                 );
               })}
             </ScrollContainer>
@@ -521,6 +526,11 @@ export default function Page() {
                       newStyles = [...tempStyles, name];
                     }
 
+                    if (newStyles.length >= 4) {
+                      customToast("스타일은 최대 3개까지 선택할 수 있습니다.");
+                      return;
+                    }
+
                     setTempStyles(newStyles);
                   }}
                 >
@@ -534,6 +544,11 @@ export default function Page() {
           <Button
             className="h-[48px] w-[100%]"
             onClick={() => {
+              if (tempStyles.length > 3) {
+                customToast("스타일은 최대 3개까지 선택할 수 있습니다.");
+                return;
+              }
+
               setValue("style", tempStyles);
               setIsStyleDrawerOpen(false);
             }}
@@ -590,7 +605,6 @@ export default function Page() {
       <Drawer
         open={isStartDateDrawerOpen}
         onClose={() => {
-          setTempStartDate(getValues("startDate"));
           setIsStartDateDrawerOpen(false);
         }}
       >
@@ -615,7 +629,6 @@ export default function Page() {
       <Drawer
         open={isEndDateDrawerOpen}
         onClose={() => {
-          setTempEndDate(getValues("endDate"));
           setIsEndDateDrawerOpen(false);
         }}
       >
