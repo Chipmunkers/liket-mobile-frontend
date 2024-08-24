@@ -62,12 +62,10 @@ export const metadata: Metadata = {
   },
   keywords: ["라이켓", "LIKET"],
   openGraph: {
-    title: "라이켓",
-    description: "즐기고 만들자, 라이켓 LIKET",
-    url: "https://dev.liket.site",
     images: [
       {
-        url: "/opengraph-image.png",
+        url: "https://liket.s3.ap-northeast-2.amazonaws.com/opengraph-image.png",
+        alt: "라이켓",
       },
     ],
   },
