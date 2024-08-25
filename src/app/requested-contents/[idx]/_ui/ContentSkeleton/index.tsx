@@ -1,7 +1,6 @@
 "use client";
 
 import Divider from "@/shared/ui/Divider";
-import ContentImgCarousel from "@/widgets/content/ContentImgCarousel";
 import SkeletonItem from "@/shared/ui/SkeletonItem";
 
 const ContentSkeleton = () => {

@@ -1,3 +1,5 @@
+import { ContentEntity } from "@/shared/types/api/content/ContentEntity";
+
 export type Props = {
-  idx: number;
+  content: ContentEntity;
 };

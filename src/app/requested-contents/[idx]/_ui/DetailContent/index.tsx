@@ -10,7 +10,6 @@ import { useState } from "react";
 import { Props } from "./types";
 import ContentTab from "./ui/ContentTab";
 import LikeContentButton from "@/entities/content/LikeContentButton";
-import { useGetCultureContentByIdx } from "./hooks/useGetContentByIdx";
 import ReviewTab from "./ui/ReviewTab";
 import { getStatus } from "@/shared/helpers/getStatus";
 import { CONTENT_STATES } from "@/shared/consts/content/state";
@@ -18,15 +17,11 @@ import Badge from "@/shared/ui/Badge";
 import CategoryTab from "@/shared/ui/CategoryTab";
 import Divider from "@/shared/ui/Divider";
 import ContentImgCarousel from "@/widgets/content/ContentImgCarousel";
-import ContentSkeleton from "./ui/ContentSkeleton";
-import ContentNotFound from "../../_ui/ContentNotFound";
 
-const DetailContent = ({ idx }: Props) => {
+const DetailContent = ({ content }: Props) => {
   const [selectedTab, setSelectedTab] = useState<"content" | "review">(
     "content"
   );
-
-  const { data: content, error } = useGetCultureContentByIdx(idx);
 
   if (content) {
     return (
@@ -126,12 +121,6 @@ const DetailContent = ({ idx }: Props) => {
       </main>
     );
   }
-
-  if (error && error.response?.status === 404) {
-    return <ContentNotFound />;
-  }
-
-  return <ContentSkeleton />;
 };
 
 export default DetailContent;
