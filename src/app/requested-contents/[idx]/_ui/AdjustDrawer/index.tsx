@@ -5,8 +5,7 @@ import customToast from "@/shared/helpers/customToast";
 import useModalStore from "@/shared/store/modalStore";
 import { useDeleteContent } from "@/app/requested-contents/[idx]/_ui/AdjustDrawer/hooks/useDeleteContent";
 import { useRouter } from "next/navigation";
-import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
-import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { stackRouterBack } from "@/shared/helpers/stackRouter";
 
 const AdjustDrawer = ({ idx, isOpen, setIsOpen, acceptedAt }: Props) => {
   const openModal = useModalStore(({ openModal }) => openModal);
