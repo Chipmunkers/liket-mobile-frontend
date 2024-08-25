@@ -5,7 +5,8 @@ import customToast from "@/shared/helpers/customToast";
 import useModalStore from "@/shared/store/modalStore";
 import { useDeleteContent } from "@/app/requested-contents/[idx]/_ui/AdjustDrawer/hooks/useDeleteContent";
 import { useRouter } from "next/navigation";
-import { stackRouterBack } from "@/shared/helpers/stackRouter";
+import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
 const AdjustDrawer = ({ idx, isOpen, setIsOpen, acceptedAt }: Props) => {
   const openModal = useModalStore(({ openModal }) => openModal);
@@ -28,7 +29,10 @@ const AdjustDrawer = ({ idx, isOpen, setIsOpen, acceptedAt }: Props) => {
               );
             }
 
-            return customToast("열심히 준비중입니다!");
+            stackRouterPush(router, {
+              path: `/edit/requested-content/${idx}`,
+              screen: WEBVIEW_SCREEN.EDIT_REQUESTED_CONTENT,
+            });
           }}
           className="bottom-sheet-button flex justify-start px-[24px]"
         >
