@@ -2,8 +2,13 @@ import Drawer from "@/shared/ui/Drawer";
 import { Props } from "./types";
 import { ButtonBase } from "@mui/material";
 import customToast from "@/shared/helpers/customToast";
+import useModalStore from "@/shared/store/modalStore";
+import { useDeleteContent } from "@/app/requested-contents/[idx]/_ui/AdjustDrawer/hooks/useDeleteContent";
 
 const AdjustDrawer = ({ idx, isOpen, setIsOpen }: Props) => {
+  const openModal = useModalStore(({ openModal }) => openModal);
+  const { mutate: deleteContentByIdx } = useDeleteContent();
+
   return (
     <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
       <li className="bottom-sheet-list">
@@ -18,7 +23,13 @@ const AdjustDrawer = ({ idx, isOpen, setIsOpen }: Props) => {
       </li>
       <li className="bottom-sheet-list">
         <ButtonBase
-          onClick={() => {}}
+          onClick={() => {
+            openModal("DeleteModal", {
+              onClickPositive() {
+                deleteContentByIdx(idx);
+              },
+            });
+          }}
           className="bottom-sheet-button flex justify-start px-[24px] text-rosepink-01"
         >
           삭제

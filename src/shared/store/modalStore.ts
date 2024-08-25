@@ -2,7 +2,7 @@ import { getKeys } from "@/shared/helpers/getKeys";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-export type ModalType = "LoginModal" | "DeleteCommentModal";
+export type ModalType = "LoginModal" | "DeleteModal";
 
 export interface ModalInformation {
   isOpen: boolean;
