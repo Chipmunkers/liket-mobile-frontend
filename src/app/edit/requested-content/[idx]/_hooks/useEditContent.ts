@@ -27,7 +27,6 @@ interface UpdateContentDto {
 
 export const useEditContent = ({
   idx,
-  onSuccess,
 }: UseMutationOptions<AxiosResponse, AxiosError, UpdateContentDto> & {
   idx: number;
 }) => {

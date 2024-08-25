@@ -1,20 +1,18 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useGetInquiries } from "./_hooks/useGetInquiries";
 import {
   Header,
   HeaderLeft,
   HeaderMiddle,
   HeaderRight,
 } from "@/shared/ui/Header";
-import DevIng from "@/widgets/common/DevIng";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import InquiryInfiniteGroup from "@/app/inquiries/_ui/InquiryInfiniteGroup";
 
 export default function Page() {
   const router = useRouter();
-  const res = useGetInquiries();
-
-  return <DevIng />;
 
   return (
     <>
@@ -24,11 +22,19 @@ export default function Page() {
         <HeaderRight
           option={{
             create: {
-              onClick: () => router.push("/create/inquiry"),
+              onClick: () => {
+                stackRouterPush(router, {
+                  path: "/create/inquiry",
+                  screen: WEBVIEW_SCREEN.CREATE_INQUIRY,
+                });
+              },
             },
           }}
         />
       </Header>
+      <main>
+        <InquiryInfiniteGroup />
+      </main>
     </>
   );
 }

@@ -14,7 +14,7 @@ const InquiryCardSmall = ({ inquiry, onClick, className = "" }: Props) => {
     <Link
       className={classNames(
         className,
-        "w-[100%] flex flex-col py-[7px] border-b-[1px] border-b-grey-01"
+        "w-[100%] flex flex-col border-b-[1px] border-b-grey-01 relative"
       )}
       href={`/inquiries/${inquiry.idx}`}
       onClick={() => {
@@ -26,9 +26,13 @@ const InquiryCardSmall = ({ inquiry, onClick, className = "" }: Props) => {
         });
       }}
     >
-      <div className="text-body4 text-rosepink-01">{inquiry.type.name}</div>
-      <div className="text-body2 text-grey-black mt-[8px]">{inquiry.title}</div>
-      <div className="text-body2 text-grey-black">
+      <span className="text-body4 text-rosepink-01 mt-[8px]">
+        {inquiry.type.name}
+      </span>
+      <div className="text-body2 text-grey-black mt-[8px] w-[calc(100%-74px)] truncate">
+        {inquiry.title}
+      </div>
+      <div className="text-body5 text-grey-04 mb-[6px] mt-[8px]">
         {dayjs(inquiry.createdAt).format("YYYY.MM.DD")}
       </div>
       <Badge
