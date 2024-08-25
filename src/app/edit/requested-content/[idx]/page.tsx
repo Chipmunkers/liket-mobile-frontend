@@ -41,6 +41,7 @@ import { CONDITIONS, MAX_IMAGES_COUNT } from "./_consts/content";
 import { useGetCultureContentByIdx } from "./_hooks/useGetContentByIdx";
 import { findIdxByName } from "./_util/findIdxByName";
 import { useEditContent } from "./_hooks/useEditContent";
+import DefaultImg from "@/shared/ui/DefaultImg";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",
@@ -527,11 +528,7 @@ export default function Page({ params: { idx } }: PageProps) {
                     key={filePath}
                     className="w-[96px] h-[96px] relative shrink-0"
                   >
-                    <Image
-                      src={process.env.NEXT_PUBLIC_IMAGE_SERVER + filePath}
-                      fill
-                      alt="업로드된 이미지"
-                    />
+                    <DefaultImg src={filePath} alt="업로드된 이미지" />
                     <button
                       type="button"
                       aria-label="현재 선택된 이미지 삭제"
