@@ -7,6 +7,7 @@ import KonvaText from "./_ui/KonvaText";
 import { BACKGROUND_CARD_SIZES, STAGE_SIZE } from "../../_consts/size";
 import { Props } from "./types";
 import KonvaImage from "./_ui/KonvaImage";
+import Konva from "konva";
 import { StrictShapeConfig } from "../../types";
 
 const LiketUploader = ({
@@ -21,6 +22,16 @@ const LiketUploader = ({
 }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const touchStateRef = useRef<{
+    center: null | {
+      x: number;
+      y: number;
+    };
+    distance: number;
+  }>({
+    center: null,
+    distance: 0,
+  });
   const { x, y, width, height } = BACKGROUND_CARD_SIZES[size];
 
   const deselectShape = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
@@ -42,6 +53,102 @@ const LiketUploader = ({
     onSelectShape(id);
   };
 
+  const handleTouchEndStage = () => {
+    touchStateRef.current = {
+      distance: 0,
+      center: null,
+    };
+  };
+
+  const pinchZoom = (e: KonvaEventObject<TouchEvent>) => {
+    if (!stageRef.current) {
+      return;
+    }
+
+    function getDistance(
+      p1: { x: number; y: number },
+      p2: { x: number; y: number }
+    ) {
+      return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+    }
+
+    function getCenter(
+      p1: { x: number; y: number },
+      p2: { x: number; y: number }
+    ) {
+      return {
+        x: (p1.x + p2.x) / 2,
+        y: (p1.y + p2.y) / 2,
+      };
+    }
+
+    let { center, distance } = touchStateRef.current;
+
+    var dragStopped = false;
+
+    e.evt.preventDefault();
+    var touch1 = e.evt.touches[0];
+    var touch2 = e.evt.touches[1];
+
+    if (touch1 && !touch2 && !stageRef.current.isDragging() && dragStopped) {
+      stageRef.current.startDrag();
+      dragStopped = false;
+    }
+
+    if (touch1 && touch2) {
+      if (stageRef.current.isDragging()) {
+        dragStopped = true;
+        stageRef.current.stopDrag();
+      }
+
+      const p1 = {
+        x: touch1.clientX,
+        y: touch1.clientY,
+      };
+      const p2 = {
+        x: touch2.clientX,
+        y: touch2.clientY,
+      };
+
+      if (!center) {
+        touchStateRef.current.center = getCenter(p1, p2);
+        return;
+      }
+      const newCenter = getCenter(p1, p2);
+
+      const dist = getDistance(p1, p2);
+
+      if (!distance) {
+        touchStateRef.current.distance = dist;
+      }
+
+      const pointTo = {
+        x: (newCenter.x - stageRef.current.x()) / stageRef.current.scaleX(),
+        y: (newCenter.y - stageRef.current.y()) / stageRef.current.scaleX(),
+      };
+
+      const scale = stageRef.current.scaleX() * (dist / distance);
+
+      stageRef.current.scaleX(scale);
+      stageRef.current.scaleY(scale);
+
+      const dx = newCenter.x - center.x;
+      const dy = newCenter.y - center.y;
+
+      const newPos = {
+        x: newCenter.x - pointTo.x * scale + dx,
+        y: newCenter.y - pointTo.y * scale + dy,
+      };
+
+      stageRef.current.position(newPos);
+
+      touchStateRef.current = {
+        distance: dist,
+        center: newCenter,
+      };
+    }
+  };
+
   useEffect(() => {
     const handleClickOutSideOfStage = (e: MouseEvent) => {
       if (
@@ -54,6 +161,10 @@ const LiketUploader = ({
 
     window.addEventListener("click", handleClickOutSideOfStage);
     return () => window.removeEventListener("click", handleClickOutSideOfStage);
+  }, []);
+
+  useEffect(() => {
+    Konva.hitOnDragEnabled = true;
   }, []);
 
   return (
@@ -69,7 +180,9 @@ const LiketUploader = ({
           onMouseDown={(e) => deselectShape(e)}
           onTouchStart={(e) => {
             deselectShape(e);
+            pinchZoom(e);
           }}
+          onTouchEnd={handleTouchEndStage}
         >
           <Layer>
             <Image
