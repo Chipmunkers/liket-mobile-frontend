@@ -1,15 +1,17 @@
+import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/shared/helpers/axios";
 import { ContentEntity } from "@/shared/types/api/content/ContentEntity";
-import { useQuery } from "@tanstack/react-query";
 
-export const useGetContentDetail = (idx: string | undefined) =>
+export const useGetCultureContentByIdx = (idx: number) =>
   useQuery({
-    queryKey: ["requested-content-detail", idx],
+    queryKey: [`requested-culture-content-${idx}`],
     queryFn: async () => {
       const { data } = await axiosInstance.get<ContentEntity>(
-        "/apis/culture-content/" + idx
+        `/apis/culture-content/${idx}`
       );
 
       return data;
     },
+    staleTime: 0,
+    refetchOnWindowFocus: false,
   });
