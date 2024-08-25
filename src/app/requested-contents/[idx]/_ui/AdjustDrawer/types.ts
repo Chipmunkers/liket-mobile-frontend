@@ -6,4 +6,6 @@ export type Props = {
   isOpen: boolean;
 
   setIsOpen: SetState<boolean>;
+
+  acceptedAt: string | null;
 };

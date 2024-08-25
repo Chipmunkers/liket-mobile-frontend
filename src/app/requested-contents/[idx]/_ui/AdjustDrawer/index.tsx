@@ -5,7 +5,7 @@ import customToast from "@/shared/helpers/customToast";
 import useModalStore from "@/shared/store/modalStore";
 import { useDeleteContent } from "@/app/requested-contents/[idx]/_ui/AdjustDrawer/hooks/useDeleteContent";
 
-const AdjustDrawer = ({ idx, isOpen, setIsOpen }: Props) => {
+const AdjustDrawer = ({ idx, isOpen, setIsOpen, acceptedAt }: Props) => {
   const openModal = useModalStore(({ openModal }) => openModal);
   const { mutate: deleteContentByIdx } = useDeleteContent();
 
@@ -14,6 +14,12 @@ const AdjustDrawer = ({ idx, isOpen, setIsOpen }: Props) => {
       <li className="bottom-sheet-list">
         <ButtonBase
           onClick={() => {
+            if (acceptedAt) {
+              return customToast(
+                "활성화된 컨텐츠는 수정할 수 없습니다.\n문의주시기 바랍니다."
+              );
+            }
+
             return customToast("열심히 준비중입니다!");
           }}
           className="bottom-sheet-button flex justify-start px-[24px]"
@@ -24,6 +30,12 @@ const AdjustDrawer = ({ idx, isOpen, setIsOpen }: Props) => {
       <li className="bottom-sheet-list">
         <ButtonBase
           onClick={() => {
+            if (acceptedAt) {
+              return customToast(
+                "활성화된 컨텐츠는 삭제할 수 없습니다.\n문의주시기 바랍니다."
+              );
+            }
+
             openModal("DeleteModal", {
               onClickPositive() {
                 deleteContentByIdx(idx);

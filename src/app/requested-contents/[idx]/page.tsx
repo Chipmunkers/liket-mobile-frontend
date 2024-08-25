@@ -66,11 +66,14 @@ export default function Page({ params: { idx } }: PageProps) {
         </ButtonBase>
       </Header>
       {content ? <DetailContent content={content} /> : <ContentSkeleton />}
-      <AdjustDrawer
-        isOpen={isOpenDrawer}
-        setIsOpen={setIsOpenDrawer}
-        idx={Number(idx)}
-      />
+      {content && (
+        <AdjustDrawer
+          acceptedAt={content.acceptedAt}
+          isOpen={isOpenDrawer}
+          setIsOpen={setIsOpenDrawer}
+          idx={Number(idx)}
+        />
+      )}
     </>
   );
 }
