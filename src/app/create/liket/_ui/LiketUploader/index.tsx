@@ -23,7 +23,7 @@ const LiketUploader = ({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const { x, y, width, height } = BACKGROUND_CARD_SIZES[size];
 
-  const onClickStage = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
+  const deselectShape = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
     const isEmptyAreaClicked = e.target === e.target.getStage();
     const isBackgroundImageClicked = e.target.attrs.id === "bg-image";
 
@@ -66,8 +66,10 @@ const LiketUploader = ({
           ref={stageRef}
           width={STAGE_SIZE.WIDTH}
           height={STAGE_SIZE.HEIGHT}
-          onMouseDown={onClickStage}
-          onTouchStart={onClickStage}
+          onMouseDown={(e) => deselectShape(e)}
+          onTouchStart={(e) => {
+            deselectShape(e);
+          }}
         >
           <Layer>
             <Image
