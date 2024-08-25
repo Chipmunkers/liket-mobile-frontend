@@ -34,7 +34,9 @@ export const useDeleteContent = (
         );
       }
 
-      return customToast("예상하지 못한 에러가 발생했습니다.");
+      return customToast(
+        "예상하지 못한 에러가 발생했습니다. 다시 시도해주세요."
+      );
     },
     ...options,
   });
