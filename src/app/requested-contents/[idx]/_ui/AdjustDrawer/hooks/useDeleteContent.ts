@@ -1,7 +1,6 @@
 import axiosInstance from "@/shared/helpers/axios";
 import { MutationOptions, useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { number } from "zod";
 
 export const useDeleteContent = (
   options?: MutationOptions<void, AxiosError, number>
