@@ -18,14 +18,15 @@ import Badge from "@/shared/ui/Badge";
 import CategoryTab from "@/shared/ui/CategoryTab";
 import Divider from "@/shared/ui/Divider";
 import ContentImgCarousel from "@/widgets/content/ContentImgCarousel";
-import ContentSkeleton from "@/app/requested-contents/[idx]/_ui/DetailContent/ui/ContentSkeleton";
+import ContentSkeleton from "./ui/ContentSkeleton";
+import ContentNotFound from "../../_ui/ContentNotFound";
 
 const DetailContent = ({ idx }: Props) => {
   const [selectedTab, setSelectedTab] = useState<"content" | "review">(
     "content"
   );
 
-  const { data: content } = useGetCultureContentByIdx(idx);
+  const { data: content, error } = useGetCultureContentByIdx(idx);
 
   if (content) {
     return (
@@ -124,6 +125,10 @@ const DetailContent = ({ idx }: Props) => {
         )}
       </main>
     );
+  }
+
+  if (error && error.response?.status === 404) {
+    return <ContentNotFound />;
   }
 
   return <ContentSkeleton />;
