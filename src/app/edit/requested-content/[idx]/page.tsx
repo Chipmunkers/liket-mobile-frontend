@@ -13,7 +13,6 @@ import { ButtonBase, TextareaAutosize } from "@mui/material";
 import dayjs from "dayjs";
 import { DateCalendar } from "@mui/x-date-pickers";
 import Script from "next/script";
-import { useCreateContent } from "./_hooks/useCreateContent";
 import {
   Header,
   HeaderLeft,
@@ -25,6 +24,7 @@ import { BasicInput, InputLabel } from "@/shared/ui/Input";
 import Chip from "@/shared/ui/Chip";
 import Button from "@/shared/ui/Button";
 import { findIdxsByNames } from "./_util/findIdxsByNames";
+import { formatDate } from "./_util/formatDate";
 import { classNames } from "@/shared/helpers/classNames";
 import customToast from "@/shared/helpers/customToast";
 import { GENRES } from "@/shared/consts/content/genre";
@@ -38,17 +38,31 @@ import SelectButtonMedium from "@/shared/ui/SelectButton/SelectButtonMedium";
 import { SelectedAddress } from "./types";
 import { DEFAULT_VALUE, schema, ValidateSchema } from "./schema";
 import { CONDITIONS, MAX_IMAGES_COUNT } from "./_consts/content";
+import { useGetCultureContentByIdx } from "./_hooks/useGetContentByIdx";
+import { findIdxByName } from "./_util/findIdxByName";
+import { useEditContent } from "./_hooks/useEditContent";
+import DefaultImg from "@/shared/ui/DefaultImg";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",
   EXACT = "EXACT",
 }
 
-export default function Page() {
+interface PageProps {
+  params: {
+    idx: string;
+  };
+}
+
+export default function Page({ params: { idx } }: PageProps) {
   const searchParam = useSearchParams();
   const isSearchModalOpen = searchParam.get("isSearchModalOpen");
 
-  const [uploadedImgs, setUploadedImgs] = useState<string[]>([]);
+  const { data: content, isFetched } = useGetCultureContentByIdx(Number(idx));
+
+  const [uploadedImgs, setUploadedImgs] = useState<string[]>(
+    content?.imgList || []
+  );
   const inputRef = useRef<HTMLInputElement>(null);
   const { mutate: uploadContentImages } = useUploadContentImages({
     onSuccess: ({ data }) => {
@@ -75,21 +89,14 @@ export default function Page() {
   }>();
   const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder>();
 
+  const { mutate: editContent } = useEditContent({ idx: Number(idx) });
+
   const { formState, watch, register, setValue, getValues, trigger } =
     useForm<ValidateSchema>({
       mode: "onBlur",
       defaultValues: DEFAULT_VALUE,
       resolver: zodResolver(schema),
     });
-
-  const { mutate: createContent } = useCreateContent({
-    onSuccess: ({ data }) => {
-      router.replace(`/requested-contents/${data.idx}`);
-    },
-    onError: () => {
-      // TODO: 에러 핸들링
-    },
-  });
 
   const [isStyleSelectionDrawerOpen, setIsStyleSelectionDrawerOpen] =
     useState(false);
@@ -181,6 +188,76 @@ export default function Page() {
     $mapScript.addEventListener("load", onLoadMap);
   }, []);
 
+  useEffect(() => {
+    if (content && isFetched) {
+      const {
+        title,
+        genre,
+        location,
+        startDate,
+        endDate,
+        age,
+        style,
+        openTime,
+        websiteLink,
+        description,
+        isFee,
+        isParking,
+        isPet,
+        isReservation,
+        imgList,
+      } = content;
+
+      const condition = ["에약", "주차", "입장료", "반려동물"].reduce(
+        (prev, cur) => {
+          if (prev.length === 1 && prev[0] === "") {
+            prev.pop();
+          }
+
+          if (cur === "예약" && isReservation) {
+            prev.push("예약");
+          }
+
+          if (cur === "주차" && isParking) {
+            prev.push("주차");
+          }
+
+          if (cur === "반려동물" && isPet) {
+            prev.push("반려동물");
+          }
+
+          if (cur === "입장료" && isFee) {
+            prev.push("입장료");
+          }
+
+          return prev;
+        },
+        [""]
+      );
+      setValue("address", location.address);
+      setValue("title", title);
+      setValue("genre", genre.name);
+      setValue("additional-address", location.detailAddress);
+      setValue("description", description);
+      setValue("age", age.name);
+      setValue("startDate", formatDate(startDate));
+      setValue("endDate", formatDate(endDate));
+      setValue(
+        "style",
+        style.map(({ name }) => name)
+      );
+      setValue("openTime", openTime);
+      setValue("websiteLink", websiteLink);
+      setValue("condition", condition);
+
+      setDetailAddress(location.address);
+      setAddressInformation(location);
+      setUploadedImgs([...imgList]);
+      setValue("imgList", [...imgList]);
+      trigger();
+    }
+  }, [content, isFetched, setValue]);
+
   return (
     <>
       <Header>
@@ -209,7 +286,7 @@ export default function Page() {
                 const styleIdxList = findIdxsByNames(STYLES, style);
 
                 if (addressInformation && genreIdx && ageIdx && styleIdxList) {
-                  createContent({
+                  editContent({
                     isPet: condition.includes("반려동물"),
                     isFee: condition.includes("입장료"),
                     isParking: condition.includes("주차"),
@@ -451,11 +528,7 @@ export default function Page() {
                     key={filePath}
                     className="w-[96px] h-[96px] relative shrink-0"
                   >
-                    <Image
-                      src={process.env.NEXT_PUBLIC_IMAGE_SERVER + filePath}
-                      fill
-                      alt="업로드된 이미지"
-                    />
+                    <DefaultImg src={filePath} alt="업로드된 이미지" />
                     <button
                       type="button"
                       aria-label="현재 선택된 이미지 삭제"

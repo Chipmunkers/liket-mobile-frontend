@@ -23,6 +23,7 @@ export const WEBVIEW_SCREEN = {
   KAKAO_LOGIN: "Kakao Login",
   APPLE_LOGIN: "Apple Login",
   REQUESTED_CONTENT_DETAIL: "Requested Content Detail",
+  EDIT_REQUESTED_CONTENT: "Edit Requested Content",
 } as const;
 
 export type WebviewScreen = keyof typeof WEBVIEW_SCREEN;
