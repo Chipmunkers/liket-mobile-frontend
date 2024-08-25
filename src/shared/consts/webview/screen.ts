@@ -24,6 +24,7 @@ export const WEBVIEW_SCREEN = {
   APPLE_LOGIN: "Apple Login",
   REQUESTED_CONTENT_DETAIL: "Requested Content Detail",
   EDIT_REQUESTED_CONTENT: "Edit Requested Content",
+  INQUIRY_DETAIL: "Inquiry Detail",
 } as const;
 
 export type WebviewScreen = keyof typeof WEBVIEW_SCREEN;

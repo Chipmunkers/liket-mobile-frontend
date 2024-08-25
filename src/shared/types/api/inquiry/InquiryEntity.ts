@@ -16,4 +16,6 @@ export interface InquiryEntity {
   answerList: AnswerEntity[];
 
   imgList: string[];
+
+  createdAt: Date;
 }
