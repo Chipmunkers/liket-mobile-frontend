@@ -84,11 +84,12 @@ const LiketUploader = ({
 
     let { center, distance } = touchStateRef.current;
 
-    var dragStopped = false;
+    let dragStopped = false;
 
     e.evt.preventDefault();
-    var touch1 = e.evt.touches[0];
-    var touch2 = e.evt.touches[1];
+
+    let touch1 = e.evt.touches[0];
+    let touch2 = e.evt.touches[1];
 
     if (touch1 && !touch2 && !stageRef.current.isDragging() && dragStopped) {
       stageRef.current.startDrag();
@@ -127,7 +128,8 @@ const LiketUploader = ({
         y: (newCenter.y - stageRef.current.y()) / stageRef.current.scaleX(),
       };
 
-      const scale = stageRef.current.scaleX() * (dist / distance);
+      const scale =
+        stageRef.current.scaleX() * (dist / touchStateRef.current.distance);
 
       stageRef.current.scaleX(scale);
       stageRef.current.scaleY(scale);
@@ -180,6 +182,8 @@ const LiketUploader = ({
           onMouseDown={(e) => deselectShape(e)}
           onTouchStart={(e) => {
             deselectShape(e);
+          }}
+          onTouchMove={(e) => {
             pinchZoom(e);
           }}
           onTouchEnd={handleTouchEndStage}
