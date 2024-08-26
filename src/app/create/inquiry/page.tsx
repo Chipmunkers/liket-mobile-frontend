@@ -8,7 +8,7 @@ import CreateIcon from "@/icons/create.svg";
 import { Controller, useForm } from "react-hook-form";
 import DeleteIcon from "@/icons/circle-cross.svg";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SmallDownArrow from "@/icons/down-arrow-small.svg";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,14 +31,16 @@ import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 const MAX_IMAGES_COUNT = 10;
 
 const inquiryTypeSchema = z.object({
-  idx: z.string(),
+  idx: z.number(),
   name: z.string(),
 });
 
 const schema = z.object({
   title: z.string().min(1, "필수로 입력돼야합니다."),
   description: z.string().min(1, "필수로 입력돼야합니다."),
-  imgList: z.array(z.string()).min(1, "이미지가 최소 하나 이상 필요합니다."),
+  imgList: z
+    .array(z.string())
+    .max(10, "이미지는 최대 10장까지 업로드할 수 있습니다."),
   inquiryType: inquiryTypeSchema,
 });
 
@@ -50,8 +52,8 @@ export default function Page() {
       const newData = data.map(({ filePath }) => filePath);
 
       setUploadedImages([...uploadedImages, ...newData]);
-      // setValue("imgList", [...uploadedImages, ...newData]);
-      // trigger("imgList");
+      setValue("imgList", [...uploadedImages, ...newData]);
+      trigger("imgList");
     },
   });
   const { mutate: createInquiry } = useCreateInquiry({
@@ -66,12 +68,23 @@ export default function Page() {
       // TODO: 에러 핸들링
     },
   });
-  const methods = useForm({
-    mode: "onBlur",
-    resolver: zodResolver(schema),
-  });
 
-  const { formState, control, register, setValue, trigger, watch } = methods;
+  const { getValues, formState, control, register, setValue, trigger, watch } =
+    useForm<{
+      title: string;
+      description: string;
+      imgList: string[];
+      inquiryType: null | { idx: number; name: string };
+    }>({
+      mode: "onBlur",
+      resolver: zodResolver(schema),
+      defaultValues: {
+        title: "",
+        description: "",
+        imgList: [] as string[],
+        inquiryType: null,
+      },
+    });
 
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [isTypeDrawerOpen, setIsTypeDrawerOpen] = useState(false);
@@ -100,7 +113,18 @@ export default function Page() {
             check: {
               disabled: !formState.isValid,
               onClick: () => {
-                createInquiry;
+                const inquiryType = getValues("inquiryType.idx");
+                if (!inquiryType) {
+                  customToast("문의 유형은 필수 값입니다.");
+                  return;
+                }
+
+                createInquiry({
+                  title: getValues("title"),
+                  contents: getValues("description"),
+                  imgList: getValues("imgList"),
+                  typeIdx: inquiryType,
+                });
               },
             },
           }}
@@ -137,7 +161,7 @@ export default function Page() {
                 return (
                   <div className="mt-[12px]">
                     <SelectButtonMedium
-                      text={""}
+                      text={watch("inquiryType")?.name || ""}
                       className="w-full"
                       placeholder="문의 유형을 선택해주세요."
                       onClick={() => setIsTypeDrawerOpen(true)}
@@ -250,14 +274,14 @@ export default function Page() {
                       <ButtonBase
                         onClick={() => {
                           field.onChange({ idx, name });
-                          // setValue("inquiryTypeIdx", `${idx}`);
+                          setValue("inquiryTypeIdx", `${idx}`);
                           setIsTypeDrawerOpen(false);
                         }}
                         className={classNames(
-                          "bottom-sheet-button flex justify-start px-[24px]"
-                          // watch("inquiryTypeIdx") === `${idx}`
-                          //   ? "text-skyblue-01 text-body1"
-                          //   : ""
+                          "bottom-sheet-button flex justify-start px-[24px]",
+                          watch("inquiryTypeIdx") === `${idx}`
+                            ? "text-skyblue-01 text-body1"
+                            : ""
                         )}
                       >
                         {name}
