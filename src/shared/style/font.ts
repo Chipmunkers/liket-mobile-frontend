@@ -41,7 +41,7 @@ export const TypographyTextScale: FontSize = {
     "14px",
     {
       fontWeight: 700,
-      lineHeight: "120%",
+      lineHeight: "17px",
     },
   ],
   body3: [
