@@ -29,7 +29,7 @@ const InquirySkeleton = () => {
           />
         </div>
         <div className="py-[16px] border-y-[1px] border-grey-01">
-          <SkeletonItem width="100%" height="100px" />
+          <SkeletonItem width="100%" height="112px" />
         </div>
       </section>
       <section>

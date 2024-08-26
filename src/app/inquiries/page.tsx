@@ -17,7 +17,7 @@ export default function Page() {
   return (
     <>
       <Header>
-        <HeaderLeft logo />
+        <HeaderLeft option={{ back: true }} />
         <HeaderMiddle text="문의 내역" />
         <HeaderRight
           option={{
