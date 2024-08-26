@@ -25,6 +25,8 @@ import { classNames } from "@/shared/helpers/classNames";
 import SelectButtonMedium from "@/shared/ui/SelectButton/SelectButtonMedium";
 import Drawer from "@/shared/ui/Drawer";
 import customToast from "@/shared/helpers/customToast";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
 const MAX_IMAGES_COUNT = 10;
 
@@ -54,9 +56,13 @@ export default function Page() {
   });
   const { mutate: createInquiry } = useCreateInquiry({
     onSuccess: ({ data }) => {
-      router.replace(`/inquiries/${data.idx}`);
+      stackRouterPush(router, {
+        path: `/inquiries/${data.idx}`,
+        screen: WEBVIEW_SCREEN.INQUIRY_DETAIL,
+        isStack: false,
+      });
     },
-    onError: () => {
+    onError: (err) => {
       // TODO: 에러 핸들링
     },
   });
@@ -68,8 +74,7 @@ export default function Page() {
   const { formState, control, register, setValue, trigger, watch } = methods;
 
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
-  const [isTypeSelectionModalOpen, setIsTypeSelectionModalOpen] =
-    useState(false);
+  const [isTypeDrawerOpen, setIsTypeDrawerOpen] = useState(false);
 
   const handleRemoveImage = (filePath: string) => {
     const newImgList = uploadedImages.filter(
@@ -106,7 +111,7 @@ export default function Page() {
           <div className="mx-[24px] mt-[16px]">
             <div>
               <InputLabel
-                maxLength={40}
+                maxLength={30}
                 htmlFor="title"
                 currentLength={watch("title")?.length || 0}
               >
@@ -135,7 +140,7 @@ export default function Page() {
                       text={""}
                       className="w-full"
                       placeholder="문의 유형을 선택해주세요."
-                      onClick={() => setIsTypeSelectionModalOpen(true)}
+                      onClick={() => setIsTypeDrawerOpen(true)}
                       Icon={<SmallDownArrow />}
                     />
                   </div>
@@ -234,8 +239,8 @@ export default function Page() {
         render={({ field }) => {
           return (
             <Drawer
-              open={isTypeSelectionModalOpen}
-              onClose={() => setIsTypeSelectionModalOpen(false)}
+              open={isTypeDrawerOpen}
+              onClose={() => setIsTypeDrawerOpen(false)}
             >
               <div className="center text-h2">문의 유형</div>
               <ul>
@@ -246,7 +251,7 @@ export default function Page() {
                         onClick={() => {
                           field.onChange({ idx, name });
                           // setValue("inquiryTypeIdx", `${idx}`);
-                          setIsTypeSelectionModalOpen(false);
+                          setIsTypeDrawerOpen(false);
                         }}
                         className={classNames(
                           "bottom-sheet-button flex justify-start px-[24px]"
