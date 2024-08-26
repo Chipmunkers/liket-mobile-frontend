@@ -1,21 +1,16 @@
 "use client";
 
-import SkeletonItem from "@/shared/ui/SkeletonItem";
 import { useGetInquiryByIdx } from "./_hooks/useGetInquiryByIdx";
-import {
-  Header,
-  HeaderLeft,
-  HeaderMiddle,
-  HeaderRight,
-} from "@/shared/ui/Header";
+import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import InquirySkeleton from "@/app/inquiries/[idx]/_ui/InquirySkeleton";
 import InquiryCardSmall from "@/entities/inquiry/InquiryCardSmall";
 import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
 import DefaultImg from "@/shared/ui/DefaultImg";
 import Divider from "@/shared/ui/Divider";
 import { classNames } from "@/shared/helpers/classNames";
-import { useEffect } from "react";
 import { ButtonBase } from "@mui/material";
+import { useDeleteInquiryByIdx } from "@/app/inquiries/[idx]/_hooks/useDeleteInquiryByIdx";
+import useModalStore from "@/shared/store/modalStore";
 
 interface PageProps {
   params: {
@@ -24,9 +19,12 @@ interface PageProps {
 }
 
 export default function page({ params: { idx } }: PageProps) {
-  const { data: inquiry, error } = useGetInquiryByIdx(Number(idx));
+  const openModal = useModalStore(({ openModal }) => openModal);
 
-  if (error?.response?.status === 404) {
+  const { data: inquiry, error } = useGetInquiryByIdx(Number(idx));
+  const { mutate: deleteInquiryByIdx } = useDeleteInquiryByIdx();
+
+  if (error?.response?.status === 404 || error?.response?.status === 400) {
     return (
       <>
         <Header>
@@ -62,7 +60,16 @@ export default function page({ params: { idx } }: PageProps) {
             }}
           />
           <HeaderMiddle text="문의내역" />
-          <ButtonBase className="w-[48px] h-[48px] text-rosepink-01 text-body3 mr-[12px] rounded-full">
+          <ButtonBase
+            className="w-[48px] h-[48px] text-rosepink-01 text-body3 mr-[12px] rounded-full"
+            onClick={() => {
+              openModal("DeleteModal", {
+                onClickPositive() {
+                  deleteInquiryByIdx(Number(idx));
+                },
+              });
+            }}
+          >
             삭제
           </ButtonBase>
         </Header>
