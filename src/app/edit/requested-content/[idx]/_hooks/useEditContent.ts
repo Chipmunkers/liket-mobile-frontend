@@ -27,7 +27,6 @@ interface UpdateContentDto {
 
 export const useEditContent = ({
   idx,
-  onSuccess,
 }: UseMutationOptions<AxiosResponse, AxiosError, UpdateContentDto> & {
   idx: number;
 }) => {
@@ -58,7 +57,7 @@ export const useEditContent = ({
 
       if (statusCode === 409) {
         return customToast(
-          "활성화된 컨텐츠는 수정할 수 없습니다.\n문의주시기 바랍니다."
+          "활성화된 컨텐츠는 수정할 수 없습니다. 문의를 남겨주세요."
         );
       }
 

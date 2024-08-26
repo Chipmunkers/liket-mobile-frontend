@@ -8,7 +8,7 @@ import CreateIcon from "@/icons/create.svg";
 import { Controller, useForm } from "react-hook-form";
 import DeleteIcon from "@/icons/circle-cross.svg";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SmallDownArrow from "@/icons/down-arrow-small.svg";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,18 +25,24 @@ import { classNames } from "@/shared/helpers/classNames";
 import SelectButtonMedium from "@/shared/ui/SelectButton/SelectButtonMedium";
 import Drawer from "@/shared/ui/Drawer";
 import customToast from "@/shared/helpers/customToast";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import DefaultImg from "@/shared/ui/DefaultImg";
+import { compressImage } from "@/shared/helpers/compressImage";
 
 const MAX_IMAGES_COUNT = 10;
 
 const inquiryTypeSchema = z.object({
-  idx: z.string(),
+  idx: z.number(),
   name: z.string(),
 });
 
 const schema = z.object({
   title: z.string().min(1, "필수로 입력돼야합니다."),
   description: z.string().min(1, "필수로 입력돼야합니다."),
-  imgList: z.array(z.string()).min(1, "이미지가 최소 하나 이상 필요합니다."),
+  imgList: z
+    .array(z.string())
+    .max(10, "이미지는 최대 10장까지 업로드할 수 있습니다."),
   inquiryType: inquiryTypeSchema,
 });
 
@@ -48,28 +54,39 @@ export default function Page() {
       const newData = data.map(({ filePath }) => filePath);
 
       setUploadedImages([...uploadedImages, ...newData]);
-      // setValue("imgList", [...uploadedImages, ...newData]);
-      // trigger("imgList");
+      setValue("imgList", [...uploadedImages, ...newData]);
+      trigger("imgList");
     },
   });
   const { mutate: createInquiry } = useCreateInquiry({
     onSuccess: ({ data }) => {
-      router.replace(`/inquiries/${data.idx}`);
+      stackRouterPush(router, {
+        path: `/inquiries/${data.idx}`,
+        screen: WEBVIEW_SCREEN.INQUIRY_DETAIL,
+        isStack: false,
+      });
     },
-    onError: () => {
-      // TODO: 에러 핸들링
-    },
-  });
-  const methods = useForm({
-    mode: "onBlur",
-    resolver: zodResolver(schema),
   });
 
-  const { formState, control, register, setValue, trigger, watch } = methods;
+  const { getValues, formState, control, register, setValue, trigger, watch } =
+    useForm<{
+      title: string;
+      description: string;
+      imgList: string[];
+      inquiryType: null | { idx: number; name: string };
+    }>({
+      mode: "onBlur",
+      resolver: zodResolver(schema),
+      defaultValues: {
+        title: "",
+        description: "",
+        imgList: [] as string[],
+        inquiryType: null,
+      },
+    });
 
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
-  const [isTypeSelectionModalOpen, setIsTypeSelectionModalOpen] =
-    useState(false);
+  const [isTypeDrawerOpen, setIsTypeDrawerOpen] = useState(false);
 
   const handleRemoveImage = (filePath: string) => {
     const newImgList = uploadedImages.filter(
@@ -80,6 +97,10 @@ export default function Page() {
     setValue("imgList", newImgList);
     trigger("imgList");
   };
+
+  useEffect(() => {
+    console.log(getValues());
+  }, [formState]);
 
   return (
     <>
@@ -95,7 +116,18 @@ export default function Page() {
             check: {
               disabled: !formState.isValid,
               onClick: () => {
-                createInquiry;
+                const inquiryType = getValues("inquiryType.idx");
+                if (!inquiryType) {
+                  customToast("문의 유형은 필수 값입니다.");
+                  return;
+                }
+
+                createInquiry({
+                  title: getValues("title"),
+                  contents: getValues("description"),
+                  imgList: getValues("imgList"),
+                  typeIdx: inquiryType,
+                });
               },
             },
           }}
@@ -106,7 +138,7 @@ export default function Page() {
           <div className="mx-[24px] mt-[16px]">
             <div>
               <InputLabel
-                maxLength={40}
+                maxLength={30}
                 htmlFor="title"
                 currentLength={watch("title")?.length || 0}
               >
@@ -132,10 +164,10 @@ export default function Page() {
                 return (
                   <div className="mt-[12px]">
                     <SelectButtonMedium
-                      text={""}
+                      text={watch("inquiryType")?.name || ""}
                       className="w-full"
                       placeholder="문의 유형을 선택해주세요."
-                      onClick={() => setIsTypeSelectionModalOpen(true)}
+                      onClick={() => setIsTypeDrawerOpen(true)}
                       Icon={<SmallDownArrow />}
                     />
                   </div>
@@ -174,8 +206,11 @@ export default function Page() {
                 type="file"
                 multiple
                 className="hidden grow"
-                onChange={(e) => {
-                  if (uploadedImages.length > MAX_IMAGES_COUNT) {
+                onChange={async (e) => {
+                  if (
+                    uploadedImages.length + (e.target.files?.length || 0) >
+                    MAX_IMAGES_COUNT
+                  ) {
                     customToast("이미지는 최대 10개까지만 업로드 가능합니다.");
 
                     return;
@@ -185,7 +220,10 @@ export default function Page() {
                     const formData = new FormData();
 
                     for (let i = 0; i < e.target.files.length; i++) {
-                      formData.append("files", e.target.files[i]);
+                      formData.append(
+                        "files",
+                        await compressImage(e.target.files[i])
+                      );
                     }
 
                     uploadInquiryImages(formData);
@@ -206,13 +244,9 @@ export default function Page() {
                 return (
                   <li
                     key={filePath}
-                    className="w-[96px] h-[96px] relative shrink-0"
+                    className="w-[96px] h-[96px] relative shrink-0 border-[1px] border-grey-02"
                   >
-                    <Image
-                      src={process.env.NEXT_PUBLIC_IMAGE_SERVER + filePath}
-                      fill
-                      alt="업로드된 이미지"
-                    />
+                    <DefaultImg src={filePath} alt="업로드된 이미지" />
                     <button
                       type="button"
                       aria-label="현재 선택된 이미지 삭제"
@@ -234,8 +268,8 @@ export default function Page() {
         render={({ field }) => {
           return (
             <Drawer
-              open={isTypeSelectionModalOpen}
-              onClose={() => setIsTypeSelectionModalOpen(false)}
+              open={isTypeDrawerOpen}
+              onClose={() => setIsTypeDrawerOpen(false)}
             >
               <div className="center text-h2">문의 유형</div>
               <ul>
@@ -245,14 +279,14 @@ export default function Page() {
                       <ButtonBase
                         onClick={() => {
                           field.onChange({ idx, name });
-                          // setValue("inquiryTypeIdx", `${idx}`);
-                          setIsTypeSelectionModalOpen(false);
+                          setValue("inquiryType.idx", idx);
+                          setIsTypeDrawerOpen(false);
                         }}
                         className={classNames(
-                          "bottom-sheet-button flex justify-start px-[24px]"
-                          // watch("inquiryTypeIdx") === `${idx}`
-                          //   ? "text-skyblue-01 text-body1"
-                          //   : ""
+                          "bottom-sheet-button flex justify-start px-[24px]",
+                          watch("inquiryType.idx") === idx
+                            ? "text-skyblue-01 text-body1"
+                            : ""
                         )}
                       >
                         {name}

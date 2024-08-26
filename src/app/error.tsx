@@ -7,7 +7,7 @@ import Button from "@/shared/ui/Button";
 import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
-export default function Page() {
+export default function ErrorPage() {
   const router = useRouter();
 
   return (

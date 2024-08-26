@@ -46,6 +46,14 @@ const config: Config = {
       maxWidth: {
         content: PAGE_CONTENT_MAX_WIDTH,
       },
+      boxShadow: {
+        "01": "0px -8px 16px 4px rgba(0, 0, 0, 0.04)",
+        "02": "8px 8px 16px 4px rgba(0, 0, 0, 0.04)",
+        "03": "0px 0px 8px 16px rgba(0, 0, 0, 0.04)",
+        "04": "0px 0px 16px rgba(0, 0, 0, 0.04)",
+        "05": "0px 0px 16px 4px rgba(0, 0, 0, 0.04)",
+        "06": "0px 0px 8px 8px rgba(0, 0, 0, 0.04)",
+      },
     },
   },
   plugins: [],

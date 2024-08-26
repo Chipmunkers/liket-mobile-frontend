@@ -25,7 +25,7 @@ const AdjustDrawer = ({ idx, isOpen, setIsOpen, acceptedAt }: Props) => {
           onClick={() => {
             if (acceptedAt) {
               return customToast(
-                "활성화된 컨텐츠는 수정할 수 없습니다.\n문의주시기 바랍니다."
+                "활성화된 컨텐츠는 수정할 수 없습니다. 문의를 남겨주세요."
               );
             }
 
@@ -44,7 +44,7 @@ const AdjustDrawer = ({ idx, isOpen, setIsOpen, acceptedAt }: Props) => {
           onClick={() => {
             if (acceptedAt) {
               return customToast(
-                "활성화된 컨텐츠는 삭제할 수 없습니다.\n문의주시기 바랍니다."
+                "활성화된 컨텐츠는 삭제할 수 없습니다. 문의를 남겨주세요."
               );
             }
 
