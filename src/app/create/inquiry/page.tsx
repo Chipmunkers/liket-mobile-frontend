@@ -207,7 +207,10 @@ export default function Page() {
                 multiple
                 className="hidden grow"
                 onChange={async (e) => {
-                  if (uploadedImages.length > MAX_IMAGES_COUNT) {
+                  if (
+                    uploadedImages.length + (e.target.files?.length || 0) >
+                    MAX_IMAGES_COUNT
+                  ) {
                     customToast("이미지는 최대 10개까지만 업로드 가능합니다.");
 
                     return;
