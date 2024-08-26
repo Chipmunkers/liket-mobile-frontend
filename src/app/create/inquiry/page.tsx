@@ -64,9 +64,6 @@ export default function Page() {
         isStack: false,
       });
     },
-    onError: (err) => {
-      // TODO: 에러 핸들링
-    },
   });
 
   const { getValues, formState, control, register, setValue, trigger, watch } =
@@ -274,12 +271,12 @@ export default function Page() {
                       <ButtonBase
                         onClick={() => {
                           field.onChange({ idx, name });
-                          setValue("inquiryTypeIdx", `${idx}`);
+                          setValue("inquiryType.idx", idx);
                           setIsTypeDrawerOpen(false);
                         }}
                         className={classNames(
                           "bottom-sheet-button flex justify-start px-[24px]",
-                          watch("inquiryTypeIdx") === `${idx}`
+                          watch("inquiryType.idx") === idx
                             ? "text-skyblue-01 text-body1"
                             : ""
                         )}
