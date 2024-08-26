@@ -25,10 +25,6 @@ interface PageProps {
 export default function page({ params: { idx } }: PageProps) {
   const { data: inquiry, error } = useGetInquiryByIdx(Number(idx));
 
-  useEffect(() => {
-    console.log(error);
-  }, [error]);
-
   if (error?.response?.status === 404) {
     return (
       <>
