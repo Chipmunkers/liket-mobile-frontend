@@ -77,8 +77,11 @@ export default function page({ params: { idx } }: PageProps) {
           </section>
           <section className="mt-[16px]">
             <CustomScrollContainer className="flex flex-row gap-[8px] w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-              {inquiry.imgList.map((imgPath) => (
-                <div className="w-[80px] h-[80px] relative border-[1px] border-grey-02">
+              {inquiry.imgList.map((imgPath, i) => (
+                <div
+                  className="w-[80px] h-[80px] relative border-[1px] border-grey-02"
+                  key={`image-${i}`}
+                >
                   <DefaultImg src={imgPath} alt="" />
                 </div>
               ))}
