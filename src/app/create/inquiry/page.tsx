@@ -27,6 +27,8 @@ import Drawer from "@/shared/ui/Drawer";
 import customToast from "@/shared/helpers/customToast";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import DefaultImg from "@/shared/ui/DefaultImg";
+import { compressImage } from "@/shared/helpers/compressImage";
 
 const MAX_IMAGES_COUNT = 10;
 
@@ -95,6 +97,10 @@ export default function Page() {
     setValue("imgList", newImgList);
     trigger("imgList");
   };
+
+  useEffect(() => {
+    console.log(getValues());
+  }, [formState]);
 
   return (
     <>
@@ -200,7 +206,7 @@ export default function Page() {
                 type="file"
                 multiple
                 className="hidden grow"
-                onChange={(e) => {
+                onChange={async (e) => {
                   if (uploadedImages.length > MAX_IMAGES_COUNT) {
                     customToast("이미지는 최대 10개까지만 업로드 가능합니다.");
 
@@ -211,7 +217,10 @@ export default function Page() {
                     const formData = new FormData();
 
                     for (let i = 0; i < e.target.files.length; i++) {
-                      formData.append("files", e.target.files[i]);
+                      formData.append(
+                        "files",
+                        await compressImage(e.target.files[i])
+                      );
                     }
 
                     uploadInquiryImages(formData);
@@ -232,13 +241,9 @@ export default function Page() {
                 return (
                   <li
                     key={filePath}
-                    className="w-[96px] h-[96px] relative shrink-0"
+                    className="w-[96px] h-[96px] relative shrink-0 border-[1px] border-grey-02"
                   >
-                    <Image
-                      src={process.env.NEXT_PUBLIC_IMAGE_SERVER + filePath}
-                      fill
-                      alt="업로드된 이미지"
-                    />
+                    <DefaultImg src={filePath} alt="업로드된 이미지" />
                     <button
                       type="button"
                       aria-label="현재 선택된 이미지 삭제"
