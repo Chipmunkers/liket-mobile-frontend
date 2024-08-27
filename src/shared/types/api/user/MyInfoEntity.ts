@@ -10,9 +10,9 @@ export interface MyInfoEntity {
   profileImgPath: string;
   nickname: string;
   provider: string;
-  gender: number;
+  gender: number | null;
   email: string;
-  birth: number;
+  birth: number | null;
   likeCount: number;
   createdAt: string;
 }

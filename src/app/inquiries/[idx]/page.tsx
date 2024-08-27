@@ -79,21 +79,23 @@ export default function page({ params: { idx } }: PageProps) {
               inquiry={{ ...inquiry, isAnswered: !!inquiry.answerList[0] }}
             />
             <div className="py-[16px] border-b-[1px] border-b-grey-01">
-              <div className="text-body3 h-[112px]">{inquiry.contents}</div>
+              <div className="text-body3 min-h-[112px]">{inquiry.contents}</div>
             </div>
           </section>
-          <section className="mt-[16px]">
-            <CustomScrollContainer className="flex flex-row gap-[8px] w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-              {inquiry.imgList.map((imgPath, i) => (
-                <div
-                  className="w-[80px] h-[80px] relative border-[1px] border-grey-02"
-                  key={`image-${i}`}
-                >
-                  <DefaultImg src={imgPath} alt="" />
-                </div>
-              ))}
-            </CustomScrollContainer>
-          </section>
+          {!!inquiry.imgList[0] && (
+            <section className="mt-[16px]">
+              <CustomScrollContainer className="flex flex-row gap-[8px] w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
+                {inquiry.imgList.map((imgPath, i) => (
+                  <div
+                    className="w-[80px] h-[80px] relative border-[1px] border-grey-02"
+                    key={`image-${i}`}
+                  >
+                    <DefaultImg src={imgPath} alt="" />
+                  </div>
+                ))}
+              </CustomScrollContainer>
+            </section>
+          )}
           <Divider width="100%" height="8px" margin="24px 0px" />
           <section className="px-[24px]">
             <div className="text-h2">답변</div>
@@ -104,13 +106,7 @@ export default function page({ params: { idx } }: PageProps) {
                 inquiry.answerList[0] ? "" : "flex items-center justify-center"
               )}
             >
-              {inquiry.answerList[0] ? (
-                inquiry.answerList[0].contents
-              ) : (
-                <span className="text-body4 text-grey-03">
-                  아직 답변중입니다!
-                </span>
-              )}
+              {inquiry.answerList[0] && inquiry.answerList[0].contents}
             </div>
           </section>
         </main>

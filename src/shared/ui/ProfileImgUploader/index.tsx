@@ -4,7 +4,7 @@ import { getRefValue } from "@/shared/helpers/getRefValue";
 import { classNames } from "@/shared/helpers/classNames";
 import PlusIcon from "./icon/PlusIcon.svg";
 import DefaultProfileIcon from "@/shared/icon/user/DefaultProfileIcon.svg";
-import Image from "next/image";
+import DefaultImg from "@/shared/ui/DefaultImg";
 
 const ProfileImgUploader = ({
   onUpload,
@@ -12,9 +12,7 @@ const ProfileImgUploader = ({
   src = "",
   preview = true,
 }: Props) => {
-  const [ImgSrc, setImgSrc] = useState<string>(
-    src ? process.env.NEXT_PUBLIC_IMAGE_SERVER + src : src
-  );
+  const [ImgSrc, setImgSrc] = useState<string>(src);
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -26,15 +24,10 @@ const ProfileImgUploader = ({
         }}
       >
         {ImgSrc ? (
-          <Image
-            src={ImgSrc || ""}
-            alt="프로필 이미지"
-            fill
-            style={{ objectFit: "cover" }}
-          />
+          <DefaultImg src={ImgSrc} alt="프로필 이미지" />
         ) : (
           <div className="bg-grey-01 w-[100%] h-[100%] flex justify-center items-center">
-            <DefaultProfileIcon />
+            <DefaultProfileIcon className="w-[48px] h-[48px]" />
           </div>
         )}
       </div>

@@ -1,25 +1,22 @@
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import axiosInstance from "@/shared/helpers/axios";
-import { MutationOptions, useQuery } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { MyInfoEntity } from "@/shared/types/api/user/MyInfoEntity";
+import { useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { stackRouterPush } from "@/shared/helpers/stackRouter";
-import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
-export const useGetMyInfo = (
-  options: MutationOptions<MyInfoEntity, AxiosError>
-) => {
+export const useGetMyInfo = () => {
   const router = useRouter();
 
   const query = useQuery<MyInfoEntity, AxiosError>({
-    queryKey: ["mypage"],
+    queryKey: [`get-my-info`],
     queryFn: async () => {
       const { data } = await axiosInstance.get<MyInfoEntity>("/apis/user/my");
 
       return data;
     },
-    ...options,
   });
 
   useEffect(() => {
@@ -29,7 +26,7 @@ export const useGetMyInfo = (
 
     if (status === 401) {
       stackRouterPush(router, {
-        path: "/login",
+        path: "/login?isTokenExpired=true",
         screen: WEBVIEW_SCREEN.LOGIN,
         isStack: false,
       });
@@ -39,7 +36,6 @@ export const useGetMyInfo = (
     stackRouterPush(router, {
       path: "/error",
       screen: WEBVIEW_SCREEN.ERROR,
-      isStack: false,
     });
   }, [query.error]);
 

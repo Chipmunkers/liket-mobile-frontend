@@ -7,8 +7,9 @@ import {
   PropsWithFallbackComponent,
   PropsWithFallbackImg,
 } from "./types";
-import { classNames } from "../../helpers/classNames";
+import { classNames } from "@/shared/helpers/classNames";
 import EmptyImgIcon from "./icon/EmptyImgIcon.svg";
+import LIKETLogo from "@/shared/icon/common/LIKETBlackLogo.svg";
 
 const DefaultImg = ({
   alt = "",
@@ -56,6 +57,14 @@ const DefaultImg = ({
         height: height || "100%",
       }}
     >
+      <div className="w-[100%] h-[100%] absolute bg-grey-01 flex justify-center items-center">
+        <LIKETLogo
+          style={{
+            width: "50%",
+            opacity: "20%",
+          }}
+        />
+      </div>
       {!isErrorEmit && (
         <Image
           className={classNames(!select ? "select-none" : "")}
@@ -97,7 +106,7 @@ const DefaultImg = ({
 
       {/* fallbackComponent와 fallbackImgSrc모두 없을 때 */}
       {isErrorEmit && !fallbackComponent && !fallbackImgSrc ? (
-        <div className="w-[100%] h-[100%] flex justify-center items-center bg-grey-03">
+        <div className="absolute w-[100%] h-[100%] flex justify-center items-center bg-grey-03">
           <EmptyImgIcon />
         </div>
       ) : null}
