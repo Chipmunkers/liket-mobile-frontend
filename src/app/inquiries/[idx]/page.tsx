@@ -79,7 +79,7 @@ export default function page({ params: { idx } }: PageProps) {
               inquiry={{ ...inquiry, isAnswered: !!inquiry.answerList[0] }}
             />
             <div className="py-[16px] border-b-[1px] border-b-grey-01">
-              <div className="text-body3 h-[112px]">{inquiry.contents}</div>
+              <div className="text-body3 min-h-[112px]">{inquiry.contents}</div>
             </div>
           </section>
           {!!inquiry.imgList[0] && (
