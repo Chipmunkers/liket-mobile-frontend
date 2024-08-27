@@ -52,7 +52,7 @@ const TextEnteringModal = ({
               }}
             />
           </Header>
-          <div className="flex grow items-center mx-auto w-content px-[45px]">
+          <div className="flex grow items-center w-full max-w-content mx-auto px-[45px]">
             <textarea
               value={value}
               onChange={handleChange}
