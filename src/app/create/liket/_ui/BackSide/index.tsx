@@ -7,14 +7,9 @@ import StarRating from "@/entities/review/StarRating";
 import { colors } from "@/shared/style/color";
 import GrayLiket from "./_assets/gray_liket.svg";
 
-const BackSide = ({ isFront, review, onClickReview }: Props) => {
+const BackSide = ({ review, onClickReview }: Props) => {
   return (
-    <div
-      className={classNames(
-        "liket-card flex-col mx-auto p-[16px]",
-        isFront && "hidden"
-      )}
-    >
+    <>
       <div className="flex items-center">
         <div className="relative w-[14px] h-[14px] overflow-hidden rounded-full">
           <Image
