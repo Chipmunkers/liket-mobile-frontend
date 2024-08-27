@@ -104,13 +104,7 @@ export default function page({ params: { idx } }: PageProps) {
                 inquiry.answerList[0] ? "" : "flex items-center justify-center"
               )}
             >
-              {inquiry.answerList[0] ? (
-                inquiry.answerList[0].contents
-              ) : (
-                <span className="text-body4 text-grey-03">
-                  아직 답변중입니다!
-                </span>
-              )}
+              {inquiry.answerList[0] && inquiry.answerList[0].contents}
             </div>
           </section>
         </main>
