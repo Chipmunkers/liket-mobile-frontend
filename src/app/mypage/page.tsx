@@ -246,18 +246,9 @@ export default function Page() {
           >
             컨텐츠 등록 요청
           </LinkItem>
-          <ButtonBase
-            onClick={() => {
-              stackRouterPush(router, {
-                path: "/inquiries",
-                screen: WEBVIEW_SCREEN.MY_INQUIRY,
-              });
-            }}
-          >
-            <LinkItem screen={WEBVIEW_SCREEN.MY_INQUIRY} href="/inquires">
-              1:1문의
-            </LinkItem>
-          </ButtonBase>
+          <LinkItem screen={WEBVIEW_SCREEN.MY_INQUIRY} href="/inquiries">
+            1:1문의
+          </LinkItem>
           <Divider width="100%" height="8px" />
           <LinkItem screen={WEBVIEW_SCREEN.TERMS_LIST} href="/terms">
             약관/정책
