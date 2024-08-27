@@ -106,7 +106,7 @@ const DefaultImg = ({
 
       {/* fallbackComponent와 fallbackImgSrc모두 없을 때 */}
       {isErrorEmit && !fallbackComponent && !fallbackImgSrc ? (
-        <div className="w-[100%] h-[100%] flex justify-center items-center bg-grey-03">
+        <div className="absolute w-[100%] h-[100%] flex justify-center items-center bg-grey-03">
           <EmptyImgIcon />
         </div>
       ) : null}
