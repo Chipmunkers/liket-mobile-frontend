@@ -1,6 +1,7 @@
 import { useState, ChangeEvent } from "react";
 import { Props } from "./types";
 import { Header, HeaderLeft, HeaderRight } from "@/shared/ui/Header";
+import ReactTextareaAutosize from "react-textarea-autosize";
 
 const TEXT_AREA_HEIGHT = 48;
 
@@ -53,14 +54,12 @@ const TextEnteringModal = ({
             />
           </Header>
           <div className="flex grow items-center w-full max-w-content mx-auto px-[45px]">
-            <textarea
+            <ReactTextareaAutosize
               value={value}
               onChange={handleChange}
-              placeholder="텍스트를 입력해주세요"
               maxLength={maxLength}
-              style={{
-                height: textAreaHeight,
-              }}
+              maxRows={3}
+              placeholder="텍스트를 입력해주세요"
               className="text-button4 text-center resize-none border-b-2 border-skyblue-01 outline-none bg-transparent px-[8px] py-[16px] text-white w-[100%]"
             />
           </div>
