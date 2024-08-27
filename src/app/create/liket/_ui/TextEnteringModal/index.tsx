@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, KeyboardEvent } from "react";
 import { Props } from "./types";
 import { Header, HeaderLeft, HeaderRight } from "@/shared/ui/Header";
 import ReactTextareaAutosize from "react-textarea-autosize";
@@ -22,6 +22,12 @@ const TextEnteringModal = ({
       setTextAreaHeight(e.target.scrollHeight - 5);
     } else {
       setValue(e.target.value.replace(/(\r\n|\n|\r)/gm, ""));
+    }
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && value.split("\n").length >= 3) {
+      e.preventDefault();
     }
   };
 
@@ -59,6 +65,7 @@ const TextEnteringModal = ({
               onChange={handleChange}
               maxLength={maxLength}
               maxRows={3}
+              onKeyDown={handleKeyDown}
               placeholder="텍스트를 입력해주세요"
               className="text-button4 text-center resize-none border-b-2 border-skyblue-01 outline-none bg-transparent px-[8px] py-[16px] text-white w-[100%]"
             />
