@@ -172,7 +172,7 @@ const LiketUploader = ({
   return (
     <div
       ref={wrapperRef}
-      className="liket-card center bg-[url(/icons/create-54.svg)] bg-[center_193px] bg-no-repeat"
+      className="liket-card center bg-[url(/icons/create-54.svg)] bg-[center_193px] bg-no-repeat overflow-hidden"
     >
       {uploadedImage ? (
         <Stage
