@@ -11,12 +11,33 @@ import Drawer from "@/shared/ui/Drawer";
 import { useState } from "react";
 import { ButtonBase } from "@mui/material";
 import customToast from "@/shared/helpers/customToast";
+import { useDeleteReview } from "./hooks/useDeleteReview";
+import useModalStore from "@/shared/store/modalStore";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ReviewInfinite = ({ idx }: Props) => {
   const router = useRouter();
   const { data, setTarget, error, refetch } = useGetMyReviews(idx);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedReview, setSelectedReview] = useState<number>();
+  const { mutate: deleteReviewByIdx } = useDeleteReview({
+    onSuccess() {
+      resetReview();
+      setIsDrawerOpen(false);
+    },
+  });
+  const openModal = useModalStore(({ openModal }) => openModal);
+  const queryClient = useQueryClient();
+
+  const resetReview = () => {
+    queryClient.removeQueries({
+      queryKey: [`user-review-${idx}`],
+    });
+    queryClient.setQueryData([`user-review-${idx}`], {
+      pages: [],
+      pageParams: [],
+    });
+  };
 
   return (
     <>
@@ -84,7 +105,11 @@ const ReviewInfinite = ({ idx }: Props) => {
             onClick={() => {
               if (!selectedReview) return;
 
-              selectedReview;
+              openModal("DeleteModal", {
+                onClickPositive() {
+                  deleteReviewByIdx(selectedReview);
+                },
+              });
             }}
             className="bottom-sheet-button flex justify-start px-[24px] text-rosepink-01"
           >
