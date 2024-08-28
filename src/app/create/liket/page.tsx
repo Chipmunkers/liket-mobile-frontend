@@ -19,10 +19,7 @@ import BackSide from "./_ui/BackSide";
 import TextEnteringModal from "./_ui/TextEnteringModal";
 import WriteTab from "./_ui/WriteTab";
 import { StrictShapeConfig } from "./types";
-
-const NoSSRLiketUploader = dynamic(() => import("./_ui/LiketUploader"), {
-  ssr: false,
-});
+import LiketUploader from "./_ui/LiketUploader";
 
 export default function Page() {
   const router = useRouter();
@@ -107,7 +104,7 @@ export default function Page() {
           <BackSide review={review} onClickReview={handleClickWriteReview} />
         </div>
         <div className={classNames(!isFront && "hidden")}>
-          <NoSSRLiketUploader
+          <LiketUploader
             uploadedImage={uploadedImage}
             stageRef={stageRef}
             size={size}
