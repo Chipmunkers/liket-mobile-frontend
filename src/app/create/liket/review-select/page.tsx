@@ -1,6 +1,7 @@
 "use client";
 
 import InfiniteReviews from "@/app/create/liket/review-select/_ui/InfiniteReviews";
+import { ReviewSmallSkeleton } from "@/entities/review/ReviewSmall";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
 import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
@@ -48,7 +49,18 @@ export default function Page() {
         <HeaderLeft option={{ back: true }} />
         <HeaderMiddle text="리뷰 선택" />
       </Header>
-      <main>{data && <InfiniteReviews idx={data.idx} />}</main>
+      <main>
+        {data && <InfiniteReviews idx={data.idx} />}
+        {
+          !Array(10)
+            .fill(0)
+            .map((elem, i) => (
+              <div className="px-[24px]">
+                <ReviewSmallSkeleton />
+              </div>
+            ))
+        }
+      </main>
     </>
   );
 }
