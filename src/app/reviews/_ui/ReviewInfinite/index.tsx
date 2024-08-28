@@ -65,7 +65,7 @@ const ReviewInfinite = ({ idx }: Props) => {
                     review={review}
                     onClickContents={(review) => {
                       stackRouterPush(router, {
-                        path: `/contents/${review.cultureContent.idx}?review=${review.idx}&tab=review`,
+                        path: `/contents/${review.cultureContent.idx}`,
                       });
                     }}
                     onClickMeatball={(review) => {
