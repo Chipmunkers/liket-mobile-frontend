@@ -3,7 +3,7 @@ import axiosInstance from "@/shared/helpers/axios";
 import { ReviewEntity } from "@/shared/types/api/review/ReviewEntity";
 import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import customToast from "@/shared/helpers/customToast";
@@ -13,20 +13,18 @@ import customToast from "@/shared/helpers/customToast";
  *
  * @param idx 사용자 인덱스
  */
-export const useGetMyReviews = (
-  idx: number,
-  option: {
-    orderby?: "time" | "like";
-  }
-) => {
+export const useGetMyReviews = (idx: number) => {
   const router = useRouter();
+  const searchParam = useSearchParams();
+
+  const order = searchParam.get("order") || "desc";
 
   const query = useInfiniteQuery({
-    queryKey: [`user-review-${idx}`, option],
+    queryKey: [`user-review-${idx}`, order],
     queryFn: async ({ pageParam = 1 }) => {
       const { data } = await axiosInstance.get<{ reviewList: ReviewEntity[] }>(
         `/apis/review/all?user=${idx}&` +
-          (option?.orderby ? `orderby=${option.orderby}&` : ``) +
+          `order=${order}&` +
           `page=${pageParam}`
       );
 

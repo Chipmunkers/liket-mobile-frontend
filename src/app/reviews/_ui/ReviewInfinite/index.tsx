@@ -6,7 +6,7 @@ import Divider from "@/shared/ui/Divider";
 import { Props } from "./types";
 
 const ReviewInfinite = ({ idx }: Props) => {
-  const { data, setTarget } = useGetMyReviews(idx, {});
+  const { data, setTarget } = useGetMyReviews(idx);
 
   return (
     <div>
