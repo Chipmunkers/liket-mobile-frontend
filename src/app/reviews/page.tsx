@@ -33,7 +33,9 @@ export default function Page() {
         />
       </Header>
       <main>
-        <ReviewLarge />
+        <div className="px-[24px]">
+          <ReviewLarge />
+        </div>
       </main>
     </>
   );
