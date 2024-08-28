@@ -51,15 +51,14 @@ export default function Page() {
       </Header>
       <main>
         {data && <InfiniteReviews idx={data.idx} />}
-        {
-          !Array(10)
+        {!data &&
+          Array(10)
             .fill(0)
             .map((elem, i) => (
               <div className="px-[24px]">
                 <ReviewSmallSkeleton />
               </div>
-            ))
-        }
+            ))}
       </main>
     </>
   );
