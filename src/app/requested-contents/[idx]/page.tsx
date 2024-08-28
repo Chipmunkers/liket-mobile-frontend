@@ -5,7 +5,7 @@ import ContentNotFound from "./_ui/ContentNotFound";
 import { Header, HeaderLeft } from "@/shared/ui/Header";
 import { useGetCultureContentByIdx } from "./_hooks/useGetContentByIdx";
 import ContentSkeleton from "./_ui/ContentSkeleton";
-import MeatballIcon from "./_icon/meatball-icon.svg";
+import MeatballIcon from "@/shared/icon/review/MeatballIcon.svg";
 import { ButtonBase } from "@mui/material";
 import { useState } from "react";
 import AdjustDrawer from "@/app/requested-contents/[idx]/_ui/AdjustDrawer";
