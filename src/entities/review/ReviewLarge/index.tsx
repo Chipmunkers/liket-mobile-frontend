@@ -6,6 +6,8 @@ import { ButtonBase } from "@mui/material";
 import StarRating from "@/entities/review/StarRating";
 import { Carousel } from "react-responsive-carousel";
 import dayjs from "dayjs";
+import ReviewLargeSkeleton from "./ui/ReviewLargeSkeleton";
+import { classNames } from "@/shared/helpers/classNames";
 
 const ReviewLarge = ({ review, onClickContents, onClickMeatball }: Props) => {
   return (
@@ -14,7 +16,10 @@ const ReviewLarge = ({ review, onClickContents, onClickMeatball }: Props) => {
       <div className="h-[64px] border-b-[1px] border-b-grey-01 flex relative">
         {/* 이미지 영역 */}
         <div
-          className="w-[48px] h-[48px] relative mt-[8px]"
+          className={classNames(
+            "w-[48px] h-[48px] relative mt-[8px]",
+            onClickContents ? "cursor-pointer" : ""
+          )}
           onClick={() => {
             onClickContents && onClickContents(review.cultureContent);
           }}
@@ -26,12 +31,15 @@ const ReviewLarge = ({ review, onClickContents, onClickMeatball }: Props) => {
         </div>
         {/* 컨텐츠 영역 */}
         <div
-          className="ml-[12px]"
+          className={classNames(
+            "ml-[12px] pr-[24px]",
+            onClickContents ? "cursor-pointer" : ""
+          )}
           onClick={() => {
             onClickContents && onClickContents(review.cultureContent);
           }}
         >
-          <h1 className="text-body2 mt-[15px]">
+          <h1 className="text-body2 mt-[15px] line-clamp-1">
             {review.cultureContent.title}
           </h1>
           <h2 className="text-body5 text-grey-04 mt-[4px]">
@@ -89,7 +97,7 @@ const ReviewLarge = ({ review, onClickContents, onClickMeatball }: Props) => {
         </div>
         {/* 리뷰 내용 */}
         <div className="mt-[8px]">
-          <span className="line-clamp-3">{review.description}</span>
+          <span className="text-body3 line-clamp-3">{review.description}</span>
         </div>
       </div>
     </li>
@@ -97,3 +105,5 @@ const ReviewLarge = ({ review, onClickContents, onClickMeatball }: Props) => {
 };
 
 export default ReviewLarge;
+
+export { ReviewLargeSkeleton };

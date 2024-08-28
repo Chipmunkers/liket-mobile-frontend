@@ -1,6 +1,6 @@
 "use client";
 
-import ReviewLarge from "@/entities/review/ReviewLarge";
+import ReviewInfinite from "./_ui/ReviewInfinite";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import {
@@ -9,10 +9,23 @@ import {
   HeaderMiddle,
   HeaderRight,
 } from "@/shared/ui/Header";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Page() {
   const router = useRouter();
+  const searchParam = useSearchParams();
+
+  const userIdx = searchParam.get("user");
+
+  if (!userIdx || isNaN(Number(userIdx))) {
+    // TODO: 잘못된 접근입니다 페이지로 이동시켜야함
+    stackRouterPush(router, {
+      path: "/error",
+      screen: WEBVIEW_SCREEN.ERROR,
+      isStack: false,
+    });
+    return;
+  }
 
   return (
     <>
@@ -33,7 +46,7 @@ export default function Page() {
         />
       </Header>
       <main>
-        <div className="px-[24px]"></div>
+        <ReviewInfinite idx={Number(userIdx)} />
       </main>
     </>
   );

@@ -45,6 +45,7 @@ export default function Page() {
 
   if (data) {
     const {
+      idx,
       reviewCount,
       reviewList,
       liketCount,
@@ -148,7 +149,7 @@ export default function Page() {
                   e.preventDefault();
 
                   stackRouterPush(router, {
-                    path: "/reviews",
+                    path: `/reviews?user=${idx}`,
                     screen: WEBVIEW_SCREEN.MY_REVIEW,
                   });
                 }}
