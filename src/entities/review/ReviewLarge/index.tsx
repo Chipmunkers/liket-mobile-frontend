@@ -21,7 +21,7 @@ const ReviewLarge = ({ review, onClickContents, onClickMeatball }: Props) => {
             onClickContents ? "cursor-pointer" : ""
           )}
           onClick={() => {
-            onClickContents && onClickContents(review.cultureContent);
+            onClickContents && onClickContents(review);
           }}
         >
           <DefaultImg
@@ -36,7 +36,7 @@ const ReviewLarge = ({ review, onClickContents, onClickMeatball }: Props) => {
             onClickContents ? "cursor-pointer" : ""
           )}
           onClick={() => {
-            onClickContents && onClickContents(review.cultureContent);
+            onClickContents && onClickContents(review);
           }}
         >
           <h1 className="text-body2 mt-[15px] line-clamp-1">

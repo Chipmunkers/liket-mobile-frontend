@@ -5,8 +5,11 @@ import ReviewLarge, {
 import Divider from "@/shared/ui/Divider";
 import { Props } from "./types";
 import ReloadButton from "@/shared/ui/ReloadButton";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { useRouter } from "next/navigation";
 
 const ReviewInfinite = ({ idx }: Props) => {
+  const router = useRouter();
   const { data, setTarget, error, refetch } = useGetMyReviews(idx);
 
   return (
@@ -30,7 +33,14 @@ const ReviewInfinite = ({ idx }: Props) => {
           .map((review) => (
             <>
               <div className="px-[24px]">
-                <ReviewLarge review={review} />
+                <ReviewLarge
+                  review={review}
+                  onClickContents={(review) => {
+                    stackRouterPush(router, {
+                      path: `/contents/${review.cultureContent.idx}?review=${review.idx}&tab=review`,
+                    });
+                  }}
+                />
               </div>
               <Divider width="100%" height="8px" margin="8px 0" />
             </>

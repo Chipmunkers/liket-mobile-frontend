@@ -19,7 +19,7 @@ export type Props = EntityUiProps<{
    *
    * @default "아무 작동도 되지 않음"
    */
-  onClickContents?: (content: ReviewLargeReview["cultureContent"]) => void;
+  onClickContents?: (review: ReviewLargeReview) => void;
 
   /**
    * 미트볼 버튼 클릭 이벤트
