@@ -33,8 +33,12 @@ const BottomTabCreateDrawer = ({ isOpen, setIsOpen }: Props) => {
         </DrawerItem>
         <DrawerItem
           onClick={() => {
+            stackRouterPush(router, {
+              path: "/create/liket/review-select",
+              screen: WEBVIEW_SCREEN.SELECT_LIKET_REVIEW,
+            });
             if (isWebview) {
-              router.push("/create/liket");
+              //router.push("/create/liket/review");
             } else {
               customToast("모바일 앱에서만 사용이 가능해요.");
             }

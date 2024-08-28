@@ -27,6 +27,8 @@ export const WEBVIEW_SCREEN = {
   INQUIRY_DETAIL: "Inquiry Detail",
   CREATE_INQUIRY: "Create Inquiry",
   ERROR: "Error",
+  SELECT_LIKET_REVIEW: "Select Liket Review",
+  CREATE_LIKET: "Create Liket",
 } as const;
 
 export type WebviewScreen = keyof typeof WEBVIEW_SCREEN;
