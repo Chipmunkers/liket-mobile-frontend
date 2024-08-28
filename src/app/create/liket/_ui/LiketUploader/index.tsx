@@ -115,34 +115,28 @@ const LiketUploader = ({
         touchStateRef.current.center = getCenter(p1, p2);
         return;
       }
-      const newCenter = getCenter(p1, p2);
 
+      const newCenter = getCenter(p1, p2);
       const dist = getDistance(p1, p2);
 
       if (!distance) {
         touchStateRef.current.distance = dist;
       }
 
-      const pointTo = {
-        x: (newCenter.x - stageRef.current.x()) / stageRef.current.scaleX(),
-        y: (newCenter.y - stageRef.current.y()) / stageRef.current.scaleX(),
-      };
+      const scale = dist / touchStateRef.current.distance;
+      const bgImage = stageRef.current.findOne("#bg-image");
 
-      const scale =
-        stageRef.current.scaleX() * (dist / touchStateRef.current.distance);
+      if (bgImage) {
+        const newWidth = bgImage.width() * scale;
+        const newHeight = bgImage.height() * scale;
 
-      stageRef.current.scaleX(scale);
-      stageRef.current.scaleY(scale);
-
-      const dx = newCenter.x - center.x;
-      const dy = newCenter.y - center.y;
-
-      const newPos = {
-        x: newCenter.x - pointTo.x * scale + dx,
-        y: newCenter.y - pointTo.y * scale + dy,
-      };
-
-      stageRef.current.position(newPos);
+        bgImage.width(newWidth);
+        bgImage.height(newHeight);
+        bgImage.position({
+          x: bgImage.x() - (newWidth - bgImage.width()) / 2,
+          y: bgImage.y() - (newHeight - bgImage.height()) / 2,
+        });
+      }
 
       touchStateRef.current = {
         distance: dist,
