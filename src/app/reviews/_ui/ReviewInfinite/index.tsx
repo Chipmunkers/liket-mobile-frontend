@@ -4,13 +4,15 @@ import ReviewLarge, {
 } from "@/entities/review/ReviewLarge";
 import Divider from "@/shared/ui/Divider";
 import { Props } from "./types";
+import ReloadButton from "@/shared/ui/ReloadButton";
 
 const ReviewInfinite = ({ idx }: Props) => {
-  const { data, setTarget } = useGetMyReviews(idx);
+  const { data, setTarget, error, refetch } = useGetMyReviews(idx);
 
   return (
     <div>
       {!data &&
+        !error &&
         Array(10)
           .fill(0)
           .map(() => (
@@ -33,6 +35,11 @@ const ReviewInfinite = ({ idx }: Props) => {
               <Divider width="100%" height="8px" margin="8px 0" />
             </>
           ))}
+      {error && (
+        <ReloadButton className="pt-[16px] pb-[24px]" onClick={() => refetch()}>
+          새고로침
+        </ReloadButton>
+      )}
       <div ref={setTarget}></div>
     </div>
   );
