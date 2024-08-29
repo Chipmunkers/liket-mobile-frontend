@@ -20,7 +20,8 @@ import ContentBottomSheet from "./_ui/ContentBottomSheet";
 import { MapFilter, SelectLocation } from "./_types/types";
 import FilterDrawer from "./_ui/FilterDrawer";
 import LocationDrawer from "./_ui/LocationDrawer";
-import KakaoMap from "./_ui/KakaoMap";
+import { Status, Wrapper } from "@googlemaps/react-wrapper";
+import CustomGoogleMap from "@/app/map/_ui/GoogleMap";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -91,7 +92,7 @@ export default function MapPage() {
         <HeaderRight option={{ search: true, like: true }} />
       </Header>
       <main>
-        <KakaoMap
+        <CustomGoogleMap
           contentList={contentList}
           setContentList={setContentList}
           clickedContent={clickedContent}
@@ -138,7 +139,7 @@ export default function MapPage() {
               </div>
             ) : null}
           </div>
-        </KakaoMap>
+        </CustomGoogleMap>
 
         {/* 컨텐츠 바텀 시트 */}
         {!clickedContent && contentList.length !== 0 ? (
