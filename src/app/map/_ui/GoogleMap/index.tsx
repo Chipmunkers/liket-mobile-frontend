@@ -140,144 +140,12 @@ const CustomGoogleMap = ({
     );
   }, [clusteredContentList]);
 
-  // // * 지도 초기화
-  // useEffect(() => {
-  //   if (!ref.current) return;
-
-  //   const initialMap = new window.google.maps.Map(ref.current, {
-  //     center: {
-  //       lat: latLng.lat,
-  //       lng: latLng.lng,
-  //     },
-  //     zoom: mapInfo.level,
-  //     styles: mapStyle,
-  //     minZoom: 10,
-  //     disableDefaultUI: true,
-  //   });
-
-  //   // 맵 클릭 시
-  //   initialMap.addListener("click", () => {
-  //     setClickedContent(undefined);
-  //   });
-
-  //   // Zoom Level 변경 시
-  //   initialMap.addListener("zoom_changed", () => {
-  //     const currentZoom = initialMap.getZoom();
-
-  //     if (!currentZoom) return;
-
-  //     setLevel(level);
-  //   });
-
-  //   // 드래그 종료 시
-  //   initialMap.addListener("dragend", () => {
-  //     const bounds = initialMap.getBounds();
-  //     const ne = bounds?.getNorthEast();
-  //     const sw = bounds?.getSouthWest();
-
-  //     const zoomLevel = initialMap.getZoom();
-
-  //     if (!ne || !sw || !zoomLevel) return;
-
-  //     setMapInfo({
-  //       bound: {
-  //         top: { x: sw.lng(), y: ne.lat() },
-  //         bottom: { x: ne.lng(), y: sw.lat() },
-  //       },
-  //       level: zoomLevel,
-  //     });
-  //   });
-
-  //   setGoogleMap(initialMap);
-  // }, [ref]);
-
   useEffect(() => {
     setClusteredContentList([]);
     setContentList([]);
     setClickedContent(undefined);
     setMapInfo({ ...mapInfo, level });
   }, [level, mapFilter]);
-
-  // //클러스터 데이터 뿌려주기
-  // useEffect(() => {
-  //   if (!googleMap || !clusteredData) return;
-
-  //   clusteredData.forEach(({ lat, lng, count, scale }) => {
-  //     const marker = new window.google.maps.Marker({
-  //       position: { lat, lng },
-  //       map: googleMap,
-  //       label: {
-  //         text: `${count}`,
-  //         color: "white",
-  //         fontWeight: "bold",
-  //         fontSize: "14px",
-  //       },
-  //       icon: {
-  //         path: window.google.maps.SymbolPath.CIRCLE,
-  //         fillColor: "skyblue",
-  //         fillOpacity: 0.8,
-  //         strokeColor: "skyblue",
-  //         strokeWeight: 2,
-  //         scale: 10 + scale * 3,
-  //       },
-  //     });
-
-  //     marker.addListener("click", () => {
-  //       //setLatLng({ lat, lng });
-  //       // TODO: 수정 필요
-  //       //setLevel((prev) => prev - 1);
-  //     });
-  //   });
-  // }, [googleMap, clusteredData]);
-
-  // useEffect(() => {
-  //   console.log(latLng);
-  // }, [latLng]);
-
-  // //컨텐츠 데이터 뿌려주기
-  // useEffect(() => {
-  //   if (!googleMap || !contentList) return;
-
-  //   contentList.forEach((content) => {
-  //     const { idx, genre, title, location } = content;
-
-  //     const marker = new window.google.maps.Marker({
-  //       position: { lat: location.positionY, lng: location.positionX },
-  //       map: googleMap,
-  //       icon:
-  //         clickedContent?.idx === idx
-  //           ? `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${genre.idx}_icon.svg`
-  //           : `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/default-marker-${genre.idx}.svg`,
-  //     });
-
-  //     const infoWindow = new window.google.maps.InfoWindow({
-  //       content: `
-  //         <div style="
-  //           background-color: rgba(0, 0, 0, 0.6);
-  //           color: white;
-  //           padding: 4px 8px;
-  //           border-radius: 8px;
-  //           text-shadow: -1px -1px 0 #222, 1px -1px 0 #222, -1px 1px 0 #222, 1px 1px 0 #222;
-  //           text-align: center;
-  //           white-space: nowrap;
-  //         ">
-  //           ${title}
-  //         </div>
-  //       `,
-  //     });
-
-  //     marker.addListener("click", () => {
-  //       setClickedContent(clickedContent?.idx === idx ? undefined : content);
-  //       if (clickedContent?.idx !== idx) {
-  //         infoWindow.open(googleMap, marker);
-  //       }
-  //     });
-
-  //     if (clickedContent?.idx !== idx) {
-  //       infoWindow.close();
-  //     }
-  //   });
-  // }, [googleMap, contentList, clickedContent]);
 
   return (
     <LoadScript
@@ -417,27 +285,6 @@ const CustomGoogleMap = ({
             )}
           </MarkerClustererF>
         }
-        {/* 
-        {contentList &&
-          contentList.map((content, i) => (
-            <MarkerF
-              key={`content-marker-${i}`}
-              onClick={() => {
-                setClickedContent(content);
-              }}
-              position={{
-                lat: content.location.positionY,
-                lng: content.location.positionX,
-              }}
-              title={content.title}
-              icon={{
-                url:
-                  clickedContent?.idx === content.idx
-                    ? `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${content.genre.idx}_icon.svg`
-                    : `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/default_marker_${content.genre.idx}_icon.svg`,
-              }}
-            ></MarkerF>
-          ))} */}
         {children}
       </GoogleMap>
     </LoadScript>
