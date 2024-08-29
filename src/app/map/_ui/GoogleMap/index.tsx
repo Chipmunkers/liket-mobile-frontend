@@ -84,19 +84,6 @@ const CustomGoogleMap = ({
       (content) => content.idx
     );
 
-    console.log([
-      ...contentApiResult.contentList.filter(
-        (content) => !alreadyExistContentIdxList.includes(content.idx)
-      ),
-      ...contentList.filter(
-        (content) =>
-          content.location.positionX <= mapInfo.bound.bottom.x &&
-          content.location.positionX >= mapInfo.bound.top.x &&
-          content.location.positionY <= mapInfo.bound.top.y &&
-          content.location.positionY >= mapInfo.bound.bottom.y
-      ),
-    ]);
-
     setContentList([
       ...contentApiResult.contentList.filter(
         (content) => !alreadyExistContentIdxList.includes(content.idx)
@@ -315,7 +302,7 @@ const CustomGoogleMap = ({
                 {contentList.map((content, i) => (
                   <MarkerF
                     clusterer={clusterer}
-                    key={`content-marker-${content.idx}`}
+                    key={`content-marker-${content.idx}-${level}`}
                     onClick={() => {
                       setClickedClusteredContents([]);
                       setClickedContent(content);
