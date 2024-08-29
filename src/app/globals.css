@@ -64,6 +64,10 @@
   }
 }
 
+.gm-style iframe + div {
+  border: none !important;
+}
+
 @layer components {
   .full-modal {
     @apply bg-white fixed transition-transform duration-500 ease-in-out flex flex-col h-[100%] w-[100%] z-[9999] max-w-content;
