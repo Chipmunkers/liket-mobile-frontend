@@ -13,7 +13,9 @@ export const useGetClusteredContent = (
     queryFn: async () => {
       if (mapInfo.level >= 15) return null;
 
-      const clusteredLevel = mapInfo.level >= 14 ? 6 : 10;
+      // TODO: 레벨 관련 로직 수정 필요함: 백엔드에서 카카오 레벨 기준으로 설정되어있는 문제가 있음
+      const clusteredLevel =
+        mapInfo.level >= 13 ? 6 : mapInfo.level === 10 ? 11 : 10;
 
       const { data } = await axiosInstance.get<{
         clusteredContentList: ClusteredContentEntity[];

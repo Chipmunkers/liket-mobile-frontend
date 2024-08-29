@@ -5,7 +5,12 @@ import { Props } from "./types";
 import { MapInfo } from "../../_types/types";
 import { useGetClusteredContent } from "@/app/map/_hooks/useGetClusteredContent";
 import { useGetMapContent } from "@/app/map/_hooks/useGetMapContent";
-import { LoadScript, GoogleMap, OverlayView } from "@react-google-maps/api";
+import {
+  LoadScript,
+  GoogleMap,
+  OverlayView,
+  OverlayViewF,
+} from "@react-google-maps/api";
 
 const CustomGoogleMap = ({
   children,
@@ -353,7 +358,7 @@ const CustomGoogleMap = ({
       >
         {clusteredData &&
           clusteredData.map((data, i) => (
-            <OverlayView
+            <OverlayViewF
               key={`clustered-contents-${i}`}
               position={{ lat: data.lat, lng: data.lng }}
               mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
@@ -361,7 +366,7 @@ const CustomGoogleMap = ({
               <div className="rounded-full w-[48px] h-[48px] border-[1px] bg-skyblue-01 flex justify-center items-center text-body4 text-white border-skyblue-02 bg-opacity-[80%] absolute translate-x-[-50%] translate-y-[-50%]">
                 {data.count}
               </div>
-            </OverlayView>
+            </OverlayViewF>
           ))}
         {children}
       </GoogleMap>
