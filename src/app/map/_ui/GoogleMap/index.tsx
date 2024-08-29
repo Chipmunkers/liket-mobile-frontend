@@ -50,6 +50,15 @@ const CustomGoogleMap = ({
   useEffect(() => {
     if (!googleMap) return;
 
+    googleMap.setCenter({
+      lat: latLng.lat,
+      lng: latLng.lng,
+    });
+  }, [latLng, googleMap]);
+
+  useEffect(() => {
+    if (!googleMap) return;
+
     // 맵 경계 설정
     const bounds = googleMap.getBounds();
     const ne = bounds?.getNorthEast();
@@ -279,6 +288,7 @@ const CustomGoogleMap = ({
                     clusterer={clusterer}
                     key={`content-marker-${content.idx}`}
                     onClick={() => {
+                      setClickedClusteredContents([]);
                       setClickedContent(content);
                     }}
                     position={{
