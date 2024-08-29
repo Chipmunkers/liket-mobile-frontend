@@ -250,7 +250,22 @@ const CustomGoogleMap = ({
               position={{ lat: data.lat, lng: data.lng }}
               mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
             >
-              <div className="rounded-full w-[48px] h-[48px] border-[1px] bg-skyblue-01 flex justify-center items-center text-body4 text-white border-skyblue-02 bg-opacity-[80%] absolute translate-x-[-50%] translate-y-[-50%]">
+              <div
+                className="rounded-full w-[48px] h-[48px] border-[1px] bg-skyblue-01 flex justify-center items-center text-body4 text-white border-skyblue-02 bg-opacity-[80%] absolute translate-x-[-50%] translate-y-[-50%]"
+                onClick={() => {
+                  if (!googleMap) return;
+
+                  const currentZoom = googleMap.getZoom();
+
+                  if (!currentZoom) return;
+
+                  googleMap.setZoom(currentZoom + 1);
+                  googleMap.setCenter({
+                    lat: data.lat,
+                    lng: data.lng,
+                  });
+                }}
+              >
                 {data.count}
               </div>
             </OverlayViewF>
