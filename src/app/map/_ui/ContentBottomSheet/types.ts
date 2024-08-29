@@ -12,4 +12,16 @@ export type Props = {
     | "likeState"
     | "title"
   >[];
+
+  /**
+   * 열린채로 둘 것인지 여부
+   *
+   * @default false
+   */
+  open?: boolean;
+
+  /**
+   * 바텀시트
+   */
+  title?: string;
 };

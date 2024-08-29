@@ -20,9 +20,9 @@ import ContentBottomSheet from "./_ui/ContentBottomSheet";
 import { MapFilter, SelectLocation } from "./_types/types";
 import FilterDrawer from "./_ui/FilterDrawer";
 import LocationDrawer from "./_ui/LocationDrawer";
-import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import CustomGoogleMap from "@/app/map/_ui/GoogleMap";
 import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
+import { BottomSheet } from "react-spring-bottom-sheet";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -41,8 +41,8 @@ export default function MapPage() {
   const [clickedContent, setClickedContent] = useState<MapContentEntity>();
 
   // * 선택된 클러스터 마커
-  const [clickedClusteredContent, setClickedClusteredContent] = useState<
-    SummaryContentEntity[]
+  const [clickedClusteredContents, setClickedClusteredContent] = useState<
+    MapContentEntity[]
   >([]);
 
   // * 필터링 선택
@@ -106,6 +106,7 @@ export default function MapPage() {
           mapFilter={mapFilter}
           latLng={latLng}
           setLatLng={setLatLng}
+          setClickedClusteredContents={setClickedClusteredContent}
         >
           <div className="absolute z-[2] mt-[16px] ml-[24px] w-100 flex items-center">
             {/* 필터링 아이콘 */}
@@ -159,7 +160,7 @@ export default function MapPage() {
 
         {/* 클릭한 컨텐츠 */}
         {clickedContent ? (
-          <div className="bottom-[--bottom-tab-height] absolute z-10 w-[calc(100%-16px)] left-[8px] mb-[8px]">
+          <div className="bottom-[48px] absolute z-10 w-[calc(100%-16px)] left-[8px] mb-[8px]">
             <div className="p-[16px] bg-white rounded-[24px]">
               <ContentCardMedium
                 content={{
@@ -170,6 +171,28 @@ export default function MapPage() {
             </div>
           </div>
         ) : null}
+
+        {/* 클러스터링 컨텐츠 바텀 시트 */}
+        <BottomSheet
+          defaultSnap={({ maxHeight }) => maxHeight / 2 - 45}
+          open={!!clickedClusteredContents.length}
+          blocking={false}
+          snapPoints={({ maxHeight }) => [maxHeight / 2 - 45, 0]}
+          onBlur={() => {
+            setClickedClusteredContent([]);
+          }}
+        >
+          {clickedClusteredContents.map((content) => (
+            <li key={content.idx} className="w-[100%] mb-[16px] px-[24px]">
+              <ContentCardMedium
+                content={{
+                  ...content,
+                  thumbnail: content.imgList[0] || "",
+                }}
+              />
+            </li>
+          ))}
+        </BottomSheet>
       </main>
 
       <FilterDrawer

@@ -23,7 +23,9 @@ const CustomGoogleMap = ({
   mapFilter,
   latLng,
   setLatLng,
+  setClickedClusteredContents,
 }: Props) => {
+  const [loadState, setLoadState] = useState(false);
   const [googleMap, setGoogleMap] = useState<google.maps.Map | null>(null);
   const [level, setLevel] = useState(8);
   const [mapInfo, setMapInfo] = useState<MapInfo>({
@@ -149,9 +151,11 @@ const CustomGoogleMap = ({
 
   return (
     <LoadScript
+      onLoad={() => setLoadState(true)}
       googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY || ""}
     >
       <GoogleMap
+        key={`${loadState}`}
         mapContainerClassName="flex-1"
         zoom={8}
         options={{
@@ -160,7 +164,11 @@ const CustomGoogleMap = ({
           minZoom: 10,
         }}
         onClick={() => {
+          setClickedClusteredContents([]);
           setClickedContent(undefined);
+        }}
+        onDragStart={() => {
+          setClickedClusteredContents([]);
         }}
         onDragEnd={() => {
           if (!googleMap) return;
@@ -244,7 +252,12 @@ const CustomGoogleMap = ({
             gridSize={10}
             zoomOnClick={false}
             onClick={(cluster) => {
-              console.log(cluster.getMarkers());
+              setClickedContent(undefined);
+              setClickedClusteredContents(
+                cluster
+                  .getMarkers()
+                  .map((marker) => JSON.parse(marker.getTitle() || ""))
+              );
             }}
             options={{
               styles: [

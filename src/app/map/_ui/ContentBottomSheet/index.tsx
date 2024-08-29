@@ -4,16 +4,21 @@ import ContentCardMedium from "@/entities/content/ContentCardMedium";
 import { Props } from "./types";
 import CustomBottomSheet from "@/shared/ui/BottomSheet";
 
-const ContentBottomSheet = ({ contentList }: Props) => {
+const ContentBottomSheet = ({ contentList, open, title }: Props) => {
   return (
     <CustomBottomSheet
       isOpen={true}
       defaultSnap={20}
-      snapPoints={({ maxHeight }) => [
-        20,
-        maxHeight / 2 - 45,
-        maxHeight - 68 - 48 - 74,
-      ]}
+      title={title}
+      snapPoints={({ maxHeight }) => {
+        if (open) {
+          // * 처음부터 열려있는 경우
+          return [maxHeight / 2 - 45, 0];
+        }
+
+        // * 처음부터 닫혀있는 경우
+        return [20, maxHeight / 2 - 45, maxHeight - 68 - 48 - 74];
+      }}
     >
       <ul>
         {contentList.map((content) => (
