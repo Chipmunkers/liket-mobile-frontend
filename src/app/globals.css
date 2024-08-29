@@ -64,6 +64,7 @@
   }
 }
 
+/* 지도 클릭 시 outline 생기는 현상 방지 */
 .gm-style iframe + div {
   border: none !important;
 }

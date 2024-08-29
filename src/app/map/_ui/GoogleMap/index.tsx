@@ -10,6 +10,8 @@ import {
   GoogleMap,
   OverlayView,
   OverlayViewF,
+  MarkerF,
+  MarkerClustererF,
 } from "@react-google-maps/api";
 
 const CustomGoogleMap = ({
@@ -368,6 +370,74 @@ const CustomGoogleMap = ({
               </div>
             </OverlayViewF>
           ))}
+        {
+          <MarkerClustererF
+            key={level}
+            gridSize={10}
+            zoomOnClick={false}
+            onClick={(cluster) => {
+              console.log(cluster.getMarkers());
+            }}
+            options={{
+              styles: [
+                {
+                  url: "https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/clustered_marker.svg",
+                  width: 40,
+                  height: 40,
+                  textColor: "white",
+                  anchorText: [8, 10],
+                  textSize: 12,
+                },
+              ],
+            }}
+          >
+            {(clusterer) => (
+              <>
+                {contentList.map((content, i) => (
+                  <MarkerF
+                    clusterer={clusterer}
+                    key={`content-marker-${content.idx}`}
+                    onClick={() => {
+                      setClickedContent(content);
+                    }}
+                    position={{
+                      lat: content.location.positionY,
+                      lng: content.location.positionX,
+                    }}
+                    title={JSON.stringify(content)}
+                    icon={{
+                      url:
+                        clickedContent?.idx === content.idx
+                          ? `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${content.genre.idx}_icon.svg`
+                          : `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/default_marker_${content.genre.idx}_icon.svg`,
+                    }}
+                  ></MarkerF>
+                ))}
+              </>
+            )}
+          </MarkerClustererF>
+        }
+        {/* 
+        {contentList &&
+          contentList.map((content, i) => (
+            <MarkerF
+              key={`content-marker-${i}`}
+              onClick={() => {
+                setClickedContent(content);
+              }}
+              position={{
+                lat: content.location.positionY,
+                lng: content.location.positionX,
+              }}
+              title={content.title}
+              icon={{
+                url:
+                  clickedContent?.idx === content.idx
+                    ? `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${content.genre.idx}_icon.svg`
+                    : `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/default_marker_${content.genre.idx}_icon.svg`,
+              }}
+            ></MarkerF>
+          ))} */}
         {children}
       </GoogleMap>
     </LoadScript>

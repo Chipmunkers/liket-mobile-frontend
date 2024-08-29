@@ -22,6 +22,7 @@ import FilterDrawer from "./_ui/FilterDrawer";
 import LocationDrawer from "./_ui/LocationDrawer";
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import CustomGoogleMap from "@/app/map/_ui/GoogleMap";
+import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -38,6 +39,11 @@ export default function MapPage() {
 
   // * 선택된 컨텐츠
   const [clickedContent, setClickedContent] = useState<MapContentEntity>();
+
+  // * 선택된 클러스터 마커
+  const [clickedClusteredContent, setClickedClusteredContent] = useState<
+    SummaryContentEntity[]
+  >([]);
 
   // * 필터링 선택
   const [selectedGenre, setSelectedGenre] = useState<GenreEntity>();
