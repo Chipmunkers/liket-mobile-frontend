@@ -12,7 +12,11 @@ import {
   OverlayViewF,
   MarkerF,
   MarkerClustererF,
+  useJsApiLoader,
 } from "@react-google-maps/api";
+import { useRouter } from "next/navigation";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
 const CustomGoogleMap = ({
   children,
@@ -55,27 +59,6 @@ const CustomGoogleMap = ({
       lng: latLng.lng,
     });
   }, [latLng, googleMap]);
-
-  useEffect(() => {
-    if (!googleMap) return;
-
-    // 맵 경계 설정
-    const bounds = googleMap.getBounds();
-    const ne = bounds?.getNorthEast();
-    const sw = bounds?.getSouthWest();
-
-    const zoomLevel = googleMap.getZoom();
-
-    if (!ne || !sw || !zoomLevel) return;
-
-    setMapInfo({
-      bound: {
-        top: { x: ne.lng(), y: ne.lat() },
-        bottom: { x: sw.lng(), y: sw.lat() },
-      },
-      level: zoomLevel,
-    });
-  }, [googleMap, level]);
 
   useEffect(() => {
     if (!contentApiResult) return;
@@ -158,11 +141,12 @@ const CustomGoogleMap = ({
     setMapInfo({ ...mapInfo, level });
   }, [level, mapFilter]);
 
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY || "",
+  });
+
   return (
-    <LoadScript
-      onLoad={() => setLoadState(true)}
-      googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY || ""}
-    >
+    isLoaded && (
       <GoogleMap
         key={`${loadState}`}
         mapContainerClassName="flex-1"
@@ -179,60 +163,23 @@ const CustomGoogleMap = ({
         onDragStart={() => {
           setClickedClusteredContents([]);
         }}
-        onDragEnd={() => {
-          if (!googleMap) return;
-
-          const bounds = googleMap.getBounds();
-          const zoomLevel = googleMap.getZoom();
-
-          const ne = bounds?.getNorthEast();
-          const sw = bounds?.getSouthWest();
-
-          if (!ne || !sw || !zoomLevel) return;
-
-          setMapInfo({
-            bound: {
-              top: { x: sw.lng(), y: ne.lat() },
-              bottom: { x: ne.lng(), y: sw.lat() },
-            },
-            level: zoomLevel,
-          });
-        }}
-        onZoomChanged={() => {
-          if (!googleMap) return;
-
-          const bounds = googleMap.getBounds();
-          const zoomLevel = googleMap.getZoom();
-
-          const ne = bounds?.getNorthEast();
-          const sw = bounds?.getSouthWest();
-
-          if (!ne || !sw || !zoomLevel) return;
-
-          setLevel(zoomLevel);
-          setMapInfo({
-            bound: {
-              top: { x: sw.lng(), y: ne.lat() },
-              bottom: { x: ne.lng(), y: sw.lat() },
-            },
-            level: zoomLevel,
-          });
-        }}
         onLoad={(map) => {
           setGoogleMap(map);
+        }}
+        onIdle={() => {
+          if (!googleMap) return;
 
-          map.setCenter({
-            lat: latLng.lat,
-            lng: latLng.lng,
-          });
-
-          const bounds = map.getBounds();
-          const zoomLevel = map.getZoom();
+          const bounds = googleMap.getBounds();
+          const zoomLevel = googleMap.getZoom();
 
           const ne = bounds?.getNorthEast();
           const sw = bounds?.getSouthWest();
 
           if (!ne || !sw || !zoomLevel) return;
+
+          if (zoomLevel !== level) {
+            setLevel(zoomLevel);
+          }
 
           setMapInfo({
             bound: {
@@ -326,7 +273,7 @@ const CustomGoogleMap = ({
         }
         {children}
       </GoogleMap>
-    </LoadScript>
+    )
   );
 };
 
