@@ -19,14 +19,6 @@ export default function Page() {
         isStack: false,
       });
     },
-    onError: ({ response }) => {
-      if (response?.status === 400) {
-        customToast("비밀번호가 올바르지 않습니다.");
-        return;
-      }
-
-      customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
-    },
   });
 
   const handleClickNextButton = (oldPw: string, newPw: string) =>
