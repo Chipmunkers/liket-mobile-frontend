@@ -2,6 +2,7 @@ import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import axiosInstance from "@/shared/helpers/axios";
 import customToast from "@/shared/helpers/customToast";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { useExceptionHandler } from "@/shared/hooks/useExceptionHandler";
 import { LocationEntity } from "@/shared/types/api/content/LocationEntity";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
@@ -30,6 +31,7 @@ export const useEditContent = ({
 }: UseMutationOptions<AxiosResponse, AxiosError, UpdateContentDto> & {
   idx: number;
 }) => {
+  const exceptionHandler = useExceptionHandler();
   const router = useRouter();
 
   return useMutation<AxiosResponse, AxiosError, UpdateContentDto>({
@@ -44,24 +46,17 @@ export const useEditContent = ({
       });
     },
     onError: (err) => {
-      const statusCode = err.response?.status;
-
-      if (statusCode === 401) {
-        stackRouterPush(router, {
-          path: "/login?isTokenExpired=true",
-          screen: WEBVIEW_SCREEN.LOGIN,
-          isStack: false,
-        });
-        return;
-      }
-
-      if (statusCode === 409) {
-        return customToast(
-          "활성화된 컨텐츠는 수정할 수 없습니다. 문의를 남겨주세요."
-        );
-      }
-
-      return customToast("예상하지 못한 에러가 발생했습니다.");
+      exceptionHandler(err, [
+        401,
+        {
+          statusCode: 409,
+          handler() {
+            customToast(
+              "활성화된 컨텐츠는 수정할 수 없습니다. 문의 주시기 바랍니다."
+            );
+          },
+        },
+      ]);
     },
   });
 };

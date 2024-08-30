@@ -29,7 +29,7 @@ export default function Page() {
   }>({ onlyopen: false });
 
   // * 좋아요 컨텐츠 무한 쿼리
-  const { data, fetchNextPage, isFetching, refetch, error, hasNextPage } =
+  const { data, refetch, error, setTarget } =
     useGetLikeContent(contentPagerble);
 
   // * 옵션 변경 시 리뷰 쿼리 데이터 초기화
@@ -43,46 +43,6 @@ export default function Page() {
       pageParams: [],
     });
   };
-
-  const moveLoginPage = useMoveLoginPage();
-
-  // * 무한 스크롤 타겟
-  const [target, setTarget] = useState<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (!target) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !isFetching && !error) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 1 }
-    );
-
-    observer.observe(target);
-    return () => {
-      observer.unobserve(target);
-    };
-  }, [target, hasNextPage, isFetching]);
-
-  useEffect(() => {
-    if (!error) return;
-
-    if (error instanceof AxiosError) {
-      if (error.response?.status === 401) {
-        moveLoginPage(
-          error.response.data?.cause?.type === "NO_TOKEN"
-            ? "NO_TOKEN"
-            : "INVALID_TOKEN"
-        );
-        return;
-      }
-    }
-
-    customToast("에러가 발생했습니다. 다시 시도해주세요.");
-  }, [error]);
 
   // * 컴포넌트를 벗어나면 Like Content 초기화
   useEffect(() => {

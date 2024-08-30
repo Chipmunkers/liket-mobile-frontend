@@ -2,12 +2,17 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import axiosInstance from "@/shared/helpers/axios";
 import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 import { GenreEntity } from "@/shared/types/api/tag/GenreEntity";
+import { useEffect, useState } from "react";
+import { AxiosError } from "axios";
+import { useExceptionHandler } from "@/shared/hooks/useExceptionHandler";
 
 export const useGetLikeContent = (option: {
   onlyopen: boolean;
   genre?: GenreEntity;
-}) =>
-  useInfiniteQuery({
+}) => {
+  const exceptionHandler = useExceptionHandler();
+
+  const query = useInfiniteQuery({
     queryKey: [`like-content-all`, option],
     queryFn: async ({ pageParam = 1 }) => {
       const { data } = await axiosInstance.get<{
@@ -35,3 +40,34 @@ export const useGetLikeContent = (option: {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
   });
+
+  const [target, setTarget] = useState<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !query.isFetching && !query.error) {
+          query.fetchNextPage();
+        }
+      },
+      { threshold: 1 }
+    );
+
+    observer.observe(target);
+    return () => {
+      observer.unobserve(target);
+    };
+  }, [target, query.hasNextPage, query.isFetching]);
+
+  useEffect(() => {
+    if (!query.error) return;
+
+    if (!(query.error instanceof AxiosError)) return;
+
+    exceptionHandler(query.error, [401, 418]);
+  }, [query.error]);
+
+  return { ...query, setTarget };
+};

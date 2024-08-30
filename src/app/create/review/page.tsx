@@ -68,16 +68,6 @@ export default function Page() {
     onSuccess: ({ data }) => {
       setUploadedImages([...uploadedImages, ...data]);
     },
-    onError: (err) => {
-      if (err instanceof AxiosError) {
-        if (err.response?.status === 400) {
-          customToast(".png또는 .jpg파일만 업로드할 수 있습니다.");
-        }
-        if (err.response?.status === 413) {
-          customToast("파일 용량이 너무 큽니다.");
-        }
-      }
-    },
   });
 
   const { mutate: writeReview } = useCreateReview({

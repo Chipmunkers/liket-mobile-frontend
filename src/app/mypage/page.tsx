@@ -23,7 +23,7 @@ import MyPageSkeleton from "./_ui/MyPageSkeleton";
 
 export default function Page() {
   const router = useRouter();
-  const { data, error } = useGetMyInfo({});
+  const { data } = useGetMyInfo({});
 
   const [profileImgPath, setProfileImgPath] = useState(
     data?.profileImgPath || ""

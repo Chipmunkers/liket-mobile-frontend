@@ -10,7 +10,6 @@ import Divider from "@/shared/ui/Divider";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import authStore from "@/shared/store/authStore";
-import customToast from "@/shared/helpers/customToast";
 import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
 import LinkItem from "@/shared/ui/Link/LinkItem";
 import Kakao from "@/shared/icon/user/kakao.svg";
@@ -32,9 +31,6 @@ export default function Page() {
         screen: WEBVIEW_SCREEN.MAIN,
         isStack: false,
       });
-    },
-    onError: () => {
-      customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
     },
   });
   const setToken = authStore(({ setToken }) => setToken);

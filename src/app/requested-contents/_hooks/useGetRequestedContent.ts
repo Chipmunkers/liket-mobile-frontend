@@ -2,6 +2,7 @@ import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import axiosInstance from "@/shared/helpers/axios";
 import customToast from "@/shared/helpers/customToast";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { useExceptionHandler } from "@/shared/hooks/useExceptionHandler";
 import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -11,6 +12,7 @@ import { useEffect, useState } from "react";
 export const useGetRequestedContent = (idx: number | undefined) => {
   const router = useRouter();
   const [target, setTarget] = useState<HTMLDivElement | null>(null);
+  const exceptionHandler = useExceptionHandler();
 
   const res = useInfiniteQuery({
     queryKey: ["requested-contents", idx],
@@ -47,16 +49,7 @@ export const useGetRequestedContent = (idx: number | undefined) => {
 
     if (!error) return;
 
-    if (error.response?.status === 401) {
-      stackRouterPush(router, {
-        path: "/login?isTokenExpired=true",
-        screen: WEBVIEW_SCREEN.LOGIN,
-        isStack: false,
-      });
-      return;
-    }
-
-    customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
+    exceptionHandler(error, [401]);
   }, [res.error]);
 
   useEffect(() => {

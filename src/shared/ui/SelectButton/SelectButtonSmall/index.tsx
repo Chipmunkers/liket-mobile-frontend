@@ -16,7 +16,7 @@ const SelectButtonSmall = ({
       disableRipple={!rippleEffect}
       onClick={onClick}
       className={classNames(
-        "flex justify-between items-center rounded-[20px] text-button3 h-[28px]",
+        "flex justify-between items-center rounded-[20px] text-button4 h-[28px] pl-[8px]",
         withBorder && "border-solid border-[1px] border-grey-02",
         text && "bg-skyblue-01 text-white",
         className

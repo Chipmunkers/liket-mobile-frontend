@@ -1,6 +1,7 @@
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import axiosInstance from "@/shared/helpers/axios";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { useExceptionHandler } from "@/shared/hooks/useExceptionHandler";
 import { MyInfoEntity } from "@/shared/types/api/user/MyInfoEntity";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -9,6 +10,7 @@ import { useEffect } from "react";
 
 export const useGetMyInfo = () => {
   const router = useRouter();
+  const exceptionHandler = useExceptionHandler();
 
   const query = useQuery<MyInfoEntity, AxiosError>({
     queryKey: [`get-my-info`],
@@ -24,19 +26,7 @@ export const useGetMyInfo = () => {
 
     const status = query.error.response?.status;
 
-    if (status === 401) {
-      stackRouterPush(router, {
-        path: "/login?isTokenExpired=true",
-        screen: WEBVIEW_SCREEN.LOGIN,
-        isStack: false,
-      });
-      return;
-    }
-
-    stackRouterPush(router, {
-      path: "/error",
-      screen: WEBVIEW_SCREEN.ERROR,
-    });
+    exceptionHandler(query.error, [401, 500, 502, 504]);
   }, [query.error]);
 
   return query;

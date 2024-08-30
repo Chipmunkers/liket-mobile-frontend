@@ -6,11 +6,13 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { useExceptionHandler } from "@/shared/hooks/useExceptionHandler";
 
 export const useGetMyInfo = (
   options: MutationOptions<MyInfoEntity, AxiosError>
 ) => {
   const router = useRouter();
+  const exceptionHandler = useExceptionHandler();
 
   const query = useQuery<MyInfoEntity, AxiosError>({
     queryKey: ["mypage"],
@@ -25,22 +27,7 @@ export const useGetMyInfo = (
   useEffect(() => {
     if (!query.error) return;
 
-    const status = query.error.response?.status;
-
-    if (status === 401) {
-      stackRouterPush(router, {
-        path: "/login",
-        screen: WEBVIEW_SCREEN.LOGIN,
-        isStack: false,
-      });
-      return;
-    }
-
-    stackRouterPush(router, {
-      path: "/error",
-      screen: WEBVIEW_SCREEN.ERROR,
-      isStack: false,
-    });
+    exceptionHandler(query.error, [401, 418, 429, 500, 502, 504]);
   }, [query.error]);
 
   return query;
