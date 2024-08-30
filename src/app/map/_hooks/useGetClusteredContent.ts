@@ -4,6 +4,23 @@ import axiosInstance from "@/shared/helpers/axios";
 import { ClusteredContentEntity } from "@/shared/types/api/map/ClusteredContentEntity";
 import { useQuery } from "@tanstack/react-query";
 
+const ClusterLevel = {
+  /**
+   * 시도
+   */
+  SIDO: 1,
+
+  /**
+   * 시군구
+   */
+  SIGUNGU: 2,
+
+  /**
+   * 읍면동
+   */
+  DONG: 3,
+};
+
 export const useGetClusteredContent = (
   mapInfo: MapInfo,
   mapFilter: MapFilter
@@ -13,9 +30,12 @@ export const useGetClusteredContent = (
     queryFn: async () => {
       if (mapInfo.level >= 15) return null;
 
-      // TODO: 레벨 관련 로직 수정 필요함: 백엔드에서 카카오 레벨 기준으로 설정되어있는 문제가 있음
       const clusteredLevel =
-        mapInfo.level >= 13 ? 6 : mapInfo.level === 10 ? 11 : 10;
+        mapInfo.level >= 13
+          ? ClusterLevel.DONG
+          : mapInfo.level === 10
+          ? ClusterLevel.SIDO
+          : ClusterLevel.SIGUNGU;
 
       const { data } = await axiosInstance.get<{
         clusteredContentList: ClusteredContentEntity[];
