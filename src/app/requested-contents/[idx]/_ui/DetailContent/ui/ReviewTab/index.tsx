@@ -4,7 +4,6 @@ import BottomArrowIcon from "@/icons/down-arrow-small.svg";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDeleteReview } from "./hooks/useDeleteReview";
-import { AxiosError } from "axios";
 import ReloadIcon from "./icon/review-reload.svg";
 import { ButtonBase } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -15,15 +14,16 @@ import customToast from "@/shared/helpers/customToast";
 import { useGetReviewAllByContentIdx } from "./hooks/useGetReviewAllByContentIdx";
 import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
 import EmptyReview from "./ui/EmptyReview";
-import useMoveLoginPage from "@/shared/hooks/useMoveLoginPage";
 import ReviewInfiniteScroll from "./ui/ReviewInfiniteScroll";
 import StarRating from "@/entities/review/StarRating";
 import Divider from "@/shared/ui/Divider";
 import Drawer from "@/shared/ui/Drawer";
+import { useExceptionHandler } from "@/shared/hooks/useExceptionHandler";
 
 const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
   const [isReviewMenuDrawerOpen, setIsReviewMenuDrawerOpen] = useState(false);
   const [selectReviewIdx, setSelectReviewIdx] = useState<number>();
+  const exceptionHandler = useExceptionHandler();
 
   const searchParam = useSearchParams();
 
@@ -35,39 +35,12 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
   }>({ orderby: "like", review: searchParam.get("review") });
 
   // * 리뷰 데이터 무한 쿼리
-  const { data, fetchNextPage, hasNextPage, isFetching, refetch, error } =
+  const { data, isFetching, refetch, error, setTarget } =
     useGetReviewAllByContentIdx(props.idx, reviewPagerble);
   const { data: loginUser } = useGetMyInfo();
 
   // * 옵션 변경 시 리뷰 쿼리 데이터 초기화
   const queryClient = useQueryClient();
-
-  // * 무한 스크롤 타겟
-  const [target, setTarget] = useState<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (!target) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !isFetching && !error) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 1 }
-    );
-
-    observer.observe(target);
-    return () => {
-      observer.unobserve(target);
-    };
-  }, [target, hasNextPage, isFetching]);
-
-  useEffect(() => {
-    if (!error) return;
-
-    customToast("리뷰를 불러오는 중 에러가 발생했습니다.");
-  }, [error]);
 
   useEffect(() => {
     // 컴포넌트를 벗어나면 Review 불러온 데이터 초기화
@@ -85,8 +58,6 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
     });
   };
 
-  const moveLoginPage = useMoveLoginPage();
-
   // * 리뷰 삭제
   const { mutate: deleteReviewApi } = useDeleteReview({
     onSuccess: () => {
@@ -95,17 +66,17 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
       resetReview();
     },
     onError: (err) => {
-      if (err instanceof AxiosError) {
-        if (err.response?.status === 401) return moveLoginPage();
-        if (err.response?.status === 404) {
-          customToast("삭제되었습니다.");
-          setIsReviewMenuDrawerOpen(false);
-          resetReview();
-          return;
-        }
-      }
-
-      customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
+      exceptionHandler(err, [
+        401,
+        {
+          statusCode: 404,
+          handler() {
+            customToast("삭제되었습니다.");
+            setIsReviewMenuDrawerOpen(false);
+            resetReview();
+          },
+        },
+      ]);
     },
   });
 
