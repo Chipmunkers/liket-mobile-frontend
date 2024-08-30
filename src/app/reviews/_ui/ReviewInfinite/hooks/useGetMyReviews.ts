@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import customToast from "@/shared/helpers/customToast";
+import { useExceptionHandler } from "@/shared/hooks/useExceptionHandler";
 
 /**
  * 무한 리뷰 목록 불러오기
@@ -16,6 +17,7 @@ import customToast from "@/shared/helpers/customToast";
 export const useGetMyReviews = (idx: number) => {
   const router = useRouter();
   const searchParam = useSearchParams();
+  const exceptionHandler = useExceptionHandler();
 
   const order = searchParam.get("order") || "desc";
 
@@ -67,27 +69,27 @@ export const useGetMyReviews = (idx: number) => {
   useEffect(() => {
     if (!query.error) return;
 
-    const statusCode = (query.error as AxiosError).response?.status;
-
-    if (statusCode === 401) {
-      stackRouterPush(router, {
-        path: "/login?isTokenExpired=true",
-        screen: WEBVIEW_SCREEN.LOGIN,
-        isStack: false,
-      });
+    if (!(query.error instanceof AxiosError)) {
+      customToast("예상하지 못한 에러가 발생했습니다.");
       return;
     }
 
-    if (statusCode === 403) {
-      // TODO: 잘못된 접근입니다 페이지로 넘겨야함
-      stackRouterPush(router, {
-        path: "/error",
-        screen: WEBVIEW_SCREEN.ERROR,
-      });
-      return;
-    }
-
-    customToast("예상하지 못한 에러가 발생헀습니다.");
+    exceptionHandler(
+      query.error,
+      [
+        401,
+        {
+          statusCode: 403,
+          handler() {
+            stackRouterPush(router, {
+              path: "/error",
+              screen: WEBVIEW_SCREEN.ERROR,
+            });
+          },
+        },
+      ],
+      "예상하지 못한 에러가 발생했습니다."
+    );
   }, [query.error]);
 
   return { ...query, setTarget };
