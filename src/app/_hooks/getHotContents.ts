@@ -5,6 +5,7 @@ import { HotContentEntity } from "@/shared/types/api/content/HotContentEntity";
 import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
 import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 import { AgeEntity } from "@/shared/types/api/tag/AgeEntity";
+import { AxiosError } from "axios";
 
 export const getHotContentsForServer = async (): Promise<HotContentEntity[]> =>
   (
@@ -16,7 +17,13 @@ export const getHotContentsForServer = async (): Promise<HotContentEntity[]> =>
   ).json();
 
 export const useGetHotStyleContents = () =>
-  useQuery({
+  useQuery<
+    {
+      style: StyleEntity;
+      contentList: SummaryContentEntity[];
+    },
+    AxiosError
+  >({
     queryKey: ["hot-style-content"],
     queryFn: async () => {
       const { data } = await axiosInstance.get<{

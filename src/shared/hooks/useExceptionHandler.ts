@@ -76,6 +76,7 @@ export const useExceptionHandler = () => {
 
       // Too Many Request
       if (option === 429 && statusCode === 429) {
+        // TODO: 일시적 네트워크 에러 페이지로 이동
         stackRouterPush(router, {
           path: "/error",
           screen: WEBVIEW_SCREEN.ERROR,
