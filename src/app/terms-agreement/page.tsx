@@ -28,8 +28,6 @@ export default function Page() {
   const [allAgree, setAllAgree] = useState(false);
 
   useEffect(() => {
-    console.log(agree);
-
     setAllAgree(isAllAgree(agree));
   }, [agree]);
 
