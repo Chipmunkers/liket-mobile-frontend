@@ -8,6 +8,7 @@ import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import useModalStore from "@/shared/store/modalStore";
 import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
+import { useExceptionHandler } from "@/shared/hooks/useExceptionHandler";
 
 export const GET_CONTENT_ALL_KEY = "content-search-key";
 
@@ -15,6 +16,7 @@ export const useGetContentAll = (querystring: string) => {
   const router = useRouter();
   const [target, setTarget] = useState<HTMLDivElement | null>(null);
   const openModal = useModalStore(({ openModal }) => openModal);
+  const exceptionHandler = useExceptionHandler();
 
   const { data, fetchNextPage, isFetching, refetch, error, hasNextPage } =
     useInfiniteQuery({
@@ -48,25 +50,25 @@ export const useGetContentAll = (querystring: string) => {
   useEffect(() => {
     if (!error) return;
 
-    if (error instanceof AxiosError) {
-      if (error.response?.status === 401) {
-        openModal("LoginModal", {
-          onClickPositive: () => {
-            stackRouterPush(router, {
-              path: "/login",
-              screen: WEBVIEW_SCREEN.LOGIN,
-              isStack: false,
-            });
-          },
-          onClickNegative: () => {
-            stackRouterBack(router);
-          },
-        });
-        return;
-      }
-    }
-
-    customToast("에러가 발생했습니다. 다시 시도해주세요.");
+    exceptionHandler(error as AxiosError, [
+      {
+        statusCode: 401,
+        handler() {
+          openModal("LoginModal", {
+            onClickPositive: () => {
+              stackRouterPush(router, {
+                path: "/login",
+                screen: WEBVIEW_SCREEN.LOGIN,
+                isStack: false,
+              });
+            },
+            onClickNegative: () => {
+              stackRouterBack(router);
+            },
+          });
+        },
+      },
+    ]);
   }, [error]);
 
   // * 무한 스크롤 타겟팅
