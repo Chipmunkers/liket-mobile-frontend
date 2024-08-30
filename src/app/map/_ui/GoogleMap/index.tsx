@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { ClusteredContentEntity } from "@/shared/types/api/map/ClusteredContentEntity";
 import { mapStyle } from "./style/mapStyle";
 import { Props } from "./types";
@@ -6,7 +6,6 @@ import { MapInfo } from "../../_types/types";
 import { useGetClusteredContent } from "@/app/map/_hooks/useGetClusteredContent";
 import { useGetMapContent } from "@/app/map/_hooks/useGetMapContent";
 import {
-  LoadScript,
   GoogleMap,
   OverlayView,
   OverlayViewF,
@@ -14,9 +13,6 @@ import {
   MarkerClustererF,
   useJsApiLoader,
 } from "@react-google-maps/api";
-import { useRouter } from "next/navigation";
-import { stackRouterPush } from "@/shared/helpers/stackRouter";
-import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
 const CustomGoogleMap = ({
   children,
@@ -266,7 +262,7 @@ const CustomGoogleMap = ({
                           ? `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${content.genre.idx}_icon.svg`
                           : `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/default_marker_${content.genre.idx}_icon.svg`,
                     }}
-                  ></MarkerF>
+                  />
                 ))}
               </>
             )}
