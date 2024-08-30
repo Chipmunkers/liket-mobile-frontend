@@ -1,11 +1,9 @@
-import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import axiosInstance from "@/shared/helpers/axios";
 import customToast from "@/shared/helpers/customToast";
-import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { useExceptionHandler } from "@/shared/hooks/useExceptionHandler";
 import { UploadedFileEntity } from "@/shared/types/api/upload/UploadedFileEntity";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
-import { useRouter } from "next/navigation";
 
 export const useUploadContentImages = (
   props: UseMutationOptions<
@@ -14,7 +12,7 @@ export const useUploadContentImages = (
     FormData
   >
 ) => {
-  const router = useRouter();
+  const exceptionHandler = useExceptionHandler();
 
   return useMutation<AxiosResponse<UploadedFileEntity[]>, AxiosError, FormData>(
     {
@@ -26,20 +24,16 @@ export const useUploadContentImages = (
         });
       },
       onError: (err) => {
-        if (err.response?.status === 401) {
-          stackRouterPush(router, {
-            path: "/login?isTokenExpired=true",
-            screen: WEBVIEW_SCREEN.LOGIN,
-          });
-          return;
-        }
-
-        if (err.response?.status === 400) {
-          customToast("jpg또는 png만 업로드할 수 있습니다.");
-          return;
-        }
-
-        customToast("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
+        exceptionHandler(err, [
+          {
+            statusCode: 400,
+            handler() {
+              customToast("jpg또는 png파일만 업로드할 수 있습니다.");
+            },
+          },
+          401,
+          418,
+        ]);
       },
       ...props,
     }
