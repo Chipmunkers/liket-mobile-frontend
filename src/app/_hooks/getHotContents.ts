@@ -40,7 +40,13 @@ export const useGetHotStyleContents = () =>
   });
 
 export const useGetHotAgeContents = () =>
-  useQuery({
+  useQuery<
+    {
+      age: AgeEntity;
+      contentList: SummaryContentEntity[];
+    },
+    AxiosError
+  >({
     queryKey: ["hot-age-content"],
     queryFn: async () => {
       const { data } = await axiosInstance.get<{
