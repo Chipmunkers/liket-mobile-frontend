@@ -48,76 +48,77 @@ export const useExceptionHandler = () => {
     defaultMessage: boolean | string = true
   ) {
     const statusCode = err.response?.status;
+    console.log(statusCode);
+    console.log(err);
+    if (statusCode) {
+      for (const option of options) {
+        // * 옵션일 경우
+        if (isOption(option)) {
+          if (option.statusCode === statusCode) {
+            return option.handler(err);
+          }
 
-    if (!statusCode) return;
-
-    for (const option of options) {
-      // * 옵션일 경우
-      if (isOption(option)) {
-        if (option.statusCode === statusCode) {
-          return option.handler(err);
+          continue;
         }
 
-        continue;
-      }
+        // 로그인 되지 않은 경우
+        if (option === 401 && statusCode === 401) {
+          stackRouterPush(router, {
+            path: "/login?isTokenExpired=true",
+            screen: WEBVIEW_SCREEN.LOGIN,
+            isStack: false,
+          });
+          return;
+        }
 
-      // 로그인 되지 않은 경우
-      if (option === 401 && statusCode === 401) {
-        stackRouterPush(router, {
-          path: "/login?isTokenExpired=true",
-          screen: WEBVIEW_SCREEN.LOGIN,
-          isStack: false,
-        });
-        return;
-      }
+        // 정지된 계정
+        if (option === 418 && statusCode === 418) {
+          // TODO: 로그아웃 처리해야함
+          customToast("계정이 정지되었습니다.");
+          return;
+        }
 
-      // 정지된 계정
-      if (option === 418 && statusCode === 418) {
-        // TODO: 로그아웃 처리해야함
-        customToast("계정이 정지되었습니다.");
-        return;
-      }
+        // Too Many Request
+        if (option === 429 && statusCode === 429) {
+          // TODO: 일시적 네트워크 에러 페이지로 이동
+          stackRouterPush(router, {
+            path: "/error",
+            screen: WEBVIEW_SCREEN.ERROR,
+            isStack: false,
+          });
+          return;
+        }
 
-      // Too Many Request
-      if (option === 429 && statusCode === 429) {
-        // TODO: 일시적 네트워크 에러 페이지로 이동
-        stackRouterPush(router, {
-          path: "/error",
-          screen: WEBVIEW_SCREEN.ERROR,
-          isStack: false,
-        });
-        return;
-      }
+        // 에러
+        if (option === 500 && statusCode === 500) {
+          stackRouterPush(router, {
+            path: "/error",
+            screen: WEBVIEW_SCREEN.ERROR,
+            isStack: false,
+          });
+          return;
+        }
 
-      // 에러
-      if (option === 500 && statusCode === 500) {
-        stackRouterPush(router, {
-          path: "/error",
-          screen: WEBVIEW_SCREEN.ERROR,
-          isStack: false,
-        });
-        return;
-      }
+        // 에러
+        if (option === 502 && statusCode === 502) {
+          stackRouterPush(router, {
+            path: "/error",
+            screen: WEBVIEW_SCREEN.ERROR,
+            isStack: false,
+          });
+          return;
+        }
 
-      // 에러
-      if (option === 502 && statusCode === 502) {
-        stackRouterPush(router, {
-          path: "/error",
-          screen: WEBVIEW_SCREEN.ERROR,
-          isStack: false,
-        });
-        return;
-      }
-
-      // 에러
-      if (option === 504 && statusCode === 504) {
-        // TODO: 점검 페이지로 이동하면 좋을 듯
-        stackRouterPush(router, {
-          path: "/error",
-          screen: WEBVIEW_SCREEN.ERROR,
-          isStack: false,
-        });
-        return;
+        // 에러
+        if (option === 504 && statusCode === 504) {
+          // TODO: 점검 페이지로 이동하면 좋을 듯
+          stackRouterPush(router, {
+            path: "/error",
+            screen: WEBVIEW_SCREEN.ERROR,
+            isStack: false,
+          });
+          return;
+        }
       }
     }
 
