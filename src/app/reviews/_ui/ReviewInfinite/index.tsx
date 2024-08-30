@@ -14,6 +14,7 @@ import customToast from "@/shared/helpers/customToast";
 import { useDeleteReview } from "./hooks/useDeleteReview";
 import useModalStore from "@/shared/store/modalStore";
 import { useQueryClient } from "@tanstack/react-query";
+import PersonalReviewCard from "@/entities/review/PersonalReviewCard";
 
 const ReviewInfinite = ({ idx }: Props) => {
   const router = useRouter();
@@ -61,7 +62,7 @@ const ReviewInfinite = ({ idx }: Props) => {
             .map((review) => (
               <>
                 <div className="px-[24px]">
-                  <ReviewLarge
+                  <PersonalReviewCard
                     review={review}
                     onClickContents={(review) => {
                       stackRouterPush(router, {
