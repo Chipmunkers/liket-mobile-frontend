@@ -48,8 +48,6 @@ export const useExceptionHandler = () => {
     defaultMessage: boolean | string = true
   ) {
     const statusCode = err.response?.status;
-    console.log(statusCode);
-    console.log(err);
     if (statusCode) {
       for (const option of options) {
         // * 옵션일 경우
