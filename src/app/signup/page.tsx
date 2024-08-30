@@ -15,7 +15,6 @@ import EmailAuthForm from "./_ui/EmailAuthForm";
 import { INITIAL_FORM_STATE } from "./_const/initialForm";
 import { ProfileFormData, UpdateFormFunc } from "./types";
 import ProfileForm from "./_ui/ProfileForm";
-import customToast from "@/shared/helpers/customToast";
 
 const SignUpPage = () => {
   const router = useRouter();
@@ -27,34 +26,20 @@ const SignUpPage = () => {
   };
   const setToken = authStore(({ setToken }) => setToken);
 
-  const { mutate, status } = useLocalSignUp({
-    onSuccess: (data) => {
-      setToken(data.token);
-      setAuthToken(data.token);
-      stackRouterPush(router, {
-        path: "/",
-        screen: WEBVIEW_SCREEN.MAIN,
-        isStack: false,
-      });
+  const { mutate, status } = useLocalSignUp(
+    {
+      onSuccess: (data) => {
+        setToken(data.token);
+        setAuthToken(data.token);
+        stackRouterPush(router, {
+          path: "/",
+          screen: WEBVIEW_SCREEN.MAIN,
+          isStack: false,
+        });
+      },
     },
-    onError: (err) => {
-      if (err instanceof AxiosError) {
-        if (err.response?.status === 401) {
-          customToast("이메일 인증이 해제되었습니다. 다시 시도해주세요.");
-          setFormIndex(0);
-          return;
-        }
-        if (err.response?.status === 409) {
-          if (err.response.data?.cause === "email") {
-            customToast("이미 사용중인 이메일 계정입니다.");
-            setFormIndex(0);
-            return;
-          }
-          customToast("이미 사용중인 닉네임입니다.");
-        }
-      }
-    },
-  });
+    setFormIndex
+  );
 
   const handleClickNextButtonInPasswordForm = (pw: string) =>
     updateForm({ pw });

@@ -1,5 +1,6 @@
 import axiosInstance from "@/shared/helpers/axios";
 import customToast from "@/shared/helpers/customToast";
+import { useExceptionHandler } from "@/shared/hooks/useExceptionHandler";
 import { SetState } from "@/shared/types/react";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -12,8 +13,10 @@ export const useSendEmailAuthCode = (
   setCanResend: SetState<boolean>,
   timerStart: () => void,
   setSendAuthCode: SetState<boolean>
-) =>
-  useMutation<void, AxiosError, Dto>({
+) => {
+  const exceptionHandler = useExceptionHandler();
+
+  return useMutation<void, AxiosError, Dto>({
     mutationFn: async (body: { email: string }) => {
       await axiosInstance.post("/apis/user/email/duplicate-check", body);
 
@@ -32,14 +35,24 @@ export const useSendEmailAuthCode = (
     onError: (err) => {
       setCanResend(true);
 
-      if (err.response?.status === 409) {
-        customToast("이미 가입된 계정입니다.");
-        return;
-      }
-
-      if (err.response?.status === 400) {
-        customToast("허용되지 않은 이메일 양식입니다.");
-        return;
-      }
+      exceptionHandler(
+        err,
+        [
+          {
+            statusCode: 409,
+            handler() {
+              customToast("이미 가입된 계정입니다.");
+            },
+          },
+          {
+            statusCode: 400,
+            handler() {
+              customToast("이메일 양식이 올바르지 않습니다.");
+            },
+          },
+        ],
+        false
+      );
     },
   });
+};
