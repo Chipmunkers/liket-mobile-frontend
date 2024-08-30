@@ -226,9 +226,7 @@ const CustomGoogleMap = ({
             onClick={(cluster) => {
               setClickedContent(undefined);
               setClickedClusteredContents(
-                cluster
-                  .getMarkers()
-                  .map((marker) => JSON.parse(marker.getTitle() || ""))
+                cluster.getMarkers().map((marker) => (marker as any).customInfo)
               );
             }}
             options={{
@@ -248,8 +246,11 @@ const CustomGoogleMap = ({
               <>
                 {contentList.map((content, i) => (
                   <MarkerF
+                    onLoad={(marker) => {
+                      (marker as any).customInfo = content;
+                    }}
                     clusterer={clusterer}
-                    key={`content-marker-${content.idx}-${level}`}
+                    key={content.idx}
                     onClick={() => {
                       setClickedClusteredContents([]);
                       setClickedContent(content);
@@ -258,7 +259,7 @@ const CustomGoogleMap = ({
                       lat: content.location.positionY,
                       lng: content.location.positionX,
                     }}
-                    title={JSON.stringify(content)}
+                    title={content.title}
                     icon={{
                       url:
                         clickedContent?.idx === content.idx
