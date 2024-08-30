@@ -55,7 +55,7 @@ export default function Page() {
           Array(10)
             .fill(0)
             .map((elem, i) => (
-              <div className="px-[24px]">
+              <div className="px-[24px]" key={`review-${i}`}>
                 <ReviewSmallSkeleton />
               </div>
             ))}

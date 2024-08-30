@@ -18,7 +18,7 @@ interface PageProps {
   };
 }
 
-export default function page({ params: { idx } }: PageProps) {
+export default function Page({ params: { idx } }: PageProps) {
   const openModal = useModalStore(({ openModal }) => openModal);
 
   const { data: inquiry, error } = useGetInquiryByIdx(Number(idx));
