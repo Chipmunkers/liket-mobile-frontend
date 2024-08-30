@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/shared/helpers/axios";
 import customFetch from "@/shared/helpers/fetch";
 import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
+import { AxiosError } from "axios";
 
 export const getSoonEndContentsForServer = async (): Promise<{
   contentList: SummaryContentEntity[];
@@ -17,7 +18,12 @@ export const getSoonEndContentsForServer = async (): Promise<{
 export const useGetSoonEndContent = (initialData: {
   contentList: SummaryContentEntity[];
 }) =>
-  useQuery({
+  useQuery<
+    {
+      contentList: SummaryContentEntity[];
+    },
+    AxiosError
+  >({
     queryKey: ["soon-end-content"],
     queryFn: async () => {
       const { data } = await axiosInstance.get<{
