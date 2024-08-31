@@ -59,7 +59,7 @@ const ReviewLikeButton = ({
         ) : (
           <ThumbFilledIcon className="mt-[16px] ml-[9px]" />
         )}{" "}
-        <span className="text-numbering2 ml-[4px] mt-[18px]">{23}</span>
+        <span className="text-numbering2 ml-[4px] mt-[18px]">{likeCount}</span>
       </button>
     </>
   );
