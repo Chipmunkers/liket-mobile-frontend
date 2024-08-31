@@ -53,7 +53,7 @@ const PersonalReviewCard = ({
             {review.cultureContent.genre.name}
           </h2>
         </div>
-        <div className="absolute right-0 bottom-[50%] translate-y-[50%] flex">
+        <div className="absolute right-[-12px] bottom-[50%] translate-y-[50%] flex">
           {/* 좋아요 버튼 */}
           {likeButton && (
             <ReviewLikeButton
