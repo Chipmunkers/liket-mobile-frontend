@@ -120,8 +120,11 @@ const LiketUploader = ({
         x: touch2.clientX,
         y: touch2.clientY,
       };
+
       if (!center) {
+        // 최초 터치시 가운데 점과 각도를 저장
         touchStateRef.current.center = getCenter(p1, p2);
+        touchStateRef.current.angle = getAngle(p1, p2);
         return;
       }
 
@@ -133,23 +136,24 @@ const LiketUploader = ({
         touchStateRef.current.distance = dist;
       }
 
-      if (!angle) {
-        touchStateRef.current.angle = newAngle;
-      }
-
+      // 거리는 scale 변화를 구하는 용도
       const scale = dist / touchStateRef.current.distance;
 
-      const rotation =
-        (newAngle - touchStateRef.current.angle) * (180 / Math.PI);
+      // 회전 정도 구하기
+      const rotation = newAngle - touchStateRef.current.angle;
 
+      // 배경 이미지 가져오기
       const bgImage = stageRef.current.findOne("#bg-image");
 
+      // 이전 가운데 정보 가져오기
       const prevCenter = touchStateRef.current.center;
 
       if (bgImage && prevCenter) {
         const oldWidth = bgImage.width();
         const oldHeight = bgImage.height();
 
+        // BUG: 여기 문제있는거같음
+        // oldCenter의 x, y값이 휴대폰 스크린의 정 가운데만 가리키고 변하질않음.
         const oldCenter = {
           x: bgImage.x() + oldWidth / 2,
           y: bgImage.y() + oldHeight / 2,
@@ -157,6 +161,11 @@ const LiketUploader = ({
 
         const newWidth = bgImage.width() * scale;
         const newHeight = bgImage.height() * scale;
+
+        console.log("start");
+        console.log("예전 중앙 좌표", oldCenter.x, oldCenter.y);
+        console.log("이미지 새로운 위치", bgImage.x(), bgImage.y());
+        console.log("가로 세로 길이", oldWidth, oldHeight);
 
         const newX = oldCenter.x + (newCenter.x - prevCenter.x) - newWidth / 2;
         const newY = oldCenter.y + (newCenter.y - prevCenter.y) - newHeight / 2;
@@ -168,7 +177,10 @@ const LiketUploader = ({
           y: newY,
         });
 
-        bgImage.rotation(bgImage.rotation() + rotation);
+        // Apply rotation
+        bgImage.rotation(bgImage.rotation() + rotation * (180 / Math.PI));
+
+        stageRef.current.batchDraw();
       }
 
       touchStateRef.current = {
