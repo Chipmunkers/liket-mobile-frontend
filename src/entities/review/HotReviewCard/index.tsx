@@ -9,7 +9,7 @@ import { ReviewEntity } from "@/shared/types/api/review/ReviewEntity";
 import DefaultProfileIcon from "@/shared/icon/user/DefaultProfileIcon.svg";
 import { colors } from "@/shared/style/color";
 
-const ReviewCard = (props: { review: ReviewEntity }) => {
+const HotReviewCard = (props: { review: ReviewEntity }) => {
   const { review } = props;
   const router = useRouter();
 
@@ -71,4 +71,4 @@ const ReviewCard = (props: { review: ReviewEntity }) => {
   );
 };
 
-export default ReviewCard;
+export default HotReviewCard;

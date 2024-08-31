@@ -14,7 +14,7 @@ import { HeaderLeft, HeaderRight } from "@/shared/ui/Header";
 import Divider from "@/shared/ui/Divider";
 import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
 import MainBannerCarousel from "@/app/_ui/MainBannerCarousel";
-import ReviewCard from "@/entities/review/ReviewCard";
+import HotReviewCard from "@/entities/review/HotReviewCard";
 import { shuffle } from "@/shared/helpers/shuffle";
 
 const Home = async () => {
@@ -60,9 +60,9 @@ const Home = async () => {
 
             <section className="mb-[24px] text-h2">
               <h2 className="pl-[24px] mb-[8px]">최근 인기 리뷰</h2>
-              <CustomScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
+              <CustomScrollContainer className="flex flex-row gap-[8px] w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
                 {shuffle(reviews).map((review, index) => (
-                  <ReviewCard key={index} review={review} />
+                  <HotReviewCard key={index} review={review} />
                 ))}
               </CustomScrollContainer>
             </section>
