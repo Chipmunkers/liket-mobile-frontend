@@ -1,6 +1,6 @@
-import ReviewSmall, {
-  ReviewSmallSkeleton,
-} from "@/entities/review/ReviewSmall";
+import ReviewChoiceCard, {
+  ReviewChoiceCardSkeleton,
+} from "@/entities/review/ReviewChoiceCard";
 import { useGetMyReviews } from "./hooks/useGetMyReview";
 import { Props } from "./types";
 import { useState } from "react";
@@ -34,7 +34,7 @@ const InfiniteReviews = ({ idx }: Props) => {
                     : ""
                 )}
               >
-                <ReviewSmall
+                <ReviewChoiceCard
                   className="mx-[24px]"
                   review={review}
                   onClickReview={() => {
@@ -61,7 +61,7 @@ const InfiniteReviews = ({ idx }: Props) => {
             .fill(0)
             .map((elem, i) => (
               <div className="px-[24px]" key={`review-small-skeleton-${i}`}>
-                <ReviewSmallSkeleton />
+                <ReviewChoiceCardSkeleton />
               </div>
             ))}
       </div>

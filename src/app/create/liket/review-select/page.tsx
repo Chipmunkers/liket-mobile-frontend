@@ -1,7 +1,7 @@
 "use client";
 
 import InfiniteReviews from "@/app/create/liket/review-select/_ui/InfiniteReviews";
-import { ReviewSmallSkeleton } from "@/entities/review/ReviewSmall";
+import { ReviewChoiceCardSkeleton } from "@/entities/review/ReviewChoiceCard";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
 import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
@@ -56,7 +56,7 @@ export default function Page() {
             .fill(0)
             .map((elem, i) => (
               <div className="px-[24px]" key={`review-${i}`}>
-                <ReviewSmallSkeleton />
+                <ReviewChoiceCardSkeleton />
               </div>
             ))}
       </main>

@@ -3,10 +3,10 @@ import DefaultImg from "@/shared/ui/DefaultImg";
 import { Props } from "./types";
 import StarRating from "@/entities/review/StarRating";
 import dayjs from "dayjs";
-import ReviewSmallSkeleton from "./ui/ReviewSmallSkeleton";
+import ReviewChoiceCardSkeleton from "./ui/ReviewChoiceCardSkeleton";
 import { classNames } from "@/shared/helpers/classNames";
 
-const ReviewSmall = ({
+const ReviewChoiceCard = ({
   review,
   onClickContents,
   className = "",
@@ -76,6 +76,6 @@ const ReviewSmall = ({
   );
 };
 
-export default ReviewSmall;
+export default ReviewChoiceCard;
 
-export { ReviewSmallSkeleton };
+export { ReviewChoiceCardSkeleton };

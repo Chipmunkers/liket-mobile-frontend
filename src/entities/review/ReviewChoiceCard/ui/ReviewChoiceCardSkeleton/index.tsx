@@ -1,7 +1,7 @@
 import StarRating from "@/entities/review/StarRating";
 import SkeletonItem from "@/shared/ui/SkeletonItem";
 
-const ReviewSmallSkeleton = () => {
+const ReviewChoiceCardSkeleton = () => {
   return (
     <li className="relative border-b-[1px] border-b-grey-01">
       {/* 컨텐츠 영역 */}
@@ -38,4 +38,4 @@ const ReviewSmallSkeleton = () => {
   );
 };
 
-export default ReviewSmallSkeleton;
+export default ReviewChoiceCardSkeleton;
