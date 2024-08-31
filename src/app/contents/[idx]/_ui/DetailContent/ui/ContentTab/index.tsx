@@ -34,6 +34,8 @@ const ContentTab = (props: Props) => {
               options={{
                 minZoom: 10,
                 styles: mapStyle,
+                keyboardShortcuts: false,
+                gestureHandling: "greedy",
               }}
               onLoad={(map) => {
                 map.setCenter({
