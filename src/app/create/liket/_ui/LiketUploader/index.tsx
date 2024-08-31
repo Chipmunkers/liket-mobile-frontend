@@ -190,10 +190,6 @@ const LiketUploader = ({
           onTouchStart={(e) => {
             deselectShape(e);
           }}
-          onTouchMove={(e) => {
-            pinchZoom(e);
-          }}
-          onTouchEnd={handleTouchEndStage}
         >
           <Layer>
             <Image
@@ -206,6 +202,10 @@ const LiketUploader = ({
               objectFit="contain"
               alt="유저가 포토 카드에 올린 배경 이미지"
               cornerRadius={8}
+              onTouchMove={(e) => {
+                pinchZoom(e);
+              }}
+              onTouchEnd={handleTouchEndStage}
             />
             {shapes.map((shape, idx) => {
               const { id, type } = shape;
