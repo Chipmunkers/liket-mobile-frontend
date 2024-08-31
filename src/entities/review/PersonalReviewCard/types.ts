@@ -9,6 +9,8 @@ type ReviewLargeReview = Pick<
   | "starRating"
   | "createdAt"
   | "description"
+  | "likeState"
+  | "likeCount"
 >;
 
 export type Props = EntityUiProps<{
@@ -22,9 +24,23 @@ export type Props = EntityUiProps<{
   onClickContents?: (review: ReviewLargeReview) => void;
 
   /**
+   * 미트볼 버튼 여부
+   *
+   * @default true
+   */
+  meatballButton?: boolean;
+
+  /**
    * 미트볼 버튼 클릭 이벤트
    *
    * @default "아무 작동도 되지 않음"
    */
   onClickMeatball?: (review: ReviewLargeReview) => void;
+
+  /**
+   * 좋아요 버튼 여부
+   *
+   * @default false
+   */
+  likeButton?: boolean;
 }>;

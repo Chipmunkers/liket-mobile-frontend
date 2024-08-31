@@ -1,7 +1,4 @@
 import { useGetMyReviews } from "./hooks/useGetMyReviews";
-import ReviewLarge, {
-  ReviewLargeSkeleton,
-} from "@/entities/review/ReviewLarge";
 import Divider from "@/shared/ui/Divider";
 import { Props } from "./types";
 import ReloadButton from "@/shared/ui/ReloadButton";
@@ -14,6 +11,9 @@ import customToast from "@/shared/helpers/customToast";
 import { useDeleteReview } from "./hooks/useDeleteReview";
 import useModalStore from "@/shared/store/modalStore";
 import { useQueryClient } from "@tanstack/react-query";
+import PersonalReviewCard, {
+  PersonalReviewCardSkeleton,
+} from "@/entities/review/PersonalReviewCard";
 
 const ReviewInfinite = ({ idx }: Props) => {
   const router = useRouter();
@@ -49,7 +49,7 @@ const ReviewInfinite = ({ idx }: Props) => {
             .map(() => (
               <>
                 <div className="px-[24px]">
-                  <ReviewLargeSkeleton />
+                  <PersonalReviewCardSkeleton />
                 </div>
                 <Divider width="100%" height="8px" margin="8px 0" />
               </>
@@ -61,7 +61,7 @@ const ReviewInfinite = ({ idx }: Props) => {
             .map((review) => (
               <>
                 <div className="px-[24px]">
-                  <ReviewLarge
+                  <PersonalReviewCard
                     review={review}
                     onClickContents={(review) => {
                       stackRouterPush(router, {

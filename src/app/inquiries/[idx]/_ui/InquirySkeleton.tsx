@@ -38,7 +38,7 @@ const InquirySkeleton = () => {
             {Array(5)
               .fill(0)
               .map((elem, i) => (
-                <div>
+                <div key={`skeleton-${i}`}>
                   <SkeletonItem width="80px" height="80px" />
                 </div>
               ))}

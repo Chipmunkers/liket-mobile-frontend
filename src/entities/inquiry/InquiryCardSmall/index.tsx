@@ -17,7 +17,9 @@ const InquiryCardSmall = ({ inquiry, onClick, className = "" }: Props) => {
         "w-[100%] flex flex-col border-b-[1px] border-b-grey-01 relative"
       )}
       href={`/inquiries/${inquiry.idx}`}
-      onClick={() => {
+      onClick={(e) => {
+        e.preventDefault();
+
         if (onClick) return onClick(inquiry);
 
         stackRouterPush(router, {

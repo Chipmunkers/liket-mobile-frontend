@@ -1,4 +1,6 @@
-export type Props = {
+import { EntityUiProps } from "@/shared/types/react";
+
+export type Props = EntityUiProps<{
   /**
    * 리뷰 인덱스
    *
@@ -19,4 +21,11 @@ export type Props = {
    * @example 12
    */
   likeCount: number;
-};
+
+  /**
+   * 읽기 전용인지 여부
+   *
+   * @default false
+   */
+  readonly?: boolean;
+}>;

@@ -1,19 +1,30 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import DefaultImg from "@/shared/ui/DefaultImg";
 import { Props } from "./types";
-import MeatballIcon from "@/shared/icon/review/MeatballIcon.svg";
-import { ButtonBase } from "@mui/material";
 import StarRating from "@/entities/review/StarRating";
-import { Carousel } from "react-responsive-carousel";
 import dayjs from "dayjs";
-import ReviewLargeSkeleton from "./ui/ReviewLargeSkeleton";
+import ReviewChoiceCardSkeleton from "./ui/ReviewChoiceCardSkeleton";
 import { classNames } from "@/shared/helpers/classNames";
 
-const ReviewLarge = ({ review, onClickContents, onClickMeatball }: Props) => {
+const ReviewChoiceCard = ({
+  review,
+  onClickContents,
+  className = "",
+  onClickReview,
+}: Props) => {
   return (
-    <li className="relative">
+    <li
+      className={classNames(
+        "relative border-b-[1px] border-b-grey-01",
+        onClickReview ? "cursor-pointer" : "",
+        className
+      )}
+      onClick={() => {
+        onClickReview && onClickReview(review);
+      }}
+    >
       {/* 컨텐츠 영역 */}
-      <div className="h-[64px] border-b-[1px] border-b-grey-01 flex relative">
+      <div className="h-[64px] flex relative">
         {/* 이미지 영역 */}
         <div
           className={classNames(
@@ -46,17 +57,6 @@ const ReviewLarge = ({ review, onClickContents, onClickMeatball }: Props) => {
             {review.cultureContent.genre.name}
           </h2>
         </div>
-        {/* 미트볼 버튼 */}
-        <div className="absolute right-0 bottom-[50%] translate-y-[50%]">
-          <ButtonBase
-            className="w-[24px] h-[24px] rounded-full"
-            onClick={() => {
-              onClickMeatball && onClickMeatball(review);
-            }}
-          >
-            <MeatballIcon />
-          </ButtonBase>
-        </div>
       </div>
       {/* 리뷰 영역 */}
       <div>
@@ -71,39 +71,11 @@ const ReviewLarge = ({ review, onClickContents, onClickMeatball }: Props) => {
             </span>
           </div>
         </div>
-        {/* 리뷰 이미지 */}
-        <div className="review-img">
-          <Carousel
-            showArrows={false}
-            showStatus={false}
-            showThumbs={false}
-            emulateTouch={true}
-            swipeScrollTolerance={100}
-            preventMovementUntilSwipeScrollTolerance={true}
-          >
-            {review.imgList.map((imgPath, i) => (
-              <div
-                key={`review-entity-img-${i}`}
-                className="relative"
-                style={{
-                  width: "100%",
-                  aspectRatio: "1/1",
-                }}
-              >
-                <DefaultImg src={imgPath} alt="리뷰 이미지" />
-              </div>
-            ))}
-          </Carousel>
-        </div>
-        {/* 리뷰 내용 */}
-        <div className="mt-[8px]">
-          <span className="text-body3 line-clamp-3">{review.description}</span>
-        </div>
       </div>
     </li>
   );
 };
 
-export default ReviewLarge;
+export default ReviewChoiceCard;
 
-export { ReviewLargeSkeleton };
+export { ReviewChoiceCardSkeleton };
