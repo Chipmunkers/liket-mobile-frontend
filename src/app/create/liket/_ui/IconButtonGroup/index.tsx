@@ -40,7 +40,7 @@ const IconButtonGroup = ({ icons, iconGap, iconSize, onClickIcon }: Props) => {
                 alt={`${iconName} 아이콘`}
                 width={iconSize}
                 height={iconSize}
-                src={`/icons/stickers/${iconName}.svg`}
+                src={`/stickers/${iconName}.svg`}
               />
             </button>
           </li>

@@ -61,7 +61,7 @@ const WriteTab = ({
       <div
         role="tablist"
         aria-label="적용 가능 편집 리스트"
-        className="w-[100%] h-[100%] flex pl-[24px] pr-[24px] pb-[34px] shadow-[0px_-8px_16px_0px_rgba(0,0,0,0.04)]"
+        className="w-[100%] h-[100%] flex pl-[24px] pr-[24px]  shadow-[0px_-8px_16px_0px_rgba(0,0,0,0.04)]"
       >
         {items.map(({ label }, index) => {
           const isSelected = index === selectedIndex;

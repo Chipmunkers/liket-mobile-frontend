@@ -5,15 +5,11 @@ import { classNames } from "@/shared/helpers/classNames";
 import Divider from "@/shared/ui/Divider";
 import StarRating from "@/entities/review/StarRating";
 import { colors } from "@/shared/style/color";
+import GrayLiket from "./_assets/gray_liket.svg";
 
-const BackSide = ({ isFront, review, onClickReview }: Props) => {
+const BackSide = ({ review, onClickReview }: Props) => {
   return (
-    <div
-      className={classNames(
-        "liket-card flex-col mx-auto p-[16px]",
-        isFront && "hidden"
-      )}
-    >
+    <>
       <div className="flex items-center">
         <div className="relative w-[14px] h-[14px] overflow-hidden rounded-full">
           <Image
@@ -84,11 +80,13 @@ const BackSide = ({ isFront, review, onClickReview }: Props) => {
           {review ? review : "한줄평을 입력해주세요."}
         </div>
       </button>
-      <div className="absolute left-0 bottom-0 mb-[16px] ml-[16px]">로고</div>
+      <div className="absolute left-0 bottom-0 mb-[16px] ml-[16px]">
+        <GrayLiket />
+      </div>
       <div className="absolute right-0 bottom-0 mb-[16px] mr-[16px]">
         <SampleQR />
       </div>
-    </div>
+    </>
   );
 };
 

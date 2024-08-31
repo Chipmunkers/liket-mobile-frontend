@@ -68,7 +68,7 @@ const useWriteTab = ({
     }
 
     try {
-      const response = await fetch(`/icons/stickers/${sticker}.svg`);
+      const response = await fetch(`/stickers/${sticker}.svg`);
       const blob = await response.blob();
       const reader = new FileReader();
       reader.onload = () => {

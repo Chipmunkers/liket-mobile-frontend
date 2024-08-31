@@ -7,6 +7,7 @@ import KonvaText from "./_ui/KonvaText";
 import { BACKGROUND_CARD_SIZES, STAGE_SIZE } from "../../_consts/size";
 import { Props } from "./types";
 import KonvaImage from "./_ui/KonvaImage";
+import Konva from "konva";
 import { StrictShapeConfig } from "../../types";
 
 const LiketUploader = ({
@@ -21,9 +22,21 @@ const LiketUploader = ({
 }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const touchStateRef = useRef<{
+    center: null | {
+      x: number;
+      y: number;
+    };
+    distance: number;
+    angle: number;
+  }>({
+    center: null,
+    distance: 0,
+    angle: 0,
+  });
   const { x, y, width, height } = BACKGROUND_CARD_SIZES[size];
 
-  const onClickStage = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
+  const deselectShape = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
     const isEmptyAreaClicked = e.target === e.target.getStage();
     const isBackgroundImageClicked = e.target.attrs.id === "bg-image";
 
@@ -42,6 +55,142 @@ const LiketUploader = ({
     onSelectShape(id);
   };
 
+  const handleTouchEndStage = () => {
+    touchStateRef.current = {
+      distance: 0,
+      center: null,
+      angle: 0,
+    };
+  };
+
+  const pinchZoom = (e: KonvaEventObject<TouchEvent>) => {
+    if (!stageRef.current) {
+      return;
+    }
+
+    function getDistance(
+      p1: { x: number; y: number },
+      p2: { x: number; y: number }
+    ) {
+      return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+    }
+
+    function getCenter(
+      p1: { x: number; y: number },
+      p2: { x: number; y: number }
+    ) {
+      return {
+        x: (p1.x + p2.x) / 2,
+        y: (p1.y + p2.y) / 2,
+      };
+    }
+
+    function getAngle(
+      p1: { x: number; y: number },
+      p2: { x: number; y: number }
+    ) {
+      return Math.atan2(p2.y - p1.y, p2.x - p1.x);
+    }
+
+    let { center, distance, angle } = touchStateRef.current;
+
+    let dragStopped = false;
+
+    e.evt.preventDefault();
+
+    let touch1 = e.evt.touches[0];
+    let touch2 = e.evt.touches[1];
+
+    if (touch1 && !touch2 && !stageRef.current.isDragging() && dragStopped) {
+      stageRef.current.startDrag();
+      dragStopped = false;
+    }
+
+    if (touch1 && touch2) {
+      if (stageRef.current.isDragging()) {
+        dragStopped = true;
+        stageRef.current.stopDrag();
+      }
+
+      const p1 = {
+        x: touch1.clientX,
+        y: touch1.clientY,
+      };
+      const p2 = {
+        x: touch2.clientX,
+        y: touch2.clientY,
+      };
+
+      if (!center) {
+        // 최초 터치시 가운데 점과 각도를 저장
+        touchStateRef.current.center = getCenter(p1, p2);
+        touchStateRef.current.angle = getAngle(p1, p2);
+        return;
+      }
+
+      const newCenter = getCenter(p1, p2);
+      const dist = getDistance(p1, p2);
+      const newAngle = getAngle(p1, p2);
+
+      if (!distance) {
+        touchStateRef.current.distance = dist;
+      }
+
+      // 거리는 scale 변화를 구하는 용도
+      const scale = dist / touchStateRef.current.distance;
+
+      // 회전 정도 구하기
+      const rotation = newAngle - touchStateRef.current.angle;
+
+      // 배경 이미지 가져오기
+      const bgImage = stageRef.current.findOne("#bg-image");
+
+      // 이전 가운데 정보 가져오기
+      const prevCenter = touchStateRef.current.center;
+
+      if (bgImage && prevCenter) {
+        const oldWidth = bgImage.width();
+        const oldHeight = bgImage.height();
+
+        // BUG: 여기 문제있는거같음
+        // oldCenter의 x, y값이 휴대폰 스크린의 정 가운데만 가리키고 변하질않음.
+        const oldCenter = {
+          x: bgImage.x() + oldWidth / 2,
+          y: bgImage.y() + oldHeight / 2,
+        };
+
+        const newWidth = bgImage.width() * scale;
+        const newHeight = bgImage.height() * scale;
+
+        console.log("start");
+        console.log("예전 중앙 좌표", oldCenter.x, oldCenter.y);
+        console.log("이미지 새로운 위치", bgImage.x(), bgImage.y());
+        console.log("가로 세로 길이", oldWidth, oldHeight);
+
+        const newX = oldCenter.x + (newCenter.x - prevCenter.x) - newWidth / 2;
+        const newY = oldCenter.y + (newCenter.y - prevCenter.y) - newHeight / 2;
+
+        bgImage.width(newWidth);
+        bgImage.height(newHeight);
+        bgImage.position({
+          x: newX,
+          y: newY,
+        });
+
+        // Apply rotation
+        bgImage.rotation(bgImage.rotation() + rotation * (180 / Math.PI));
+
+        stageRef.current.batchDraw();
+      }
+
+      touchStateRef.current = {
+        distance: dist,
+        center: newCenter,
+        angle: newAngle,
+      };
+    }
+  };
+
   useEffect(() => {
     const handleClickOutSideOfStage = (e: MouseEvent) => {
       if (
@@ -56,18 +205,24 @@ const LiketUploader = ({
     return () => window.removeEventListener("click", handleClickOutSideOfStage);
   }, []);
 
+  useEffect(() => {
+    Konva.hitOnDragEnabled = true;
+  }, []);
+
   return (
     <div
       ref={wrapperRef}
-      className="liket-card center bg-[url(/icons/create-54.svg)] bg-[center_193px] bg-no-repeat"
+      className="liket-card center bg-[url(/icons/create-54.svg)] bg-[center_193px] bg-no-repeat overflow-hidden"
     >
       {uploadedImage ? (
         <Stage
           ref={stageRef}
           width={STAGE_SIZE.WIDTH}
           height={STAGE_SIZE.HEIGHT}
-          onMouseDown={onClickStage}
-          onTouchStart={onClickStage}
+          onMouseDown={(e) => deselectShape(e)}
+          onTouchStart={(e) => {
+            deselectShape(e);
+          }}
         >
           <Layer>
             <Image
@@ -80,6 +235,10 @@ const LiketUploader = ({
               objectFit="contain"
               alt="유저가 포토 카드에 올린 배경 이미지"
               cornerRadius={8}
+              onTouchMove={(e) => {
+                pinchZoom(e);
+              }}
+              onTouchEnd={handleTouchEndStage}
             />
             {shapes.map((shape, idx) => {
               const { id, type } = shape;

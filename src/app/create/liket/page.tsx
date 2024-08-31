@@ -1,6 +1,5 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useState } from "react";
 import CircleCross from "@/icons/circle-cross.svg";
 import { useRouter } from "next/navigation";
@@ -19,10 +18,7 @@ import BackSide from "./_ui/BackSide";
 import TextEnteringModal from "./_ui/TextEnteringModal";
 import WriteTab from "./_ui/WriteTab";
 import { StrictShapeConfig } from "./types";
-
-const NoSSRLiketUploader = dynamic(() => import("./_ui/LiketUploader"), {
-  ssr: false,
-});
+import LiketUploader from "./_ui/LiketUploader";
 
 export default function Page() {
   const router = useRouter();
@@ -98,13 +94,16 @@ export default function Page() {
             onClickSwitch={handleClickSwitchFrontBack}
           />
         </div>
-        <BackSide
-          isFront={isFront}
-          review={review}
-          onClickReview={handleClickWriteReview}
-        />
+        <div
+          className={classNames(
+            "liket-card flex-col mx-auto p-[16px]",
+            isFront && "hidden"
+          )}
+        >
+          <BackSide review={review} onClickReview={handleClickWriteReview} />
+        </div>
         <div className={classNames(!isFront && "hidden")}>
-          <NoSSRLiketUploader
+          <LiketUploader
             uploadedImage={uploadedImage}
             stageRef={stageRef}
             size={size}
@@ -114,29 +113,29 @@ export default function Page() {
             onChangeShape={setShapes}
             onUploadImage={handleUploadImage}
           />
-          <If condition={selectedShapeId.length > 1}>
-            <Then>
-              <button
-                className="absolute bottom-[34px] left-1/2 transform -translate-x-1/2"
-                onClick={handleClickRemoveItem}
-              >
-                <CircleCross width="36" height="36" />
-              </button>
-            </Then>
-            <Else>
-              <WriteTab
-                selectedIndex={selectedIndex}
-                onChangeTab={handleChangeTab}
-                hidden={selectedShapeId.length > 1}
-                enabled={!!uploadedImage}
-                onClickText={handleInsertTextTab}
-                onClickChangeSize={handleChangeSize}
-                onClickSticker={handleInsertSticker}
-                onClickColor={handleChangeInsertedTextColor}
-              />
-            </Else>
-          </If>
         </div>
+        <If condition={selectedShapeId.length > 1}>
+          <Then>
+            <button
+              className="absolute bottom-[34px] left-1/2 transform -translate-x-1/2"
+              onClick={handleClickRemoveItem}
+            >
+              <CircleCross width="36" height="36" />
+            </button>
+          </Then>
+          <Else>
+            <WriteTab
+              selectedIndex={selectedIndex}
+              onChangeTab={handleChangeTab}
+              hidden={selectedShapeId.length > 1}
+              enabled={!!uploadedImage}
+              onClickText={handleInsertTextTab}
+              onClickChangeSize={handleChangeSize}
+              onClickSticker={handleInsertSticker}
+              onClickColor={handleChangeInsertedTextColor}
+            />
+          </Else>
+        </If>
       </main>
       <TextEnteringModal
         isOpen={isTextEnteringOnFrontSide}
