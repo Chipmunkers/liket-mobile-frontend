@@ -4,12 +4,14 @@ import ThumbFilledIcon from "@/shared/icon/review/ThumbFilledIcon.svg";
 import { useState } from "react";
 import { useLikeReview } from "./hooks/useLikeReview";
 import { useCancelLikeReview } from "./hooks/useCancelLikeReview";
+import { classNames } from "@/shared/helpers/classNames";
 
 const ReviewLikeButton = ({
   likeState,
   likeCount: likeCountProps,
   idx,
   readonly = false,
+  className = "",
 }: Props) => {
   const [like, setLike] = useState(likeState);
   const [likeCount, setLikeCount] = useState(likeCountProps);
@@ -41,7 +43,7 @@ const ReviewLikeButton = ({
   return (
     <>
       <button
-        className="text-skyblue-01 flex w-[48px] h-[48px]"
+        className={classNames("text-skyblue-01 flex", className)}
         onClick={(e) => {
           e.preventDefault();
 

@@ -60,6 +60,7 @@ const PersonalReviewCard = ({
               idx={review.idx}
               likeState={review.likeState}
               likeCount={review.likeCount}
+              className="w-[48ox] h-[48px]"
             />
           )}
           {/* 미트볼 버튼 */}
