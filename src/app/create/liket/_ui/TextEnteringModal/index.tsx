@@ -67,7 +67,7 @@ const TextEnteringModal = ({
               maxRows={3}
               onKeyDown={handleKeyDown}
               placeholder="텍스트를 입력해주세요"
-              className="text-button4 text-center resize-none border-b-2 border-skyblue-01 outline-none bg-transparent px-[8px] py-[16px] text-white w-[100%]"
+              className="text-button4 text-center resize-none border-b-2 rounded-none border-skyblue-01 outline-none bg-transparent px-[8px] py-[16px] text-white w-[100%]"
             />
           </div>
         </div>
