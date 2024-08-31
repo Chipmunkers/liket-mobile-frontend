@@ -1,6 +1,5 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useState } from "react";
 import CircleCross from "@/icons/circle-cross.svg";
 import { useRouter } from "next/navigation";
