@@ -126,15 +126,28 @@ const LiketUploader = ({
       const scale = dist / touchStateRef.current.distance;
       const bgImage = stageRef.current.findOne("#bg-image");
 
-      if (bgImage) {
+      const prevCenter = touchStateRef.current.center;
+
+      if (bgImage && prevCenter) {
+        const oldWidth = bgImage.width();
+        const oldHeight = bgImage.height();
+
+        const oldCenter = {
+          x: bgImage.x() + oldWidth / 2,
+          y: bgImage.y() + oldHeight / 2,
+        };
+
         const newWidth = bgImage.width() * scale;
         const newHeight = bgImage.height() * scale;
+
+        const newX = oldCenter.x + (newCenter.x - prevCenter.x) - newWidth / 2;
+        const newY = oldCenter.y + (newCenter.y - prevCenter.y) - newHeight / 2;
 
         bgImage.width(newWidth);
         bgImage.height(newHeight);
         bgImage.position({
-          x: bgImage.x() - (newWidth - bgImage.width()) / 2,
-          y: bgImage.y() - (newHeight - bgImage.height()) / 2,
+          x: newX,
+          y: newY,
         });
       }
 
