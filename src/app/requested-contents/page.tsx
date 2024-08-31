@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useGetRequestedContent } from "./_hooks/useGetRequestedContent";
 import {
@@ -40,7 +40,16 @@ export default function Page() {
         <HeaderLeft option={{ back: true }} />
         <HeaderMiddle text="컨텐츠 등록 요청 내역" />
         <HeaderRight
-          option={{ create: { onClick: () => router.push("/create/content") } }}
+          option={{
+            create: {
+              onClick: () => {
+                stackRouterPush(router, {
+                  path: "/create/content",
+                  screen: WEBVIEW_SCREEN.CREATE_CONTENT,
+                });
+              },
+            },
+          }}
         />
       </Header>
       <main className="px-[24px]">

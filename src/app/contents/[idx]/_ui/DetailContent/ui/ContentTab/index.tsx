@@ -1,13 +1,14 @@
 import RightArrowIcon from "@/icons/right-arrow.svg";
-import { CustomOverlayMap, Map, useKakaoLoader } from "react-kakao-maps-sdk";
+import { CustomOverlayMap, Map } from "react-kakao-maps-sdk";
 import { Props } from "./types";
 import Divider from "@/shared/ui/Divider";
 import { colors } from "@/shared/style/color";
+import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api";
+import { mapStyle } from "@/app/map/_ui/GoogleMap/style/mapStyle";
 
 const ContentTab = (props: Props) => {
-  const [loading, error] = useKakaoLoader({
-    appkey: process.env.NEXT_PUBLIC_MAP_API_KEY || "",
-    retries: 2,
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY || "",
   });
 
   const { content } = props;
@@ -25,7 +26,36 @@ const ContentTab = (props: Props) => {
           {content.location.address} {content.location.detailAddress}
         </div>
         <div className="h-[171px] w-[100%] bg-grey-02 flex">
-          <Map
+          {isLoaded && (
+            <GoogleMap
+              mapContainerClassName="flex-1"
+              zoom={14}
+              key={`${isLoaded}`}
+              options={{
+                minZoom: 10,
+                styles: mapStyle,
+              }}
+              onLoad={(map) => {
+                map.setCenter({
+                  lat: content.location.positionY,
+                  lng: content.location.positionX,
+                });
+              }}
+            >
+              <MarkerF
+                key={content.idx}
+                position={{
+                  lat: content.location.positionY,
+                  lng: content.location.positionX,
+                }}
+                title={content.title}
+                icon={{
+                  url: `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${content.genre.idx}_icon.svg`,
+                }}
+              />
+            </GoogleMap>
+          )}
+          {/* <Map
             className="w-[100%] h-[100%]"
             center={{
               lng: content.location.positionX,
@@ -55,7 +85,7 @@ const ContentTab = (props: Props) => {
                 }}
               ></div>
             </CustomOverlayMap>
-          </Map>
+          </Map> */}
         </div>
         <button className="center absolute right-[24px] bottom-0 text-button4 text-skyblue-03">
           카카오맵에서 길찾기
