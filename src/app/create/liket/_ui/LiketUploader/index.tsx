@@ -28,9 +28,11 @@ const LiketUploader = ({
       y: number;
     };
     distance: number;
+    angle: number;
   }>({
     center: null,
     distance: 0,
+    angle: 0,
   });
   const { x, y, width, height } = BACKGROUND_CARD_SIZES[size];
 
@@ -57,6 +59,7 @@ const LiketUploader = ({
     touchStateRef.current = {
       distance: 0,
       center: null,
+      angle: 0,
     };
   };
 
@@ -82,7 +85,14 @@ const LiketUploader = ({
       };
     }
 
-    let { center, distance } = touchStateRef.current;
+    function getAngle(
+      p1: { x: number; y: number },
+      p2: { x: number; y: number }
+    ) {
+      return Math.atan2(p2.y - p1.y, p2.x - p1.x);
+    }
+
+    let { center, distance, angle } = touchStateRef.current;
 
     let dragStopped = false;
 
@@ -110,7 +120,6 @@ const LiketUploader = ({
         x: touch2.clientX,
         y: touch2.clientY,
       };
-
       if (!center) {
         touchStateRef.current.center = getCenter(p1, p2);
         return;
@@ -118,12 +127,21 @@ const LiketUploader = ({
 
       const newCenter = getCenter(p1, p2);
       const dist = getDistance(p1, p2);
+      const newAngle = getAngle(p1, p2);
 
       if (!distance) {
         touchStateRef.current.distance = dist;
       }
 
+      if (!angle) {
+        touchStateRef.current.angle = newAngle;
+      }
+
       const scale = dist / touchStateRef.current.distance;
+
+      const rotation =
+        (newAngle - touchStateRef.current.angle) * (180 / Math.PI);
+
       const bgImage = stageRef.current.findOne("#bg-image");
 
       const prevCenter = touchStateRef.current.center;
@@ -149,11 +167,14 @@ const LiketUploader = ({
           x: newX,
           y: newY,
         });
+
+        bgImage.rotation(bgImage.rotation() + rotation);
       }
 
       touchStateRef.current = {
         distance: dist,
         center: newCenter,
+        angle: newAngle,
       };
     }
   };
