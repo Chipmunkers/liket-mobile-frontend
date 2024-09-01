@@ -98,7 +98,7 @@ export const ButtonTextScale: FontSize = {
   button1: ["16px", { fontWeight: 700 }],
   button2: ["16px", { fontWeight: 400 }],
   button3: ["14px", { fontWeight: 700 }],
-  button4: ["14px", { fontWeight: 400 }],
+  button4: ["14px", { fontWeight: 400, lineHeight: "17px" }],
   button5: ["12px", { fontWeight: 700 }],
   button6: ["12px", { fontWeight: 400 }],
 };
