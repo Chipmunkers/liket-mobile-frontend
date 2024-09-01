@@ -60,10 +60,10 @@ export default function Page() {
         <main className="grow mb-[48px]">
           <div className="mx-[24px]">
             <div className="flex mt-[64px]">
-              <div className="grow">
-                <div className="flex flex-col">
+              <div className="">
+                <div className="flex flex-col items-start">
                   <Link
-                    className="text-h1"
+                    className="flex"
                     href="/mypage/edit/profile"
                     onClick={(e) => {
                       e.preventDefault();
@@ -74,22 +74,17 @@ export default function Page() {
                       });
                     }}
                   >
-                    {nickname}
-                    <RightArrow
-                      style={{
-                        display: "inline",
-                      }}
-                    />
+                    <span className="text-h1">{nickname}</span>
+                    <RightArrow className="mt-[3px]" />
                   </Link>
                   <div className="text-body5 text-grey-04 mt-[7px]">
                     {email}
                   </div>
                   <div className="flex mt-[15px]">
                     <div className="flex text-body3 items-end">
-                      좋아요{" "}
                       <ButtonBase
                         disableRipple={true}
-                        className="text-skyblue-01 ml-[4px] mt-[1px]"
+                        className="ml-[4px]"
                         onClick={() => {
                           stackRouterPush(router, {
                             path: "/like",
@@ -97,7 +92,8 @@ export default function Page() {
                           });
                         }}
                       >
-                        <div className="text-numbering1 text-skyblue-01 ml-[4px]">
+                        <div className="text-body3">좋아요</div>
+                        <div className="text-numbering1 text-skyblue-01 ml-[4px] mt-[1px]">
                           {likeCount}
                         </div>
                       </ButtonBase>
@@ -106,14 +102,14 @@ export default function Page() {
                       <VerticalDivider />
                     </div>
                     <div className="flex text-body3 items-end">
-                      루트보관함{" "}
                       <ButtonBase
                         disableRipple={true}
-                        className="text-skyblue-01 ml-[4px] mt-[1px]"
+                        className="ml-[4px]"
                         onClick={() => {
                           customToast("열심히 준비중입니다!");
                         }}
                       >
+                        <div className="text-body3">루트보관함</div>
                         <div className="text-numbering1 text-skyblue-01 ml-[4px] mt-[1px]">
                           0
                         </div>
@@ -122,7 +118,7 @@ export default function Page() {
                   </div>
                 </div>
               </div>
-              <div className="">
+              <div className="absolute right-[24px]">
                 <div className="w-[80px] h-[80px] rounded-full relative">
                   {uploadStatus === "pending" ? (
                     <div className="bg-grey-01 rounded-full w-[100%] h-[100%]">
@@ -141,9 +137,9 @@ export default function Page() {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col mt-[24px]">
+            <div className="flex flex-col mt-[24px] items-start">
               <Link
-                className="flex items-center"
+                className="flex"
                 href="/reviews"
                 onClick={(e) => {
                   e.preventDefault();
@@ -158,7 +154,7 @@ export default function Page() {
                 <div className="text-numbering1 text-skyblue-01 mt-[1px]">
                   {reviewCount}
                 </div>
-                <RightArrow />
+                <RightArrow className="mt-[1px]" />
               </Link>
               {/* 리뷰 */}
               <If condition={reviewList.length > 0}>
@@ -193,9 +189,9 @@ export default function Page() {
                 </Else>
               </If>
             </div>
-            <div className="flex flex-col mt-[24px] mb-[24px]">
+            <div className="flex flex-col mt-[24px] mb-[24px] items-start">
               <Link
-                className="flex items-center"
+                className="flex"
                 href="/likets"
                 onClick={(e) => {
                   e.preventDefault();
@@ -210,7 +206,7 @@ export default function Page() {
                 <div className="text-numbering1 text-skyblue-01 mt-[1px]">
                   {liketCount}
                 </div>
-                <RightArrow />
+                <RightArrow className="mt-[1px]" />
               </Link>
               {/* 라이켓 */}
               <If condition={liketList.length > 0}>

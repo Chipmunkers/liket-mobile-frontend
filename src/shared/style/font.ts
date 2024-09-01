@@ -21,6 +21,7 @@ export const TypographyTextScale: FontSize = {
     "18px",
     {
       fontWeight: 700,
+      lineHeight: "22px",
     },
   ],
   h2: [
