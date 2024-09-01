@@ -18,7 +18,13 @@ import BackSide from "./_ui/BackSide";
 import TextEnteringModal from "./_ui/TextEnteringModal";
 import WriteTab from "./_ui/WriteTab";
 import { StrictShapeConfig } from "./types";
-import LiketUploader from "./_ui/LiketUploader";
+import dynamic from "next/dynamic";
+
+// NOTE: React Konva는 서버사이드 렌더링이 불가함.
+// https://github.com/konvajs/react-konva?tab=readme-ov-file#usage-with-nextjs
+const LiketUploader = dynamic(() => import("./_ui/LiketUploader"), {
+  ssr: false,
+});
 
 export default function Page() {
   const router = useRouter();
