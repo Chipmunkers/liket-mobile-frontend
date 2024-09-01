@@ -89,7 +89,7 @@ export default function Page() {
                       좋아요{" "}
                       <ButtonBase
                         disableRipple={true}
-                        className="text-numbering1 text-skyblue-01 ml-[4px] h-[18px]"
+                        className="text-skyblue-01 ml-[4px] mt-[1px]"
                         onClick={() => {
                           stackRouterPush(router, {
                             path: "/like",
@@ -109,12 +109,12 @@ export default function Page() {
                       루트보관함{" "}
                       <ButtonBase
                         disableRipple={true}
-                        className="text-numbering1 text-skyblue-01 ml-[4px] h-[18px]"
+                        className="text-skyblue-01 ml-[4px] mt-[1px]"
                         onClick={() => {
                           customToast("열심히 준비중입니다!");
                         }}
                       >
-                        <div className="text-numbering1 text-skyblue-01 ml-[4px]">
+                        <div className="text-numbering1 text-skyblue-01 ml-[4px] mt-[1px]">
                           0
                         </div>
                       </ButtonBase>
@@ -155,7 +155,7 @@ export default function Page() {
                 }}
               >
                 <div className="text-h2 mr-[4px]">리뷰</div>
-                <div className="text-numbering1 text-skyblue-01">
+                <div className="text-numbering1 text-skyblue-01 mt-[1px]">
                   {reviewCount}
                 </div>
                 <RightArrow />
@@ -207,7 +207,7 @@ export default function Page() {
                 }}
               >
                 <div className="text-h2 mr-[4px]">라이켓</div>
-                <div className="text-numbering1 text-skyblue-01">
+                <div className="text-numbering1 text-skyblue-01 mt-[1px]">
                   {liketCount}
                 </div>
                 <RightArrow />

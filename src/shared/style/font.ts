@@ -75,6 +75,7 @@ export const TypographyTextScale: FontSize = {
     "16px",
     {
       fontWeight: 800,
+      lineHeight: "19px",
     },
   ],
   numbering2: [
