@@ -160,6 +160,7 @@ export default function Page() {
                 </div>
                 <RightArrow />
               </Link>
+              {/* 리뷰 */}
               <If condition={reviewList.length > 0}>
                 <Then>
                   <ScrollContainer className="flex flex-row gap-[8px] w-[100%] mt-[8px]">
@@ -210,6 +211,7 @@ export default function Page() {
                 </div>
                 <RightArrow />
               </Link>
+              {/* 라이켓 */}
               <If condition={liketList.length > 0}>
                 <Then>
                   <ScrollContainer className="flex flex-row gap-[8px] overflow-x-hidden overflow-y-hidden w-[100%] mt-[8px]">
