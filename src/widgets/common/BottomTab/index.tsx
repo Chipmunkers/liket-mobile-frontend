@@ -49,6 +49,8 @@ const BottomTab = ({ shadow = false }: Props) => {
         >
           <ButtonBase
             style={buttonStyle}
+            className="icon-button"
+            disableRipple={true}
             onClick={() => {
               if (pathname === "/") return;
 
@@ -68,6 +70,8 @@ const BottomTab = ({ shadow = false }: Props) => {
           </ButtonBase>
           <ButtonBase
             style={buttonStyle}
+            disableRipple={true}
+            className="icon-button"
             onClick={(e) => {
               if (pathname === "map") return;
 
@@ -86,6 +90,8 @@ const BottomTab = ({ shadow = false }: Props) => {
           </ButtonBase>
           <ButtonBase
             style={buttonStyle}
+            disableRipple={true}
+            className="icon-button"
             role="tab"
             aria-selected={isCreateDrawerOpen}
             type="button"
@@ -100,6 +106,8 @@ const BottomTab = ({ shadow = false }: Props) => {
           </ButtonBase>
           <ButtonBase
             style={buttonStyle}
+            disableRipple={true}
+            className="icon-button"
             onClick={() => {
               stackRouterPush(router, {
                 path: "/mypage",
