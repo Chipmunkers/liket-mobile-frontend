@@ -71,11 +71,11 @@
 
 .icon-button svg {
   @apply opacity-100;
-  @apply duration-150;
+  @apply duration-75;
 }
 
 .icon-button:active svg {
-  @apply opacity-50;
+  @apply opacity-30;
 }
 
 @layer components {
