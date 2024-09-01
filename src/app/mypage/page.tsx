@@ -84,7 +84,6 @@ export default function Page() {
                     <div className="flex text-body3 items-end">
                       <ButtonBase
                         disableRipple={true}
-                        className="ml-[4px]"
                         onClick={() => {
                           stackRouterPush(router, {
                             path: "/like",
