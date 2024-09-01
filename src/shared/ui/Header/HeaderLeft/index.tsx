@@ -29,7 +29,8 @@ const HeaderLeft = ({
   if (townName) {
     return (
       <ButtonBase
-        className="text-h1 flex ml-[24px]"
+        disableRipple={true}
+        className="text-h1 flex ml-[24px] icon-button"
         onClick={onClickTownSelection}
         disableTouchRipple={true}
       >
@@ -45,7 +46,8 @@ const HeaderLeft = ({
     const Back = back && (
       <ButtonBase
         key={"back"}
-        className="w-[48px] h-[48px] rounded-full ml-[12px]"
+        disableRipple={true}
+        className="w-[48px] h-[48px] rounded-full ml-[12px] icon-button"
         onClick={() => {
           if (typeof back === "object") {
             back.onClick && back.onClick();
@@ -62,7 +64,8 @@ const HeaderLeft = ({
     const Close = close && (
       <ButtonBase
         key={"close"}
-        className="w-[48px] h-[48px] rounded-full ml-[12px]"
+        disableRipple={true}
+        className="w-[48px] h-[48px] rounded-full ml-[12px] icon-button"
         onClick={() => {
           if (typeof close === "object") {
             close.onClick && close.onClick();
