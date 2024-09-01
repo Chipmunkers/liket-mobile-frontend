@@ -21,7 +21,6 @@ import { MapFilter, SelectLocation } from "./_types/types";
 import FilterDrawer from "./_ui/FilterDrawer";
 import LocationDrawer from "./_ui/LocationDrawer";
 import CustomGoogleMap from "@/app/map/_ui/GoogleMap";
-import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 import { BottomSheet } from "react-spring-bottom-sheet";
 
 export default function MapPage() {
