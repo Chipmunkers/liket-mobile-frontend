@@ -111,12 +111,13 @@ export default function MapPage() {
             {/* 필터링 아이콘 */}
             <ButtonBase
               className={classNames(
-                "rounded-full w-[36px] h-[36px] shadow-[0_0_8px_0_rgba(0,0,0,0.16)]",
+                "rounded-full w-[36px] h-[36px] shadow-[0_0_8px_0_rgba(0,0,0,0.16)] icon-button",
                 isSetMapFilter() ? "bg-skyblue-01" : "bg-white"
               )}
               onClick={() =>
                 router.replace(`${pathname}?isFilterModalOpen=true`)
               }
+              disableRipple={true}
             >
               <Filter
                 className={!isSetMapFilter() ? "fill-grey-black" : "fill-white"}
