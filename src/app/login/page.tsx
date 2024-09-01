@@ -113,7 +113,7 @@ export default function Page() {
           </ButtonBase>
         </div>
 
-        <div className="flex items-center mb-[38px]">
+        <div className="flex items-center mb-[30px]">
           <Divider height="1px" width="48px" />
           <span className="text-body5 text-grey-04 ml-[16px] mr-[16px]">
             또는
@@ -123,7 +123,7 @@ export default function Page() {
         <div className="flex items-center">
           <Link
             href="/login/email"
-            className="text-grey-03 text-button6 mr-[16px]"
+            className="text-grey-03 text-button6 mr-[16px] w-[92px] h-[30px] flex justify-center items-center"
             onClick={(e) => {
               e.preventDefault();
               stackRouterPush(router, {
@@ -137,7 +137,7 @@ export default function Page() {
           <Divider height="8px" width="1px" orientation="vertical" />
           <Link
             href="/signup"
-            className="text-grey-03 text-button6 ml-[16px]"
+            className="text-grey-03 text-button6 ml-[16px] w-[103px] h-[30px] flex justify-center items-center"
             onClick={(e) => {
               e.preventDefault();
 
