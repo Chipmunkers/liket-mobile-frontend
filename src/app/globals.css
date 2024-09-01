@@ -69,6 +69,15 @@
   border: none !important;
 }
 
+.icon-button svg {
+  @apply opacity-100;
+  @apply duration-75;
+}
+
+.icon-button:active svg {
+  @apply opacity-30;
+}
+
 @layer components {
   .full-modal {
     @apply bg-white fixed transition-transform duration-500 ease-in-out flex flex-col h-[100%] w-[100%] z-[9999] max-w-content;

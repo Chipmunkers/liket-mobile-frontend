@@ -145,12 +145,14 @@ const CustomGoogleMap = ({
     isLoaded && (
       <GoogleMap
         key={`${loadState}`}
-        mapContainerClassName="flex-1"
+        mapContainerClassName="h-[calc(100vh-96px)]"
         zoom={8}
         options={{
           disableDefaultUI: true,
           styles: mapStyle,
           minZoom: 10,
+          keyboardShortcuts: false,
+          gestureHandling: "greedy",
         }}
         onClick={() => {
           setClickedClusteredContents([]);

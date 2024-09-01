@@ -57,6 +57,17 @@ const DefaultImg = ({
         height: height || "100%",
       }}
     >
+      {!isErrorEmit && (
+        <div className="w-[100%] h-[100%] absolute bg-grey-01 flex justify-center items-center">
+          <LIKETLogo
+            style={{
+              width: "50%",
+              opacity: "20%",
+            }}
+          />
+        </div>
+      )}
+
       {/* fallbackImgSrc가 있을 경우 */}
       {isErrorEmit && fallbackImgSrc && (
         <Image
@@ -85,15 +96,6 @@ const DefaultImg = ({
           <EmptyImgIcon />
         </div>
       ) : null}
-
-      <div className="w-[100%] h-[100%] absolute bg-grey-01 flex justify-center items-center">
-        <LIKETLogo
-          style={{
-            width: "50%",
-            opacity: "20%",
-          }}
-        />
-      </div>
 
       {!isErrorEmit && (
         <Image

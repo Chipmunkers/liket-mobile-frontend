@@ -35,16 +35,18 @@ const ContentCardMedium = ({ content, onClick, className }: Props) => {
         <div className="relative w-[72px] h-[100px] mr-[16px]">
           <DefaultImg src={content.thumbnail} />
         </div>
-        <div>
+        <div className="flex flex-col items-start">
           <Badge state={"active"}>진행중</Badge>
-          <div className="text-body4 text-skyblue-01">{content.genre.name}</div>
-          <h2 className="text-body2">{content.title}</h2>
-          <div className="text-body5 text-grey-04">
+          <div className="text-body4 text-skyblue-01 mt-[4px]">
+            {content.genre.name}
+          </div>
+          <h2 className="text-body2 mt-[4px]">{content.title}</h2>
+          <div className="text-body5 text-grey-04 mt-[4px]">
             {content.location.region1Depth +
               " " +
               content.location.region2Depth}
           </div>
-          <div className="text-body5 text-grey-04">
+          <div className="text-body5 text-grey-04 mb-[4px]">
             {dayjs(content.startDate).format("YYYY.MM.DD")} ~{" "}
             {dayjs(content.endDate).format("MM.DD")}
           </div>

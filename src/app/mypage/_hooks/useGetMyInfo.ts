@@ -27,7 +27,23 @@ export const useGetMyInfo = (
   useEffect(() => {
     if (!query.error) return;
 
-    exceptionHandler(query.error, [401, 418, 429, 500, 502, 504]);
+    exceptionHandler(query.error, [
+      {
+        statusCode: 401,
+        handler() {
+          stackRouterPush(router, {
+            path: "/login",
+            screen: WEBVIEW_SCREEN.LOGIN,
+            isStack: false,
+          });
+        },
+      },
+      418,
+      429,
+      500,
+      502,
+      504,
+    ]);
   }, [query.error]);
 
   return query;

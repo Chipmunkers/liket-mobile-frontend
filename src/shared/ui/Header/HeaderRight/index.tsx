@@ -1,10 +1,10 @@
 "use client";
 
-import SearchIcon from "@/icons/search.svg";
-import LikeIcon from "@/icons/like.svg";
-import CreateIcon from "@/icons/create.svg";
-import MenuIcon from "@/icons/menu.svg";
-import CheckIcon from "@/icons/check.svg";
+import SearchIcon from "@/shared/icon/common/header/SearchIcon.svg";
+import HeartIcon from "@/shared/icon/common/header/HeartIcon.svg";
+import CreateIcon from "@/shared/icon/common/header/CreateIcon.svg";
+import MenuIcon from "@/shared/icon/common/header/Menu.svg";
+import CheckIcon from "@/shared/icon/common/header/CheckIcon.svg";
 import Link from "next/link";
 import { ButtonBase } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -26,8 +26,9 @@ const HeaderRight = ({ text, option }: Props) => {
 
     const Search = search && (
       <ButtonBase
-        className="w-[48px] h-[48px] rounded-full"
+        className="w-[48px] h-[48px] icon-button"
         key="header-search-btn"
+        disableRipple={true}
       >
         <Link
           href="/search"
@@ -46,7 +47,8 @@ const HeaderRight = ({ text, option }: Props) => {
     );
     const Like = like && (
       <ButtonBase
-        className="w-[48px] h-[48px] rounded-full"
+        className="w-[48px] h-[48px] icon-button"
+        disableRipple={true}
         key="header-like-btn"
       >
         <Link
@@ -61,15 +63,16 @@ const HeaderRight = ({ text, option }: Props) => {
             });
           }}
         >
-          <LikeIcon />
+          <HeartIcon />
         </Link>
       </ButtonBase>
     );
 
     const Create = create && (
       <ButtonBase
-        className="w-[48px] h-[48px] rounded-full"
+        className="w-[48px] h-[48px] icon-button"
         key="create_button"
+        disableRipple={true}
         onClick={() => {
           if (typeof create === "object") {
             create.onClick && create.onClick();
@@ -97,10 +100,11 @@ const HeaderRight = ({ text, option }: Props) => {
       check && typeof check !== "boolean" && !!check.disabled;
     const Check = check && typeof check === "object" && (
       <ButtonBase
+        disableRipple={true}
         key="check_button"
         disabled={checkDisabled}
         onClick={() => check.onClick && check.onClick()}
-        className="w-[48px] h-[48px] rounded-full"
+        className="w-[48px] h-[48px] icon-button"
       >
         <CheckIcon
           fill={checkDisabled ? colors.grey["02"] : colors.skyblue["01"]}
