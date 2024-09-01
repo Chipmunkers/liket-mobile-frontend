@@ -49,7 +49,7 @@ export default function Page() {
           <ButtonBase className="h-[48px] bg-[#FEE500] w-[100%] rounded-[24px] max-w-[342px]">
             <Link
               href={process.env.NEXT_PUBLIC_API_SERVER + "/auth/kakao"}
-              className="h-[100%] flex justify-center items-center w-[100%]"
+              className="h-[100%] flex justify-center w-[100%]"
               onClick={(e) => {
                 e.preventDefault();
 
@@ -62,7 +62,7 @@ export default function Page() {
               <div className="absolute flex justify-center items-center w-[48px] h-[48px] left-[8px]">
                 <KakaoLogo />
               </div>
-              <div className="text-button1">카카오톡으로 로그인</div>
+              <div className="text-button1 mt-[16px]">카카오톡으로 로그인</div>
             </Link>
           </ButtonBase>
 
@@ -70,7 +70,7 @@ export default function Page() {
           <ButtonBase className="h-[48px] bg-grey-black w-[100%] rounded-[24px] max-w-[342px]">
             <Link
               href={process.env.NEXT_PUBLIC_API_SERVER + "/auth/apple"}
-              className="h-[100%] flex justify-center items-center w-[100%]"
+              className="h-[100%] flex justify-center w-[100%]"
               onClick={(e) => {
                 e.preventDefault();
 
@@ -83,7 +83,9 @@ export default function Page() {
               <div className="absolute flex justify-center items-center w-[48px] h-[48px] left-[8px]">
                 <AppleLogo />
               </div>
-              <div className="text-button1 text-white">Apple로 로그인</div>
+              <div className="text-button1 text-white mt-[16px]">
+                Apple로 로그인
+              </div>
             </Link>
           </ButtonBase>
 
@@ -91,7 +93,7 @@ export default function Page() {
           <ButtonBase className="h-[48px] bg-[#03C75A] w-[100%] rounded-[24px] max-w-[342px]">
             <Link
               href={process.env.NEXT_PUBLIC_API_SERVER + "/auth/naver"}
-              className="h-[100%] flex justify-center items-center w-[100%]"
+              className="h-[100%] flex justify-center w-[100%]"
               onClick={(e) => {
                 e.preventDefault();
 
@@ -104,7 +106,9 @@ export default function Page() {
               <div className="absolute flex justify-center items-center w-[48px] h-[48px] left-[8px]">
                 <NaverLogo />
               </div>
-              <div className="text-button1 text-white">네이버로 로그인</div>
+              <div className="text-button1 text-white mt-[16px]">
+                네이버로 로그인
+              </div>
             </Link>
           </ButtonBase>
         </div>
