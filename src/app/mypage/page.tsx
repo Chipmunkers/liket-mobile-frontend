@@ -174,6 +174,7 @@ export default function Page() {
 
                             stackRouterPush(router, {
                               path: `/contents/${review.cultureContent.idx}?review=${review.idx}&tab=review`,
+                              screen: WEBVIEW_SCREEN.CONTENT_DETAIL,
                             });
                           }}
                         >
