@@ -29,7 +29,7 @@ const HotPlaceSection = (props: { contentList: HotContentEntity[] }) => {
             <div key={idx}>
               <Link
                 href={`/search?genre=${idx}&open=true&orderby=like`}
-                className="flex item-center"
+                className="flex items-center mb-[9px]"
                 onClick={(e) => {
                   e.preventDefault();
 
@@ -50,10 +50,7 @@ const HotPlaceSection = (props: { contentList: HotContentEntity[] }) => {
                 <ul>
                   {contentList.map((content, index) => {
                     return (
-                      <li
-                        className="flex my-[13px] w-[256px]"
-                        key={content.idx}
-                      >
+                      <li className="flex w-[256px] py-[8px]" key={content.idx}>
                         <div className="text-numbering1 mr-[18px] center align-middle">
                           {index + 1}
                         </div>
