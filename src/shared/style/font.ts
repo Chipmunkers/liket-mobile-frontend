@@ -55,7 +55,7 @@ export const TypographyTextScale: FontSize = {
     "12px",
     {
       fontWeight: 700,
-      lineHeight: "120%",
+      lineHeight: "14px",
     },
   ],
   body5: ["12px", { lineHeight: "18px", fontWeight: 400 }],
