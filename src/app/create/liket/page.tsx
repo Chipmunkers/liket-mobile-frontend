@@ -19,6 +19,8 @@ import TextEnteringModal from "./_ui/TextEnteringModal";
 import WriteTab from "./_ui/WriteTab";
 import { StrictShapeConfig } from "./types";
 import dynamic from "next/dynamic";
+import { useGetReview } from "./_hooks/useGetReview";
+import ContentNotFound from "@/app/requested-contents/[idx]/_ui/ContentNotFound";
 import { AxiosError } from "axios";
 
 // NOTE: React Konva는 서버사이드 렌더링이 불가함.
@@ -136,6 +138,7 @@ export default function Page({
           )}
         >
           <BackSide
+            reviewData={reviewData}
             oneLineReview={oneLineReview}
             onClickReview={handleClickWriteReview}
           />
