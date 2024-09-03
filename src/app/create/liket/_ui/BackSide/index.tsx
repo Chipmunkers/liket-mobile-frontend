@@ -7,7 +7,7 @@ import StarRating from "@/entities/review/StarRating";
 import { colors } from "@/shared/style/color";
 import GrayLiket from "./_assets/gray_liket.svg";
 
-const BackSide = ({ review, onClickReview }: Props) => {
+const BackSide = ({ oneLineReview, onClickReview }: Props) => {
   return (
     <>
       <div className="flex items-center">
@@ -68,16 +68,16 @@ const BackSide = ({ review, onClickReview }: Props) => {
         <div className="flex justify-between">
           <div className="text-caption text-grey-04">한줄평</div>
           <div className="text-numbering3 text-grey-04">
-            {review.length} / 42
+            {oneLineReview.length} / 42
           </div>
         </div>
         <div
           className={classNames(
             "whitespace-pre-wrap w-[100%] text-center mt-[18px] text-body3",
-            !review && "text-grey-02"
+            !oneLineReview && "text-grey-02"
           )}
         >
-          {review ? review : "한줄평을 입력해주세요."}
+          {oneLineReview ? oneLineReview : "한줄평을 입력해주세요."}
         </div>
       </button>
       <div className="absolute left-0 bottom-0 mb-[16px] ml-[16px]">

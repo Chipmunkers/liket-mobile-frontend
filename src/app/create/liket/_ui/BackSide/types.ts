@@ -1,4 +1,4 @@
 export type Props = {
-  review: string;
+  oneLineReview: string;
   onClickReview: () => void;
 };

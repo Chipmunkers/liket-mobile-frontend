@@ -48,7 +48,7 @@ export default function Page() {
 
   const {
     uploadedImage,
-    review,
+    oneLineReview,
     stageRef,
     isTextEnteringOnBackSide,
     isFront,
@@ -106,7 +106,10 @@ export default function Page() {
             isFront && "hidden"
           )}
         >
-          <BackSide review={review} onClickReview={handleClickWriteReview} />
+          <BackSide
+            oneLineReview={oneLineReview}
+            onClickReview={handleClickWriteReview}
+          />
         </div>
         <div className={classNames(!isFront && "hidden")}>
           <LiketUploader
