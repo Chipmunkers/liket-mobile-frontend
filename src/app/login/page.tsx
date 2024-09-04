@@ -13,16 +13,43 @@ import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import Divider from "@/shared/ui/Divider";
 import customToast from "@/shared/helpers/customToast";
+import { useIsWebView } from "@/shared/hooks/useIsWebview";
+import { WEBVIEW_EVENT_TYPE } from "@/shared/consts/webview/event";
+import useOnMessageFromWebview from "@/app/login/_hooks/useOnMessageFromWebview";
 
 export default function Page() {
   const router = useRouter();
   const searchParam = useSearchParams();
+
+  const isWebview = useIsWebView();
 
   useEffect(() => {
     if (searchParam.get("isTokenExpired")) {
       customToast("장시간 미사용으로 로그아웃 되었습니다.");
     }
   }, [searchParam]);
+
+  // * 소셜 로그인 응답 받은 후
+  useOnMessageFromWebview();
+
+  // * 소셜 로그인 클릭 전송
+  const socialLoginClickEvent = (provider: "kakao" | "apple" | "naver") => {
+    if (isWebview) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({
+          type: WEBVIEW_EVENT_TYPE.CLICK,
+          action: "social-login",
+          provider: provider,
+        })
+      );
+      return;
+    }
+
+    stackRouterPush(router, {
+      path: process.env.NEXT_PUBLIC_API_SERVER + `/auth/${provider}`,
+      screen: WEBVIEW_SCREEN.KAKAO_LOGIN,
+    });
+  };
 
   return (
     <>
@@ -48,15 +75,11 @@ export default function Page() {
           {/* 카카오 로그인 */}
           <ButtonBase className="h-[48px] bg-[#FEE500] w-[100%] rounded-[24px] max-w-[342px]">
             <Link
-              href={process.env.NEXT_PUBLIC_API_SERVER + "/auth/kakao"}
+              href={"/error"}
               className="h-[100%] flex justify-center w-[100%]"
               onClick={(e) => {
                 e.preventDefault();
-
-                stackRouterPush(router, {
-                  path: process.env.NEXT_PUBLIC_API_SERVER + "/auth/kakao",
-                  screen: WEBVIEW_SCREEN.KAKAO_LOGIN,
-                });
+                socialLoginClickEvent("kakao");
               }}
             >
               <div className="absolute flex justify-center items-center w-[48px] h-[48px] left-[8px]">
