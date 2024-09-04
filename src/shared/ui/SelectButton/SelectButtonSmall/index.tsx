@@ -13,16 +13,18 @@ const SelectButtonSmall = ({
 }: Props) => {
   return (
     <ButtonBase
-      disableRipple={!rippleEffect}
+      disableRipple={true}
       onClick={onClick}
       className={classNames(
-        "flex items-center rounded-[20px] text-button4 h-[28px] pl-[8px] pr-[6px]",
+        "flex rounded-[20px] pl-[8px] pr-[6px]",
         withBorder && "border-solid border-[1px] border-grey-02",
-        text && "bg-skyblue-01 text-white",
+        text && "bg-skyblue-01 text-white border-skyblue-01",
         className
       )}
     >
-      <span>{text || placeholder}</span>
+      <span className="text-button4 mt-[5.5px] mb-[3.5px]">
+        {text || placeholder}
+      </span>
       {Icon}
     </ButtonBase>
   );
