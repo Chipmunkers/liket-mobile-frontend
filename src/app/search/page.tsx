@@ -66,7 +66,7 @@ export default function Page() {
         placeholder="검색어를 입력해주세요."
       />
       <GenreSelectTab pagerble={pagerble} setPagerble={setPagerble} />
-      <div className="flex ml-[24px] mt-[8px] mb-[11px] gap-[8px]">
+      <div className="flex ml-[24px] mt-[8px] gap-[8px]">
         <SelectButtonSmall
           placeholder="지역"
           text={
@@ -127,7 +127,7 @@ export default function Page() {
           }
         />
       </div>
-      <div className="flex justify-between mx-[24px]">
+      <div className="flex justify-between mx-[24px] mt-[8px]">
         <CheckBox
           label="진행중인 컨텐츠만 보기"
           size="12px"
@@ -171,7 +171,7 @@ export default function Page() {
           />
         )}
       </div>
-      <main>
+      <main className="mt-[8px]">
         {!data ? <DefaultLoading center={true} /> : null}
         {data && data.pages[0].contentList.length === 0 ? (
           <div className="empty">검색 결과가 없습니다.</div>

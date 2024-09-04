@@ -21,7 +21,7 @@ const ContentCardGroup = (props: Props) => {
 
   return (
     <>
-      <div className="flex flex-wrap w-[100%] gap-[14px] mt-[4px] px-[24px]">
+      <div className="flex flex-wrap w-[100%] gap-[14px] px-[24px]">
         {contentList.map((content, i) => (
           <div
             key={`content-card${content.idx}-${i}`}
