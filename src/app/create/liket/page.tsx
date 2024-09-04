@@ -34,7 +34,7 @@ export default function Page({
 }: {
   searchParams: { review: number };
 }) {
-  const { data: reviewData, error } = useGetReview(searchParams.review);
+  // const { data: reviewData, error } = useGetReview(searchParams.review);
 
   const [shapes, setShapes] = useState<StrictShapeConfig[]>([]);
   const [selectedShapeId, setSelectedShapeId] = useState(" ");
@@ -78,29 +78,29 @@ export default function Page({
     // router.push("/mypage/likets/1");
   };
 
-  if ((error as AxiosError)?.response?.status === 404) {
-    return (
-      <>
-        <Header>
-          <HeaderLeft
-            option={{
-              back: true,
-            }}
-          />
-          <HeaderRight
-            option={{
-              search: {},
-            }}
-          />
-        </Header>
-        <ContentNotFound />
-      </>
-    );
-  }
+  // if ((error as AxiosError)?.response?.status === 404) {
+  //   return (
+  //     <>
+  //       <Header>
+  //         <HeaderLeft
+  //           option={{
+  //             back: true,
+  //           }}
+  //         />
+  //         <HeaderRight
+  //           option={{
+  //             search: {},
+  //           }}
+  //         />
+  //       </Header>
+  //       <ContentNotFound />
+  //     </>
+  //   );
+  // }
 
-  if (!reviewData) {
-    return <></>;
-  }
+  // if (!reviewData) {
+  //   return <></>;
+  // }
 
   return (
     <>
@@ -137,11 +137,11 @@ export default function Page({
             isFront && "hidden"
           )}
         >
-          <BackSide
+          {/* <BackSide
             reviewData={reviewData}
             oneLineReview={oneLineReview}
             onClickReview={handleClickWriteReview}
-          />
+          /> */}
         </div>
         <div className={classNames(!isFront && "hidden")}>
           <LiketUploader
