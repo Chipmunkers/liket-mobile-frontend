@@ -3,6 +3,9 @@ import { WEBVIEW_EVENT_TYPE } from "@/shared/consts/webview/event";
 import { SetState } from "@/shared/types/react";
 import { useEffect } from "react";
 
+/**
+ * @deprecated
+ */
 const useHandleMessageEvent = (setPagerble: SetState<SearchPagerble>) => {
   const webviewMessageEvent = (e: MessageEvent) => {
     if (typeof e.data !== "string") return;

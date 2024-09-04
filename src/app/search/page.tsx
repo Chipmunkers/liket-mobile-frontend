@@ -39,7 +39,8 @@ export default function Page() {
     setPagerble(getQuerystring(searchParams));
   }, [searchParams]);
 
-  useHandleMessageEvent(setPagerble);
+  // ! 네이티브 헤더에 버그가 많아 삭제
+  //useHandleMessageEvent(setPagerble);
   useCheckChangePagerble(pagerble);
 
   const { data, refetch, error, setTarget } = useGetContentAll(
@@ -54,29 +55,19 @@ export default function Page() {
   // * Style
   const [selectStyles, setSelectStyles] = useState<StyleEntity[]>([]);
 
-  // * 웹뷰 확인 코드
-  const isWebview = useIsWebView();
-
   return (
     <>
-      {isWebview ? (
-        <></>
-      ) : (
-        <>
-          <SearchHeader
-            onSearch={(text) => {
-              setPagerble({
-                ...pagerble,
-                search: text || null,
-              });
-            }}
-            placeholder="검색어를 입력해주세요."
-          />
-          <GenreSelectTab pagerble={pagerble} setPagerble={setPagerble} />
-        </>
-      )}
-
-      <div className="flex ml-[24px] mt-[8px] mb-[11px] gap-[8px]">
+      <SearchHeader
+        onSearch={(text) => {
+          setPagerble({
+            ...pagerble,
+            search: text || null,
+          });
+        }}
+        placeholder="검색어를 입력해주세요."
+      />
+      <GenreSelectTab pagerble={pagerble} setPagerble={setPagerble} />
+      <div className="flex ml-[24px] mt-[8px] gap-[8px]">
         <SelectButtonSmall
           placeholder="지역"
           text={
@@ -137,7 +128,7 @@ export default function Page() {
           }
         />
       </div>
-      <div className="flex justify-between mx-[24px]">
+      <div className="flex justify-between mx-[24px] mt-[8px]">
         <CheckBox
           label="진행중인 컨텐츠만 보기"
           size="12px"
@@ -181,7 +172,7 @@ export default function Page() {
           />
         )}
       </div>
-      <main>
+      <main className="mt-[8px]">
         {!data ? <DefaultLoading center={true} /> : null}
         {data && data.pages[0].contentList.length === 0 ? (
           <div className="empty">검색 결과가 없습니다.</div>
@@ -241,27 +232,33 @@ export default function Page() {
       {/* 연령대 선택 */}
       <Drawer open={isAgeDrawerOpen} onClose={() => setIsAgeDrawerOpen(false)}>
         <div className="center text-h2">연령대</div>
-        {AGES.map(({ idx, name }) => (
-          <li className="bottom-sheet-list" key={idx}>
-            <ButtonBase
-              onClick={() => {
-                setPagerble((pagerble) => ({
-                  ...pagerble,
-                  age: idx.toString() === pagerble.age ? null : idx.toString(),
-                }));
-                setIsAgeDrawerOpen(false);
-              }}
-              className={classNames(
-                "bottom-sheet-button flex justify-start px-[24px]",
-                pagerble.age === idx.toString()
-                  ? "text-skyblue-01 text-body1"
-                  : ""
-              )}
-            >
-              {name}
-            </ButtonBase>
-          </li>
-        ))}
+        {AGES.map(({ idx, name }) => {
+          // * 전체 연령대는 안 보이도록
+          if (idx === 1) return null;
+
+          return (
+            <li className="bottom-sheet-list" key={idx}>
+              <ButtonBase
+                onClick={() => {
+                  setPagerble((pagerble) => ({
+                    ...pagerble,
+                    age:
+                      idx.toString() === pagerble.age ? null : idx.toString(),
+                  }));
+                  setIsAgeDrawerOpen(false);
+                }}
+                className={classNames(
+                  "bottom-sheet-button flex justify-start px-[24px]",
+                  pagerble.age === idx.toString()
+                    ? "text-skyblue-01 text-body1"
+                    : ""
+                )}
+              >
+                {name}
+              </ButtonBase>
+            </li>
+          );
+        })}
       </Drawer>
 
       {/* 스타일 선택 */}
