@@ -153,7 +153,8 @@ const LiketUploader = ({
         const oldHeight = bgImage.height();
 
         // BUG: 여기 문제있는거같음
-        // oldCenter의 x, y값이 휴대폰 스크린의 정 가운데만 가리키고 변하질않음.
+        // 회전을 하면 oldCenter의 x, y값이 휴대폰 스크린의 정 가운데만 가리키고 변하질않음.
+        // angle을 회전하면 center 계산 공식이 달라져야 할것 같음.
         const oldCenter = {
           x: bgImage.x() + oldWidth / 2,
           y: bgImage.y() + oldHeight / 2,
