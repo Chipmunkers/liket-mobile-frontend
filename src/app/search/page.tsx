@@ -39,7 +39,8 @@ export default function Page() {
     setPagerble(getQuerystring(searchParams));
   }, [searchParams]);
 
-  useHandleMessageEvent(setPagerble);
+  // ! 네이티브 헤더에 버그가 많아 삭제
+  //useHandleMessageEvent(setPagerble);
   useCheckChangePagerble(pagerble);
 
   const { data, refetch, error, setTarget } = useGetContentAll(
