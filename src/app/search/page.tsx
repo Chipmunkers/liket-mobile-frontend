@@ -54,28 +54,18 @@ export default function Page() {
   // * Style
   const [selectStyles, setSelectStyles] = useState<StyleEntity[]>([]);
 
-  // * 웹뷰 확인 코드
-  const isWebview = useIsWebView();
-
   return (
     <>
-      {isWebview ? (
-        <></>
-      ) : (
-        <>
-          <SearchHeader
-            onSearch={(text) => {
-              setPagerble({
-                ...pagerble,
-                search: text || null,
-              });
-            }}
-            placeholder="검색어를 입력해주세요."
-          />
-          <GenreSelectTab pagerble={pagerble} setPagerble={setPagerble} />
-        </>
-      )}
-
+      <SearchHeader
+        onSearch={(text) => {
+          setPagerble({
+            ...pagerble,
+            search: text || null,
+          });
+        }}
+        placeholder="검색어를 입력해주세요."
+      />
+      <GenreSelectTab pagerble={pagerble} setPagerble={setPagerble} />
       <div className="flex ml-[24px] mt-[8px] mb-[11px] gap-[8px]">
         <SelectButtonSmall
           placeholder="지역"
