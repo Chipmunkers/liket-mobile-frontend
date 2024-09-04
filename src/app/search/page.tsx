@@ -231,27 +231,33 @@ export default function Page() {
       {/* 연령대 선택 */}
       <Drawer open={isAgeDrawerOpen} onClose={() => setIsAgeDrawerOpen(false)}>
         <div className="center text-h2">연령대</div>
-        {AGES.map(({ idx, name }) => (
-          <li className="bottom-sheet-list" key={idx}>
-            <ButtonBase
-              onClick={() => {
-                setPagerble((pagerble) => ({
-                  ...pagerble,
-                  age: idx.toString() === pagerble.age ? null : idx.toString(),
-                }));
-                setIsAgeDrawerOpen(false);
-              }}
-              className={classNames(
-                "bottom-sheet-button flex justify-start px-[24px]",
-                pagerble.age === idx.toString()
-                  ? "text-skyblue-01 text-body1"
-                  : ""
-              )}
-            >
-              {name}
-            </ButtonBase>
-          </li>
-        ))}
+        {AGES.map(({ idx, name }) => {
+          // * 전체 연령대는 안 보이도록
+          if (idx === 1) return null;
+
+          return (
+            <li className="bottom-sheet-list" key={idx}>
+              <ButtonBase
+                onClick={() => {
+                  setPagerble((pagerble) => ({
+                    ...pagerble,
+                    age:
+                      idx.toString() === pagerble.age ? null : idx.toString(),
+                  }));
+                  setIsAgeDrawerOpen(false);
+                }}
+                className={classNames(
+                  "bottom-sheet-button flex justify-start px-[24px]",
+                  pagerble.age === idx.toString()
+                    ? "text-skyblue-01 text-body1"
+                    : ""
+                )}
+              >
+                {name}
+              </ButtonBase>
+            </li>
+          );
+        })}
       </Drawer>
 
       {/* 스타일 선택 */}
