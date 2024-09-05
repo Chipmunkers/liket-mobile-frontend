@@ -41,6 +41,7 @@
     "react-spring-bottom-sheet": "3.5.0-alpha.0",
     "react-textarea-autosize": "^8.5.3",
     "react-timer-hook": "^3.0.7",
+    "tailwind-scrollbar-hide": "^1.1.7",
     "zod": "^3.22.4",
     "zustand": "^4.4.7"
   },
