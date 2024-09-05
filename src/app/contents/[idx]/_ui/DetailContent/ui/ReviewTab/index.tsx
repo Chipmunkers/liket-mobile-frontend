@@ -45,6 +45,7 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
   // * 무한 스크롤 타겟
   const [target, setTarget] = useState<HTMLDivElement | null>(null);
 
+  // TODO: 리팩토링 필요
   useEffect(() => {
     if (!target) return;
 
