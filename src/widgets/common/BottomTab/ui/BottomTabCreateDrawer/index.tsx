@@ -16,12 +16,11 @@ import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 const BottomTabCreateDrawer = ({ isOpen, setIsOpen }: Props) => {
   const router = useRouter();
   const isWebview = useIsWebView();
-  const { safeArea } = useGetSafeArea();
 
   return (
     <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
       <div className="center text-h2">Create</div>
-      <ul style={{ paddingBottom: safeArea.bottom + "px" }}>
+      <ul>
         <DrawerItem
           onClick={() => {
             stackRouterPush(router, {
