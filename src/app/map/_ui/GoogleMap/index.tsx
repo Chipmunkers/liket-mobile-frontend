@@ -234,7 +234,7 @@ const CustomGoogleMap = ({
                   width: 40,
                   height: 40,
                   textColor: "white",
-                  anchorText: [8, 10],
+                  anchorText: [10, 10],
                   textSize: 12,
                 },
               ],
