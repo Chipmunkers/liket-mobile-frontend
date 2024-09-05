@@ -7,7 +7,7 @@ export const useGetSafeArea = () => {
     setSafeArea({
       bottom: window.safeAreaBottom || 0,
     });
-  }, [safeArea]);
+  }, []);
 
   return {
     safeArea,
