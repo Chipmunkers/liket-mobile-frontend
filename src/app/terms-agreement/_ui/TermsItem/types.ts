@@ -1,5 +1,4 @@
 import { SummaryTosEntity } from "@/shared/types/api/terms-of-service/SummaryTosEntity";
-import { SetState } from "@/shared/types/react";
 
 export type Props = {
   tos: SummaryTosEntity;
@@ -9,14 +8,6 @@ export type Props = {
    *
    * @default false
    */
-  isCheck?: boolean;
-
-  agree: boolean[];
-
-  setAgree: SetState<boolean[]>;
-
-  /**
-   * 순번
-   */
-  i: number;
+  isChecked: boolean;
+  onChange: () => void;
 };

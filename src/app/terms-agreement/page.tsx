@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import Divider from "@/shared/ui/Divider";
 import CheckBox from "@/shared/ui/CheckBox";
@@ -11,25 +11,26 @@ import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import TermsItem from "./_ui/TermsItem";
 import { useGetTosAll } from "./_hooks/useGetTosAll";
-import { isAllAgree } from "@/app/terms-agreement/_util/isAllAgree";
+
+let AGREE_ALL: boolean[] = [];
+let NOT_AGREE_ALL: boolean[] = [];
 
 export default function Page() {
   const router = useRouter();
 
   const [agree, setAgree] = useState<boolean[]>([]);
+  const [isAllAgree, setIsAllAgree] = useState<boolean>(false);
   const { data: tosListData } = useGetTosAll();
 
   useEffect(() => {
-    if (!tosListData) return;
+    if (!tosListData) {
+      return;
+    }
 
-    setAgree(tosListData.tosList.map((tos) => false));
+    AGREE_ALL = new Array(tosListData.tosList.length).fill(true);
+    NOT_AGREE_ALL = new Array(tosListData.tosList.length).fill(false);
+    setAgree([...NOT_AGREE_ALL]);
   }, [tosListData]);
-
-  const [allAgree, setAllAgree] = useState(false);
-
-  useEffect(() => {
-    setAllAgree(isAllAgree(agree));
-  }, [agree]);
 
   if (!tosListData) {
     return null;
@@ -55,34 +56,40 @@ export default function Page() {
             label="전체 약관동의"
             size="14px"
             isBoard
-            isChecked={allAgree}
+            isChecked={isAllAgree}
             onChange={() => {
-              if (allAgree) {
-                setAgree(agree.map(() => false));
+              if (isAllAgree) {
+                setIsAllAgree(false);
+                setAgree([...NOT_AGREE_ALL]);
                 return;
               }
 
-              setAgree(agree.map(() => true));
+              setIsAllAgree(true);
+              setAgree([...AGREE_ALL]);
             }}
             marginBetweenTextAndCheckbox="8px"
           />
         </div>
         <Divider width="100%" height="1px" margin="0 0 16px 0" />
-        {agree.map((agreeState, i) => (
+        {agree.map((agreeState, index) => (
           <TermsItem
-            agree={agree}
-            setAgree={setAgree}
-            i={i}
-            tos={tosList[i]}
-            isCheck={agreeState}
-            key={`${agreeState}-${i}`}
+            key={index}
+            isChecked={agreeState}
+            onChange={() => {
+              const newAgree = [...agree];
+              newAgree[index] = !newAgree[index];
+
+              setAgree(newAgree);
+              setIsAllAgree(newAgree.every(Boolean));
+            }}
+            tos={tosList[index]}
           />
         ))}
       </main>
       <BottomButtonTab shadow>
         <Button
           className="flex-1 h-[48px]"
-          disabled={!isAllAgree(agree)}
+          disabled={!isAllAgree}
           onClick={() =>
             stackRouterPush(router, {
               path: "/signup/social",
@@ -93,31 +100,6 @@ export default function Page() {
           다음
         </Button>
       </BottomButtonTab>
-      {/* <div
-        className={classNames(
-          "full-modal",
-          !isTownSelectionModalOpen && "hidden"
-        )}
-      >
-        <Header>
-          <HeaderLeft
-            option={{
-              back: {
-                onClick: () => {
-                  setDetailTosIdx(undefined);
-                  stackRouterBack(router);
-                },
-              },
-            }}
-          />
-          <HeaderMiddle text={detailTosData?.title || ""} />
-        </Header>
-        <div className="full-modal-main">
-          <div className="flex grow h-[100%]">
-            <div>{detailTosData?.contents}</div>
-          </div>
-        </div>
-      </div> */}
     </>
   );
 }
