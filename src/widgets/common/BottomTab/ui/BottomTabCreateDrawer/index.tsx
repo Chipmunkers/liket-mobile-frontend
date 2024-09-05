@@ -11,15 +11,17 @@ import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { useIsWebView } from "@/shared/hooks/useIsWebview";
 import customToast from "@/shared/helpers/customToast";
 import DrawerItem from "@/shared/ui/DrawerItem";
+import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 
 const BottomTabCreateDrawer = ({ isOpen, setIsOpen }: Props) => {
   const router = useRouter();
   const isWebview = useIsWebView();
+  const { safeArea } = useGetSafeArea();
 
   return (
     <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
       <div className="center text-h2">Create</div>
-      <ul>
+      <ul style={{ paddingBottom: safeArea.bottom + "px" }}>
         <DrawerItem
           onClick={() => {
             stackRouterPush(router, {

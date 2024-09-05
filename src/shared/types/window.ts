@@ -7,5 +7,6 @@ declare global {
       postMessage(msg: string): void;
     };
     daum: any;
+    safeAreaBottom: number;
   }
 }
