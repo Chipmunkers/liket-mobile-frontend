@@ -20,12 +20,15 @@ import ReviewInfiniteScroll from "./ui/ReviewInfiniteScroll";
 import StarRating from "@/entities/review/StarRating";
 import Divider from "@/shared/ui/Divider";
 import Drawer from "@/shared/ui/Drawer";
+import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
+import ReloadButton from "@/shared/ui/ReloadButton";
 
 const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
   const [isReviewMenuDrawerOpen, setIsReviewMenuDrawerOpen] = useState(false);
   const [selectReviewIdx, setSelectReviewIdx] = useState<number>();
 
   const searchParam = useSearchParams();
+  const { safeArea } = useGetSafeArea();
 
   // * 리뷰 쿼리 옵션
   const [reviewPagerble, setReviewPagerble] = useState<{
@@ -45,6 +48,7 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
   // * 무한 스크롤 타겟
   const [target, setTarget] = useState<HTMLDivElement | null>(null);
 
+  // TODO: 리팩토링 필요
   useEffect(() => {
     if (!target) return;
 
@@ -163,19 +167,9 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
       </div>
       {/* TODO: shared ui에 reload button으로 변경해야함 */}
       {error && (
-        <div className="flex justify-center mt-[24px]">
-          <button
-            className="flex justify-center items-center rounded-[16px] bg-white shadow-[0_0_8px_0_rgba(0,0,0,0.16)] w-[105px] h-[32px]"
-            onClick={() => {
-              refetch();
-            }}
-          >
-            <div className="mr-[8px]">
-              <ReloadIcon />
-            </div>
-            <span className="text-button4">새로 고침</span>
-          </button>
-        </div>
+        <ReloadButton onClick={refetch} className="mt-[24px] mb-[24px]">
+          새로고침
+        </ReloadButton>
       )}
       <Drawer
         open={isReviewMenuDrawerOpen}
@@ -193,7 +187,10 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
             수정하기
           </ButtonBase>
         </li>
-        <li className="bottom-sheet-list">
+        <li
+          className="bottom-sheet-list"
+          style={{ marginBottom: safeArea.bottom + "px" }}
+        >
           <ButtonBase
             onClick={() => {
               if (!selectReviewIdx) return;

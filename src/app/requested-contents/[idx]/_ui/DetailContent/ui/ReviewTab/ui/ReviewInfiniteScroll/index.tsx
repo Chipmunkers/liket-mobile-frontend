@@ -63,7 +63,7 @@ const ReviewInfiniteScroll = (props: Props) => {
                   showStatus={false}
                   showThumbs={false}
                   emulateTouch={true}
-                  swipeScrollTolerance={100}
+                  swipeScrollTolerance={70}
                   preventMovementUntilSwipeScrollTolerance={true}
                 >
                   {review.imgList.map((imgPath, index) => (

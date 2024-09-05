@@ -19,6 +19,7 @@ import Drawer from "@/shared/ui/Drawer";
 import { GENRES } from "@/shared/consts/content/genre";
 import customToast from "@/shared/helpers/customToast";
 import { GenreEntity } from "@/shared/types/api/tag/GenreEntity";
+import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 
 export default function Page() {
   const [isGenreDrawerOpen, setIsGenreDrawerOpen] = useState(false);
@@ -43,6 +44,8 @@ export default function Page() {
       pageParams: [],
     });
   };
+
+  const { safeArea } = useGetSafeArea();
 
   // * 컴포넌트를 벗어나면 Like Content 초기화
   useEffect(() => {
@@ -114,7 +117,13 @@ export default function Page() {
         open={isGenreDrawerOpen}
         onClose={() => setIsGenreDrawerOpen(false)}
       >
-        <div className="center text-h2">장르</div>
+        {/* TODO: ul태그로 바꿔야함 */}
+        <div
+          className="center text-h2"
+          style={{ marginBottom: safeArea.bottom + "px" }}
+        >
+          장르
+        </div>
         {GENRES.map((genre) => {
           return (
             <li key={genre.idx} className="bottom-sheet-list">
