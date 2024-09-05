@@ -27,7 +27,6 @@ import ContentCardGroup from "@/widgets/content/ContentInfiniteGroup";
 import SearchHeader from "@/shared/ui/SearchHeader";
 import CheckBox from "@/shared/ui/CheckBox";
 import Drawer from "@/shared/ui/Drawer";
-import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -35,8 +34,6 @@ export default function Page() {
   const [pagerble, setPagerble] = useState<SearchPagerble>(
     getQuerystring(searchParams)
   );
-
-  const { safeArea } = useGetSafeArea();
 
   useEffect(() => {
     setPagerble(getQuerystring(searchParams));

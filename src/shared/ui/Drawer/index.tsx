@@ -2,7 +2,7 @@ import { Wrapper } from "@/shared/ui/Drawer/style";
 import { Props } from "./types";
 import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 
-const Drawer = ({ children, bottomSafeArea, ...props }: Props) => {
+const Drawer = ({ children, bottomSafeArea = true, ...props }: Props) => {
   const { safeArea } = useGetSafeArea();
 
   return (
