@@ -187,10 +187,7 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
             수정하기
           </ButtonBase>
         </li>
-        <li
-          className="bottom-sheet-list"
-          style={{ marginBottom: safeArea.bottom + "px" }}
-        >
+        <li className="bottom-sheet-list">
           <ButtonBase
             onClick={() => {
               if (!selectReviewIdx) return;

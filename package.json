@@ -37,6 +37,8 @@
     "react-indiana-drag-scroll": "^2.2.0",
     "react-kakao-maps-sdk": "^1.1.27",
     "react-konva": "^18.2.10",
+    "react-lottie": "^1.2.4",
+    "react-lottie-player": "^2.1.0",
     "react-responsive-carousel": "^3.2.23",
     "react-spring-bottom-sheet": "3.5.0-alpha.0",
     "react-textarea-autosize": "^8.5.3",

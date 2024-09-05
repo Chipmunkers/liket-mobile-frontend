@@ -8,6 +8,8 @@ import { useCancelLikeContent } from "./hooks/useCancelLikeContent";
 import { Props } from "./types";
 import customToast from "@/shared/helpers/customToast";
 import { colors } from "@/shared/style/color";
+import Lottie from "react-lottie-player";
+import heartButtonAnimation from "@/shared/animation/heart-button.json";
 
 const LikeContentButton = (props: Props) => {
   const [like, setLike] = useState(props.likeState);
@@ -59,11 +61,26 @@ const LikeContentButton = (props: Props) => {
         return cancelLikeContentApi();
       }}
     >
-      {like ? (
+      <div className="w-[24px] h-[24px] relative">
+        <Lottie
+          play={like}
+          loop={false}
+          speed={1.4}
+          animationData={heartButtonAnimation}
+          goTo={0}
+          className="absolute w-[40px]"
+          style={{
+            right: "-7px",
+            top: "-9px",
+          }}
+        />
+      </div>
+
+      {/* {like ? (
         <FilledHeartIcon fill={colors["skyblue"]["01"]} />
       ) : (
         <EmptyHeaderIcon fill={colors["grey"]["02"]} />
-      )}
+      )} */}
       {props.likeCount !== undefined ? (
         <div className="text-skyblue-01 text-numbering2">{likeCount}</div>
       ) : null}
