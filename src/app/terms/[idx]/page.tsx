@@ -1,4 +1,5 @@
 import { useGetTosByIdx } from "@/app/terms/[idx]/_hooks/useGetTosByIdx";
+import DetailTerms from "@/app/terms/[idx]/_ui/DetailTerms";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 
 interface PageProps {
@@ -20,7 +21,7 @@ export default async function Page({ params: { idx } }: PageProps) {
         />
         <HeaderMiddle text={title} />
       </Header>
-      <main className="px-[24px] pt-[24px] mb-[24px]">{contents}</main>
+      <DetailTerms contents={contents} />
     </>
   );
 }

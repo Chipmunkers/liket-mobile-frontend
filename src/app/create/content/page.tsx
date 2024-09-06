@@ -42,6 +42,7 @@ import { findIdxByName } from "./_util/findIdxByName";
 import { findIdxsByNames } from "./_util/findIdxsByNames";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",
@@ -177,6 +178,8 @@ export default function Page() {
     $mapScript.addEventListener("load", onLoadMap);
   }, []);
 
+  const { safeArea } = useGetSafeArea();
+
   return (
     <>
       <Header>
@@ -234,7 +237,7 @@ export default function Page() {
           }}
         />
       </Header>
-      <main>
+      <main style={{ paddingBottom: safeArea.bottom + "px" }}>
         <form
           className={classNames(`mt-[16px]`, !!isSearchModalOpen && "hidden")}
         >

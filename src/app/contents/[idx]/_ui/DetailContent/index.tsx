@@ -19,6 +19,7 @@ import Badge from "@/shared/ui/Badge";
 import CategoryTab from "@/shared/ui/CategoryTab";
 import Divider from "@/shared/ui/Divider";
 import ContentImgCarousel from "@/widgets/content/ContentImgCarousel";
+import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 
 const DetailContent = (props: Props) => {
   const searchParams = useSearchParams();
@@ -32,12 +33,17 @@ const DetailContent = (props: Props) => {
     props.content
   );
 
+  const { safeArea } = useGetSafeArea();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   return (
-    <main className="mb-[24px]">
+    <main
+      className="mb-[24px]"
+      style={{ paddingBottom: safeArea.bottom + "px" }}
+    >
       <ContentImgCarousel list={content.imgList} />
       <div className="px-[24px] py-[24px]">
         <div className="flex items-center">
