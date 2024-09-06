@@ -51,7 +51,8 @@ const SearchHeader = ({
   return (
     <div className={classNames("header", className || "")}>
       <ButtonBase
-        className="w-[48px] h-[48px] rounded-full"
+        className="w-[48px] h-[48px] rounded-full icon-button"
+        disableRipple
         onClick={() => {
           if (onBackButtonClick) {
             return onBackButtonClick();
