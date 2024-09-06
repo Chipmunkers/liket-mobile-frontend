@@ -42,7 +42,7 @@ const ReviewInfinite = ({ idx }: Props) => {
 
   return (
     <>
-      <div>
+      <div className="mb-[16px]">
         {!data &&
           !error &&
           Array(10)
