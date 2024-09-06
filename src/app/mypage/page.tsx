@@ -183,7 +183,7 @@ export default function Page() {
                 </Then>
                 <Else>
                   <div className="text-body5 text-grey-04">
-                    게시물이 없습니다.
+                    아직 작성된 리뷰가 없습니다.
                   </div>
                 </Else>
               </If>
@@ -228,7 +228,7 @@ export default function Page() {
                 </Then>
                 <Else>
                   <div className="text-body5 text-grey-04">
-                    게시물이 없습니다.
+                    아직 생성한 라이켓이 없습니다.
                   </div>
                 </Else>
               </If>
