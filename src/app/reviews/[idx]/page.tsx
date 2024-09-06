@@ -25,7 +25,15 @@ export default function Page({ params: { idx } }: PageProps) {
   const router = useRouter();
   const [isReviewMenuDrawerOpen, setIsReviewMenuDrawerOpen] = useState(false);
   const openModal = useModalStore(({ openModal }) => openModal);
-  const { mutate: deleteReviewByIdx } = useDeleteReview({});
+  const { mutate: deleteReviewByIdx } = useDeleteReview({
+    onSuccess() {
+      stackRouterPush(router, {
+        path: `/reviews?user=${review?.author.idx}`,
+        screen: WEBVIEW_SCREEN.MY_REVIEW,
+        isStack: false,
+      });
+    },
+  });
 
   const { data: review } = useGetReviewByIdx(idx);
 
