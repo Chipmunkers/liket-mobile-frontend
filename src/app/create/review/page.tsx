@@ -35,6 +35,7 @@ import { useUploadReviewImages } from "./_hooks/useUploadReviewImages";
 import { useCreateReview } from "./_hooks/useCreateReview";
 import { compressImage } from "@/shared/helpers/compressImage";
 import customToast from "@/shared/helpers/customToast";
+import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 
 const MAX_IMAGES_COUNT = 10;
 const MAX_REVIEW_LENGTH = 1000;
@@ -135,6 +136,8 @@ export default function Page() {
     router.replace(`${pathname}`);
   };
 
+  const { safeArea } = useGetSafeArea();
+
   return (
     <>
       <Header>
@@ -160,7 +163,12 @@ export default function Page() {
           }}
         />
       </Header>
-      <main className="px-[24px] py-[16px]">
+      <main
+        className="px-[24px] pt-[16px]"
+        style={{
+          paddingBottom: safeArea.bottom + "px",
+        }}
+      >
         <form>
           <div className="h-[70px]">
             <div className="text-grey-04 text-caption">
@@ -307,7 +315,7 @@ export default function Page() {
               maxLength={1000}
               onChange={(e) => setReview(e.target.value)}
               placeholder="다른 이유나 자세한 이유가 있다면 알려주세요."
-              className="w-[100%] mb-[34px] min-h-[132px] h-[auto] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0"
+              className="w-[100%] mb-[25px] min-h-[132px] h-[auto] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0"
             />
           </div>
         </form>
