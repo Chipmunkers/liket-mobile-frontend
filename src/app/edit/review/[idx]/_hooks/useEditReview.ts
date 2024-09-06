@@ -1,11 +1,11 @@
 import axiosInstance from "@/shared/helpers/axios";
 import { useExceptionHandler } from "@/shared/hooks/useExceptionHandler";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 
-export const useCreateReview = (
+export const useEditReview = (
   props: UseMutationOptions<
-    AxiosResponse,
+    number,
     AxiosError,
     {
       idx: number;
@@ -19,10 +19,13 @@ export const useCreateReview = (
   const exceptionHandler = useExceptionHandler();
 
   return useMutation({
-    mutationFn: ({ idx, ...remains }) => {
-      return axiosInstance.post(`/apis/culture-content/${idx}/review`, remains);
+    mutationFn: async ({ idx, ...body }) => {
+      await axiosInstance.put(`/apis/review/${idx}`, body);
+
+      return idx;
     },
     onError(err) {
+      // TODO: 수정해야함
       exceptionHandler(err, [401, 418]);
     },
     ...props,

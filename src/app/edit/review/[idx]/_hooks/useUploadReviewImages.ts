@@ -1,21 +1,27 @@
 import axiosInstance from "@/shared/helpers/axios";
 import customToast from "@/shared/helpers/customToast";
 import { useExceptionHandler } from "@/shared/hooks/useExceptionHandler";
+import { UploadedFileEntity } from "@/shared/types/api/upload/UploadedFileEntity";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 
 export const useUploadReviewImages = (
-  props: UseMutationOptions<AxiosResponse, AxiosError, FormData>
+  props: UseMutationOptions<UploadedFileEntity[], AxiosError, FormData>
 ) => {
   const exceptionHandler = useExceptionHandler();
 
   return useMutation({
-    mutationFn: (files) => {
-      return axiosInstance.post("/apis/upload/review", files, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+    mutationFn: async (files) => {
+      const { data } = await axiosInstance.post<UploadedFileEntity[]>(
+        "/apis/upload/review",
+        files,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return data;
     },
     onError(err) {
       exceptionHandler(err, [
