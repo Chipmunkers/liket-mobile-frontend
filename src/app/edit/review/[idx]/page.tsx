@@ -48,7 +48,11 @@ export default function Page({ params: { idx } }: PageProps) {
   // * Hooks
   const { mutate: writeReview } = useEditReview({
     onSuccess: () => {
-      // TODO: 리뷰 자세히보기 페이지 구현 후 연결 필요
+      stackRouterPush(router, {
+        path: `/reviews/${review?.idx}`,
+        screen: WEBVIEW_SCREEN.REVIEW_DETAIL,
+        isStack: false,
+      });
     },
   });
 
@@ -56,7 +60,6 @@ export default function Page({ params: { idx } }: PageProps) {
   const { data: review } = useGetReviewByIdx(idx);
 
   // * Handle
-
   const handleWriteReview = () => {
     const date = dateInfo.selected;
     const time = timeInfo.selected;

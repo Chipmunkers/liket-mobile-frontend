@@ -43,4 +43,11 @@ export type Props = EntityUiProps<{
    * @default false
    */
   likeButton?: boolean;
+
+  /**
+   * 리뷰 description 3줄만 표시할지 여부
+   *
+   * @default true
+   */
+  descriptionClamp?: boolean;
 }>;

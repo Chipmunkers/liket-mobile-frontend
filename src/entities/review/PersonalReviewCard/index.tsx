@@ -16,6 +16,7 @@ const PersonalReviewCard = ({
   onClickMeatball,
   meatballButton = true,
   likeButton = false,
+  descriptionClamp = true,
 }: Props) => {
   return (
     <li className="relative">
@@ -53,14 +54,19 @@ const PersonalReviewCard = ({
             {review.cultureContent.genre.name}
           </h2>
         </div>
-        <div className="absolute right-[-12px] bottom-[50%] translate-y-[50%] flex">
+        <div
+          className={classNames(
+            "absolute bottom-[50%] translate-y-[50%] flex",
+            meatballButton ? "right-[-12px]" : "right-[-7px]"
+          )}
+        >
           {/* 좋아요 버튼 */}
           {likeButton && (
             <ReviewLikeButton
               idx={review.idx}
               likeState={review.likeState}
               likeCount={review.likeCount}
-              className="w-[48ox] h-[48px]"
+              className="w-[48px] h-[48px]"
             />
           )}
           {/* 미트볼 버튼 */}
@@ -115,7 +121,14 @@ const PersonalReviewCard = ({
         </div>
         {/* 리뷰 내용 */}
         <div className="mt-[8px]">
-          <span className="text-body3 line-clamp-3">{review.description}</span>
+          <span
+            className={classNames(
+              "text-body3",
+              descriptionClamp ? "line-clamp-3" : ""
+            )}
+          >
+            {review.description}
+          </span>
         </div>
       </div>
     </li>

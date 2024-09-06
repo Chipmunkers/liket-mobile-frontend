@@ -14,6 +14,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import PersonalReviewCard, {
   PersonalReviewCardSkeleton,
 } from "@/entities/review/PersonalReviewCard";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
 const ReviewInfinite = ({ idx }: Props) => {
   const router = useRouter();
@@ -65,7 +66,7 @@ const ReviewInfinite = ({ idx }: Props) => {
                     review={review}
                     onClickContents={(review) => {
                       stackRouterPush(router, {
-                        path: `/contents/${review.cultureContent.idx}`,
+                        path: `/reviews/${review.idx}`,
                       });
                     }}
                     onClickMeatball={(review) => {
@@ -91,9 +92,10 @@ const ReviewInfinite = ({ idx }: Props) => {
         <li className="bottom-sheet-list">
           <ButtonBase
             onClick={() => {
-              return customToast("열심히 준비중입니다!");
-              // TODO: 페이지 생성 후 붙여야함
-              router.push(`/edit/review/${selectedReview}`);
+              stackRouterPush(router, {
+                path: `/edit/review/${selectedReview}`,
+                screen: WEBVIEW_SCREEN.EDIT_REVIEW,
+              });
             }}
             className="bottom-sheet-button flex justify-start px-[24px]"
           >
