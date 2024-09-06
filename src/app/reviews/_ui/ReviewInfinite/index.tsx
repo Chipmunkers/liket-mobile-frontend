@@ -66,6 +66,7 @@ const ReviewInfinite = ({ idx }: Props) => {
                     review={review}
                     onClickContents={(review) => {
                       stackRouterPush(router, {
+                        screen: WEBVIEW_SCREEN.REVIEW_DETAIL,
                         path: `/reviews/${review.idx}`,
                       });
                     }}
