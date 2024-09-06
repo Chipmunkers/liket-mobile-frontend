@@ -237,7 +237,10 @@ export default function Page() {
           }}
         />
       </Header>
-      <main style={{ paddingBottom: safeArea.bottom + "px" }}>
+      <main
+        className="mb-[24px]"
+        style={{ paddingBottom: safeArea.bottom + "px" }}
+      >
         <form
           className={classNames(`mt-[16px]`, !!isSearchModalOpen && "hidden")}
         >
@@ -495,7 +498,7 @@ export default function Page() {
               <TextareaAutosize
                 maxLength={1000}
                 placeholder="컨텐츠 소개나 이벤트 등에 대해 작성해주세요."
-                className="w-[100%] mb-[34px] min-h-[132px] h-[auto] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0"
+                className="w-[100%] min-h-[132px] h-[auto] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0"
                 {...register("description")}
               />
             </div>
