@@ -79,10 +79,10 @@ export const useGetMyReviews = (idx: number) => {
     }
 
     if (statusCode === 403) {
-      // TODO: 잘못된 접근입니다 페이지로 넘겨야함
       stackRouterPush(router, {
-        path: "/error",
+        path: "/error/wrong-access",
         screen: WEBVIEW_SCREEN.ERROR,
+        isStack: false,
       });
       return;
     }
