@@ -102,7 +102,7 @@ const PersonalReviewCard = ({
             showStatus={false}
             showThumbs={false}
             emulateTouch={true}
-            swipeScrollTolerance={70}
+            swipeScrollTolerance={10}
             preventMovementUntilSwipeScrollTolerance={true}
           >
             {review.imgList.map((imgPath, i) => (

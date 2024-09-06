@@ -80,7 +80,7 @@ const SharedReviewCard = ({
               showStatus={false}
               showThumbs={false}
               emulateTouch={true}
-              swipeScrollTolerance={100}
+              swipeScrollTolerance={10}
               preventMovementUntilSwipeScrollTolerance={true}
             >
               {review.imgList.map((imgPath, index) => (

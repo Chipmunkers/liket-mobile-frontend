@@ -13,7 +13,7 @@ const ContentImgCarousel = ({ list }: Props) => {
       showStatus={false}
       showThumbs={false}
       emulateTouch={true}
-      swipeScrollTolerance={70}
+      swipeScrollTolerance={10}
       preventMovementUntilSwipeScrollTolerance={true}
     >
       {list.map((imgPath, index) => {
