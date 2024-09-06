@@ -14,6 +14,7 @@ import { useState } from "react";
 import useModalStore from "@/shared/store/modalStore";
 import Drawer from "@/shared/ui/Drawer";
 import { useDeleteReview } from "./_hooks/useDeleteReview";
+import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 
 interface PageProps {
   params: {
@@ -36,6 +37,7 @@ export default function Page({ params: { idx } }: PageProps) {
   });
 
   const { data: review } = useGetReviewByIdx(idx);
+  const { safeArea } = useGetSafeArea();
 
   return (
     <>
@@ -54,13 +56,18 @@ export default function Page({ params: { idx } }: PageProps) {
           <MeatballIcon />
         </ButtonBase>
       </Header>
-      <main className="px-[24px] mt-[16px]">
+      <main
+        className="px-[24px] mt-[16px] pb-[24px]"
+        style={{
+          marginBottom: safeArea.bottom + "px",
+        }}
+      >
         {review ? (
           <PersonalReviewCard
             review={review}
             meatballButton={false}
             likeButton={true}
-            descriptionClamp={true}
+            descriptionClamp={false}
             onClickContents={() => {
               stackRouterPush(router, {
                 path: `/contents/${review.cultureContent.idx}?tab=review&review=${review.idx}`,

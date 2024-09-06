@@ -124,7 +124,7 @@ const PersonalReviewCard = ({
           <span
             className={classNames(
               "text-body3",
-              descriptionClamp ? "line-clamp-3" : ""
+              descriptionClamp ? "line-clamp-3" : "line-clamp-none"
             )}
           >
             {review.description}
