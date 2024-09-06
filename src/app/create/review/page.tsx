@@ -16,7 +16,6 @@ import { DateAndTime } from "./_types/DateAndTime";
 import DateDrawer from "./_ui/DateDrawer";
 import TimeDrawer from "./_ui/TimeDrawer";
 import useCheckLoginUser from "./_hooks/useCheckLoginUser";
-import { AxiosError } from "axios";
 import {
   Header,
   HeaderLeft,
@@ -36,6 +35,7 @@ import { useCreateReview } from "./_hooks/useCreateReview";
 import { compressImage } from "@/shared/helpers/compressImage";
 import customToast from "@/shared/helpers/customToast";
 import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
+import ImgDeleteCrossIcon from "@/shared/icon/common/cross/ImgDeleteCrossIcon.svg";
 
 const MAX_IMAGES_COUNT = 10;
 const MAX_REVIEW_LENGTH = 1000;
@@ -154,7 +154,7 @@ export default function Page() {
                 review.length > 1 &&
                 rate > 0 &&
                 selectedContent &&
-                uploadedImages.length > 0 &&
+                uploadedImages.length >= 0 &&
                 dateInfo.selected &&
                 dateInfo.selected
               ),
@@ -274,26 +274,33 @@ export default function Page() {
               >
                 <CreateIcon color="#fff" />
               </button>
-              {uploadedImages.map(({ fullUrl }) => {
+              {uploadedImages.map(({ filePath }) => {
                 return (
                   <li
-                    key={fullUrl}
+                    key={filePath}
                     className="w-[96px] h-[96px] relative shrink-0"
                   >
-                    <Image src={fullUrl} fill alt="업로드된 이미지" />
+                    <DefaultImg src={filePath} alt="업로드된 이미지" />
                     <button
                       type="button"
                       aria-label="현재 선택된 이미지 삭제"
                       className="absolute right-[8px] top-[8px]"
                       onClick={() => {
                         const newUrls = uploadedImages.filter(
-                          ({ fullUrl: targetUrl }) => targetUrl !== fullUrl
+                          ({ filePath: targetUrl }) => targetUrl !== filePath
                         );
 
                         setUploadedImages(newUrls);
                       }}
                     >
-                      <DeleteIcon width="24px" height="24px" />
+                      <div
+                        className="w-[24px] h-[24px] rounded-full flex justify-center items-center"
+                        style={{
+                          backgroundColor: "rgba(240, 240, 240, 0.4)",
+                        }}
+                      >
+                        <ImgDeleteCrossIcon />
+                      </div>
                     </button>
                   </li>
                 );

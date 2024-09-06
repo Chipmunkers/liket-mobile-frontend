@@ -26,8 +26,10 @@ const DefaultImg = ({
 
   const handleError = () => setIsErrorTriggered(true);
 
+  if (!src) src = "";
+
   // 유효하지 않은 경로일 경우 host가 src와 합쳐지게 되고 그럴 경우 허용되지 않은 host라는 에러가 발생함
-  if (!src.startsWith("/")) {
+  if (src && !src.startsWith("/")) {
     src = "/" + src;
   }
 

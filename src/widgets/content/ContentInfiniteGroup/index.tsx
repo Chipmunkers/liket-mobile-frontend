@@ -21,7 +21,10 @@ const ContentCardGroup = (props: Props) => {
 
   return (
     <>
-      <div className="flex flex-wrap w-[100%] gap-[14px] px-[24px]">
+      {/* 
+        target div크기가 10px이기 때문에 padding bottom이 14px임 (10 + 14 = 24)
+      */}
+      <div className="flex flex-wrap w-[100%] gap-[14px] px-[24px] pb-[14px]">
         {contentList.map((content, i) => (
           <div
             key={`content-card${content.idx}-${i}`}
