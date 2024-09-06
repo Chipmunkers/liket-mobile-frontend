@@ -7,6 +7,11 @@ import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import BottomButtonTab from "@/shared/ui/BottomButtonTab";
 import Button from "@/shared/ui/Button";
 
+/**
+ * 레이아웃이 피그마를 완전히 반영하지 않음. Error widget 사용하도록
+ *
+ * @deprecated
+ */
 const DevIng = () => {
   const router = useRouter();
 
