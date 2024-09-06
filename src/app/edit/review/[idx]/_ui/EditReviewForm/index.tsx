@@ -4,9 +4,7 @@ import StarRating from "@/entities/review/StarRating";
 import { colors } from "@/shared/style/color";
 import { SelectButtonMedium } from "@/shared/ui/SelectButton";
 import CreateIcon from "@/icons/create.svg";
-import Image from "next/image";
 import ClockIcon from "@/icons/clock.svg";
-import DeleteIcon from "@/icons/circle-cross.svg";
 import CalendarIcon from "@/icons/calendar.svg";
 import dayjs from "dayjs";
 import { useEffect, useRef } from "react";
@@ -14,6 +12,7 @@ import ScrollContainer from "react-indiana-drag-scroll";
 import { TextareaAutosize } from "@mui/material";
 import { useUploadReviewImages } from "@/app/edit/review/[idx]/_hooks/useUploadReviewImages";
 import customToast from "@/shared/helpers/customToast";
+import ImgDeleteCrossIcon from "@/shared/icon/common/cross/ImgDeleteCrossIcon.svg";
 import { compressImage } from "@/shared/helpers/compressImage";
 
 const MAX_REVIEW_LENGTH = 1000;
@@ -194,7 +193,14 @@ const EditReviewForm = ({
                     setUploadedImgs(newUrls);
                   }}
                 >
-                  <DeleteIcon width="24px" height="24px" />
+                  <div
+                    className="w-[24px] h-[24px] rounded-full flex justify-center items-center"
+                    style={{
+                      backgroundColor: "rgba(240, 240, 240, 0.4)",
+                    }}
+                  >
+                    <ImgDeleteCrossIcon />
+                  </div>
                 </button>
               </li>
             );
