@@ -16,7 +16,6 @@ import { DateAndTime } from "./_types/DateAndTime";
 import DateDrawer from "./_ui/DateDrawer";
 import TimeDrawer from "./_ui/TimeDrawer";
 import useCheckLoginUser from "./_hooks/useCheckLoginUser";
-import { AxiosError } from "axios";
 import {
   Header,
   HeaderLeft,
@@ -154,7 +153,7 @@ export default function Page() {
                 review.length > 1 &&
                 rate > 0 &&
                 selectedContent &&
-                uploadedImages.length > 0 &&
+                uploadedImages.length >= 0 &&
                 dateInfo.selected &&
                 dateInfo.selected
               ),
