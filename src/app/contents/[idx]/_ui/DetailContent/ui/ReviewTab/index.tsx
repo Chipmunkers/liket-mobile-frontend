@@ -22,6 +22,8 @@ import Divider from "@/shared/ui/Divider";
 import Drawer from "@/shared/ui/Drawer";
 import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 import ReloadButton from "@/shared/ui/ReloadButton";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
 const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
   const [isReviewMenuDrawerOpen, setIsReviewMenuDrawerOpen] = useState(false);
@@ -178,9 +180,10 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
         <li className="bottom-sheet-list">
           <ButtonBase
             onClick={() => {
-              return customToast("열심히 준비중입니다!");
-              // TODO: 페이지 생성 후 붙여야함
-              router.push(`/edit/review/${selectReviewIdx}`);
+              stackRouterPush(router, {
+                path: `/edit/review/${selectReviewIdx}`,
+                screen: WEBVIEW_SCREEN.EDIT_REVIEW,
+              });
             }}
             className="bottom-sheet-button flex justify-start px-[24px]"
           >
