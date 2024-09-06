@@ -168,8 +168,8 @@ export default function Page() {
                             e.preventDefault();
 
                             stackRouterPush(router, {
-                              path: `/contents/${review.cultureContent.idx}?review=${review.idx}&tab=review`,
-                              screen: WEBVIEW_SCREEN.CONTENT_DETAIL,
+                              path: `/reviews/${review.idx}`,
+                              screen: WEBVIEW_SCREEN.REVIEW_DETAIL,
                             });
                           }}
                         >
