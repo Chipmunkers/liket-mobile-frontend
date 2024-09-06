@@ -32,7 +32,7 @@ export default function Page() {
           }}
         />
       </Header>
-      <main>
+      <main className="pb-[24px]">
         <InquiryInfiniteGroup />
       </main>
     </>
