@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 
 const useCreateLiket = () => {
   const [uploadedImage, setUploadedImage] = useState<HTMLImageElement>();
-  const [review, setReview] = useState("");
+  const [oneLineReview, setOnelineReview] = useState("");
   const [isFront, setIsFront] = useState(true);
   const stageRef = useRef<Stage>(null);
   const [isTextEnteringOnBackSide, setIsTextEnteringOnBackSide] =
@@ -15,7 +15,7 @@ const useCreateLiket = () => {
   const handleClickWriteReview = () => setIsTextEnteringOnBackSide(true);
 
   const handleClickBackTextEnteringCheck = (text: string) => {
-    setReview(text);
+    setOnelineReview(text);
     setIsTextEnteringOnBackSide(false);
   };
 
@@ -26,7 +26,7 @@ const useCreateLiket = () => {
 
   return {
     uploadedImage,
-    review,
+    oneLineReview,
     stageRef,
     isTextEnteringOnBackSide,
     isFront,

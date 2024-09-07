@@ -1,7 +1,7 @@
 "use client";
 
-import { Layer, Image, Stage } from "react-konva";
-import { useEffect, useRef } from "react";
+import { Layer, Image, Stage, Group } from "react-konva";
+import { useEffect, useRef, useState } from "react";
 import { KonvaEventObject } from "konva/lib/Node";
 import KonvaText from "./_ui/KonvaText";
 import { BACKGROUND_CARD_SIZES, STAGE_SIZE } from "../../_consts/size";
@@ -9,6 +9,7 @@ import { Props } from "./types";
 import KonvaImage from "./_ui/KonvaImage";
 import Konva from "konva";
 import { StrictShapeConfig } from "../../types";
+import LiketCreateIcon from "@/shared/icon/legacy/create-54.svg";
 
 const LiketUploader = ({
   uploadedImage,
@@ -19,9 +20,11 @@ const LiketUploader = ({
   onSelectShape,
   onChangeShape,
   onUploadImage,
+  selectedIndex,
 }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
   const touchStateRef = useRef<{
     center: null | {
       x: number;
@@ -33,6 +36,14 @@ const LiketUploader = ({
     center: null,
     distance: 0,
     angle: 0,
+  });
+  const touchStateRefForOneTouch = useRef<{ x: number; y: number }>({
+    x: -1,
+    y: -1,
+  });
+  const [offset, setOffset] = useState({
+    x: 147,
+    y: 234,
   });
   const { x, y, width, height } = BACKGROUND_CARD_SIZES[size];
 
@@ -60,6 +71,10 @@ const LiketUploader = ({
       distance: 0,
       center: null,
       angle: 0,
+    };
+    touchStateRefForOneTouch.current = {
+      x: -1,
+      y: -1,
     };
   };
 
@@ -104,6 +119,48 @@ const LiketUploader = ({
     if (touch1 && !touch2 && !stageRef.current.isDragging() && dragStopped) {
       stageRef.current.startDrag();
       dragStopped = false;
+    }
+
+    if (touch1 && !touch2) {
+      if (stageRef.current.isDragging()) {
+        dragStopped = true;
+        stageRef.current.stopDrag();
+      }
+
+      const p1 = {
+        x: touch1.clientX,
+        y: touch1.clientY,
+      };
+
+      if (touchStateRefForOneTouch.current.x === -1) {
+        touchStateRefForOneTouch.current = {
+          x: p1.x,
+          y: p1.y,
+        };
+        return;
+      }
+
+      // 배경 이미지 가져오기
+      const bgImage = stageRef.current.findOne("#bg-image");
+
+      // 이전 가운데 정보 가져오기
+      if (bgImage) {
+        // 이미지의 새로운 위치는 원래 위치에서 이동한 거리만큼 더한 위치
+        const newX = bgImage.x() + p1.x - touchStateRefForOneTouch.current.x;
+        const newY = bgImage.y() + p1.y - touchStateRefForOneTouch.current.y;
+
+        bgImage.position({
+          x: newX,
+          y: newY,
+        });
+        stageRef.current.batchDraw();
+      }
+
+      touchStateRefForOneTouch.current = {
+        x: p1.x,
+        y: p1.y,
+      };
+      return;
     }
 
     if (touch1 && touch2) {
@@ -152,8 +209,6 @@ const LiketUploader = ({
         const oldWidth = bgImage.width();
         const oldHeight = bgImage.height();
 
-        // BUG: 여기 문제있는거같음
-        // oldCenter의 x, y값이 휴대폰 스크린의 정 가운데만 가리키고 변하질않음.
         const oldCenter = {
           x: bgImage.x() + oldWidth / 2,
           y: bgImage.y() + oldHeight / 2,
@@ -162,23 +217,23 @@ const LiketUploader = ({
         const newWidth = bgImage.width() * scale;
         const newHeight = bgImage.height() * scale;
 
-        console.log("start");
-        console.log("예전 중앙 좌표", oldCenter.x, oldCenter.y);
-        console.log("이미지 새로운 위치", bgImage.x(), bgImage.y());
-        console.log("가로 세로 길이", oldWidth, oldHeight);
-
-        const newX = oldCenter.x + (newCenter.x - prevCenter.x) - newWidth / 2;
-        const newY = oldCenter.y + (newCenter.y - prevCenter.y) - newHeight / 2;
-
         bgImage.width(newWidth);
         bgImage.height(newHeight);
-        bgImage.position({
-          x: newX,
-          y: newY,
+
+        setOffset({
+          x: oldWidth / 2,
+          y: oldHeight / 2,
         });
 
         // Apply rotation
-        bgImage.rotation(bgImage.rotation() + rotation * (180 / Math.PI));
+
+        const angle = bgImage.rotation() + rotation * (180 / Math.PI);
+
+        bgImage.rotation(
+          angle <= 2 && angle >= -2
+            ? 0
+            : bgImage.rotation() + rotation * (180 / Math.PI)
+        );
 
         stageRef.current.batchDraw();
       }
@@ -223,23 +278,53 @@ const LiketUploader = ({
           onTouchStart={(e) => {
             deselectShape(e);
           }}
+          onTouchMove={(e) => {
+            if (selectedIndex === 0 && selectedShapeId === " ") pinchZoom(e);
+          }}
+          onTouchEnd={() => {
+            if (selectedIndex === 0 && selectedShapeId === " ")
+              handleTouchEndStage();
+          }}
         >
           <Layer>
-            <Image
-              id="bg-image"
-              image={uploadedImage}
-              x={x}
-              y={y}
-              width={width}
-              height={height}
-              objectFit="contain"
-              alt="유저가 포토 카드에 올린 배경 이미지"
-              cornerRadius={8}
-              onTouchMove={(e) => {
-                pinchZoom(e);
+            <Group
+              clipFunc={(ctx) => {
+                if (size === "SMALL") {
+                  ctx.beginPath();
+                  ctx.roundRect(16, 16, 262, 387, 8);
+                  ctx.closePath();
+                  return;
+                }
+
+                if (size === "MEDIUM") {
+                  ctx.beginPath();
+                  ctx.roundRect(16, 16, 262, 436, 8);
+                  ctx.closePath();
+                  return;
+                }
+
+                ctx.beginPath();
+                ctx.roundRect(0, 0, 294, 468, 8);
+                ctx.closePath();
               }}
-              onTouchEnd={handleTouchEndStage}
-            />
+            >
+              <Image
+                id="bg-image"
+                image={uploadedImage}
+                x={STAGE_SIZE.WIDTH / 2}
+                y={
+                  (STAGE_SIZE.WIDTH * imageSize.height) / imageSize.width / 2 +
+                  (STAGE_SIZE.HEIGHT -
+                    (STAGE_SIZE.WIDTH * imageSize.height) / imageSize.width) /
+                    2
+                }
+                width={STAGE_SIZE.WIDTH}
+                height={(STAGE_SIZE.WIDTH * imageSize.height) / imageSize.width}
+                offsetX={offset.x}
+                offsetY={offset.y}
+                alt="유저가 포토 카드에 올린 배경 이미지"
+              />
+            </Group>
             {shapes.map((shape, idx) => {
               const { id, type } = shape;
 
@@ -278,8 +363,9 @@ const LiketUploader = ({
         <>
           <label
             htmlFor="image-uploader"
-            className="center text-center text-body5 text-grey-02 mt-[110px] cursor-pointer w-[100%] h-[100%]"
+            className="center text-center text-body5 text-grey-02 cursor-pointer w-[100%] h-[100%] flex flex-col"
           >
+            <LiketCreateIcon className="mb-[16px]" />
             이미지를 추가해
             <br />
             나만의 티켓을 만들어보세요.
@@ -304,6 +390,12 @@ const LiketUploader = ({
                 const image = new window.Image();
                 image.src = reader.result as string;
                 image.onload = () => {
+                  const h = (STAGE_SIZE.WIDTH * image.height) / image.width;
+                  setOffset({
+                    x: STAGE_SIZE.WIDTH / 2,
+                    y: h / 2,
+                  });
+                  setImageSize({ width: image.width, height: image.height });
                   onUploadImage(image);
                 };
               };

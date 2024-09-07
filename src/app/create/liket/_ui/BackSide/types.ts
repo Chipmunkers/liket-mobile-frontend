@@ -1,4 +1,7 @@
+import { ReviewEntity } from "@/shared/types/api/review/ReviewEntity";
+
 export type Props = {
-  review: string;
+  reviewData: ReviewEntity;
+  oneLineReview: string;
   onClickReview: () => void;
 };

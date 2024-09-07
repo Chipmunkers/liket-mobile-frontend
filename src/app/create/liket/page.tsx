@@ -19,6 +19,9 @@ import TextEnteringModal from "./_ui/TextEnteringModal";
 import WriteTab from "./_ui/WriteTab";
 import { StrictShapeConfig } from "./types";
 import dynamic from "next/dynamic";
+import { useGetReview } from "./_hooks/useGetReview";
+import ContentNotFound from "@/app/requested-contents/[idx]/_ui/ContentNotFound";
+import { AxiosError } from "axios";
 
 // NOTE: React Konva는 서버사이드 렌더링이 불가함.
 // https://github.com/konvajs/react-konva?tab=readme-ov-file#usage-with-nextjs
@@ -26,8 +29,12 @@ const LiketUploader = dynamic(() => import("./_ui/LiketUploader"), {
   ssr: false,
 });
 
-export default function Page() {
-  const router = useRouter();
+export default function Page({
+  searchParams,
+}: {
+  searchParams: { review: number };
+}) {
+  // const { data: reviewData, error } = useGetReview(searchParams.review);
 
   const [shapes, setShapes] = useState<StrictShapeConfig[]>([]);
   const [selectedShapeId, setSelectedShapeId] = useState(" ");
@@ -48,7 +55,7 @@ export default function Page() {
 
   const {
     uploadedImage,
-    review,
+    oneLineReview,
     stageRef,
     isTextEnteringOnBackSide,
     isFront,
@@ -70,6 +77,30 @@ export default function Page() {
     // console.log("😍", bg);
     // router.push("/mypage/likets/1");
   };
+
+  // if ((error as AxiosError)?.response?.status === 404) {
+  //   return (
+  //     <>
+  //       <Header>
+  //         <HeaderLeft
+  //           option={{
+  //             back: true,
+  //           }}
+  //         />
+  //         <HeaderRight
+  //           option={{
+  //             search: {},
+  //           }}
+  //         />
+  //       </Header>
+  //       <ContentNotFound />
+  //     </>
+  //   );
+  // }
+
+  // if (!reviewData) {
+  //   return <></>;
+  // }
 
   return (
     <>
@@ -106,10 +137,15 @@ export default function Page() {
             isFront && "hidden"
           )}
         >
-          <BackSide review={review} onClickReview={handleClickWriteReview} />
+          {/* <BackSide
+            reviewData={reviewData}
+            oneLineReview={oneLineReview}
+            onClickReview={handleClickWriteReview}
+          /> */}
         </div>
         <div className={classNames(!isFront && "hidden")}>
           <LiketUploader
+            selectedIndex={selectedIndex}
             uploadedImage={uploadedImage}
             stageRef={stageRef}
             size={size}
