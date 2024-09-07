@@ -24,6 +24,7 @@ const LiketUploader = ({
 }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
   const touchStateRef = useRef<{
     center: null | {
       x: number;
@@ -45,14 +46,6 @@ const LiketUploader = ({
     y: 234,
   });
   const { x, y, width, height } = BACKGROUND_CARD_SIZES[size];
-
-  // 클리핑 영역 정의
-  const CLIP_AREA = {
-    x: 147,
-    y: 234,
-    width: width,
-    height: height,
-  };
 
   const deselectShape = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
     const isEmptyAreaClicked = e.target === e.target.getStage();
@@ -89,8 +82,6 @@ const LiketUploader = ({
     if (!stageRef.current) {
       return;
     }
-
-    console.log(23);
 
     function getDistance(
       p1: { x: number; y: number },
@@ -235,7 +226,14 @@ const LiketUploader = ({
         });
 
         // Apply rotation
-        bgImage.rotation(bgImage.rotation() + rotation * (180 / Math.PI));
+
+        const angle = bgImage.rotation() + rotation * (180 / Math.PI);
+
+        bgImage.rotation(
+          angle <= 2 && angle >= -2
+            ? 0
+            : bgImage.rotation() + rotation * (180 / Math.PI)
+        );
 
         stageRef.current.batchDraw();
       }
@@ -313,8 +311,15 @@ const LiketUploader = ({
               <Image
                 id="bg-image"
                 image={uploadedImage}
-                x={CLIP_AREA.x}
-                y={CLIP_AREA.y}
+                x={STAGE_SIZE.WIDTH / 2}
+                y={
+                  (STAGE_SIZE.WIDTH * imageSize.height) / imageSize.width / 2 +
+                  (STAGE_SIZE.HEIGHT -
+                    (STAGE_SIZE.WIDTH * imageSize.height) / imageSize.width) /
+                    2
+                }
+                width={STAGE_SIZE.WIDTH}
+                height={(STAGE_SIZE.WIDTH * imageSize.height) / imageSize.width}
                 offsetX={offset.x}
                 offsetY={offset.y}
                 alt="유저가 포토 카드에 올린 배경 이미지"
@@ -385,6 +390,12 @@ const LiketUploader = ({
                 const image = new window.Image();
                 image.src = reader.result as string;
                 image.onload = () => {
+                  const h = (STAGE_SIZE.WIDTH * image.height) / image.width;
+                  setOffset({
+                    x: STAGE_SIZE.WIDTH / 2,
+                    y: h / 2,
+                  });
+                  setImageSize({ width: image.width, height: image.height });
                   onUploadImage(image);
                 };
               };
