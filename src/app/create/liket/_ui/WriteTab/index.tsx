@@ -5,6 +5,7 @@ import { classNames } from "@/shared/helpers/classNames";
 import TextEdit from "./ui/TextEdit";
 import { Props } from "./types";
 import StickerEdit from "./ui/StickerEdit";
+import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 
 const WriteTab = ({
   selectedIndex,
@@ -31,12 +32,17 @@ const WriteTab = ({
     },
   ];
 
+  const { safeArea } = useGetSafeArea();
+
   return (
     <div
       className={classNames(
         "fixed bottom-0 w-[100%] max-w-content bg-white",
         hidden && "hidden"
       )}
+      style={{
+        paddingBottom: safeArea.bottom + "px",
+      }}
     >
       <div>
         {items.map(({ label, content }, index) => {
