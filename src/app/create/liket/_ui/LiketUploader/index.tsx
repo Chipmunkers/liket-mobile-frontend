@@ -1,7 +1,7 @@
 "use client";
 
 import { Layer, Image, Stage } from "react-konva";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { KonvaEventObject } from "konva/lib/Node";
 import KonvaText from "./_ui/KonvaText";
 import { BACKGROUND_CARD_SIZES, STAGE_SIZE } from "../../_consts/size";
@@ -19,6 +19,7 @@ const LiketUploader = ({
   onSelectShape,
   onChangeShape,
   onUploadImage,
+  selectedIndex,
 }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -33,6 +34,14 @@ const LiketUploader = ({
     center: null,
     distance: 0,
     angle: 0,
+  });
+  const touchStateRefForOneTouch = useRef<{ x: number; y: number }>({
+    x: -1,
+    y: -1,
+  });
+  const [offset, setOffset] = useState({
+    x: 147,
+    y: 234,
   });
   const { x, y, width, height } = BACKGROUND_CARD_SIZES[size];
 
@@ -60,6 +69,10 @@ const LiketUploader = ({
       distance: 0,
       center: null,
       angle: 0,
+    };
+    touchStateRefForOneTouch.current = {
+      x: -1,
+      y: -1,
     };
   };
 
@@ -104,6 +117,48 @@ const LiketUploader = ({
     if (touch1 && !touch2 && !stageRef.current.isDragging() && dragStopped) {
       stageRef.current.startDrag();
       dragStopped = false;
+    }
+
+    if (touch1 && !touch2) {
+      if (stageRef.current.isDragging()) {
+        dragStopped = true;
+        stageRef.current.stopDrag();
+      }
+
+      const p1 = {
+        x: touch1.clientX,
+        y: touch1.clientY,
+      };
+
+      if (touchStateRefForOneTouch.current.x === -1) {
+        touchStateRefForOneTouch.current = {
+          x: p1.x,
+          y: p1.y,
+        };
+        return;
+      }
+
+      // 배경 이미지 가져오기
+      const bgImage = stageRef.current.findOne("#bg-image");
+
+      // 이전 가운데 정보 가져오기
+      if (bgImage) {
+        // 이미지의 새로운 위치는 원래 위치에서 이동한 거리만큼 더한 위치
+        const newX = bgImage.x() + p1.x - touchStateRefForOneTouch.current.x;
+        const newY = bgImage.y() + p1.y - touchStateRefForOneTouch.current.y;
+
+        bgImage.position({
+          x: newX,
+          y: newY,
+        });
+        stageRef.current.batchDraw();
+      }
+
+      touchStateRefForOneTouch.current = {
+        x: p1.x,
+        y: p1.y,
+      };
+      return;
     }
 
     if (touch1 && touch2) {
@@ -152,9 +207,6 @@ const LiketUploader = ({
         const oldWidth = bgImage.width();
         const oldHeight = bgImage.height();
 
-        // BUG: 여기 문제있는거같음
-        // 회전을 하면 oldCenter의 x, y값이 휴대폰 스크린의 정 가운데만 가리키고 변하질않음.
-        // angle을 회전하면 center 계산 공식이 달라져야 할것 같음.
         const oldCenter = {
           x: bgImage.x() + oldWidth / 2,
           y: bgImage.y() + oldHeight / 2,
@@ -168,14 +220,12 @@ const LiketUploader = ({
         console.log("이미지 새로운 위치", bgImage.x(), bgImage.y());
         console.log("가로 세로 길이", oldWidth, oldHeight);
 
-        const newX = oldCenter.x + (newCenter.x - prevCenter.x) - newWidth / 2;
-        const newY = oldCenter.y + (newCenter.y - prevCenter.y) - newHeight / 2;
-
         bgImage.width(newWidth);
         bgImage.height(newHeight);
-        bgImage.position({
-          x: newX,
-          y: newY,
+
+        setOffset({
+          x: oldWidth / 2,
+          y: oldHeight / 2,
         });
 
         // Apply rotation
@@ -224,22 +274,26 @@ const LiketUploader = ({
           onTouchStart={(e) => {
             deselectShape(e);
           }}
+          onTouchMove={(e) => {
+            if (selectedIndex === 0 && !selectedShapeId) pinchZoom(e);
+          }}
+          onTouchEnd={() => {
+            if (selectedIndex === 0 && !selectedShapeId) handleTouchEndStage();
+          }}
         >
           <Layer>
             <Image
               id="bg-image"
               image={uploadedImage}
-              x={x}
-              y={y}
+              x={147}
+              y={234}
               width={width}
               height={height}
+              offsetX={offset.x}
+              offsetY={offset.y}
               objectFit="contain"
               alt="유저가 포토 카드에 올린 배경 이미지"
               cornerRadius={8}
-              onTouchMove={(e) => {
-                pinchZoom(e);
-              }}
-              onTouchEnd={handleTouchEndStage}
             />
             {shapes.map((shape, idx) => {
               const { id, type } = shape;

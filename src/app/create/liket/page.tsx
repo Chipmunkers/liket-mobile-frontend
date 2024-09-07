@@ -145,6 +145,7 @@ export default function Page({
         </div>
         <div className={classNames(!isFront && "hidden")}>
           <LiketUploader
+            selectedIndex={selectedIndex}
             uploadedImage={uploadedImage}
             stageRef={stageRef}
             size={size}

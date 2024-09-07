@@ -11,4 +11,5 @@ export type Props = {
   onSelectShape: (shapeId: string) => void;
   onChangeShape: (shapes: StrictShapeConfig[]) => void;
   onUploadImage: (dataUrl: HTMLImageElement) => void;
+  selectedIndex: number;
 };
