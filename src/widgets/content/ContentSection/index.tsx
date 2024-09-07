@@ -7,11 +7,16 @@ import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
 import { classNames } from "@/shared/helpers/classNames";
 
 const ContentCardSection = (props: Props) => {
-  const { contentList, children, className = "" } = props;
+  const { contentList, children, className = "", paddingBottom = 0 } = props;
 
   if (contentList) {
     return (
-      <section className={classNames("mt-[24px] mb-[24px]", className)}>
+      <section
+        className={classNames("mt-[24px] mb-[24px]", className)}
+        style={{
+          paddingBottom: paddingBottom,
+        }}
+      >
         <h2 className="pl-[24px] mb-[8px] h-[20px] text-h2">{children}</h2>
         <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] touch-action-none pr-[24px] [&>*:first-child]:ml-[24px]">
           <If condition={contentList.length >= 1}>
