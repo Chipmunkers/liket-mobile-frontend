@@ -72,7 +72,8 @@ const PersonalReviewCard = ({
           {/* 미트볼 버튼 */}
           {meatballButton && (
             <ButtonBase
-              className="w-[48px] h-[48px] rounded-full"
+              disableRipple
+              className="icon-button w-[48px] h-[48px] rounded-full"
               onClick={() => {
                 onClickMeatball && onClickMeatball(review);
               }}
