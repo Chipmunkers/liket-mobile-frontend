@@ -9,6 +9,7 @@ import { Props } from "./types";
 import KonvaImage from "./_ui/KonvaImage";
 import Konva from "konva";
 import { StrictShapeConfig } from "../../types";
+import LiketCreateIcon from "@/shared/icon/legacy/create-54.svg";
 
 const LiketUploader = ({
   uploadedImage,
@@ -225,11 +226,6 @@ const LiketUploader = ({
         const newWidth = bgImage.width() * scale;
         const newHeight = bgImage.height() * scale;
 
-        console.log("start");
-        console.log("예전 중앙 좌표", oldCenter.x, oldCenter.y);
-        console.log("이미지 새로운 위치", bgImage.x(), bgImage.y());
-        console.log("가로 세로 길이", oldWidth, oldHeight);
-
         bgImage.width(newWidth);
         bgImage.height(newHeight);
 
@@ -295,9 +291,22 @@ const LiketUploader = ({
           <Layer>
             <Group
               clipFunc={(ctx) => {
+                if (size === "SMALL") {
+                  ctx.beginPath();
+                  ctx.roundRect(16, 16, 262, 387, 8);
+                  ctx.closePath();
+                  return;
+                }
+
+                if (size === "MEDIUM") {
+                  ctx.beginPath();
+                  ctx.roundRect(16, 16, 262, 436, 8);
+                  ctx.closePath();
+                  return;
+                }
+
                 ctx.beginPath();
-                //ctx.rect(0, 0, 300, 200);
-                ctx.roundRect(16, 16, 262, 387, 8);
+                ctx.roundRect(0, 0, 294, 468, 8);
                 ctx.closePath();
               }}
             >
@@ -349,8 +358,9 @@ const LiketUploader = ({
         <>
           <label
             htmlFor="image-uploader"
-            className="center text-center text-body5 text-grey-02 mt-[110px] cursor-pointer w-[100%] h-[100%]"
+            className="center text-center text-body5 text-grey-02 cursor-pointer w-[100%] h-[100%] flex flex-col"
           >
+            <LiketCreateIcon className="mb-[16px]" />
             이미지를 추가해
             <br />
             나만의 티켓을 만들어보세요.
