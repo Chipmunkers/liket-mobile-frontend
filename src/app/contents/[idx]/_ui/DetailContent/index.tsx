@@ -20,6 +20,7 @@ import CategoryTab from "@/shared/ui/CategoryTab";
 import Divider from "@/shared/ui/Divider";
 import ContentImgCarousel from "@/widgets/content/ContentImgCarousel";
 import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
+import { useIsWebView } from "@/shared/hooks/useIsWebview";
 
 const DetailContent = (props: Props) => {
   const searchParams = useSearchParams();
@@ -34,6 +35,7 @@ const DetailContent = (props: Props) => {
   );
 
   const { safeArea } = useGetSafeArea();
+  const isWebview = useIsWebView();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -76,12 +78,12 @@ const DetailContent = (props: Props) => {
             />
           </div>
           <div className="mt-[16px]">
-            <div className="text-body3">
+            <div className="text-body3 mb-[4px]">
               {dayjs(content.startDate).format("YYYY.MM.DD")} ~{" "}
               {dayjs(content.endDate).format("MM.DD")}
             </div>
-            <div className="text-body3">{content.openTime}</div>
-            <div className="text-body3">
+            <div className="text-body3 mb-[4px]">{content.openTime}</div>
+            <div className="text-body3 mb-[4px]">
               {content.location.region1Depth} {content.location.region2Depth}{" "}
               {content.location.address} {content.location.detailAddress}
             </div>
@@ -91,7 +93,10 @@ const DetailContent = (props: Props) => {
               onClick={(e) => {
                 e.preventDefault();
 
-                // TODO: 모바일에서 클릭 시 갇혀버림
+                if (!isWebview) {
+                  window.open(content.websiteLink);
+                  return;
+                }
               }}
             >
               {content.websiteLink}
