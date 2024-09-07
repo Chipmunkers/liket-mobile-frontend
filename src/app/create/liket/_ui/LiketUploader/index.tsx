@@ -1,6 +1,6 @@
 "use client";
 
-import { Layer, Image, Stage } from "react-konva";
+import { Layer, Image, Stage, Group } from "react-konva";
 import { useEffect, useRef, useState } from "react";
 import { KonvaEventObject } from "konva/lib/Node";
 import KonvaText from "./_ui/KonvaText";
@@ -45,6 +45,14 @@ const LiketUploader = ({
   });
   const { x, y, width, height } = BACKGROUND_CARD_SIZES[size];
 
+  // 클리핑 영역 정의
+  const CLIP_AREA = {
+    x: 147,
+    y: 234,
+    width: width,
+    height: height,
+  };
+
   const deselectShape = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
     const isEmptyAreaClicked = e.target === e.target.getStage();
     const isBackgroundImageClicked = e.target.attrs.id === "bg-image";
@@ -80,6 +88,8 @@ const LiketUploader = ({
     if (!stageRef.current) {
       return;
     }
+
+    console.log(23);
 
     function getDistance(
       p1: { x: number; y: number },
@@ -275,26 +285,36 @@ const LiketUploader = ({
             deselectShape(e);
           }}
           onTouchMove={(e) => {
-            if (selectedIndex === 0 && !selectedShapeId) pinchZoom(e);
+            if (selectedIndex === 0 && selectedShapeId === " ") pinchZoom(e);
           }}
           onTouchEnd={() => {
-            if (selectedIndex === 0 && !selectedShapeId) handleTouchEndStage();
+            if (selectedIndex === 0 && selectedShapeId === " ")
+              handleTouchEndStage();
           }}
         >
           <Layer>
-            <Image
-              id="bg-image"
-              image={uploadedImage}
-              x={147}
-              y={234}
-              width={width}
-              height={height}
-              offsetX={offset.x}
-              offsetY={offset.y}
-              objectFit="contain"
-              alt="유저가 포토 카드에 올린 배경 이미지"
-              cornerRadius={8}
-            />
+            <Group
+              clipFunc={(ctx) => {
+                ctx.beginPath();
+                //ctx.rect(0, 0, 300, 200);
+                ctx.roundRect(16, 16, 262, 387, 8);
+                ctx.closePath();
+              }}
+            >
+              <Image
+                id="bg-image"
+                image={uploadedImage}
+                x={CLIP_AREA.x}
+                y={CLIP_AREA.y}
+                width={width}
+                height={height}
+                offsetX={offset.x}
+                offsetY={offset.y}
+                objectFit="contain"
+                alt="유저가 포토 카드에 올린 배경 이미지"
+                cornerRadius={8}
+              />
+            </Group>
             {shapes.map((shape, idx) => {
               const { id, type } = shape;
 
