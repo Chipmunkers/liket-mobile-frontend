@@ -73,7 +73,7 @@ const SharedReviewCard = ({
             {dayjs(review.createdAt).format("YYYY.MM.DD")}
           </span>
         </div>
-        {review.imgList.length && (
+        {review.imgList.length ? (
           <div className="review-img">
             <Carousel
               showArrows={false}
@@ -97,7 +97,7 @@ const SharedReviewCard = ({
               ))}
             </Carousel>
           </div>
-        )}
+        ) : null}
         <div className="text-body3 mt-[8px]">{review.description}</div>
       </div>
     </li>
