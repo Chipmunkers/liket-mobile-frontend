@@ -15,5 +15,12 @@ export type Props = StrictPropsWithChildren<
      * @default 0
      */
     gap?: string;
+
+    /**
+     * safe area를 고려하여 padding-bottom을 줄지 여부
+     *
+     * @default true
+     */
+    paddingBottomForSafeArea?: boolean;
   }>
 >;
