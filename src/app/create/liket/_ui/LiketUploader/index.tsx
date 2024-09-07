@@ -306,13 +306,9 @@ const LiketUploader = ({
                 image={uploadedImage}
                 x={CLIP_AREA.x}
                 y={CLIP_AREA.y}
-                width={width}
-                height={height}
                 offsetX={offset.x}
                 offsetY={offset.y}
-                objectFit="contain"
                 alt="유저가 포토 카드에 올린 배경 이미지"
-                cornerRadius={8}
               />
             </Group>
             {shapes.map((shape, idx) => {
