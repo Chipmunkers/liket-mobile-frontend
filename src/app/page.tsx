@@ -16,6 +16,7 @@ import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
 import MainBannerCarousel from "@/app/_ui/MainBannerCarousel";
 import HotReviewCard from "@/entities/review/HotReviewCard";
 import { shuffle } from "@/shared/helpers/shuffle";
+import HotReviewSection from "@/app/_ui/HotReviewSection";
 
 const Home = async () => {
   const { contentList: soonOpenContents } =
@@ -41,33 +42,23 @@ const Home = async () => {
         {/* 인기 연령대 문화생활 컨텐츠 */}
         <HotAgeSection />
 
-        <Divider height="8px" width="100%" margin="24px 0" />
+        <Divider height="8px" width="100%" />
 
         {/* 핫플 차트 */}
         <HotPlaceSection contentList={hotContentList} />
 
-        <Divider height="8px" width="100%" margin="24px 0" />
+        <Divider height="8px" width="100%" />
 
         {/* 오픈 예정 컨텐츠 */}
         <SoonOpenContentSection contentList={shuffle(soonOpenContents)} />
 
         {/* 종료 예정 컨텐츠 */}
-        <SoonEndContentSection contentList={shuffle(soonEndContents)} />
+        <SoonEndContentSection
+          contentList={shuffle(soonEndContents)}
+          reviewLength={reviews.length}
+        />
 
-        {reviews.length ? (
-          <>
-            <Divider height="8px" width="100%" margin="24px 0" />
-
-            <section className="mb-[24px] text-h2">
-              <h2 className="pl-[24px] mb-[8px]">최근 인기 리뷰</h2>
-              <CustomScrollContainer className="flex flex-row gap-[8px] w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
-                {shuffle(reviews).map((review, index) => (
-                  <HotReviewCard key={index} review={review} />
-                ))}
-              </CustomScrollContainer>
-            </section>
-          </>
-        ) : null}
+        {reviews.length ? <HotReviewSection reviews={reviews} /> : null}
       </main>
       <BottomTab shadow={true} />
     </>
