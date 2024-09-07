@@ -4,13 +4,14 @@ import { Else, If, Then } from "react-if";
 import ContentCardLarge from "@/entities/content/ContentCardLarge";
 import { Props } from "./types";
 import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
+import { classNames } from "@/shared/helpers/classNames";
 
 const ContentCardSection = (props: Props) => {
-  const { contentList, children } = props;
+  const { contentList, children, className = "" } = props;
 
   if (contentList) {
     return (
-      <section className="mt-[24px] mb-[24px]">
+      <section className={classNames("mt-[24px] mb-[24px]", className)}>
         <h2 className="pl-[24px] mb-[8px] h-[20px] text-h2">{children}</h2>
         <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] touch-action-none pr-[24px] [&>*:first-child]:ml-[24px]">
           <If condition={contentList.length >= 1}>
@@ -32,7 +33,7 @@ const ContentCardSection = (props: Props) => {
 
   // * 스켈레톤 UI
   return (
-    <section className="mt-[24px] mb-[24px]">
+    <section className={classNames("mt-[24px] mb-[24px]", className)}>
       <h2 className="pl-[24px] mb-[8px]">
         <div className="bg-grey-01 rounded-[4px] w-[258px] h-[24px]"></div>
       </h2>

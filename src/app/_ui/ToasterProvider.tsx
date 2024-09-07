@@ -11,7 +11,7 @@ const ToastProvider = () => {
       position="bottom-center"
       containerStyle={{
         zIndex: 99999,
-        inset: isWebview ? "16px 16px 80px 16px" : "16px 16px 114px 16px",
+        inset: isWebview ? "16px 16px 114px 16px" : "16px 16px 80px 16px",
       }}
     />
   );
