@@ -140,12 +140,9 @@ const LiketUploader = ({
         return;
       }
 
-      // 배경 이미지 가져오기
       const bgImage = stageRef.current.findOne("#bg-image");
 
-      // 이전 가운데 정보 가져오기
       if (bgImage) {
-        // 이미지의 새로운 위치는 원래 위치에서 이동한 거리만큼 더한 위치
         const newX = bgImage.x() + p1.x - touchStateRefForOneTouch.current.x;
         const newY = bgImage.y() + p1.y - touchStateRefForOneTouch.current.y;
 
@@ -202,20 +199,12 @@ const LiketUploader = ({
       // 배경 이미지 가져오기
       const bgImage = stageRef.current.findOne("#bg-image");
 
-      // 이전 가운데 정보 가져오기
-      const prevCenter = touchStateRef.current.center;
-
-      if (bgImage && prevCenter) {
+      if (bgImage) {
         const oldWidth = bgImage.width();
         const oldHeight = bgImage.height();
 
-        const oldCenter = {
-          x: bgImage.x() + oldWidth / 2,
-          y: bgImage.y() + oldHeight / 2,
-        };
-
-        const newWidth = bgImage.width() * scale;
-        const newHeight = bgImage.height() * scale;
+        const newWidth = oldWidth * scale;
+        const newHeight = oldHeight * scale;
 
         bgImage.width(newWidth);
         bgImage.height(newHeight);
@@ -225,15 +214,10 @@ const LiketUploader = ({
           y: oldHeight / 2,
         });
 
-        // Apply rotation
-
         const angle = bgImage.rotation() + rotation * (180 / Math.PI);
+        const isRotatable = angle <= 2 && angle >= -2;
 
-        bgImage.rotation(
-          angle <= 2 && angle >= -2
-            ? 0
-            : bgImage.rotation() + rotation * (180 / Math.PI)
-        );
+        bgImage.rotation(isRotatable ? 0 : angle);
 
         stageRef.current.batchDraw();
       }
