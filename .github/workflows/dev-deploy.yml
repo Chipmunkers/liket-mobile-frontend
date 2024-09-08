@@ -26,7 +26,7 @@ jobs:
 
           echo "${{ secrets.DEV_ENV }}" > ./.env.local
 
-      - name: Build, tag, and push image to Amazon ECR
+      - name: Build and Push to docker hub
         env:
           IMAGE_TAG: latest
         run: |
@@ -54,7 +54,6 @@ jobs:
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/liket-mobile-dev-nextjs-server:latest
             docker stop ${{ secrets.DEV_SERVER_CONTAINER_NAME }} || true
             docker rm ${{ secrets.DEV_SERVER_CONTAINER_NAME }} || true
-            ls $ENV_FILE_PATH
             
             docker run -d -p 4000:3000 --name ${{ secrets.DEV_SERVER_CONTAINER_NAME }} ${{ secrets.DOCKER_HUB_USERNAME }}/liket-mobile-dev-nextjs-server:latest
           EOF
