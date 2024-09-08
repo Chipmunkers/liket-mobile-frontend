@@ -1,7 +1,7 @@
 import { Stage } from "konva/lib/Stage";
 import { useState, useRef } from "react";
 
-const useCreateLiket = () => {
+const useLiket = () => {
   const [uploadedImage, setUploadedImage] = useState<HTMLImageElement>();
   const [oneLineReview, setOnelineReview] = useState("");
   const [isFront, setIsFront] = useState(true);
@@ -38,4 +38,4 @@ const useCreateLiket = () => {
   };
 };
 
-export default useCreateLiket;
+export default useLiket;

@@ -5,7 +5,7 @@ import CircleCross from "@/icons/circle-cross.svg";
 import { useRouter } from "next/navigation";
 import { Else, If, Then } from "react-if";
 import useWriteTab from "./_hooks/useWriteTab";
-import useCreateLiket from "./_hooks/useCreateLiket";
+import useLiket from "./_hooks/useLiket";
 import {
   Header,
   HeaderLeft,
@@ -64,7 +64,7 @@ export default function Page({
     handleClickBackTextEnteringCheck,
     handleClickBackTextEnteringClose,
     handleClickSwitchFrontBack,
-  } = useCreateLiket();
+  } = useLiket();
 
   const isTextEnteringOpen =
     isTextEnteringOnBackSide || isTextEnteringOnFrontSide;
