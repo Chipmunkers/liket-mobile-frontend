@@ -38,9 +38,12 @@ const useHandleMessageEvent = (setPagerble: SetState<SearchPagerble>) => {
     window.addEventListener("message", webviewMessageEvent);
 
     // android
-    //document.addEventListener("message", (e) => alert(e.data));
+    document.addEventListener("message", webviewMessageEvent as any);
 
-    return () => window.removeEventListener("message", webviewMessageEvent);
+    return () => {
+      window.removeEventListener("message", webviewMessageEvent);
+      document.removeEventListener("message", webviewMessageEvent as any);
+    };
   }, []);
 };
 
