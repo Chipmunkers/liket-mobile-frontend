@@ -16,7 +16,7 @@ const HotPlaceSection = (props: { contentList: HotContentEntity[] }) => {
   const router = useRouter();
 
   return (
-    <section>
+    <section className="my-[24px]">
       <div className="pl-[24px] flex flex-row mb-[8px]">
         <h2 className="text-h2">핫플차트</h2>
         <div className="text-body5 text-grey-04 flex flex-col-reverse ml-[8px]">{`업로드 ${dayjs(

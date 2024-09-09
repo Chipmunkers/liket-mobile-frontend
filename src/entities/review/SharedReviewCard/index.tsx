@@ -55,7 +55,8 @@ const SharedReviewCard = ({
             {/* 미트볼 버튼 */}
             {meatballButton ? (
               <ButtonBase
-                className="w-[48px] h-[48px] rounded-full"
+                className="icon-button w-[48px] h-[48px] rounded-full"
+                disableRipple
                 onClick={() => {
                   onClickMeatball && onClickMeatball(review);
                 }}
@@ -73,7 +74,7 @@ const SharedReviewCard = ({
             {dayjs(review.createdAt).format("YYYY.MM.DD")}
           </span>
         </div>
-        {review.imgList.length && (
+        {review.imgList.length ? (
           <div className="review-img">
             <Carousel
               showArrows={false}
@@ -97,7 +98,7 @@ const SharedReviewCard = ({
               ))}
             </Carousel>
           </div>
-        )}
+        ) : null}
         <div className="text-body3 mt-[8px]">{review.description}</div>
       </div>
     </li>

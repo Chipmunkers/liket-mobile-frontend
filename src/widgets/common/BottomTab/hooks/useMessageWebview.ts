@@ -20,9 +20,12 @@ const useMessageWebview = (isOpen: boolean, setIsOpen: SetState<boolean>) => {
     window.addEventListener("message", messageEvent);
 
     // android
-    //document.addEventListener("message", (e) => alert(e.data));
+    document.addEventListener("message", messageEvent as any);
 
-    return () => window.removeEventListener("message", messageEvent);
+    return () => {
+      window.removeEventListener("message", messageEvent);
+      document.removeEventListener("message", messageEvent as any);
+    };
   });
 
   useEffect(() => {
