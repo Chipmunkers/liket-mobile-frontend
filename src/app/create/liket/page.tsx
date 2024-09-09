@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CircleCross from "@/icons/circle-cross.svg";
-import { useRouter } from "next/navigation";
 import { Else, If, Then } from "react-if";
-import useWriteTab from "./_hooks/useWriteTab";
 import useLiket from "./_hooks/useLiket";
 import {
   Header,
@@ -17,11 +15,13 @@ import FrontBackSwitch from "./_ui/FrontBackSwitch";
 import BackSide from "./_ui/BackSide";
 import TextEnteringModal from "./_ui/TextEnteringModal";
 import WriteTab from "./_ui/WriteTab";
-import { StrictShapeConfig } from "./types";
+import { CardImageInformation, StrictShapeConfig } from "./types";
 import dynamic from "next/dynamic";
-import { useGetReview } from "./_hooks/useGetReview";
-import ContentNotFound from "@/app/requested-contents/[idx]/_ui/ContentNotFound";
-import { AxiosError } from "axios";
+import { getRefValue } from "@/shared/helpers/getRefValue";
+import { useGetLiket } from "./_hooks/useGetLiket";
+import { CardSizeType, ColorTokensType, IconType } from "../liket/types";
+import { getXPos, yPos } from "./_util/position";
+import { generateRandomId } from "@/shared/helpers/random";
 
 // NOTE: React Konva는 서버사이드 렌더링이 불가함.
 // https://github.com/konvajs/react-konva?tab=readme-ov-file#usage-with-nextjs
@@ -36,6 +36,7 @@ export default function Page({
 }) {
   // const { data: reviewData, error } = useGetReview(searchParams.review);
 
+  const { data, isSuccess } = useGetLiket({ idx: 1 });
   const [shapes, setShapes] = useState<StrictShapeConfig[]>([]);
   const [selectedShapeId, setSelectedShapeId] = useState(" ");
   const [cardImageInformation, setCardImageInformation] =
@@ -141,12 +142,10 @@ export default function Page({
   };
 
   const {
-    uploadedImage,
     oneLineReview,
     stageRef,
     isTextEnteringOnBackSide,
     isFront,
-    handleUploadImage,
     handleClickWriteReview,
     handleClickBackTextEnteringCheck,
     handleClickBackTextEnteringClose,
@@ -157,13 +156,31 @@ export default function Page({
     isTextEnteringOnBackSide || isTextEnteringOnFrontSide;
 
   const handleCreateLiket = () => {
-    // const dataURL = getRefValue(stageRef).toDataURL();
-    // const json = JSON.stringify(shapes);
-    // const bg = (uploadedImage as HTMLImageElement).src;
-    // console.log("😂", json);
-    // console.log("😍", bg);
+    const dataURL = getRefValue(stageRef).toDataURL();
+    const payload = {
+      shapes: JSON.stringify(shapes),
+      cardImageSrc: dataURL,
+      backgroundImage: (uploadedImage as HTMLImageElement).src,
+      cardSize: size,
+      cardImageInformation,
+    };
+    localStorage.setItem("liket", JSON.stringify(payload));
     // router.push("/mypage/likets/1");
   };
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      const { shapes, backgroundImage, cardSize, cardImageInformation } = data;
+      const $img = document.createElement("img");
+      $img.src = backgroundImage;
+      $img.alt = "배경 사진";
+
+      // setUploadedImage($img);
+      setShapes(JSON.parse(shapes));
+      setSize(cardSize);
+      setCardImageInformation(cardImageInformation);
+    }
+  }, [data, isSuccess]);
 
   // if ((error as AxiosError)?.response?.status === 404) {
   //   return (
@@ -232,6 +249,10 @@ export default function Page({
         </div>
         <div className={classNames(!isFront && "hidden")}>
           <LiketUploader
+            cardImageInformation={cardImageInformation}
+            onChangeBackgroundImage={(cardImageInformation) =>
+              setCardImageInformation(cardImageInformation)
+            }
             selectedIndex={selectedIndex}
             uploadedImage={uploadedImage}
             stageRef={stageRef}
