@@ -1,4 +1,4 @@
-import { WidgetUiProps } from "@/shared/types/react";
+import { SetState, WidgetUiProps } from "@/shared/types/react";
 
 export type Props = WidgetUiProps<{
   /**
