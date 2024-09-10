@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import PersonalReviewCardSkeleton from "./ui/PersonalReviewCardSkeleton";
 import { classNames } from "@/shared/helpers/classNames";
 import ReviewLikeButton from "@/entities/review/ReviewLikeButton";
+import ReviewImgCarousel from "@/entities/review/ReviewImgCarousel";
 
 const PersonalReviewCard = ({
   review,
@@ -97,29 +98,10 @@ const PersonalReviewCard = ({
           </div>
         </div>
         {/* 리뷰 이미지 */}
-        <div className="review-img">
-          <Carousel
-            showArrows={false}
-            showStatus={false}
-            showThumbs={false}
-            emulateTouch={true}
-            swipeScrollTolerance={10}
-            preventMovementUntilSwipeScrollTolerance={true}
-          >
-            {review.imgList.map((imgPath, i) => (
-              <div
-                key={`review-entity-img-${i}`}
-                className="relative"
-                style={{
-                  width: "100%",
-                  aspectRatio: "1/1",
-                }}
-              >
-                <DefaultImg src={imgPath} alt="리뷰 이미지" />
-              </div>
-            ))}
-          </Carousel>
-        </div>
+        dd
+        {review.imgList.length ? (
+          <ReviewImgCarousel imgList={review.imgList} />
+        ) : null}
         {/* 리뷰 내용 */}
         <div className="mt-[8px]">
           <span
