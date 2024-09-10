@@ -8,6 +8,7 @@ import { Carousel } from "react-responsive-carousel";
 import { Props } from "./types";
 import { useRouter } from "next/navigation";
 import { classNames } from "@/shared/helpers/classNames";
+import { useIsWebView } from "@/shared/hooks/useIsWebview";
 
 const DetailImgCarousel = ({
   className = "",
@@ -15,6 +16,7 @@ const DetailImgCarousel = ({
   imgList,
 }: Props) => {
   const router = useRouter();
+  const isWebview = useIsWebView();
 
   return (
     <div
@@ -27,6 +29,8 @@ const DetailImgCarousel = ({
         disableRipple
         className="icon-button absolute top-[12px] left-[12px] w-[24px] h-[24px] flex justify-center items-center"
         onClick={() => {
+          if (!isWebview) return router.back();
+
           stackRouterBack(router);
         }}
       >
