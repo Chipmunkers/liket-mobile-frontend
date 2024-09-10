@@ -1,36 +1,36 @@
 "use client";
 
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from "react-responsive-carousel";
-import DefaultImg from "@/shared/ui/DefaultImg";
+import { useRouter } from "next/navigation";
 import { Props } from "./types";
+import ImgCarousel from "@/shared/ui/ImgCarousel";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { useIsWebView } from "@/shared/hooks/useIsWebview";
 
 const ContentImgCarousel = ({ list }: Props) => {
+  const router = useRouter();
+  const isWebview = useIsWebView();
+
   return (
-    <Carousel
-      infiniteLoop
-      showArrows={false}
-      showStatus={false}
-      showThumbs={false}
-      emulateTouch={true}
-      swipeScrollTolerance={10}
-      preventMovementUntilSwipeScrollTolerance={true}
-    >
-      {list.map((imgPath, index) => {
-        return (
-          <div
-            key={imgPath + index}
-            className="relative"
-            style={{
-              width: "100%",
-              aspectRatio: "1 / 1",
-            }}
-          >
-            <DefaultImg src={imgPath} />
-          </div>
-        );
-      })}
-    </Carousel>
+    <ImgCarousel
+      imgList={list}
+      onClickImg={(path, i) => {
+        if (!isWebview) {
+          router.push(
+            window.location.pathname + "?" + `content-img-index=${i}`
+          );
+          return;
+        }
+
+        stackRouterPush(router, {
+          path:
+            `/img-detail?select=${i}&` +
+            list.map((path) => `path=${path}`).join("&"),
+          screen: WEBVIEW_SCREEN.IMG_DETAIL,
+        });
+      }}
+      imgAlt="컨텐츠 이미지"
+    />
   );
 };
 

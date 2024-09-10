@@ -32,6 +32,7 @@ export const WEBVIEW_SCREEN = {
   CREATE_CONTENT: "Create Content",
   EDIT_REVIEW: "Edit Review",
   REVIEW_DETAIL: "Review Detail",
+  IMG_DETAIL: "Img Detail", // 이미지 크게 보기
 } as const;
 
 export type WebviewScreen = keyof typeof WEBVIEW_SCREEN;

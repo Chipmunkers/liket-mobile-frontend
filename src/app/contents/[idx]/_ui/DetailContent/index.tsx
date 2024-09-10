@@ -21,6 +21,7 @@ import Divider from "@/shared/ui/Divider";
 import ContentImgCarousel from "@/widgets/content/ContentImgCarousel";
 import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 import { useIsWebView } from "@/shared/hooks/useIsWebview";
+import DetailImgCarousel from "@/shared/ui/DetailImgCarousel";
 
 const DetailContent = (props: Props) => {
   const searchParams = useSearchParams();
@@ -28,6 +29,22 @@ const DetailContent = (props: Props) => {
   const [selectedTab, setSelectedTab] = useState<"content" | "review">(
     searchParams.get("tab") === "review" ? "review" : "content"
   );
+
+  const [selectedImgIndex, setSelectedImgIndex] = useState<number>();
+
+  useEffect(() => {
+    const selectIdxQuerystring = searchParams.get("content-img-index");
+
+    if (!selectIdxQuerystring) {
+      return setSelectedImgIndex(undefined);
+    }
+
+    setSelectedImgIndex(
+      isNaN(Number(selectIdxQuerystring))
+        ? undefined
+        : Number(selectIdxQuerystring)
+    );
+  }, [searchParams]);
 
   const { data: content } = useGetCultureContentByIdx(
     props.content.idx,
@@ -46,6 +63,14 @@ const DetailContent = (props: Props) => {
       className="mb-[24px]"
       style={{ paddingBottom: safeArea.bottom + "px" }}
     >
+      {selectedImgIndex !== undefined ? (
+        <div className="fixed max-w-[600px] w-[100%] h-[100vh] z-10 top-0">
+          <DetailImgCarousel
+            selectIdx={selectedImgIndex}
+            imgList={content.imgList}
+          />
+        </div>
+      ) : null}
       <ContentImgCarousel list={content.imgList} />
       <div className="px-[24px] py-[24px]">
         <div className="flex items-center">
