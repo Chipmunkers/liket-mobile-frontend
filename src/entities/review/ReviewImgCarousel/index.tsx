@@ -13,9 +13,11 @@ const ReviewImgCarousel = ({ className = "", imgList }: Props) => {
       className={classNames(className)}
       imgList={imgList}
       imgAlt="리뷰 이미지"
-      onClickImg={(path) => {
+      onClickImg={(path, i) => {
         stackRouterPush(router, {
-          path: `/img-detail?path=${path}`,
+          path:
+            `/img-detail?select=${i}&` +
+            imgList.map((path) => `path=${path}`).join("&"),
           screen: WEBVIEW_SCREEN.IMG_DETAIL,
         });
       }}
