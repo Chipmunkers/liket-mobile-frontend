@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import CrossIcon from "@/shared/icon/common/cross/DefaultCrossIcon.svg";
 import { stackRouterBack } from "@/shared/helpers/stackRouter";
 import { colors } from "@/shared/style/color";
+import Image from "next/image";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -14,6 +15,16 @@ export default function Page() {
 
   return (
     <div className="w-[100%] h-[100vh] absolute bg-grey-black top-0 z-10 flex items-center">
+      <div className="w-[100%] relative h-[calc(100%-120px)] flex items-center">
+        <Image
+          src={process.env.NEXT_PUBLIC_IMAGE_SERVER + imgPath}
+          alt="이미지"
+          fill
+          sizes="100vw"
+          style={{ objectFit: "contain" }}
+        />
+      </div>
+
       <ButtonBase
         disableRipple
         className="icon-button absolute top-[12px] left-[12px] w-[24px] h-[24px] flex justify-center items-center"
@@ -23,9 +34,6 @@ export default function Page() {
       >
         <CrossIcon fill={colors.grey.white} />
       </ButtonBase>
-      <div className="bg-grey-white w-[100%] h-[calc(100%-120px)] relative">
-        <DefaultImg src={imgPath} className="fill-grey-white" />
-      </div>
     </div>
   );
 }

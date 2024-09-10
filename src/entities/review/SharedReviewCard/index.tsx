@@ -4,11 +4,11 @@ import ReviewLikeButton from "@/entities/review/ReviewLikeButton";
 import { classNames } from "@/shared/helpers/classNames";
 import MeatballIcon from "@/shared/icon/review/MeatballIcon.svg";
 import StarRating from "@/entities/review/StarRating";
-import { Carousel } from "react-responsive-carousel";
 import dayjs from "dayjs";
 import { ButtonBase } from "@mui/material";
 import DefaultProfileIcon from "@/shared/icon/user/DefaultProfileIcon.svg";
 import { colors } from "@/shared/style/color";
+import ReviewImgCarousel from "@/entities/review/ReviewImgCarousel";
 
 const SharedReviewCard = ({
   review,
@@ -76,27 +76,7 @@ const SharedReviewCard = ({
         </div>
         {review.imgList.length ? (
           <div className="review-img">
-            <Carousel
-              showArrows={false}
-              showStatus={false}
-              showThumbs={false}
-              emulateTouch={true}
-              swipeScrollTolerance={10}
-              preventMovementUntilSwipeScrollTolerance={true}
-            >
-              {review.imgList.map((imgPath, index) => (
-                <div
-                  key={imgPath + index}
-                  className="relative"
-                  style={{
-                    width: "100%",
-                    aspectRatio: "1/1",
-                  }}
-                >
-                  <DefaultImg src={imgPath} />
-                </div>
-              ))}
-            </Carousel>
+            <ReviewImgCarousel imgList={review.imgList} />
           </div>
         ) : null}
         <div className="text-body3 mt-[8px]">{review.description}</div>
