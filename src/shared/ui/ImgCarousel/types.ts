@@ -24,7 +24,7 @@ export type Props = SharedUiProps<{
   /**
    * 이미지 클릭 이벤트
    */
-  onClickImg?: (imgPath: string) => void;
+  onClickImg?: (imgPath: string, i: number) => void;
 
   /**
    * 이미지 가로 세로 비율
