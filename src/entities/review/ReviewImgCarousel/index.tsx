@@ -43,7 +43,9 @@ const ReviewImgCarousel = ({ className = "", imgList }: Props) => {
         imgAlt="리뷰 이미지"
         onClickImg={(path, i) => {
           if (!isWebview) {
-            router.push(window.location.pathname + `?review-img-index=${i}`, {
+            const join = searchParams.size !== 0 ? "&" : "?";
+
+            router.push(window.location.href + join + `review-img-index=${i}`, {
               scroll: false,
             });
             return;
