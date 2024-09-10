@@ -29,7 +29,7 @@ const ImgCarousel = ({
           className="relative w-[100%]"
           style={{ aspectRatio }}
           onClick={() => {
-            onClickImg && onClickImg(path);
+            onClickImg && onClickImg(path, i);
           }}
         >
           <DefaultImg src={path} alt={imgAlt} />

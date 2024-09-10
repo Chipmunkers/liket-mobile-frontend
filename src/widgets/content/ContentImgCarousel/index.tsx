@@ -12,9 +12,11 @@ const ContentImgCarousel = ({ list }: Props) => {
   return (
     <ImgCarousel
       imgList={list}
-      onClickImg={(path) => {
+      onClickImg={(path, i) => {
         stackRouterPush(router, {
-          path: `/img-detail?path=${path}`,
+          path:
+            `/img-detail?select=${i}&` +
+            list.map((path) => `path=${path}`).join("&"),
           screen: WEBVIEW_SCREEN.IMG_DETAIL,
         });
       }}
