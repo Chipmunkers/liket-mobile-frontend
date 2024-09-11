@@ -39,6 +39,8 @@ export interface CardImageInformation {
   width: number;
   height: number;
   angle: number;
+  offsetX: number;
+  offsetY: number;
 }
 
 export interface Payload {
