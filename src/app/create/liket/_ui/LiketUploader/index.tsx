@@ -24,13 +24,11 @@ const LiketUploader = ({
   onChangeBackgroundImage,
   selectedIndex,
 }: Props) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const wrapperRef = useRef<HTMLDivElement>(null);
   const touchStateRef = useRef<{
-    center: null | {
+    center: {
       x: number;
       y: number;
-    };
+    } | null;
     distance: number;
     angle: number;
   }>({
@@ -38,14 +36,7 @@ const LiketUploader = ({
     distance: 0,
     angle: 0,
   });
-  const touchStateRefForOneTouch = useRef<{ x: number; y: number }>({
-    x: -1,
-    y: -1,
-  });
-  const [offset, setOffset] = useState({
-    x: 147,
-    y: 234,
-  });
+  const touchStateRefForOneTouch = useRef<{ x: number; y: number }>();
 
   const deselectShape = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
     const isEmptyAreaClicked = e.target === e.target.getStage();
@@ -132,7 +123,7 @@ const LiketUploader = ({
         y: touch1.clientY,
       };
 
-      if (touchStateRefForOneTouch.current.x === -1) {
+      if (!touchStateRefForOneTouch.current) {
         touchStateRefForOneTouch.current = {
           x: p1.x,
           y: p1.y,
@@ -216,11 +207,6 @@ const LiketUploader = ({
         bgImage.width(newWidth);
         bgImage.height(newHeight);
 
-        setOffset({
-          x: oldWidth / 2,
-          y: oldHeight / 2,
-        });
-
         const angle = bgImage.rotation() + rotation * (180 / Math.PI);
         const isRotatable = angle <= 2 && angle >= -2;
 
@@ -266,10 +252,7 @@ const LiketUploader = ({
   }, []);
 
   return (
-    <div
-      ref={wrapperRef}
-      className="liket-card center bg-[url(/icons/create-54.svg)] bg-[center_193px] bg-no-repeat overflow-hidden"
-    >
+    <div className="liket-card center bg-[url(/icons/create-54.svg)] bg-[center_193px] bg-no-repeat overflow-hidden">
       {uploadedImage ? (
         <Stage
           ref={stageRef}
@@ -280,11 +263,14 @@ const LiketUploader = ({
             deselectShape(e);
           }}
           onTouchMove={(e) => {
-            if (selectedIndex === 0 && selectedShapeId === " ") pinchZoom(e);
+            if (selectedIndex === 0 && selectedShapeId === " ") {
+              pinchZoom(e);
+            }
           }}
           onTouchEnd={() => {
-            if (selectedIndex === 0 && selectedShapeId === " ")
+            if (selectedIndex === 0 && selectedShapeId === " ") {
               handleTouchEndStage();
+            }
           }}
         >
           <Layer>
@@ -369,7 +355,6 @@ const LiketUploader = ({
           </label>
           <input
             id="image-uploader"
-            ref={inputRef}
             accept="image/*"
             type="file"
             hidden
