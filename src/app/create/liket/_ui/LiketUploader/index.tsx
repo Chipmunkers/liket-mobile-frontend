@@ -244,22 +244,21 @@ const LiketUploader = ({
           <Layer>
             <Group
               clipFunc={(ctx) => {
-                if (size === "SMALL") {
-                  ctx.beginPath();
-                  ctx.roundRect(16, 16, 262, 387, 8);
-                  ctx.closePath();
-                  return;
-                }
-
-                if (size === "MEDIUM") {
-                  ctx.beginPath();
-                  ctx.roundRect(16, 16, 262, 436, 8);
-                  ctx.closePath();
-                  return;
-                }
-
                 ctx.beginPath();
-                ctx.roundRect(0, 0, 294, 468, 8);
+
+                switch (size) {
+                  case "SMALL":
+                    ctx.roundRect(16, 16, 262, 387, 8);
+                    break;
+
+                  case "MEDIUM":
+                    ctx.roundRect(16, 16, 262, 436, 8);
+                    break;
+
+                  case "LARGE":
+                    ctx.roundRect(0, 0, 294, 468, 8);
+                }
+
                 ctx.closePath();
               }}
             >
@@ -361,29 +360,6 @@ const LiketUploader = ({
                   onUploadImage(image);
                 };
               };
-
-              // reader.onload = () => {
-              //   const image = new window.Image();
-              //   image.src = reader.result as string;
-              //   image.onload = () => {
-              //     const h = (STAGE_SIZE.WIDTH * image.height) / image.width;
-              //     onChangeBackgroundImage({
-              //       width: STAGE_SIZE.WIDTH,
-              //       height: (STAGE_SIZE.WIDTH * image.height) / image.width,
-              //       angle: 0,
-              //       x: STAGE_SIZE.WIDTH / 2,
-              //       y:
-              //         (STAGE_SIZE.WIDTH * image.height) / image.width / 2 +
-              //         (STAGE_SIZE.HEIGHT -
-              //           (STAGE_SIZE.WIDTH * image.height) / image.width) /
-              //           2,
-              //       offsetX: STAGE_SIZE.WIDTH / 2,
-              //       offsetY: h / 2,
-              //     });
-
-              //     onUploadImage(image);
-              //   };
-              // };
 
               reader.readAsDataURL(file);
             }}
