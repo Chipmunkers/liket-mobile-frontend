@@ -2,7 +2,6 @@ import { Stage } from "konva/lib/Stage";
 import { useState, useRef } from "react";
 
 const useLiket = () => {
-  const [uploadedImage, setUploadedImage] = useState<HTMLImageElement>();
   const [oneLineReview, setOnelineReview] = useState("");
   const [isFront, setIsFront] = useState(true);
   const stageRef = useRef<Stage>(null);
@@ -21,16 +20,11 @@ const useLiket = () => {
 
   const handleClickSwitchFrontBack = () => setIsFront(!isFront);
 
-  const handleUploadImage = (imageElement: HTMLImageElement) =>
-    setUploadedImage(imageElement);
-
   return {
-    uploadedImage,
     oneLineReview,
     stageRef,
     isTextEnteringOnBackSide,
     isFront,
-    handleUploadImage,
     handleClickWriteReview,
     handleClickBackTextEnteringCheck,
     handleClickBackTextEnteringClose,

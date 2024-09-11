@@ -157,31 +157,62 @@ export default function Page({
 
   const handleCreateLiket = () => {
     const dataURL = getRefValue(stageRef).toDataURL();
+    const shapesToSave = shapes.map((shape) => {
+      if (shape.type === "image") {
+        return {
+          ...shape,
+          image: shape.image.src,
+        };
+      }
+
+      return shape;
+    });
+
     const payload = {
-      shapes: JSON.stringify(shapes),
+      shapes: JSON.stringify(shapesToSave),
       cardImageSrc: dataURL,
       backgroundImage: (uploadedImage as HTMLImageElement).src,
       cardSize: size,
       cardImageInformation,
     };
+
     localStorage.setItem("liket", JSON.stringify(payload));
     // router.push("/mypage/likets/1");
   };
 
   useEffect(() => {
     if (isSuccess && data) {
-      const { shapes, backgroundImage, cardSize, cardImageInformation } = data;
-      const $img = document.createElement("img");
-      $img.src = backgroundImage;
-      $img.alt = "배경 사진";
+      const { shapes, backgroundImage, cardSize, cardImageInformation } =
+        data as {
+          shapes: string;
+          backgroundImage: any;
+          cardSize: any;
+          cardImageInformation: any;
+        };
+      const $image = new window.Image();
+      $image.src = backgroundImage;
+      $image.alt = "배경 사진";
 
-      // setUploadedImage($img);
-      setShapes(JSON.parse(shapes));
-      setSize(cardSize);
-      setCardImageInformation(cardImageInformation);
+      const shapesWithImage = (JSON.parse(shapes) as any[]).map((shape) => {
+        if (shape.type === "image") {
+          const image = new Image();
+          image.src = shape.image;
+          image.alt = "스티커";
+
+          return { ...shape, image };
+        }
+
+        return shape;
+      });
+
+      $image.onload = () => {
+        setUploadedImage($image);
+        setShapes(shapesWithImage);
+        setSize(cardSize);
+        setCardImageInformation(cardImageInformation);
+      };
     }
   }, [data, isSuccess]);
-
   // if ((error as AxiosError)?.response?.status === 404) {
   //   return (
   //     <>

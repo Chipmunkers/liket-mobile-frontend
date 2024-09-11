@@ -4,7 +4,7 @@ import { Layer, Image, Stage, Group } from "react-konva";
 import { useEffect, useRef, useState } from "react";
 import { KonvaEventObject } from "konva/lib/Node";
 import KonvaText from "./_ui/KonvaText";
-import { BACKGROUND_CARD_SIZES, STAGE_SIZE } from "../../_consts/size";
+import { STAGE_SIZE } from "../../_consts/size";
 import { Props } from "./types";
 import KonvaImage from "./_ui/KonvaImage";
 import Konva from "konva";
@@ -12,6 +12,7 @@ import { StrictShapeConfig } from "../../types";
 import LiketCreateIcon from "@/shared/icon/legacy/create-54.svg";
 
 const LiketUploader = ({
+  cardImageInformation,
   uploadedImage,
   shapes,
   size = "LARGE",
@@ -20,11 +21,11 @@ const LiketUploader = ({
   onSelectShape,
   onChangeShape,
   onUploadImage,
+  onChangeBackgroundImage,
   selectedIndex,
 }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
   const touchStateRef = useRef<{
     center: null | {
       x: number;
@@ -45,7 +46,6 @@ const LiketUploader = ({
     x: 147,
     y: 234,
   });
-  const { x, y, width, height } = BACKGROUND_CARD_SIZES[size];
 
   const deselectShape = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
     const isEmptyAreaClicked = e.target === e.target.getStage();
@@ -150,6 +150,13 @@ const LiketUploader = ({
           x: newX,
           y: newY,
         });
+
+        cardImageInformation &&
+          onChangeBackgroundImage({
+            ...(cardImageInformation || {}),
+            x: newX,
+            y: newY,
+          });
         stageRef.current.batchDraw();
       }
 
@@ -218,6 +225,16 @@ const LiketUploader = ({
         const isRotatable = angle <= 2 && angle >= -2;
 
         bgImage.rotation(isRotatable ? 0 : angle);
+
+        cardImageInformation &&
+          onChangeBackgroundImage({
+            ...(cardImageInformation || {}),
+            offsetX: oldWidth / 2,
+            offsetY: oldHeight / 2,
+            width: newWidth,
+            height: newHeight,
+            angle: isRotatable ? 0 : angle,
+          });
 
         stageRef.current.batchDraw();
       }
@@ -295,17 +312,13 @@ const LiketUploader = ({
               <Image
                 id="bg-image"
                 image={uploadedImage}
-                x={STAGE_SIZE.WIDTH / 2}
-                y={
-                  (STAGE_SIZE.WIDTH * imageSize.height) / imageSize.width / 2 +
-                  (STAGE_SIZE.HEIGHT -
-                    (STAGE_SIZE.WIDTH * imageSize.height) / imageSize.width) /
-                    2
-                }
-                width={STAGE_SIZE.WIDTH}
-                height={(STAGE_SIZE.WIDTH * imageSize.height) / imageSize.width}
-                offsetX={offset.x}
-                offsetY={offset.y}
+                x={cardImageInformation!.x}
+                y={cardImageInformation!.y}
+                width={cardImageInformation!.width}
+                height={cardImageInformation!.height}
+                rotation={cardImageInformation!.angle}
+                offsetX={cardImageInformation!.offsetX}
+                offsetY={cardImageInformation!.offsetY}
                 alt="유저가 포토 카드에 올린 배경 이미지"
               />
             </Group>
@@ -375,11 +388,20 @@ const LiketUploader = ({
                 image.src = reader.result as string;
                 image.onload = () => {
                   const h = (STAGE_SIZE.WIDTH * image.height) / image.width;
-                  setOffset({
+                  onChangeBackgroundImage({
+                    width: STAGE_SIZE.WIDTH,
+                    height: (STAGE_SIZE.WIDTH * image.height) / image.width,
+                    angle: 0,
                     x: STAGE_SIZE.WIDTH / 2,
-                    y: h / 2,
+                    y:
+                      (STAGE_SIZE.WIDTH * image.height) / image.width / 2 +
+                      (STAGE_SIZE.HEIGHT -
+                        (STAGE_SIZE.WIDTH * image.height) / image.width) /
+                        2,
+                    offsetX: STAGE_SIZE.WIDTH / 2,
+                    offsetY: h / 2,
                   });
-                  setImageSize({ width: image.width, height: image.height });
+
                   onUploadImage(image);
                 };
               };
