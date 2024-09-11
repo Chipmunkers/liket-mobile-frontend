@@ -16,8 +16,8 @@ export type StrictShapeConfig = RequireProperty<ShapeConfig, "id">;
 
 export interface TextShape {
   type: "text";
-  id: number; // front에서 임의로 생성하고있음.
-  fill: string; // 컬러값
+  id: string;
+  fill: string;
   text: string;
   x: string;
   y: string;
@@ -25,7 +25,7 @@ export interface TextShape {
 
 export interface ImageShape {
   type: "image";
-  id: number;
+  id: string;
   imageSrc: string;
   width: number;
   height: number;
@@ -43,9 +43,9 @@ export interface CardImageInformation {
   offsetY: number;
 }
 
-export interface Payload {
+export interface CreateLiketPayload {
   shapes: (TextShape | ImageShape)[];
-  cardImageSrc: string; // Blob Data URL
+  cardImageSrc: string;
   cardSize: "SMALL" | "MEDIUM" | "LARGE";
   cardImageInformation: CardImageInformation;
 }
