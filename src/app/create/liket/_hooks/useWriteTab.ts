@@ -1,23 +1,29 @@
-import { StrictShapeConfig } from "../types";
-import { CardSizeType, ColorTokensType, IconType } from "../../liket/types";
-import { getXPos, yPos } from "../_util/position";
 import { generateRandomId } from "@/shared/helpers/random";
-import { SetState } from "@/shared/types/react";
-import { useState } from "react";
+import {
+  CardSizeType,
+  IconType,
+  ImageShape,
+  StrictShapeConfig,
+  TextShape,
+} from "../types";
+import { Dispatch } from "react";
+
+interface Props {
+  shapes: StrictShapeConfig[];
+  selectedShapeId: string;
+  setShapes: Dispatch<StrictShapeConfig[]>;
+  setSize: Dispatch<CardSizeType>;
+  setSelectedIndex: Dispatch<number>;
+}
 
 const useWriteTab = ({
   shapes,
-  setShapes,
   selectedShapeId,
-}: {
-  shapes: StrictShapeConfig[];
-  setShapes: SetState<StrictShapeConfig[]>;
-  selectedShapeId: string;
-}) => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [isTextEnteringOnFrontSide, setIsTextEnteringOnFrontSide] =
-    useState(false);
-  const [size, setSize] = useState<CardSizeType>("LARGE");
+  setShapes,
+  setSize,
+  setSelectedIndex,
+}: Props) => {
+  const handleChangeTab = (index: number) => setSelectedIndex(index);
 
   const handleClickRemoveItem = () => {
     const targetShape = shapes.find(({ id }) => id === selectedShapeId);
@@ -28,34 +34,6 @@ const useWriteTab = ({
 
     const newShapes = shapes.filter(({ id }) => id !== selectedShapeId);
     setShapes(newShapes);
-  };
-
-  const handleChangeTab = (index: number) => setSelectedIndex(index);
-
-  const handleClickFrontTextEnteringClose = () => {
-    setSelectedIndex(0);
-    setIsTextEnteringOnFrontSide(false);
-  };
-
-  const handleClickFrontTextEnteringCheck = (text: string) => {
-    setShapes([
-      ...shapes,
-      {
-        type: "text",
-        id: generateRandomId(10),
-        fill: "black",
-        text,
-        x: getXPos(text),
-        y: yPos,
-      },
-    ]);
-
-    setIsTextEnteringOnFrontSide(false);
-  };
-
-  const handleInsertTextTab = () => {
-    const isTextExist = shapes.some(({ type }) => type === "text");
-    !isTextExist && setIsTextEnteringOnFrontSide(true);
   };
 
   const handleChangeSize = (size: CardSizeType) => setSize(size);
@@ -94,29 +72,9 @@ const useWriteTab = ({
       console.error("스티커를 가져오는 도중 에러가 발생했습니다", error);
     }
   };
-
-  const handleChangeInsertedTextColor = (fill: ColorTokensType) => {
-    const textShapeIdx = shapes.findIndex(({ type }) => type === "text");
-
-    const newShapes = [...shapes];
-    newShapes[textShapeIdx] = {
-      ...newShapes[textShapeIdx],
-      fill,
-    };
-
-    setShapes(newShapes);
-  };
-
   return {
-    size,
-    selectedIndex,
-    isTextEnteringOnFrontSide,
-    handleClickFrontTextEnteringCheck,
-    handleClickRemoveItem,
     handleChangeTab,
-    handleClickFrontTextEnteringClose,
-    handleChangeInsertedTextColor,
-    handleInsertTextTab,
+    handleClickRemoveItem,
     handleChangeSize,
     handleInsertSticker,
   };

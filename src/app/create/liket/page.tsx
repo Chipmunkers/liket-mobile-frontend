@@ -19,9 +19,10 @@ import { CardImageInformation, StrictShapeConfig } from "./types";
 import dynamic from "next/dynamic";
 import { getRefValue } from "@/shared/helpers/getRefValue";
 import { useGetLiket } from "./_hooks/useGetLiket";
-import { CardSizeType, ColorTokensType, IconType } from "../liket/types";
+import { CardSizeType, ColorTokensType } from "../liket/types";
 import { getXPos, yPos } from "./_util/position";
 import { generateRandomId } from "@/shared/helpers/random";
+import useWriteTab from "./_hooks/useWriteTab";
 
 // NOTE: React Konva는 서버사이드 렌더링이 불가함.
 // https://github.com/konvajs/react-konva?tab=readme-ov-file#usage-with-nextjs
@@ -34,37 +35,34 @@ export default function Page({
 }: {
   searchParams: { review: number };
 }) {
-  // const { data: reviewData, error } = useGetReview(searchParams.review);
-
-  const { data, isSuccess } = useGetLiket({ idx: 1 });
   const [shapes, setShapes] = useState<StrictShapeConfig[]>([]);
+  const [size, setSize] = useState<CardSizeType>("LARGE");
   const [selectedShapeId, setSelectedShapeId] = useState(" ");
   const [cardImageInformation, setCardImageInformation] =
     useState<CardImageInformation>();
-
-  const [uploadedImage, setUploadedImage] = useState<HTMLImageElement>();
-  const handleUploadImage = (imageElement: HTMLImageElement) =>
-    setUploadedImage(imageElement);
-
-  // const { mutate: createLiket } = useCreateLiket();
-
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [uploadedImage, setUploadedImage] = useState<HTMLImageElement>();
   const [isTextEnteringOnFrontSide, setIsTextEnteringOnFrontSide] =
     useState(false);
-  const [size, setSize] = useState<CardSizeType>("LARGE");
 
-  const handleClickRemoveItem = () => {
-    const targetShape = shapes.find(({ id }) => id === selectedShapeId);
+  // const { data: reviewData, error } = useGetReview(searchParams.review);
+  const { data: restoredLiket, isSuccess } = useGetLiket({ idx: 1 });
 
-    if (targetShape?.type === "text") {
-      setSelectedIndex(0);
-    }
+  const {
+    handleChangeTab,
+    handleClickRemoveItem,
+    handleChangeSize,
+    handleInsertSticker,
+  } = useWriteTab({
+    shapes,
+    selectedShapeId,
+    setShapes,
+    setSize,
+    setSelectedIndex,
+  });
 
-    const newShapes = shapes.filter(({ id }) => id !== selectedShapeId);
-    setShapes(newShapes);
-  };
-
-  const handleChangeTab = (index: number) => setSelectedIndex(index);
+  const handleUploadImage = (imageElement: HTMLImageElement) =>
+    setUploadedImage(imageElement);
 
   const handleClickFrontTextEnteringClose = () => {
     setSelectedIndex(0);
@@ -87,49 +85,12 @@ export default function Page({
     setIsTextEnteringOnFrontSide(false);
   };
 
-  const handleInsertTextTab = () => {
+  const handleInsertTextOnLiket = () => {
     const isTextExist = shapes.some(({ type }) => type === "text");
     !isTextExist && setIsTextEnteringOnFrontSide(true);
   };
 
-  const handleChangeSize = (size: CardSizeType) => setSize(size);
-
-  const handleInsertSticker = async (sticker: IconType) => {
-    const num_of_images = shapes.map(({ type }) => type === "image").length;
-
-    if (num_of_images > 10) {
-      return false;
-    }
-
-    try {
-      const response = await fetch(`/stickers/${sticker}.svg`);
-      const blob = await response.blob();
-      const reader = new FileReader();
-      reader.onload = () => {
-        const image = new window.Image();
-        image.src = reader.result as string;
-        image.onload = () => {
-          setShapes([
-            ...shapes,
-            {
-              type: "image",
-              id: generateRandomId(10),
-              image,
-              width: 80,
-              height: 80,
-              x: 0,
-              y: 0,
-            },
-          ]);
-        };
-      };
-      reader.readAsDataURL(blob);
-    } catch (error) {
-      console.error("스티커를 가져오는 도중 에러가 발생했습니다", error);
-    }
-  };
-
-  const handleChangeInsertedTextColor = (fill: ColorTokensType) => {
+  const handleChangeTextColor = (fill: ColorTokensType) => {
     const textShapeIdx = shapes.findIndex(({ type }) => type === "text");
 
     const newShapes = [...shapes];
@@ -143,10 +104,10 @@ export default function Page({
 
   const {
     oneLineReview,
+    handleClickWriteReview,
     stageRef,
     isTextEnteringOnBackSide,
     isFront,
-    handleClickWriteReview,
     handleClickBackTextEnteringCheck,
     handleClickBackTextEnteringClose,
     handleClickSwitchFrontBack,
@@ -181,9 +142,9 @@ export default function Page({
   };
 
   useEffect(() => {
-    if (isSuccess && data) {
+    if (isSuccess && restoredLiket) {
       const { shapes, backgroundImage, cardSize, cardImageInformation } =
-        data as {
+        restoredLiket as {
           shapes: string;
           backgroundImage: any;
           cardSize: any;
@@ -212,7 +173,8 @@ export default function Page({
         setCardImageInformation(cardImageInformation);
       };
     }
-  }, [data, isSuccess]);
+  }, [isSuccess, restoredLiket]);
+
   // if ((error as AxiosError)?.response?.status === 404) {
   //   return (
   //     <>
@@ -310,10 +272,10 @@ export default function Page({
               onChangeTab={handleChangeTab}
               hidden={selectedShapeId.length > 1}
               enabled={!!uploadedImage}
-              onClickText={handleInsertTextTab}
+              onClickText={handleInsertTextOnLiket}
               onClickChangeSize={handleChangeSize}
               onClickSticker={handleInsertSticker}
-              onClickColor={handleChangeInsertedTextColor}
+              onClickColor={handleChangeTextColor}
             />
           </Else>
         </If>
