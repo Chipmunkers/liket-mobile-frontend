@@ -23,6 +23,9 @@ import { CardSizeType, ColorTokensType } from "../liket/types";
 import { getXPos, yPos } from "./_util/position";
 import { generateRandomId } from "@/shared/helpers/random";
 import useWriteTab from "./_hooks/useWriteTab";
+import { useGetReview } from "./_hooks/useGetReview";
+import ContentNotFound from "@/app/contents/[idx]/_ui/ContentNotFound";
+import { AxiosError } from "axios";
 
 // NOTE: React Konva는 서버사이드 렌더링이 불가함.
 // https://github.com/konvajs/react-konva?tab=readme-ov-file#usage-with-nextjs
@@ -45,7 +48,7 @@ export default function Page({
   const [isTextEnteringOnFrontSide, setIsTextEnteringOnFrontSide] =
     useState(false);
 
-  // const { data: reviewData, error } = useGetReview(searchParams.review);
+  const { data: reviewData, error } = useGetReview(searchParams.review);
   const { data: restoredLiket, isSuccess } = useGetLiket({ idx: 1 });
 
   const {
@@ -175,29 +178,29 @@ export default function Page({
     }
   }, [isSuccess, restoredLiket]);
 
-  // if ((error as AxiosError)?.response?.status === 404) {
-  //   return (
-  //     <>
-  //       <Header>
-  //         <HeaderLeft
-  //           option={{
-  //             back: true,
-  //           }}
-  //         />
-  //         <HeaderRight
-  //           option={{
-  //             search: {},
-  //           }}
-  //         />
-  //       </Header>
-  //       <ContentNotFound />
-  //     </>
-  //   );
-  // }
+  if ((error as AxiosError)?.response?.status === 404) {
+    return (
+      <>
+        <Header>
+          <HeaderLeft
+            option={{
+              back: true,
+            }}
+          />
+          <HeaderRight
+            option={{
+              search: {},
+            }}
+          />
+        </Header>
+        <ContentNotFound />
+      </>
+    );
+  }
 
-  // if (!reviewData) {
-  //   return <></>;
-  // }
+  if (!reviewData) {
+    return <></>;
+  }
 
   return (
     <>
@@ -234,11 +237,11 @@ export default function Page({
             isFront && "hidden"
           )}
         >
-          {/* <BackSide
+          <BackSide
             reviewData={reviewData}
             oneLineReview={oneLineReview}
             onClickReview={handleClickWriteReview}
-          /> */}
+          />
         </div>
         <div className={classNames(!isFront && "hidden")}>
           <LiketUploader
