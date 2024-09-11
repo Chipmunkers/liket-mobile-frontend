@@ -1,7 +1,7 @@
 "use client";
 
 import { Layer, Image, Stage, Group } from "react-konva";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { KonvaEventObject } from "konva/lib/Node";
 import KonvaText from "./_ui/KonvaText";
 import { STAGE_SIZE } from "../../_consts/size";
@@ -25,14 +25,13 @@ const LiketUploader = ({
   selectedIndex,
 }: Props) => {
   const touchStateRef = useRef<{
-    center: {
+    center?: {
       x: number;
       y: number;
-    } | null;
+    };
     distance: number;
     angle: number;
   }>({
-    center: null,
     distance: 0,
     angle: 0,
   });
@@ -60,7 +59,6 @@ const LiketUploader = ({
   const handleTouchEndStage = () => {
     touchStateRef.current = {
       distance: 0,
-      center: null,
       angle: 0,
     };
     touchStateRefForOneTouch.current = {
@@ -74,31 +72,7 @@ const LiketUploader = ({
       return;
     }
 
-    function getDistance(
-      p1: { x: number; y: number },
-      p2: { x: number; y: number }
-    ) {
-      return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
-    }
-
-    function getCenter(
-      p1: { x: number; y: number },
-      p2: { x: number; y: number }
-    ) {
-      return {
-        x: (p1.x + p2.x) / 2,
-        y: (p1.y + p2.y) / 2,
-      };
-    }
-
-    function getAngle(
-      p1: { x: number; y: number },
-      p2: { x: number; y: number }
-    ) {
-      return Math.atan2(p2.y - p1.y, p2.x - p1.x);
-    }
-
-    let { center, distance, angle } = touchStateRef.current;
+    let { center, distance } = touchStateRef.current;
 
     let dragStopped = false;
 
@@ -174,7 +148,6 @@ const LiketUploader = ({
       };
 
       if (!center) {
-        // 최초 터치시 가운데 점과 각도를 저장
         touchStateRef.current.center = getCenter(p1, p2);
         touchStateRef.current.angle = getAngle(p1, p2);
         return;
@@ -188,13 +161,8 @@ const LiketUploader = ({
         touchStateRef.current.distance = dist;
       }
 
-      // 거리는 scale 변화를 구하는 용도
       const scale = dist / touchStateRef.current.distance;
-
-      // 회전 정도 구하기
       const rotation = newAngle - touchStateRef.current.angle;
-
-      // 배경 이미지 가져오기
       const bgImage = stageRef.current.findOne("#bg-image");
 
       if (bgImage) {
@@ -372,24 +340,50 @@ const LiketUploader = ({
                 const image = new window.Image();
                 image.src = reader.result as string;
                 image.onload = () => {
-                  const h = (STAGE_SIZE.WIDTH * image.height) / image.width;
+                  const { width: IMAGE_WIDTH, height: IMAGE_HEIGHT } = image;
+                  const { WIDTH: STAGE_WIDTH, HEIGHT: STAGE_HEIGHT } =
+                    STAGE_SIZE;
+                  const scale = STAGE_WIDTH / IMAGE_WIDTH;
+                  const NEW_IMAGE_HEIGHT = scale * IMAGE_HEIGHT;
+
                   onChangeBackgroundImage({
-                    width: STAGE_SIZE.WIDTH,
-                    height: (STAGE_SIZE.WIDTH * image.height) / image.width,
+                    width: STAGE_WIDTH,
+                    height: NEW_IMAGE_HEIGHT,
                     angle: 0,
-                    x: STAGE_SIZE.WIDTH / 2,
+                    x: STAGE_WIDTH / 2,
                     y:
-                      (STAGE_SIZE.WIDTH * image.height) / image.width / 2 +
-                      (STAGE_SIZE.HEIGHT -
-                        (STAGE_SIZE.WIDTH * image.height) / image.width) /
-                        2,
-                    offsetX: STAGE_SIZE.WIDTH / 2,
-                    offsetY: h / 2,
+                      NEW_IMAGE_HEIGHT / 2 +
+                      (STAGE_HEIGHT - NEW_IMAGE_HEIGHT) / 2,
+                    offsetX: STAGE_WIDTH / 2,
+                    offsetY: NEW_IMAGE_HEIGHT / 2,
                   });
 
                   onUploadImage(image);
                 };
               };
+
+              // reader.onload = () => {
+              //   const image = new window.Image();
+              //   image.src = reader.result as string;
+              //   image.onload = () => {
+              //     const h = (STAGE_SIZE.WIDTH * image.height) / image.width;
+              //     onChangeBackgroundImage({
+              //       width: STAGE_SIZE.WIDTH,
+              //       height: (STAGE_SIZE.WIDTH * image.height) / image.width,
+              //       angle: 0,
+              //       x: STAGE_SIZE.WIDTH / 2,
+              //       y:
+              //         (STAGE_SIZE.WIDTH * image.height) / image.width / 2 +
+              //         (STAGE_SIZE.HEIGHT -
+              //           (STAGE_SIZE.WIDTH * image.height) / image.width) /
+              //           2,
+              //       offsetX: STAGE_SIZE.WIDTH / 2,
+              //       offsetY: h / 2,
+              //     });
+
+              //     onUploadImage(image);
+              //   };
+              // };
 
               reader.readAsDataURL(file);
             }}
@@ -401,3 +395,19 @@ const LiketUploader = ({
 };
 
 export default LiketUploader;
+
+const getDistance = (
+  p1: { x: number; y: number },
+  p2: { x: number; y: number }
+) => Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+
+const getCenter = (
+  p1: { x: number; y: number },
+  p2: { x: number; y: number }
+) => ({
+  x: (p1.x + p2.x) / 2,
+  y: (p1.y + p2.y) / 2,
+});
+
+const getAngle = (p1: { x: number; y: number }, p2: { x: number; y: number }) =>
+  Math.atan2(p2.y - p1.y, p2.x - p1.x);
