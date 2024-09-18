@@ -59,7 +59,7 @@ const TextEnteringModal = ({
               }}
             />
           </Header>
-          <div className="flex grow items-center w-full max-w-content mx-auto px-[45px]">
+          <div className="flex grow items-center w-full max-w-content mx-auto px-[45px] mt-[-48px]">
             <ReactTextareaAutosize
               value={value}
               onChange={handleChange}
