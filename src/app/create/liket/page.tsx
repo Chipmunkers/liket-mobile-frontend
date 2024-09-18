@@ -260,27 +260,32 @@ export default function Page({
             onUploadImage={handleUploadImage}
           />
         </div>
-        <If condition={selectedShapeId.length > 1}>
+        <If condition={isFront}>
           <Then>
-            <button
-              className="absolute bottom-[34px] left-1/2 transform -translate-x-1/2"
-              onClick={handleClickRemoveItem}
-            >
-              <CircleCross width="36" height="36" />
-            </button>
+            <If condition={selectedShapeId.length > 1}>
+              <Then>
+                <button
+                  className="absolute bottom-[34px] left-1/2 transform -translate-x-1/2"
+                  onClick={handleClickRemoveItem}
+                >
+                  <CircleCross width="36" height="36" />
+                </button>
+              </Then>
+              <Else>
+                <WriteTab
+                  selectedIndex={selectedIndex}
+                  onChangeTab={handleChangeTab}
+                  hidden={selectedShapeId.length > 1}
+                  enabled={!!uploadedImage}
+                  onClickText={handleInsertTextOnLiket}
+                  onClickChangeSize={handleChangeSize}
+                  onClickSticker={handleInsertSticker}
+                  onClickColor={handleChangeTextColor}
+                />
+              </Else>
+            </If>
           </Then>
-          <Else>
-            <WriteTab
-              selectedIndex={selectedIndex}
-              onChangeTab={handleChangeTab}
-              hidden={selectedShapeId.length > 1}
-              enabled={!!uploadedImage}
-              onClickText={handleInsertTextOnLiket}
-              onClickChangeSize={handleChangeSize}
-              onClickSticker={handleInsertSticker}
-              onClickColor={handleChangeTextColor}
-            />
-          </Else>
+          <Else></Else>
         </If>
       </main>
       <TextEnteringModal
