@@ -61,10 +61,7 @@ const LiketUploader = ({
       distance: 0,
       angle: 0,
     };
-    touchStateRefForOneTouch.current = {
-      x: -1,
-      y: -1,
-    };
+    touchStateRefForOneTouch.current = undefined;
   };
 
   const pinchZoom = (e: KonvaEventObject<TouchEvent>) => {
@@ -110,6 +107,7 @@ const LiketUploader = ({
       if (bgImage) {
         const newX = bgImage.x() + p1.x - touchStateRefForOneTouch.current.x;
         const newY = bgImage.y() + p1.y - touchStateRefForOneTouch.current.y;
+        console.log(touchStateRefForOneTouch.current);
 
         bgImage.position({
           x: newX,
