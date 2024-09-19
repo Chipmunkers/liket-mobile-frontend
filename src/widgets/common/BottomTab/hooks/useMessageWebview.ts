@@ -5,12 +5,8 @@ import useGetClickEvent from "@/widgets/common/BottomTab/hooks/useGetClickEvent"
 import { useEffect } from "react";
 
 const useMessageWebview = (isOpen: boolean, setIsOpen: SetState<boolean>) => {
-  const {
-    mainButtonClickEvent,
-    mapButtonClickEvent,
-    createButtonClickEvent,
-    mypageButtonClickEvent,
-  } = useGetClickEvent(setIsOpen);
+  const { mainButtonClickEvent, createButtonClickEvent } =
+    useGetClickEvent(setIsOpen);
 
   const messageEvent = (e: MessageEvent) => {
     if (typeof e.data !== "string") return;
@@ -21,16 +17,8 @@ const useMessageWebview = (isOpen: boolean, setIsOpen: SetState<boolean>) => {
         return mainButtonClickEvent();
       }
 
-      if (data.click === "nav-map-button") {
-        return mapButtonClickEvent();
-      }
-
       if (data.click === "nav-create-button") {
         return createButtonClickEvent();
-      }
-
-      if (data.click === "nav-mypage-button") {
-        return mypageButtonClickEvent();
       }
     }
   };

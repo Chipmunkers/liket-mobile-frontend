@@ -1,24 +1,33 @@
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { useIsWebView } from "@/shared/hooks/useIsWebview";
 import { SetState } from "@/shared/types/react";
 import { usePathname, useRouter } from "next/navigation";
 
 const useGetClickEvent = (setIsCreateDrawerOpen: SetState<boolean>) => {
   const pathname = usePathname();
   const router = useRouter();
+  const isWebview = useIsWebView();
 
   /**
    * 메인 버튼 클릭 이벤트
    */
   const mainButtonClickEvent = () => {
-    if (pathname === "/") return;
+    if (pathname === "/") {
+      scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
 
-    stackRouterPush(router, {
-      path: "/",
-      screen: WEBVIEW_SCREEN.MAIN,
-      isStack: false,
-      moveScreen: false,
-    });
+    if (!isWebview) {
+      stackRouterPush(router, {
+        path: "/",
+        screen: WEBVIEW_SCREEN.MAIN,
+        isStack: false,
+        moveScreen: false,
+      });
+    }
   };
 
   /**
