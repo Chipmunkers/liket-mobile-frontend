@@ -18,7 +18,7 @@ const ContentCardSection = (props: Props) => {
         }}
       >
         <h2 className="pl-[24px] mb-[8px] h-[20px] text-h2">{children}</h2>
-        <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] touch-action-none pr-[24px] [&>*:first-child]:ml-[24px]">
+        <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden overflow-x-hidden w-[100%] touch-action-none pr-[24px] [&>*:first-child]:ml-[24px]">
           <If condition={contentList.length >= 1}>
             <Then>
               {contentList.map((content, i) => (
