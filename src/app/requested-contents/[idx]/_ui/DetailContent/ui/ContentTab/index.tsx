@@ -5,9 +5,10 @@ import Divider from "@/shared/ui/Divider";
 import { colors } from "@/shared/style/color";
 
 const ContentTab = (props: Props) => {
-  const [loading, error] = useKakaoLoader({
+  useKakaoLoader({
     appkey: process.env.NEXT_PUBLIC_MAP_API_KEY || "",
     retries: 2,
+    libraries: ["services"],
   });
 
   const { content } = props;
