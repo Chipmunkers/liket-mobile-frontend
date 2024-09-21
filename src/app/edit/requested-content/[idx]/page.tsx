@@ -42,6 +42,7 @@ import { useGetCultureContentByIdx } from "./_hooks/useGetContentByIdx";
 import { findIdxByName } from "./_util/findIdxByName";
 import { useEditContent } from "./_hooks/useEditContent";
 import DefaultImg from "@/shared/ui/DefaultImg";
+import { useKakaoLoader } from "react-kakao-maps-sdk";
 
 enum AnalyzeType {
   SIMILAR = "SIMILAR",
@@ -172,21 +173,20 @@ export default function Page({ params: { idx } }: PageProps) {
     router.replace(`${pathname}?isSearchModalOpen=true`);
   };
 
-  useEffect(() => {
-    const $mapScript = document.createElement("script");
-    $mapScript.async = false;
-    $mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_API_KEY}&autoload=false&libraries=services`;
-    document.head.appendChild($mapScript);
+  const [isLoading, error] = useKakaoLoader({
+    appkey: process.env.NEXT_PUBLIC_MAP_API_KEY || "",
+    retries: 2,
+    libraries: ["services"],
+  });
 
-    const onLoadMap = () => {
+  useEffect(() => {
+    if (!isLoading && !error) {
       window.kakao.maps.load(() => {
         const geocoder = new window.kakao.maps.services.Geocoder();
         setGeocoder(geocoder);
       });
-    };
-
-    $mapScript.addEventListener("load", onLoadMap);
-  }, []);
+    }
+  }, [error, isLoading]);
 
   useEffect(() => {
     if (content && isFetched) {
