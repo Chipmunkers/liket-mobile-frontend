@@ -11,41 +11,43 @@ const ContentTab = (props: Props) => {
     libraries: ["services"],
   });
 
-  const { content } = props;
+  const {
+    content: { description, location, idx, genre },
+  } = props;
 
   return (
     <>
       <div className="py-[16px] px-[24px] whitespace-pre-wrap w-[100%] text-center text-body3">
-        {content.description}
+        {description}
       </div>
       <Divider width="100%" height="8px" />
       <div className="px-[24px] py-[24px] flex-col relative">
         <div className="text-h2">위치</div>
         <div className="text-grey-04 text-body5 mt-[7px] mb-[4px]">
-          {content.location.region1Depth} {content.location.region2Depth}{" "}
-          {content.location.address} {content.location.detailAddress}
+          {location.region1Depth} {location.region2Depth} {location.address}{" "}
+          {location.detailAddress}
         </div>
         <div className="h-[171px] w-[100%] bg-grey-02 flex">
           <Map
             className="w-[100%] h-[100%]"
             center={{
-              lng: content.location.positionX,
-              lat: content.location.positionY,
+              lng: location.positionX,
+              lat: location.positionY,
             }}
             isPanto={false}
             level={4}
           >
             <CustomOverlayMap
               position={{
-                lng: content.location.positionX,
-                lat: content.location.positionY,
+                lng: location.positionX,
+                lat: location.positionY,
               }}
-              key={content.idx}
+              key={idx}
             >
               <div className="flex items-end justify-center h-[50px] select-none cursor-pointer">
                 <img
                   className="w-[40px]"
-                  src={`https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${content.genre.idx}_icon.svg`}
+                  src={`https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${genre.idx}_icon.svg`}
                 />
               </div>
               <div
