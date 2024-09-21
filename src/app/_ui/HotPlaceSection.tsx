@@ -23,7 +23,7 @@ const HotPlaceSection = (props: { contentList: HotContentEntity[] }) => {
           new Date()
         ).format("YYYY.MM.DD HH:00")}`}</div>
       </div>
-      <CustomScrollContainer className="flex flex-row gap-[8px] w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
+      <CustomScrollContainer className="flex flex-row gap-[8px] w-[100%] overflow-x-hidden [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
         {contentList.map(({ idx, name, contentList }) => {
           return (
             <div key={idx}>
