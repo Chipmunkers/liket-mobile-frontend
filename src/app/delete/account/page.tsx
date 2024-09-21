@@ -11,7 +11,6 @@ import CheckBox from "@/shared/ui/CheckBox";
 import { InputLabel } from "@/shared/ui/Input";
 import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
-import customToast from "@/shared/helpers/customToast";
 import BottomButtonTab from "@/shared/ui/BottomButtonTab";
 import Button from "@/shared/ui/Button";
 import { useDeleteAccount } from "./_hooks/useDeleteAccount";
@@ -116,7 +115,7 @@ export default function Page() {
                 maxLength={200}
                 onChange={(e) => setText(e.target.value)}
                 placeholder="다른 이유나 자세한 이유가 있다면 알려주세요."
-                className="w-[100%] mb-[34px] min-h-[132px] h-[auto] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0"
+                className="text-area mb-[34px]"
               />
             </div>
           </form>
