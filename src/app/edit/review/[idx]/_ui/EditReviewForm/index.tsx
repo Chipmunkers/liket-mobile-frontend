@@ -222,7 +222,7 @@ const EditReviewForm = ({
           maxLength={1000}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="다른 이유나 자세한 이유가 있다면 알려주세요."
-          className="w-[100%] mb-[25px] min-h-[132px] h-[auto] overflow-y-hidden px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0 rounded-none"
+          className="w-[100%] mb-[25px] min-h-[132px] px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none focus:ring-0 rounded-none"
         />
       </div>
     </form>
