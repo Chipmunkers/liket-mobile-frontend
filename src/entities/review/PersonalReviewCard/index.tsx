@@ -4,7 +4,6 @@ import { Props } from "./types";
 import MeatballIcon from "@/shared/icon/review/MeatballIcon.svg";
 import { ButtonBase } from "@mui/material";
 import StarRating from "@/entities/review/StarRating";
-import { Carousel } from "react-responsive-carousel";
 import dayjs from "dayjs";
 import PersonalReviewCardSkeleton from "./ui/PersonalReviewCardSkeleton";
 import { classNames } from "@/shared/helpers/classNames";
