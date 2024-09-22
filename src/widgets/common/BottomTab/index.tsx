@@ -12,13 +12,12 @@ import MyPageIcon from "@/icons/mypage.svg";
 import FilledMyPageIcon from "@/icons/mypage-filled.svg";
 import { ButtonBase } from "@mui/material";
 import { useIsWebView } from "@/shared/hooks/useIsWebview";
-import { stackRouterPush } from "@/shared/helpers/stackRouter";
-import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { Props } from "./types";
 import BottomTabCreateDrawer from "@/widgets/common/BottomTab/ui/BottomTabCreateDrawer";
 import useMessageWebview from "@/widgets/common/BottomTab/hooks/useMessageWebview";
 import { colors } from "@/shared/style/color";
 import { classNames } from "@/shared/helpers/classNames";
+import useGetClickEvent from "./hooks/useGetClickEvent";
 
 const BottomTab = ({ shadow = false }: Props) => {
   const router = useRouter();
@@ -27,6 +26,12 @@ const BottomTab = ({ shadow = false }: Props) => {
   const isWebview = useIsWebView();
 
   useMessageWebview(isCreateDrawerOpen, setIsCreateDrawerOpen);
+  const {
+    mainButtonClickEvent,
+    mapButtonClickEvent,
+    createButtonClickEvent,
+    mypageButtonClickEvent,
+  } = useGetClickEvent(setIsCreateDrawerOpen);
 
   const buttonStyle = {
     width: "20%",
@@ -51,16 +56,7 @@ const BottomTab = ({ shadow = false }: Props) => {
             style={buttonStyle}
             className="icon-button"
             disableRipple={true}
-            onClick={() => {
-              if (pathname === "/") return;
-
-              stackRouterPush(router, {
-                path: "/",
-                screen: WEBVIEW_SCREEN.MAIN,
-                isStack: false,
-                moveScreen: false,
-              });
-            }}
+            onClick={() => mainButtonClickEvent()}
           >
             {pathname === "/" ? (
               <FilledHomeIcon color={colors.skyblue["01"]} />
@@ -72,15 +68,7 @@ const BottomTab = ({ shadow = false }: Props) => {
             style={buttonStyle}
             disableRipple={true}
             className="icon-button"
-            onClick={(e) => {
-              if (pathname === "map") return;
-
-              stackRouterPush(router, {
-                path: "/map",
-                screen: WEBVIEW_SCREEN.MAIN,
-                moveScreen: false,
-              });
-            }}
+            onClick={(e) => mapButtonClickEvent()}
           >
             {pathname === "/map" ? (
               <FilledMapIcon color={colors.skyblue["01"]} />
@@ -96,7 +84,7 @@ const BottomTab = ({ shadow = false }: Props) => {
             aria-selected={isCreateDrawerOpen}
             type="button"
             data-twe-ripple-init
-            onClick={() => setIsCreateDrawerOpen(true)}
+            onClick={() => createButtonClickEvent()}
           >
             {isCreateDrawerOpen ? (
               <FilledCreateIcon color={colors.skyblue["01"]} />
@@ -108,14 +96,7 @@ const BottomTab = ({ shadow = false }: Props) => {
             style={buttonStyle}
             disableRipple={true}
             className="icon-button"
-            onClick={() => {
-              stackRouterPush(router, {
-                path: "/mypage",
-                screen: WEBVIEW_SCREEN.MAIN,
-                isStack: false,
-                moveScreen: false,
-              });
-            }}
+            onClick={() => mypageButtonClickEvent()}
           >
             {pathname === "/mypage" ? (
               <FilledMyPageIcon color={colors.skyblue["01"]} />

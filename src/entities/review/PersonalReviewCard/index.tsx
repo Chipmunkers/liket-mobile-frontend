@@ -98,7 +98,6 @@ const PersonalReviewCard = ({
           </div>
         </div>
         {/* 리뷰 이미지 */}
-        dd
         {review.imgList.length ? (
           <ReviewImgCarousel imgList={review.imgList} />
         ) : null}
