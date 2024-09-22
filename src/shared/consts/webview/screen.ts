@@ -33,6 +33,9 @@ export const WEBVIEW_SCREEN = {
   EDIT_REVIEW: "Edit Review",
   REVIEW_DETAIL: "Review Detail",
   IMG_DETAIL: "Img Detail", // 이미지 크게 보기
+  EDIT_LIKET: "Edit liket",
+  LIKET_LIST: "Liket list",
+  LIKET_DETAIL: "Liket Detail",
 } as const;
 
 export type WebviewScreen = keyof typeof WEBVIEW_SCREEN;

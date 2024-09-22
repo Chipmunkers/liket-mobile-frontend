@@ -16,9 +16,12 @@ import LikeContentButton from "@/entities/content/LikeContentButton";
 const ContentCardLarge = ({ content, width, onClick, className }: Props) => {
   const router = useRouter();
 
+  const { idx, thumbnail, startDate, endDate, likeState, genre, title } =
+    content;
+
   return (
     <Link
-      href={`/contents/${content.idx}`}
+      href={`/contents/${idx}`}
       className={className || ""}
       onClick={(e) => {
         e.preventDefault();
@@ -29,7 +32,7 @@ const ContentCardLarge = ({ content, width, onClick, className }: Props) => {
         }
 
         stackRouterPush(router, {
-          path: `/contents/${content.idx}`,
+          path: `/contents/${idx}`,
           screen: WEBVIEW_SCREEN.CONTENT_DETAIL,
         });
       }}
@@ -37,32 +40,27 @@ const ContentCardLarge = ({ content, width, onClick, className }: Props) => {
       <article className={classNames(width ? `w-[${width}]` : "w-[164px]")}>
         <div className="relative mb-[8px]">
           <div className="relative aspect-[164/232]">
-            <DefaultImg src={content.thumbnail} />
+            <DefaultImg src={thumbnail} />
           </div>
           <Badge
-            state={getStatus(content.startDate, content.endDate)}
+            state={getStatus(startDate, endDate)}
             className="absolute top-[8px] left-[8px]"
           >
-            {CONTENT_STATES[getStatus(content.startDate, content.endDate)].name}
+            {CONTENT_STATES[getStatus(startDate, endDate)].name}
           </Badge>
           <div className="absolute bottom-[8px] right-[8px] h-[24px]">
-            <LikeContentButton
-              idx={content.idx}
-              likeState={content.likeState}
-            />
+            <LikeContentButton idx={idx} likeState={likeState} />
           </div>
         </div>
         <div className="flex flex-col">
           <div className="text-body4 text-skyblue-01 mb-[4px]">
-            {content.genre.name}
+            {genre.name}
           </div>
-          <div className="text-body2 min-h-[17px] mb-[4px]">
-            {content.title}
-          </div>
+          <div className="text-body2 min-h-[17px] mb-[4px]">{title}</div>
           <div className="text-body5 text-grey-04">{`${content.location.region1Depth} ${content.location.region2Depth}`}</div>
           <div className="text-body5 text-grey-04">
-            {dayjs(content.startDate).format("YYYY-MM-DD")} -{" "}
-            {dayjs(content.endDate).format("MM.DD")}
+            {dayjs(startDate).format("YYYY-MM-DD")} -{" "}
+            {dayjs(endDate).format("MM.DD")}
           </div>
         </div>
       </article>

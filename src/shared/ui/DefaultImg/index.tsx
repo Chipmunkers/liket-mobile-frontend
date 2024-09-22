@@ -20,6 +20,7 @@ const DefaultImg = ({
   height = "100%",
   select = false,
   src,
+  testSrc = "",
   ...props
 }: Props) => {
   const [isErrorEmit, setIsErrorTriggered] = useState(false);
@@ -99,7 +100,26 @@ const DefaultImg = ({
         </div>
       ) : null}
 
-      {!isErrorEmit && (
+      {/* TODO: 라이켓 리스트 개발용으로 사용함. 사용하고 삭제 필요 */}
+      {testSrc && (
+        <Image
+          className={classNames(!select ? "select-none" : "")}
+          src={testSrc}
+          onError={handleError}
+          alt={alt}
+          fill
+          style={
+            cover
+              ? {
+                  objectFit: "cover",
+                }
+              : {}
+          }
+        />
+      )}
+
+      {/* TODO: testSrc 조건은 라이켓 리스트 개발용으로 사용함. 사용하고 삭제 필요 */}
+      {!isErrorEmit && !testSrc && (
         <Image
           className={classNames(!select ? "select-none" : "")}
           src={srcHost + src}
