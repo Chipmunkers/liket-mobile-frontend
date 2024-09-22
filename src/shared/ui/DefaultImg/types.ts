@@ -50,6 +50,13 @@ export type DefaultProps = {
    * @default false
    */
   select?: boolean;
+
+  /**
+   * TODO: 개발을 위한 테스트 property로 전부 다 사용후 삭제 필요
+   *
+   * @default ""
+   */
+  testSrc?: string;
 };
 
 export type PropsWithFallbackImg = DefaultProps & {
