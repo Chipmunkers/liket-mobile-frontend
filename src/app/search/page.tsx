@@ -6,7 +6,6 @@ import { ButtonBase } from "@mui/material";
 import { useSearchParams } from "next/navigation";
 import { useGetContentAll } from "./_hooks/useGetContentAll";
 import { AxiosError } from "axios";
-import ReloadIcon from "@/icons/reload.svg";
 import { SearchPagerble } from "./_types/pagerble";
 import { createQuerystring } from "./_util/createQueryString";
 import { getQuerystring } from "./_util/getQuerystring";
@@ -26,6 +25,7 @@ import SearchHeader from "@/shared/ui/SearchHeader";
 import CheckBox from "@/shared/ui/CheckBox";
 import Drawer from "@/shared/ui/Drawer";
 import ReloadButton from "@/shared/ui/ReloadButton";
+import ReloadIcon from "@/shared/icon/common/ReloadIcon.svg";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -66,7 +66,7 @@ export default function Page() {
         placeholder="검색어를 입력해주세요."
       />
       <GenreSelectTab pagerble={pagerble} setPagerble={setPagerble} />
-      <div className="flex ml-[24px] mt-[8px] gap-[8px]">
+      <div className="flex mx-[24px] mt-[8px] gap-[8px] relative">
         <SelectButtonSmall
           placeholder="지역"
           text={
@@ -126,6 +126,14 @@ export default function Page() {
             />
           }
         />
+        <div className="absolute right-0">
+          <ButtonBase
+            disableRipple
+            className="w-[28px] h-[28px] flex items-center justify-center icon-button"
+          >
+            <ReloadIcon className="fill-grey-01" />
+          </ButtonBase>
+        </div>
       </div>
       <div className="flex justify-between mx-[24px] mt-[8px]">
         <CheckBox
