@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import SmallDownArrow from "@/icons/down-arrow-small.svg";
 import { ButtonBase } from "@mui/material";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useGetContentAll } from "./_hooks/useGetContentAll";
 import { AxiosError } from "axios";
 import { SearchPagerble } from "./_types/pagerble";
@@ -29,6 +29,7 @@ import ReloadIcon from "@/shared/icon/common/ReloadIcon.svg";
 
 export default function Page() {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   const [pagerble, setPagerble] = useState<SearchPagerble>(
     getQuerystring(searchParams)
@@ -45,6 +46,18 @@ export default function Page() {
   const { data, refetch, error, setTarget } = useGetContentAll(
     createQuerystring(getQuerystring(searchParams))
   );
+
+  const resetPagerble = () => {
+    setPagerble({
+      region: null,
+      style: [],
+      age: null,
+      genre: null,
+      open: null,
+      orderby: null,
+      search: null,
+    });
+  };
 
   // * Drawer
   const [isSidoDrawerOpen, setIsSidoDrawerOpen] = useState(false);
@@ -130,6 +143,7 @@ export default function Page() {
           <ButtonBase
             disableRipple
             className="w-[28px] h-[28px] flex items-center justify-center icon-button"
+            onClick={() => resetPagerble()}
           >
             <ReloadIcon className="fill-grey-01" />
           </ButtonBase>
