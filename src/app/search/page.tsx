@@ -25,6 +25,7 @@ import ContentCardGroup from "@/widgets/content/ContentInfiniteGroup";
 import SearchHeader from "@/shared/ui/SearchHeader";
 import CheckBox from "@/shared/ui/CheckBox";
 import Drawer from "@/shared/ui/Drawer";
+import ReloadButton from "@/shared/ui/ReloadButton";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -186,17 +187,7 @@ export default function Page() {
         )}
         {error && (error as AxiosError).response?.status !== 401 && (
           <div className="absolute bottom-[24px] flex justify-center w-[100%]">
-            <ButtonBase
-              className="flex justify-center items-center rounded-[16px] bg-white shadow-[0_0_8px_0_rgba(0,0,0,0.16)] w-[105px] h-[32px]"
-              onClick={() => {
-                refetch();
-              }}
-            >
-              <div className="mr-[8px]">
-                <ReloadIcon />
-              </div>
-              <span className="text-button4">새로 고침</span>
-            </ButtonBase>
+            <ReloadButton onClick={() => refetch()}>새로 고침</ReloadButton>
           </div>
         )}
       </main>
