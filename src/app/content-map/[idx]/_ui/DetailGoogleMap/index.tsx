@@ -5,7 +5,7 @@ import { Props } from "./tyeps";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
-const GoogleMap = ({ content }: Props) => {
+const DetailGoogleMap = ({ content }: Props) => {
   const router = useRouter();
 
   if (!content) {
@@ -21,4 +21,4 @@ const GoogleMap = ({ content }: Props) => {
   return <div></div>;
 };
 
-export default GoogleMap;
+export default DetailGoogleMap;

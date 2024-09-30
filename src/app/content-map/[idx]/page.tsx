@@ -1,5 +1,5 @@
 import { Header, HeaderLeft } from "@/shared/ui/Header";
-import GoogleMap from "./_ui/GoogleMap";
+import DetailGoogleMap from "./_ui/DetailGoogleMap";
 import { Metadata } from "next";
 import customFetch from "@/shared/helpers/fetch";
 
@@ -48,7 +48,7 @@ export default async function ContentMapPage({ params: { idx } }: PageProps) {
           }}
         />
       </Header>
-      <GoogleMap content={res.ok ? content : undefined} />
+      <DetailGoogleMap content={res.ok ? content : undefined} />
     </>
   );
 }
