@@ -7,8 +7,12 @@ import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api";
 import { mapStyle } from "@/app/map/_ui/GoogleMap/style/mapStyle";
 import { ButtonBase } from "@mui/material";
 import customToast from "@/shared/helpers/customToast";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { useRouter } from "next/navigation";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
 const ContentTab = (props: Props) => {
+  const router = useRouter();
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY || "",
   });
@@ -39,6 +43,12 @@ const ContentTab = (props: Props) => {
                 keyboardShortcuts: false,
                 gestureHandling: "none",
                 fullscreenControl: false,
+              }}
+              onClick={() => {
+                stackRouterPush(router, {
+                  path: `/content-map/${content.idx}`,
+                  screen: WEBVIEW_SCREEN.CONTENT_MAP_DETAIL,
+                });
               }}
               onLoad={(map) => {
                 map.setCenter({
