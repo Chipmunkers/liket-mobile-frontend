@@ -78,7 +78,7 @@ const DetailGoogleMap = ({ content }: Props) => {
                 bg-grey-black/60 
                 bg-opacity-60
                 rounded-[8px] 
-                py-[1px] 
+                pt-[2px] 
                 text-white 
                 px-[8px] 
                 max-w-[100px] 
