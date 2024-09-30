@@ -5,8 +5,14 @@ import Divider from "@/shared/ui/Divider";
 import { colors } from "@/shared/style/color";
 import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api";
 import { mapStyle } from "@/app/map/_ui/GoogleMap/style/mapStyle";
+import { ButtonBase } from "@mui/material";
+import customToast from "@/shared/helpers/customToast";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { useRouter } from "next/navigation";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
 const ContentTab = (props: Props) => {
+  const router = useRouter();
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY || "",
   });
@@ -35,7 +41,14 @@ const ContentTab = (props: Props) => {
                 minZoom: 10,
                 styles: mapStyle,
                 keyboardShortcuts: false,
-                gestureHandling: "greedy",
+                gestureHandling: "none",
+                fullscreenControl: false,
+              }}
+              onClick={() => {
+                stackRouterPush(router, {
+                  path: `/content-map/${content.idx}`,
+                  screen: WEBVIEW_SCREEN.CONTENT_MAP_DETAIL,
+                });
               }}
               onLoad={(map) => {
                 map.setCenter({
@@ -89,10 +102,16 @@ const ContentTab = (props: Props) => {
             </CustomOverlayMap>
           </Map> */}
         </div>
-        <button className="center absolute right-[24px] bottom-0 text-button4 text-skyblue-03">
-          카카오맵에서 길찾기
+        <ButtonBase
+          disableRipple
+          className="center absolute right-[24px] bottom-0 text-button4 text-skyblue-03"
+          onClick={() => {
+            customToast("열심히 준비중입니다!");
+          }}
+        >
+          구글맵에서 길찾기
           <RightArrowIcon fill={colors["skyblue"]["03"]} />
-        </button>
+        </ButtonBase>
       </div>
     </>
   );

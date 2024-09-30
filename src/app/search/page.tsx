@@ -3,10 +3,9 @@
 import { useEffect, useState } from "react";
 import SmallDownArrow from "@/icons/down-arrow-small.svg";
 import { ButtonBase } from "@mui/material";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useGetContentAll } from "./_hooks/useGetContentAll";
 import { AxiosError } from "axios";
-import ReloadIcon from "@/icons/reload.svg";
 import { SearchPagerble } from "./_types/pagerble";
 import { createQuerystring } from "./_util/createQueryString";
 import { getQuerystring } from "./_util/getQuerystring";
@@ -25,9 +24,12 @@ import ContentCardGroup from "@/widgets/content/ContentInfiniteGroup";
 import SearchHeader from "@/shared/ui/SearchHeader";
 import CheckBox from "@/shared/ui/CheckBox";
 import Drawer from "@/shared/ui/Drawer";
+import ReloadButton from "@/shared/ui/ReloadButton";
+import ReloadIcon from "@/shared/icon/common/ReloadIcon.svg";
 
 export default function Page() {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   const [pagerble, setPagerble] = useState<SearchPagerble>(
     getQuerystring(searchParams)
@@ -44,6 +46,18 @@ export default function Page() {
   const { data, refetch, error, setTarget } = useGetContentAll(
     createQuerystring(getQuerystring(searchParams))
   );
+
+  const resetPagerble = () => {
+    setPagerble({
+      region: null,
+      style: [],
+      age: null,
+      genre: null,
+      open: null,
+      orderby: null,
+      search: null,
+    });
+  };
 
   // * Drawer
   const [isSidoDrawerOpen, setIsSidoDrawerOpen] = useState(false);
@@ -65,7 +79,7 @@ export default function Page() {
         placeholder="검색어를 입력해주세요."
       />
       <GenreSelectTab pagerble={pagerble} setPagerble={setPagerble} />
-      <div className="flex ml-[24px] mt-[8px] gap-[8px]">
+      <div className="flex mx-[24px] mt-[8px] gap-[8px] relative">
         <SelectButtonSmall
           placeholder="지역"
           text={
@@ -125,6 +139,15 @@ export default function Page() {
             />
           }
         />
+        <div className="absolute right-0">
+          <ButtonBase
+            disableRipple
+            className="w-[28px] h-[28px] flex items-center justify-center icon-button"
+            onClick={() => resetPagerble()}
+          >
+            <ReloadIcon className="fill-grey-01" />
+          </ButtonBase>
+        </div>
       </div>
       <div className="flex justify-between mx-[24px] mt-[8px]">
         <CheckBox
@@ -186,17 +209,7 @@ export default function Page() {
         )}
         {error && (error as AxiosError).response?.status !== 401 && (
           <div className="absolute bottom-[24px] flex justify-center w-[100%]">
-            <ButtonBase
-              className="flex justify-center items-center rounded-[16px] bg-white shadow-[0_0_8px_0_rgba(0,0,0,0.16)] w-[105px] h-[32px]"
-              onClick={() => {
-                refetch();
-              }}
-            >
-              <div className="mr-[8px]">
-                <ReloadIcon />
-              </div>
-              <span className="text-button4">새로 고침</span>
-            </ButtonBase>
+            <ReloadButton onClick={() => refetch()}>새로 고침</ReloadButton>
           </div>
         )}
       </main>
