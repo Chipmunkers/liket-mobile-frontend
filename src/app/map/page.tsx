@@ -22,11 +22,13 @@ import FilterDrawer from "./_ui/FilterDrawer";
 import LocationDrawer from "./_ui/LocationDrawer";
 import CustomGoogleMap from "@/app/map/_ui/GoogleMap";
 import { BottomSheet } from "react-spring-bottom-sheet";
+import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const { safeArea } = useGetSafeArea();
 
   const isTownSelectionModalOpen = searchParams.get("isTownSelectionModalOpen");
   const isFilterModalOpen = searchParams.get("isFilterModalOpen");
@@ -160,7 +162,12 @@ export default function MapPage() {
 
         {/* 클릭한 컨텐츠 */}
         {clickedContent ? (
-          <div className="bottom-[48px] absolute z-10 w-[calc(100%-16px)] left-[8px] mb-[8px]">
+          <div
+            className="bottom-[48px] absolute z-10 w-[calc(100%-16px)] left-[8px]"
+            style={{
+              marginBottom: 8 + safeArea.bottom + "px",
+            }}
+          >
             <div className="p-[16px] bg-white rounded-[24px]">
               <ContentCardMedium
                 content={{
