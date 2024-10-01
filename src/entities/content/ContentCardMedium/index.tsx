@@ -46,7 +46,7 @@ const ContentCardMedium = ({ content, onClick, className }: Props) => {
               " " +
               content.location.region2Depth}
           </div>
-          <div className="text-body5 text-grey-04 mb-[4px]">
+          <div className="text-body5 text-grey-04">
             {dayjs(content.startDate).format("YYYY.MM.DD")} ~{" "}
             {dayjs(content.endDate).format("MM.DD")}
           </div>
