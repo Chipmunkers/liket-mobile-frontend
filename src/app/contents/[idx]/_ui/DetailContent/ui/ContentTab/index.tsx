@@ -10,6 +10,7 @@ import customToast from "@/shared/helpers/customToast";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { useRouter } from "next/navigation";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import MapExpandIcon from "@/shared/icon/content/MapExpandIcon.svg";
 
 const ContentTab = (props: Props) => {
   const router = useRouter();
@@ -31,7 +32,10 @@ const ContentTab = (props: Props) => {
           {content.location.region1Depth} {content.location.region2Depth}{" "}
           {content.location.address} {content.location.detailAddress}
         </div>
-        <div className="h-[171px] w-[100%] bg-grey-02 flex">
+        <div className="h-[171px] w-[100%] bg-grey-02 flex relative cursor-pointer">
+          <div className="absolute right-[9px] top-[8px] z-[1] cursor-pointer">
+            <MapExpandIcon />
+          </div>
           {isLoaded && (
             <GoogleMap
               mapContainerClassName="flex-1"
