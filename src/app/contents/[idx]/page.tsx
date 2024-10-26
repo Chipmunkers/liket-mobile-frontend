@@ -29,7 +29,7 @@ export async function generateMetadata({
       images: [
         { url: process.env.NEXT_PUBLIC_IMAGE_SERVER + content.thumbnail },
       ],
-      url: `https://dev.liket.site/contents/${params.idx}`,
+      url: `https://liket.site/contents/${params.idx}`,
       type: "article",
     },
   };
