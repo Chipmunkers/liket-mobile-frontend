@@ -16,14 +16,14 @@ const HotPlaceSection = (props: { contentList: HotContentEntity[] }) => {
   const router = useRouter();
 
   return (
-    <section className="my-[24px]">
+    <section className="my-[24px] overflow-x-hidden">
       <div className="pl-[24px] flex flex-row mb-[8px]">
         <h2 className="text-h2">핫플차트</h2>
         <div className="text-body5 text-grey-04 flex flex-col-reverse ml-[8px]">{`업로드 ${dayjs(
           new Date()
         ).format("YYYY.MM.DD HH:00")}`}</div>
       </div>
-      <CustomScrollContainer className="flex flex-row gap-[8px] w-[100%] overflow-x-hidden [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
+      <CustomScrollContainer className="flex flex-row gap-[8px] w-[100%] [&>*:last-child]:mr-[24px] [&>*:first-child]:ml-[24px]">
         {contentList.map(({ idx, name, contentList }) => {
           return (
             <div key={idx}>
