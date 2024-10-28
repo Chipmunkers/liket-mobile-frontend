@@ -1,11 +1,13 @@
 "use client";
 
-import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
-import EmailForm from "@/components/SignupForm/EmailForm";
 import { useState } from "react";
-import PasswordForm from "@/components/SignupForm/PasswordForm";
-import { useResetPassword } from "@/service/reset/hooks";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
+import { useResetPassword } from "./_hooks/useResetPassword";
+import EmailAuthForm from "./_ui/EmailAuthForm";
+import PasswordForm from "./_ui/PasswordForm";
 
 export default function Page() {
   const [formIndex, setFormIndex] = useState(0);
@@ -18,9 +20,14 @@ export default function Page() {
   };
   const { mutate } = useResetPassword({
     onSuccess: () => {
-      router.replace("/login/email");
+      stackRouterPush(router, {
+        path: "/login/email",
+        screen: WEBVIEW_SCREEN.EMAIL_LOGIN,
+        isStack: false,
+      });
     },
   });
+
   const handleClickNextButtonInPasswordForm = (pw: string) =>
     mutate({
       pw,
@@ -30,16 +37,16 @@ export default function Page() {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <HeaderLeft
           option={{
             close: {
               onClick: () => router.back(),
             },
           }}
         />
-        <Header.MiddleText text="비밀번호 재설정" />
+        <HeaderMiddle text="비밀번호 재설정" />
       </Header>
-      {formIndex === 0 && <EmailForm updateForm={updateForm} />}
+      {formIndex === 0 && <EmailAuthForm updateForm={updateForm} />}
       {formIndex === 1 && (
         <PasswordForm
           isResetForm

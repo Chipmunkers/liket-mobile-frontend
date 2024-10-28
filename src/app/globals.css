@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --bottom-tab-height: 74px;
+  --bottom-tab-height: 48px;
 }
 
 @layer base {
@@ -13,6 +13,7 @@
 
   html {
     @apply h-[100%] overflow-y-scroll;
+    scrollbar-width: none;
   }
 
   body {
@@ -20,6 +21,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-smooth: never;
+    -webkit-touch-callout: none;
   }
 
   main {
@@ -32,6 +34,11 @@
 
   input:focus {
     @apply outline-none;
+  }
+
+  li {
+    list-style-type: none;
+    list-style: none;
   }
 
   h1 {
@@ -57,9 +64,27 @@
   }
 }
 
+/* 지도 클릭 시 outline 생기는 현상 방지 */
+.gm-style iframe + div {
+  border: none !important;
+}
+
+.icon-button svg {
+  @apply opacity-100;
+  @apply duration-75;
+}
+
+.icon-button:active svg {
+  @apply opacity-30;
+}
+
 @layer components {
+  .text-area {
+    @apply w-[100%] min-h-[132px] px-[8px] py-[16px] mt-[8px] placeholder:text-body3 placeholder:text-grey-02 border-y-[1px] focus:outline-none rounded-none;
+  }
+
   .full-modal {
-    @apply bg-white absolute transition-transform duration-500 ease-in-out flex flex-col h-[100%] w-[100%] z-[9999];
+    @apply bg-white fixed transition-transform duration-500 ease-in-out flex flex-col h-[100%] w-[100%] z-[9999] max-w-content;
   }
 
   .full-modal-main {
@@ -67,15 +92,15 @@
   }
 
   .header {
-    @apply sticky top-0 z-[1] bg-white flex justify-between items-center w-[100%] h-[48px] min-h-[48px] pl-[24px] pr-[24px];
+    @apply sticky top-0 z-[2] bg-white flex justify-between items-center w-[100%] h-[48px] min-h-[48px];
   }
 
   .bottom-tab {
-    @apply flex sticky bottom-0 bg-white w-[100%] h-[74px] min-h-[74px];
+    @apply fixed bottom-0 w-[100%] max-w-[600px];
   }
 
   .bottom-sheet-list {
-    @apply flex text-body3 h-[48px] mx-[24px];
+    @apply flex text-body3 h-[48px];
   }
 
   .bottom-sheet-button {
@@ -112,4 +137,23 @@ div[data-rsbs-backdrop] {
 }
 div[data-rsbs-header] {
   padding-bottom: 12px;
+}
+
+/* carousel */
+.dot {
+  opacity: 1 !important;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: none !important;
+  background-color: "#f0f0f0" !important;
+}
+
+.dot.selected {
+  background-color: #00c2ff !important;
+}
+
+input {
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
 }

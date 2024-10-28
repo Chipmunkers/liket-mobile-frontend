@@ -1,439 +1,231 @@
 "use client";
 
-import Header from "@/components/Header";
-import LinkableTab from "@/components/LinkableTab";
-import KaKaoMap from "@/components/KaKaoMap";
-import { useState, MouseEvent } from "react";
-import { classNames } from "@/utils/helpers";
-import BottomButtonTabWrapper from "@/components/BottomButtonTabWrapper";
-import Button from "@/components/Button";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import CustomBottomSheet from "@/components/BottomSheet";
-import MapBottomSheetCard, {
-  CONTENT_CARDS_DUMMY,
-} from "@/components/Card/MapBottomSheetCard";
-import FilterFilled from "@/icons/filter-filled.svg";
 import Filter from "@/icons/filter.svg";
-import ButtonGroup from "@/components/ButtonGroup";
-import { AGES, GENRES, STYLES } from "@/utils/const";
-import Chip from "@/components/Chip";
-import { AgeType, CityType, GenreType, StyleType } from "@/types/const";
+import { ButtonBase } from "@mui/material";
+import ContentCardMedium from "@/entities/content/ContentCardMedium";
+import BottomTab from "@/widgets/common/BottomTab";
+import { GenreEntity } from "@/shared/types/api/tag/GenreEntity";
+import { AgeEntity } from "@/shared/types/api/tag/AgeEntity";
+import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
+import { Sido, SIDO_LIST } from "@/shared/consts/region/sido";
+import { Sigungu } from "@/shared/consts/region/sigungu";
+import { Header, HeaderLeft, HeaderRight } from "@/shared/ui/Header";
+import Chip from "@/shared/ui/Chip";
+import { classNames } from "@/shared/helpers/classNames";
+import { MapContentEntity } from "@/shared/types/api/map/MapContentEntity";
+import useCheckModalOpenForWebview from "./_hooks/onMessageWebview";
+import ContentBottomSheet from "./_ui/ContentBottomSheet";
+import { MapFilter, SelectLocation } from "./_types/types";
+import FilterDrawer from "./_ui/FilterDrawer";
+import LocationDrawer from "./_ui/LocationDrawer";
+import CustomGoogleMap from "@/app/map/_ui/GoogleMap";
+import { BottomSheet } from "react-spring-bottom-sheet";
+import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
-  const isTownSelectionModalOpen = searchParams.get("isTownSelectionModalOpen");
-  const isFilterModalOpen = searchParams.get("isFilterModalOpen");
-  const [appliedFilters, setAppliedFilters] = useState<AppliedFiltersType>({
-    currentAges: [],
-    currentGenres: [],
-    currentStyles: [],
-    currentCities: [],
-    newGenres: [],
-    newCities: [],
-    newAges: [],
-    newStyles: [],
-  });
-
-  const [cityAndGuSelection, setCityAndGuSelection] = useState(
-    INITIAL_CITY_AND_GU_SELECTION
-  );
-
-  const { currentSelectedGu, newSelectedCity, newSelectedGu } =
-    cityAndGuSelection;
-
   const router = useRouter();
   const pathname = usePathname();
+  const { safeArea } = useGetSafeArea();
 
-  const onClickTownSelection = () => {
-    router.push(`${pathname}?isTownSelectionModalOpen=true`);
-  };
-  const onClickFilter = () => {
-    router.push(`${pathname}?isFilterModalOpen=true`);
+  const isTownSelectionModalOpen = searchParams.get("isTownSelectionModalOpen");
+  const isFilterModalOpen = searchParams.get("isFilterModalOpen");
+
+  useCheckModalOpenForWebview(isTownSelectionModalOpen, isFilterModalOpen);
+
+  // * 현재 보여지고 있는 컨텐츠 목록
+  const [contentList, setContentList] = useState<MapContentEntity[]>([]);
+
+  // * 선택된 컨텐츠
+  const [clickedContent, setClickedContent] = useState<MapContentEntity>();
+
+  // * 선택된 클러스터 마커
+  const [clickedClusteredContents, setClickedClusteredContent] = useState<
+    MapContentEntity[]
+  >([]);
+
+  // * 필터링 선택
+  const [selectedGenre, setSelectedGenre] = useState<GenreEntity>();
+  const [selectedAge, setSelectedAge] = useState<AgeEntity>();
+  const [selectedStyles, setSelectedStyles] = useState<StyleEntity[]>([]);
+
+  // * 최종적으로 필터링 목록
+  const [mapFilter, setMapFilter] = useState<MapFilter>({
+    genre: undefined,
+    age: undefined,
+    styles: [],
+  });
+
+  // * 지역 선택
+  const [selectSido, setSelectSido] = useState<Sido>(SIDO_LIST[0]);
+  const [selectSigungu, setSelectSigungu] = useState<Sigungu | null>(null);
+  const [selectLocation, setSelectLocation] = useState<SelectLocation>({
+    sido: selectSido,
+    sigungu: selectSigungu,
+  });
+
+  const isSetMapFilter = (): boolean => {
+    return !!(mapFilter.genre || mapFilter.age || mapFilter.styles.length);
   };
 
-  const onCloseTownSelectionModal = () => {
-    router.back();
-    setCityAndGuSelection({
-      ...cityAndGuSelection,
-      newSelectedCity: cityAndGuSelection.currentSelectedCity,
-      newSelectedGu: cityAndGuSelection.currentSelectedGu,
+  // * 현재 보고 있는 위치
+  const [latLng, setLatLng] = useState<{ lng: number; lat: number }>({
+    lng: Number(selectLocation.sigungu?.lng || selectLocation.sido.lng),
+    lat: Number(selectLocation.sigungu?.lat || selectLocation.sido.lat),
+  });
+
+  useEffect(() => {
+    setLatLng({
+      lng: Number(selectLocation.sigungu?.lng || selectLocation.sido.lng),
+      lat: Number(selectLocation.sigungu?.lat || selectLocation.sido.lat),
     });
-  };
-
-  const onClickGu = (gu: string) => {
-    const newCityAndGuSelection = { ...cityAndGuSelection };
-    newCityAndGuSelection.newSelectedGu = gu;
-    setCityAndGuSelection(newCityAndGuSelection);
-  };
-
-  const onClickCity = (city: (typeof CITIES)[number]) => {
-    const newCityAndGuSelection = { ...cityAndGuSelection };
-    newCityAndGuSelection.newSelectedCity = city;
-    newCityAndGuSelection.newSelectedGu = CITY_GU_MAP[city][0];
-    setCityAndGuSelection(newCityAndGuSelection);
-  };
-
-  const onClickSettingNeighbor = () =>
-    setCityAndGuSelection({
-      ...cityAndGuSelection,
-      currentSelectedCity: cityAndGuSelection.newSelectedCity,
-      currentSelectedGu: cityAndGuSelection.newSelectedGu,
-    });
-
-  const onClickInitialize = () =>
-    setAppliedFilters({
-      ...appliedFilters,
-      newAges: [],
-      newCities: [],
-      newGenres: [],
-      newStyles: [],
-    });
-
-  const onClickSettingFilter = () => {
-    router.back();
-    const { currentAges, currentCities, currentGenres, currentStyles } =
-      appliedFilters;
-
-    setAppliedFilters({
-      ...appliedFilters,
-      newAges: currentAges,
-      newCities: currentCities,
-      newGenres: currentGenres,
-      newStyles: currentStyles,
-    });
-  };
-
-  const onCloseFilterSelectionModal = () => {
-    router.back();
-
-    const { currentAges, currentCities, currentGenres, currentStyles } =
-      appliedFilters;
-
-    setAppliedFilters({
-      ...appliedFilters,
-      newAges: currentAges,
-      newCities: currentCities,
-      newGenres: currentGenres,
-      newStyles: currentStyles,
-    });
-  };
-  const onClickOption = (
-    e: MouseEvent<HTMLUListElement>,
-    option: "장르" | "스타일" | "연령대" | "지역"
-  ) => {
-    const target = e.target as HTMLUListElement;
-
-    const textContent = target.textContent;
-
-    if (target.tagName !== "BUTTON" || !textContent) {
-      return;
-    }
-
-    const { newGenres, newCities, newAges, newStyles } = appliedFilters;
-
-    if (option === "장르") {
-      setAppliedFilters({
-        ...appliedFilters,
-        newGenres: getAppliedOptionList(
-          newGenres,
-          textContent
-        ) as AppliedFiltersType["newGenres"],
-      });
-    } else if (option === "스타일") {
-      setAppliedFilters({
-        ...appliedFilters,
-        newStyles: getAppliedOptionList(
-          newStyles,
-          textContent
-        ) as AppliedFiltersType["newStyles"],
-      });
-    } else if (option === "연령대") {
-      setAppliedFilters({
-        ...appliedFilters,
-        newAges: getAppliedOptionList(
-          newAges,
-          textContent
-        ) as AppliedFiltersType["newAges"],
-      });
-    } else if (option === "지역") {
-      setAppliedFilters({
-        ...appliedFilters,
-        newCities: getAppliedOptionList(
-          newCities,
-          textContent
-        ) as AppliedFiltersType["newCities"],
-      });
-    }
-  };
+  }, [selectLocation]);
 
   return (
     <>
       <Header>
-        <Header.LeftOption
-          townName={currentSelectedGu}
-          onClickTownSelection={onClickTownSelection}
+        <HeaderLeft
+          townName={
+            selectLocation.sigungu
+              ? selectLocation.sido.name + " " + selectLocation.sigungu.name
+              : selectLocation.sido.name
+          }
+          onClickTownSelection={() => {
+            router.replace(`${pathname}?isTownSelectionModalOpen=true`);
+          }}
         />
-        <Header.RightOption option={{ search: true, like: true }} />
+        <HeaderRight option={{ search: true, like: true }} />
       </Header>
       <main>
-        <KaKaoMap>
-          <button
-            className="absolute top-0 left-0 z-[2]"
-            onClick={onClickFilter}
-          >
-            {isAppliedFilterExist(appliedFilters) ? (
-              <FilterFilled />
-            ) : (
-              <Filter />
-            )}
-          </button>
-        </KaKaoMap>
-        <CustomBottomSheet
-          open={true}
-          defaultSnap={20}
-          snapPoints={({ maxHeight }) => [
-            20,
-            maxHeight / 2 - 45,
-            maxHeight - 68 - 48 - 74,
-          ]}
+        <CustomGoogleMap
+          contentList={contentList}
+          setContentList={setContentList}
+          clickedContent={clickedContent}
+          setClickedContent={setClickedContent}
+          mapFilter={mapFilter}
+          latLng={latLng}
+          setLatLng={setLatLng}
+          setClickedClusteredContents={setClickedClusteredContent}
         >
-          <ul>
-            {CONTENT_CARDS_DUMMY.map((cardItem, index) => {
-              return (
-                <li key={index}>
-                  <MapBottomSheetCard {...cardItem} />
-                </li>
-              );
-            })}
-          </ul>
-        </CustomBottomSheet>
-      </main>
-      <LinkableTab />
-      <div
-        className="full-modal transform translate-y-full"
-        style={{
-          transform: !!isFilterModalOpen ? "translateY(0)" : "translateY(100%)",
-        }}
-      >
-        <Header>
-          <Header.LeftOption
-            option={{
-              close: {
-                onClick: onCloseFilterSelectionModal,
-              },
-            }}
-          />
-          <Header.MiddleText text="필터" />
-        </Header>
-        <div className="full-modal-main px-[24px] py-[16px] gap-[48px]">
-          {(["장르", "지역", "연령대", "스타일"] as const).map((option) => {
-            return (
-              <div key={option}>
-                <div className="text-h2 mb-[15px]">{option}</div>
-                <ul
-                  onClick={(e) => onClickOption(e, option)}
-                  className="flex flex-wrap gap-[8px]"
-                >
-                  {FILTER_OPTIONS[option].map((item) => {
-                    const { newGenres, newCities, newAges, newStyles } =
-                      appliedFilters;
-
-                    let isSelected = false;
-                    if (option === "장르") {
-                      isSelected = newGenres.includes(item as GenreType);
-                    } else if (option === "스타일") {
-                      isSelected = newStyles.includes(item as StyleType);
-                    } else if (option === "연령대") {
-                      isSelected = newAges.includes(item as AgeType);
-                    } else if (option === "지역") {
-                      isSelected = newCities.includes(item as CityType);
-                    }
-
-                    return (
-                      <li key={item}>
-                        <Chip isSelected={isSelected} onClick={() => {}}>
-                          {item}
-                        </Chip>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            );
-          })}
-        </div>
-        <BottomButtonTabWrapper>
-          <ButtonGroup gap={16}>
-            <Button
-              height={48}
-              onClick={onClickInitialize}
-              variant="ghost"
-              fullWidth
+          <div className="absolute z-[2] mt-[16px] ml-[24px] w-100 flex items-center">
+            {/* 필터링 아이콘 */}
+            <ButtonBase
+              className={classNames(
+                "rounded-full w-[36px] h-[36px] shadow-[0_0_8px_0_rgba(0,0,0,0.16)] icon-button",
+                isSetMapFilter() ? "bg-skyblue-01" : "bg-white"
+              )}
+              onClick={() =>
+                router.replace(`${pathname}?isFilterModalOpen=true`)
+              }
+              disableRipple={true}
             >
-              초기화
-            </Button>
-            <Button height={48} onClick={onClickSettingFilter} fullWidth>
-              적용하기
-            </Button>
-          </ButtonGroup>
-        </BottomButtonTabWrapper>
-      </div>
-      <div
-        className="full-modal transform translate-y-full"
-        style={{
-          transform: !!isTownSelectionModalOpen
-            ? "translateY(0)"
-            : "translateY(100%)",
-        }}
-      >
-        <Header>
-          <Header.LeftOption
-            option={{
-              close: {
-                onClick: onCloseTownSelectionModal,
-              },
-            }}
+              <Filter
+                className={!isSetMapFilter() ? "fill-grey-black" : "fill-white"}
+                fill="white"
+              />
+            </ButtonBase>
+
+            {/* 필터링 칩 */}
+            {mapFilter.genre || mapFilter.age || mapFilter.styles.length ? (
+              <div className="flex items-center">
+                {mapFilter.genre ? (
+                  <div className="ml-[8px]">
+                    <Chip isSelected={true}>{mapFilter.genre.name}</Chip>
+                  </div>
+                ) : null}
+                {mapFilter.age ? (
+                  <div className="ml-[8px]">
+                    <Chip isSelected={true}>{mapFilter.age.name}</Chip>
+                  </div>
+                ) : null}
+                {mapFilter.styles.map(({ name }) => (
+                  <div className="ml-[8px]" key={name}>
+                    <Chip isSelected={true}>{name}</Chip>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </div>
+        </CustomGoogleMap>
+
+        {/* 컨텐츠 바텀 시트 */}
+        {!clickedContent && contentList.length !== 0 ? (
+          <ContentBottomSheet
+            contentList={contentList.map((content) => ({
+              ...content,
+              thumbnail: content.imgList[0],
+            }))}
           />
-          <Header.MiddleText text="지역설정" />
-        </Header>
-        <div className="full-modal-main">
-          <div className="flex grow h-[100%]">
-            <div className="h-[100%] w-[50%] bg-grey-01">
-              <ul className="flex flex-col w-[100%]">
-                {CITIES.map((CITY, index) => {
-                  return (
-                    <li
-                      key={index}
-                      className={classNames(
-                        "center h-[48px]",
-                        newSelectedCity === CITY
-                          ? "bg-white text-skyblue-01"
-                          : "bg-grey-01 text-grey-04"
-                      )}
-                    >
-                      <button onClick={() => onClickCity(CITY)}>{CITY}</button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-            <div className="w-[50%]">
-              <ul className="flex flex-col w-[100%] h-[100%] overflow-y-auto">
-                {CITY_GU_MAP[newSelectedCity].map((GU, index) => {
-                  return (
-                    <li
-                      key={index}
-                      className={classNames(
-                        "center h-[48px] shrink-0",
-                        newSelectedGu === GU && "text-skyblue-01"
-                      )}
-                    >
-                      <button onClick={() => onClickGu(GU)}>{GU}</button>
-                    </li>
-                  );
-                })}
-              </ul>
+        ) : null}
+
+        {/* 클릭한 컨텐츠 */}
+        {clickedContent ? (
+          <div
+            className="bottom-[48px] absolute z-10 w-[calc(100%-16px)] left-[8px]"
+            style={{
+              marginBottom: 8 + safeArea.bottom + "px",
+            }}
+          >
+            <div className="p-[16px] bg-white rounded-[24px]">
+              <ContentCardMedium
+                content={{
+                  ...clickedContent,
+                  thumbnail: clickedContent.imgList[0],
+                }}
+              />
             </div>
           </div>
-        </div>
-        <BottomButtonTabWrapper shadow>
-          <Button height={48} onClick={onClickSettingNeighbor} fullWidth>
-            설정하기
-          </Button>
-        </BottomButtonTabWrapper>
-      </div>
+        ) : null}
+
+        {/* 클러스터링 컨텐츠 바텀 시트 */}
+        <BottomSheet
+          defaultSnap={({ maxHeight }) => maxHeight / 2 - 45}
+          open={!!clickedClusteredContents.length}
+          blocking={false}
+          snapPoints={({ maxHeight }) => [maxHeight / 2 - 45, 0]}
+          onBlur={() => {
+            setClickedClusteredContent([]);
+          }}
+        >
+          {clickedClusteredContents.map((content) => (
+            <li key={content.idx} className="w-[100%] mb-[16px] px-[24px]">
+              <ContentCardMedium
+                content={{
+                  ...content,
+                  thumbnail: content.imgList[0] || "",
+                }}
+              />
+            </li>
+          ))}
+        </BottomSheet>
+      </main>
+
+      <FilterDrawer
+        isOpen={!!isFilterModalOpen}
+        selectGenre={selectedGenre}
+        selectStyles={selectedStyles}
+        selectAge={selectedAge}
+        setStyle={setSelectedStyles}
+        setAge={setSelectedAge}
+        setGenre={setSelectedGenre}
+        mapFilter={mapFilter}
+        setMapFilter={setMapFilter}
+      />
+
+      {/* 지역 모달 */}
+      <LocationDrawer
+        isOpen={!!isTownSelectionModalOpen}
+        selectSido={selectSido}
+        setSelectSido={setSelectSido}
+        selectSigungu={selectSigungu}
+        setSelectSigungu={setSelectSigungu}
+        selectLocation={selectLocation}
+        setSelectLocation={setSelectLocation}
+      />
+
+      <BottomTab />
     </>
   );
-}
-
-const SEOUL_GU_DUMMY = [
-  "동대문구",
-  "도봉구",
-  "동작구",
-  "서대문구",
-  "마포구",
-  "서초구",
-  "은평구",
-  "용산구",
-  "영등포구",
-  "양천구",
-  "성북구",
-  "송파구",
-  "노원구",
-  "강서구",
-  "관악구",
-  "강북구",
-  "도봉구",
-  "광진구",
-  "구로구",
-  "금천구",
-];
-
-const INCHENON_GU_DUMMY = ["미추홀구", "부평구"];
-
-const GYEONGGI_GU_DUMMY = [
-  "권선구",
-  "기흥구",
-  "수정구",
-  "수지구",
-  "영통구",
-  "오정구",
-];
-
-const CITY_GU_MAP = {
-  서울광역시: SEOUL_GU_DUMMY,
-  인천광역시: INCHENON_GU_DUMMY,
-  경기도: GYEONGGI_GU_DUMMY,
-} as const;
-
-const CITIES = Object.keys(CITY_GU_MAP) as Array<keyof typeof CITY_GU_MAP>;
-
-const INITIAL_CITY_AND_GU_SELECTION = {
-  currentSelectedCity: CITIES[0],
-  currentSelectedGu: CITY_GU_MAP[CITIES[0]][0],
-  newSelectedCity: CITIES[0],
-  newSelectedGu: CITY_GU_MAP[CITIES[0]][0],
-};
-
-const FILTER_OPTIONS = {
-  장르: GENRES,
-  지역: CITIES,
-  연령대: AGES,
-  스타일: STYLES,
-} as const;
-
-const isAppliedFilterExist = ({
-  currentAges,
-  currentCities,
-  currentGenres,
-  currentStyles,
-}: AppliedFiltersType) => {
-  return (
-    currentAges.length !== 0 ||
-    currentCities.length !== 0 ||
-    currentGenres.length !== 0 ||
-    currentStyles.length !== 0
-  );
-};
-
-const getAppliedOptionList = (
-  prevOptionList: string[],
-  targetOption: string
-) => {
-  if (prevOptionList.some((option) => option === targetOption)) {
-    return prevOptionList.filter((option) => option !== targetOption);
-  }
-
-  return [...prevOptionList, targetOption];
-};
-
-interface AppliedFiltersType {
-  currentGenres: GenreType[];
-  currentAges: AgeType[];
-  currentStyles: StyleType[];
-  currentCities: CityType[];
-  newGenres: GenreType[];
-  newCities: CityType[];
-  newAges: AgeType[];
-  newStyles: StyleType[];
 }

@@ -1,28 +1,24 @@
-import { getTosList } from "@/apis/terms";
-import Header from "@/components/Header";
-import LinkItem from "@/components/LinkItem";
+import { useGetTosAll } from "@/app/terms/_hooks/useGetTosAll";
+import TosItem from "./_ui/TosItem";
+import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 
 export default async function Page() {
-  const { tosList } = await getTosList();
+  const { tosList } = await useGetTosAll();
 
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <HeaderLeft
           option={{
             back: true,
           }}
         />
-        <Header.MiddleText text="약관/정책" />
+        <HeaderMiddle text="약관/정책" />
       </Header>
       <main>
-        {tosList.map(({ idx, title }) => {
-          return (
-            <LinkItem key={idx} href={`/terms/${idx}`}>
-              {title}
-            </LinkItem>
-          );
-        })}
+        {tosList.map((tos) => (
+          <TosItem tos={tos} key={tos.idx} />
+        ))}
       </main>
     </>
   );

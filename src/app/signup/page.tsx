@@ -1,39 +1,45 @@
 "use client";
 
-import Control from "@/components/Control";
-import Header from "@/components/Header";
-import EmailForm from "@/components/SignupForm/EmailForm";
-import PasswordForm from "@/components/SignupForm/PasswordForm";
-import ProfileForm from "@/components/SignupForm/ProfileForm";
-import { useLocalSignup } from "@/service/signup/hooks";
-import { ProfileFormData } from "@/types/signup";
+import PasswordForm from "./_ui/PasswordForm";
+import { setAuthToken } from "@/shared/helpers/axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
-const INITIAL_FORM_STATE = {
-  emailToken: "",
-  email: "",
-  pw: "",
-  nickname: "",
-  gender: "",
-  birth: "",
-  file: "",
-};
+import { AxiosError } from "axios";
+import authStore from "@/shared/store/authStore";
+import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import PageController from "@/shared/ui/PageController";
+import { useLocalSignUp } from "./_hooks/useLocalSignUp";
+import EmailAuthForm from "./_ui/EmailAuthForm";
+import { INITIAL_FORM_STATE } from "./_const/initialForm";
+import { ProfileFormData, UpdateFormFunc } from "./types";
+import ProfileForm from "./_ui/ProfileForm";
 
 const SignUpPage = () => {
   const router = useRouter();
   const [formInformation, setFormInformation] = useState(INITIAL_FORM_STATE);
   const [formIndex, setFormIndex] = useState(0);
-  const updateForm = (insertedFormData: Partial<typeof INITIAL_FORM_STATE>) => {
+  const updateForm: UpdateFormFunc = (insertedFormData) => {
     setFormInformation({ ...formInformation, ...insertedFormData });
     setFormIndex(formIndex + 1);
   };
+  const setToken = authStore(({ setToken }) => setToken);
 
-  const { mutate } = useLocalSignup({
-    onSuccess: (res) => {
-      console.log(res);
+  const { mutate, status } = useLocalSignUp(
+    {
+      onSuccess: (data) => {
+        setToken(data.token);
+        setAuthToken(data.token);
+        stackRouterPush(router, {
+          path: "/",
+          screen: WEBVIEW_SCREEN.MAIN,
+          isStack: false,
+        });
+      },
     },
-  });
+    setFormIndex
+  );
 
   const handleClickNextButtonInPasswordForm = (pw: string) =>
     updateForm({ pw });
@@ -56,28 +62,28 @@ const SignUpPage = () => {
   return (
     <>
       <Header>
-        <Header.LeftOption
+        <HeaderLeft
           option={{
-            back: {
-              onClick: () => router.back(),
-            },
+            back: true,
           }}
         />
-        <Header.MiddleText text={formIndex === 2 ? "프로필" : "회원가입"} />
+        <HeaderMiddle text={formIndex === 2 ? "프로필" : "회원가입"} />
       </Header>
       <main>
         <div className="my-[16px] gap-[8px] center">
           {[0, 1, 2].map((index) => {
             return (
-              <Control
+              <PageController
                 key={index}
-                onClick={() => {}}
+                onClick={() => {
+                  // ! 완료된 순서대로 이 전으로 갈 수 있도록 변경해야함
+                }}
                 isSelected={index === formIndex}
               />
             );
           })}
         </div>
-        {formIndex === 0 && <EmailForm updateForm={updateForm} />}
+        {formIndex === 0 && <EmailAuthForm updateForm={updateForm} />}
         {formIndex === 1 && (
           <PasswordForm
             isResetForm={false}
@@ -89,6 +95,7 @@ const SignUpPage = () => {
           <ProfileForm
             nextButtonText="라이켓 시작하기"
             onClickNextButton={onClickNextButtonInProfileForm}
+            status={status}
           />
         )}
       </main>

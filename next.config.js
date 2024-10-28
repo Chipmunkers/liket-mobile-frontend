@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "standalone",
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "picsum.photos" },
@@ -10,6 +11,18 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "liket.s3.ap-northeast-2.amazonaws.com",
+      },
+      {
+        protocol: "https",
+        hostname: "s3.ap-northeast-2.amazonaws.com",
+      },
+      {
+        protocol: "https",
+        hostname: "dev.liket.site",
+      },
+      {
+        protocol: "https",
+        hostname: "liket.site",
       },
     ],
   },
