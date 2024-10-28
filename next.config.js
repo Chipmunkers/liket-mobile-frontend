@@ -20,6 +20,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "dev.liket.site",
       },
+      {
+        protocol: "https",
+        hostname: "liket.site",
+      },
     ],
   },
   async rewrites() {

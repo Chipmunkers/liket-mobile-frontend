@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     initialScale: 1,
     maximumScale: 1,
   },
-  metadataBase: new URL("https://dev.liket.site"),
+  metadataBase: new URL("https://liket.site"),
   keywords: ["라이켓", "LIKET"],
   openGraph: {
     images: [
