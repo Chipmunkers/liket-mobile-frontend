@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDeleteReview } from "./hooks/useDeleteReview";
 import { AxiosError } from "axios";
-import ReloadIcon from "./icon/review-reload.svg";
 import { ButtonBase } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
 import { DefaultLoading } from "@/shared/ui/Loading";
@@ -24,10 +23,14 @@ import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 import ReloadButton from "@/shared/ui/ReloadButton";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { REPORT_TYPE } from "@/app/contents/[idx]/_const/reportType";
 
 const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
-  const [isReviewMenuDrawerOpen, setIsReviewMenuDrawerOpen] = useState(false);
   const [selectReviewIdx, setSelectReviewIdx] = useState<number>();
+  const [isReportDrawerOpen, setIsReportDrawerOpen] = useState(false);
+  const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
+  const [isSelectReportKindDrawerOpen, setIsSelectReportKindDrawerOpen] =
+    useState(false);
 
   const searchParam = useSearchParams();
   const { safeArea } = useGetSafeArea();
@@ -97,7 +100,7 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
   const { mutate: deleteReviewApi } = useDeleteReview({
     onSuccess: () => {
       customToast("삭제되었습니다.");
-      setIsReviewMenuDrawerOpen(false);
+      setIsEditDrawerOpen(false);
       resetReview();
     },
     onError: (err) => {
@@ -105,7 +108,7 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
         if (err.response?.status === 401) return moveLoginPage();
         if (err.response?.status === 404) {
           customToast("삭제되었습니다.");
-          setIsReviewMenuDrawerOpen(false);
+          setIsEditDrawerOpen(false);
           resetReview();
           return;
         }
@@ -160,8 +163,15 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
           ) : (
             <ReviewInfiniteScroll
               reviewList={data.pages.map((page) => page.reviewList).flat()}
-              setIsReviewMenuDrawerOpen={setIsReviewMenuDrawerOpen}
-              setSelectReviewIdx={setSelectReviewIdx}
+              onClickMeatball={(userIdxOfReview) => {
+                setSelectReviewIdx(userIdxOfReview);
+
+                if (loginUser?.idx === userIdxOfReview) {
+                  setIsEditDrawerOpen(true);
+                } else {
+                  setIsReportDrawerOpen(true);
+                }
+              }}
               loginUser={loginUser}
               setTarget={setTarget}
             />
@@ -174,8 +184,8 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
         </ReloadButton>
       )}
       <Drawer
-        open={isReviewMenuDrawerOpen}
-        onClose={() => setIsReviewMenuDrawerOpen(false)}
+        open={isEditDrawerOpen}
+        onClose={() => setIsEditDrawerOpen(false)}
       >
         <li className="bottom-sheet-list">
           <ButtonBase
@@ -202,6 +212,45 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
             삭제
           </ButtonBase>
         </li>
+      </Drawer>
+      <Drawer
+        open={isReportDrawerOpen}
+        onClose={() => setIsReportDrawerOpen(false)}
+      >
+        <li className="bottom-sheet-list">
+          <ButtonBase
+            onClick={() => {
+              setIsReportDrawerOpen(false);
+              setIsSelectReportKindDrawerOpen(true);
+            }}
+            className="bottom-sheet-button flex justify-start px-[24px] text-rosepink-01"
+          >
+            신고하기
+          </ButtonBase>
+        </li>
+      </Drawer>
+      <Drawer
+        open={isSelectReportKindDrawerOpen}
+        onClose={() => setIsSelectReportKindDrawerOpen(false)}
+      >
+        <div className="center text-h2">신고 유형</div>
+        <ul>
+          {REPORT_TYPE.map(({ idx, name }) => (
+            <li className="bottom-sheet-list" key={idx}>
+              <ButtonBase
+                onClick={() => {
+                  setIsSelectReportKindDrawerOpen(false);
+                  customToast("신고 완료되었습니다.");
+                }}
+                className={classNames(
+                  "bottom-sheet-button flex justify-start px-[24px]"
+                )}
+              >
+                {name}
+              </ButtonBase>
+            </li>
+          ))}
+        </ul>
       </Drawer>
     </>
   );
