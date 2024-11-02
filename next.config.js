@@ -18,6 +18,10 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: "liket-temp.s3.ap-northeast-2.amazonaws.com",
+      },
+      {
+        protocol: "https",
         hostname: "dev.liket.site",
       },
       {

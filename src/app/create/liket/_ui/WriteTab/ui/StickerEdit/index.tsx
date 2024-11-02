@@ -1,3 +1,4 @@
+import { Sticker } from "@/app/create/liket/_consts/icon";
 import IconButtonGroup from "../../../../_ui/IconButtonGroup";
 import { Props } from "./types";
 
@@ -6,7 +7,7 @@ const StickerEdit = ({ onClickSticker }: Props) => {
     <div className="h-[80px]">
       <IconButtonGroup
         iconSize={48}
-        onClickIcon={onClickSticker}
+        onClickIcon={(sticker) => onClickSticker(sticker as Sticker)}
         icons={[
           "꽃",
           "리본",

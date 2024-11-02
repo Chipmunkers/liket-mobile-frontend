@@ -8,22 +8,34 @@ import { STAGE_SIZE } from "../../_consts/size";
 import { Props } from "./types";
 import KonvaImage from "./_ui/KonvaImage";
 import Konva from "konva";
-import { StrictShapeConfig } from "../../types";
+import { StrictShapeConfig, TextShape } from "../../types";
 import LiketCreateIcon from "@/shared/icon/legacy/create-54.svg";
+import { useUploadLiketImg } from "../../_hooks/useUploadBgImg";
 
 const LiketUploader = ({
-  cardImageInformation,
+  bgImgInfo,
   uploadedImage,
-  shapes,
+  imgShapes,
+  textShape,
   size = "LARGE",
   stageRef,
-  selectedShapeId,
-  onSelectShape,
-  onChangeShape,
+  selectedImgShapeCode,
+  isTextShapeSelected,
+  onSelectImgShape,
+  onSelectTextShape,
+  onChangeImgShapes,
+  onChangeTextShape,
   onUploadImage,
   onChangeBackgroundImage,
+  onUploadSuccessBgImg,
   selectedIndex,
 }: Props) => {
+  const { mutate: uploadImage } = useUploadLiketImg({
+    onSuccess: ({ fullUrl }) => {
+      onUploadSuccessBgImg(fullUrl);
+    },
+  });
+
   const touchStateRef = useRef<{
     center?: {
       x: number;
@@ -42,18 +54,15 @@ const LiketUploader = ({
     const isBackgroundImageClicked = e.target.attrs.id === "bg-image";
 
     if (isEmptyAreaClicked || isBackgroundImageClicked) {
-      onSelectShape(" ");
+      onSelectImgShape();
+      onSelectTextShape(false);
     }
   };
 
-  const onChange = (newAttrs: StrictShapeConfig, idx: number) => {
-    const newShapes = [...shapes];
+  const handleChangeImgShape = (newAttrs: StrictShapeConfig, idx: number) => {
+    const newShapes = [...imgShapes];
     newShapes[idx] = newAttrs;
-    onChangeShape(newShapes);
-  };
-
-  const handleSelectItem = (id: string) => {
-    onSelectShape(id);
+    onChangeImgShapes(newShapes);
   };
 
   const handleTouchEndStage = () => {
@@ -114,9 +123,9 @@ const LiketUploader = ({
           y: newY,
         });
 
-        cardImageInformation &&
+        bgImgInfo &&
           onChangeBackgroundImage({
-            ...(cardImageInformation || {}),
+            ...(bgImgInfo || {}),
             x: newX,
             y: newY,
           });
@@ -178,14 +187,14 @@ const LiketUploader = ({
 
         bgImage.rotation(isRotatable ? 0 : angle);
 
-        cardImageInformation &&
+        bgImgInfo &&
           onChangeBackgroundImage({
-            ...(cardImageInformation || {}),
+            ...(bgImgInfo || {}),
             offsetX: oldWidth / 2,
             offsetY: oldHeight / 2,
             width: newWidth,
             height: newHeight,
-            angle: isRotatable ? 0 : angle,
+            rotation: isRotatable ? 0 : angle,
           });
 
         stageRef.current.batchDraw();
@@ -205,7 +214,8 @@ const LiketUploader = ({
         (e.target as HTMLElement)?.tagName !== "CANVAS" &&
         (e.target as HTMLElement)?.tagName !== "TEXTAREA"
       ) {
-        onSelectShape(" ");
+        onSelectImgShape();
+        onSelectTextShape(false);
       }
     };
 
@@ -229,12 +239,20 @@ const LiketUploader = ({
             deselectShape(e);
           }}
           onTouchMove={(e) => {
-            if (selectedIndex === 0 && selectedShapeId === " ") {
+            if (
+              selectedIndex === 0 &&
+              !selectedImgShapeCode &&
+              !isTextShapeSelected
+            ) {
               pinchZoom(e);
             }
           }}
           onTouchEnd={() => {
-            if (selectedIndex === 0 && selectedShapeId === " ") {
+            if (
+              selectedIndex === 0 &&
+              !selectedImgShapeCode &&
+              !isTextShapeSelected
+            ) {
               handleTouchEndStage();
             }
           }}
@@ -263,48 +281,45 @@ const LiketUploader = ({
               <Image
                 id="bg-image"
                 image={uploadedImage}
-                x={cardImageInformation!.x}
-                y={cardImageInformation!.y}
-                width={cardImageInformation!.width}
-                height={cardImageInformation!.height}
-                rotation={cardImageInformation!.angle}
-                offsetX={cardImageInformation!.offsetX}
-                offsetY={cardImageInformation!.offsetY}
+                x={bgImgInfo!.x}
+                y={bgImgInfo!.y}
+                width={bgImgInfo!.width}
+                height={bgImgInfo!.height}
+                rotation={bgImgInfo!.rotation}
+                offsetX={bgImgInfo!.offsetX}
+                offsetY={bgImgInfo!.offsetY}
                 alt="유저가 포토 카드에 올린 배경 이미지"
               />
             </Group>
-            {shapes.map((shape, idx) => {
-              const { id, type } = shape;
+            {imgShapes.map((shape, idx) => {
+              const { code } = shape;
 
-              switch (type) {
-                case "text": {
-                  return (
-                    <KonvaText
-                      key={id}
-                      isSelected={id === selectedShapeId}
-                      shapeProps={shape}
-                      onSelect={() => handleSelectItem(id)}
-                      onChange={(newAttrs: StrictShapeConfig) =>
-                        onChange(newAttrs, idx)
-                      }
-                    />
-                  );
-                }
-                case "image": {
-                  return (
-                    <KonvaImage
-                      key={id}
-                      isSelected={id === selectedShapeId}
-                      shapeProps={shape}
-                      onSelect={() => handleSelectItem(id)}
-                      onChange={(newAttrs: StrictShapeConfig) =>
-                        onChange(newAttrs, idx)
-                      }
-                    />
-                  );
-                }
-              }
+              return (
+                <KonvaImage
+                  key={code}
+                  isSelected={code === selectedImgShapeCode}
+                  shapeProps={shape}
+                  onSelect={() => {
+                    onSelectTextShape(false);
+                    onSelectImgShape(code);
+                  }}
+                  onChange={(newAttrs: StrictShapeConfig) =>
+                    handleChangeImgShape(newAttrs, idx)
+                  }
+                />
+              );
             })}
+            {textShape && (
+              <KonvaText
+                isSelected={isTextShapeSelected}
+                shapeProps={textShape}
+                onSelect={() => {
+                  onSelectTextShape(true);
+                  onSelectImgShape();
+                }}
+                onChange={(newAttrs: TextShape) => onChangeTextShape(newAttrs)}
+              />
+            )}
           </Layer>
         </Stage>
       ) : (
@@ -330,36 +345,38 @@ const LiketUploader = ({
                 return;
               }
 
-              const file = files[0];
-              const reader = new FileReader();
+              if (files) {
+                const reader = new FileReader();
+                const file = files[0];
 
-              reader.onload = () => {
-                const image = new window.Image();
-                image.src = reader.result as string;
-                image.onload = () => {
-                  const { width: IMAGE_WIDTH, height: IMAGE_HEIGHT } = image;
-                  const { WIDTH: STAGE_WIDTH, HEIGHT: STAGE_HEIGHT } =
-                    STAGE_SIZE;
-                  const scale = STAGE_WIDTH / IMAGE_WIDTH;
-                  const NEW_IMAGE_HEIGHT = scale * IMAGE_HEIGHT;
+                reader.onloadend = () => {
+                  const image = new window.Image();
+                  image.onload = () => {
+                    const { width: IMAGE_WIDTH, height: IMAGE_HEIGHT } = image;
+                    const { WIDTH: STAGE_WIDTH, HEIGHT: STAGE_HEIGHT } =
+                      STAGE_SIZE;
+                    const scale = STAGE_WIDTH / IMAGE_WIDTH;
+                    const NEW_IMAGE_HEIGHT = scale * IMAGE_HEIGHT;
+                    onChangeBackgroundImage({
+                      width: STAGE_WIDTH,
+                      height: NEW_IMAGE_HEIGHT,
+                      rotation: 0,
+                      x: STAGE_WIDTH / 2,
+                      y:
+                        NEW_IMAGE_HEIGHT / 2 +
+                        (STAGE_HEIGHT - NEW_IMAGE_HEIGHT) / 2,
+                      offsetX: STAGE_WIDTH / 2,
+                      offsetY: NEW_IMAGE_HEIGHT / 2,
+                    });
+                    onUploadImage(image);
+                  };
 
-                  onChangeBackgroundImage({
-                    width: STAGE_WIDTH,
-                    height: NEW_IMAGE_HEIGHT,
-                    angle: 0,
-                    x: STAGE_WIDTH / 2,
-                    y:
-                      NEW_IMAGE_HEIGHT / 2 +
-                      (STAGE_HEIGHT - NEW_IMAGE_HEIGHT) / 2,
-                    offsetX: STAGE_WIDTH / 2,
-                    offsetY: NEW_IMAGE_HEIGHT / 2,
-                  });
-
-                  onUploadImage(image);
+                  image.src = reader.result as string;
+                  uploadImage(files[0]);
                 };
-              };
 
-              reader.readAsDataURL(file);
+                reader.readAsDataURL(file);
+              }
             }}
           />
         </>

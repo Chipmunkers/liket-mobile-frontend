@@ -1,3 +1,4 @@
+import { Sticker } from "../../_consts/icon";
 import { CardSizeType, ColorTokensType, IconType } from "../../types";
 
 export type Props = {
@@ -7,6 +8,6 @@ export type Props = {
   onChangeTab: (index: number) => void;
   onClickText: () => void;
   onClickChangeSize: (size: CardSizeType) => void;
-  onClickSticker: (sticker: IconType) => void;
+  onClickSticker: (sticker: Sticker) => void;
   onClickColor: (color: ColorTokensType) => void;
 };
