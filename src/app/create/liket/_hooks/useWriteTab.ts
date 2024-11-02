@@ -1,77 +1,67 @@
 import { generateRandomId } from "@/shared/helpers/random";
-import {
-  CardSizeType,
-  IconType,
-  ImageShape,
-  StrictShapeConfig,
-  TextShape,
-} from "../types";
+import { CardSizeType, ImgShape, StrictShapeConfig, TextShape } from "../types";
 import { Dispatch } from "react";
+import { findLowestMissingNumber } from "../_ui/LiketUploader/_utils/helper";
+import { ShapeConfig } from "konva/lib/Shape";
+import { IconToStickerNumberMap, Sticker } from "../_consts/icon";
 
 interface Props {
-  shapes: StrictShapeConfig[];
-  selectedShapeId: string;
-  setShapes: Dispatch<StrictShapeConfig[]>;
+  imgShapes: ImgShape[];
+  isTextShapeSelected: boolean;
+  selectedImgShapeCode: number | undefined;
+  setTextShape: Dispatch<TextShape | undefined>;
+  setImgShapes: Dispatch<ImgShape[]>;
   setSize: Dispatch<CardSizeType>;
   setSelectedIndex: Dispatch<number>;
 }
 
 const useWriteTab = ({
-  shapes,
-  selectedShapeId,
-  setShapes,
+  imgShapes,
+  isTextShapeSelected,
+  selectedImgShapeCode,
+  setTextShape,
+  setImgShapes,
   setSize,
   setSelectedIndex,
 }: Props) => {
   const handleChangeTab = (index: number) => setSelectedIndex(index);
 
   const handleClickRemoveItem = () => {
-    const targetShape = shapes.find(({ id }) => id === selectedShapeId);
+    if (isTextShapeSelected) {
+      setTextShape(undefined);
+    } else {
+      const newShapes = imgShapes.filter(
+        ({ code }) => code !== selectedImgShapeCode
+      );
 
-    if (targetShape?.type === "text") {
-      setSelectedIndex(0);
+      setImgShapes(newShapes);
     }
-
-    const newShapes = shapes.filter(({ id }) => id !== selectedShapeId);
-    setShapes(newShapes);
   };
 
   const handleChangeSize = (size: CardSizeType) => setSize(size);
 
-  const handleInsertSticker = async (sticker: IconType) => {
-    const num_of_images = shapes.map(({ type }) => type === "image").length;
+  const handleInsertSticker = async (sticker: Sticker) => {
+    const num_of_images = imgShapes.map(({ type }) => type === "image").length;
+    const stickerNumber = IconToStickerNumberMap[sticker];
 
-    if (num_of_images > 10) {
+    if (num_of_images >= 10) {
       return false;
     }
 
-    try {
-      const response = await fetch(`/stickers/${sticker}.svg`);
-      const blob = await response.blob();
-      const reader = new FileReader();
-      reader.onload = () => {
-        const image = new window.Image();
-        image.src = reader.result as string;
-        image.onload = () => {
-          setShapes([
-            ...shapes,
-            {
-              type: "image",
-              id: generateRandomId(10),
-              image,
-              width: 80,
-              height: 80,
-              x: 0,
-              y: 0,
-            },
-          ]);
-        };
-      };
-      reader.readAsDataURL(blob);
-    } catch (error) {
-      console.error("스티커를 가져오는 도중 에러가 발생했습니다", error);
-    }
+    setImgShapes([
+      ...imgShapes,
+      {
+        code: findLowestMissingNumber(imgShapes.map(({ code }) => code)),
+        stickerNumber,
+        width: 80,
+        height: 80,
+        x: 0,
+        y: 0,
+        rotation: 0,
+      },
+    ]);
   };
+
   return {
     handleChangeTab,
     handleClickRemoveItem,
