@@ -1,8 +1,8 @@
-import { StrictShapeConfig } from "../../../../types";
+import { ImgShape } from "../../../../types";
 
 export type Props = {
-  shapeProps: StrictShapeConfig;
+  shapeProps: ImgShape;
   isSelected: boolean;
-  onChange: (newAttrs: StrictShapeConfig) => void;
+  onChange: (newAttrs: ImgShape) => void;
   onSelect: () => void;
 };

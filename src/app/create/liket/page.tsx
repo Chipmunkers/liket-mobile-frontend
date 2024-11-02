@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CircleCross from "@/icons/circle-cross.svg";
 import { Else, If, Then } from "react-if";
 import useLiket from "./_hooks/useLiket";
@@ -15,17 +15,18 @@ import FrontBackSwitch from "./_ui/FrontBackSwitch";
 import BackSide from "./_ui/BackSide";
 import TextEnteringModal from "./_ui/TextEnteringModal";
 import WriteTab from "./_ui/WriteTab";
-import { CardImageInformation, StrictShapeConfig } from "./types";
+import { BgImgInfo, ImgShape, TextShape } from "./types";
 import dynamic from "next/dynamic";
 import { getRefValue } from "@/shared/helpers/getRefValue";
-import { useGetLiket } from "./_hooks/useGetLiket";
 import { CardSizeType, ColorTokensType } from "../liket/types";
 import { getXPos, yPos } from "./_util/position";
-import { generateRandomId } from "@/shared/helpers/random";
 import useWriteTab from "./_hooks/useWriteTab";
 import { useGetReview } from "./_hooks/useGetReview";
 import ContentNotFound from "@/app/contents/[idx]/_ui/ContentNotFound";
 import { AxiosError } from "axios";
+import useCreateLiket from "./_hooks/useCreateLiket";
+import { useUploadCardImg } from "./_hooks/useUploadCardImg";
+import { CARD_SIZE_TO_INDEX } from "./_util/const";
 
 // NOTE: React Konva는 서버사이드 렌더링이 불가함.
 // https://github.com/konvajs/react-konva?tab=readme-ov-file#usage-with-nextjs
@@ -38,18 +39,48 @@ export default function Page({
 }: {
   searchParams: { review: number };
 }) {
-  const [shapes, setShapes] = useState<StrictShapeConfig[]>([]);
+  const { mutate: createLiket } = useCreateLiket({
+    onSuccess: (data) => {
+      console.log("라이켓 생성됨", data);
+    },
+    onError: () => {
+      console.error("라이켓 에러남");
+    },
+  });
+  const { mutate: uploadCardImg } = useUploadCardImg({
+    onSuccess: ({ fullUrl }) => {
+      if (bgImgInfo && uploadedBgImgPath) {
+        createLiket({
+          reviewIdx: searchParams.review,
+          bgImgInfo,
+          cardImgPath: fullUrl,
+          bgImgPath: uploadedBgImgPath,
+          textShape,
+          imgShapes,
+          size: CARD_SIZE_TO_INDEX[size],
+          description,
+        });
+      }
+    },
+    onError: () => {
+      console.log("라이켓 카드 이미지 업로드 실패");
+    },
+  });
+
+  const [imgShapes, setImgShapes] = useState<ImgShape[]>([]);
+  const [textShape, setTextShape] = useState<TextShape | undefined>();
+
   const [size, setSize] = useState<CardSizeType>("LARGE");
-  const [selectedShapeId, setSelectedShapeId] = useState(" ");
-  const [cardImageInformation, setCardImageInformation] =
-    useState<CardImageInformation>();
+  const [selectedImgShapeCode, setSelectedImgShapeCode] = useState<number>();
+  const [isTextShapeSelected, setIsTextShapeSelected] = useState(false);
+  const [bgImgInfo, setBgImgInfo] = useState<BgImgInfo>();
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [uploadedImage, setUploadedImage] = useState<HTMLImageElement>();
+  const [uploadedBgImgPath, setUploadedBgImgPath] = useState("");
+  const [uploadedImage, setUploadbgImg] = useState<HTMLImageElement>();
   const [isTextEnteringOnFrontSide, setIsTextEnteringOnFrontSide] =
     useState(false);
 
   const { data: reviewData, error } = useGetReview(searchParams.review);
-  const { data: restoredLiket, isSuccess } = useGetLiket({ idx: 1 });
 
   const {
     handleChangeTab,
@@ -57,15 +88,18 @@ export default function Page({
     handleChangeSize,
     handleInsertSticker,
   } = useWriteTab({
-    shapes,
-    selectedShapeId,
-    setShapes,
+    imgShapes,
+    selectedImgShapeCode,
+    isTextShapeSelected,
+    setTextShape,
+    setImgShapes,
     setSize,
     setSelectedIndex,
   });
 
-  const handleUploadImage = (imageElement: HTMLImageElement) =>
-    setUploadedImage(imageElement);
+  const handleUploadBgImg = (imgElement: HTMLImageElement) => {
+    setUploadbgImg(imgElement);
+  };
 
   const handleClickFrontTextEnteringClose = () => {
     setSelectedIndex(0);
@@ -73,40 +107,32 @@ export default function Page({
   };
 
   const handleClickFrontTextEnteringCheck = (text: string) => {
-    setShapes([
-      ...shapes,
-      {
-        type: "text",
-        id: generateRandomId(10),
-        fill: "black",
-        text,
-        x: getXPos(text),
-        y: yPos,
-      },
-    ]);
+    setTextShape({
+      fill: "black",
+      text,
+      x: getXPos(text),
+      y: yPos,
+    });
 
     setIsTextEnteringOnFrontSide(false);
   };
 
   const handleInsertTextOnLiket = () => {
-    const isTextExist = shapes.some(({ type }) => type === "text");
-    !isTextExist && setIsTextEnteringOnFrontSide(true);
+    !textShape && setIsTextEnteringOnFrontSide(true);
   };
 
+  const handleChangeTextShape = (newAttrs: TextShape) => setTextShape(newAttrs);
+
   const handleChangeTextColor = (fill: ColorTokensType) => {
-    const textShapeIdx = shapes.findIndex(({ type }) => type === "text");
-
-    const newShapes = [...shapes];
-    newShapes[textShapeIdx] = {
-      ...newShapes[textShapeIdx],
-      fill,
-    };
-
-    setShapes(newShapes);
+    textShape &&
+      setTextShape({
+        ...textShape,
+        fill,
+      });
   };
 
   const {
-    oneLineReview,
+    description,
     handleClickWriteReview,
     stageRef,
     isTextEnteringOnBackSide,
@@ -120,63 +146,26 @@ export default function Page({
     isTextEnteringOnBackSide || isTextEnteringOnFrontSide;
 
   const handleCreateLiket = () => {
-    const dataURL = getRefValue(stageRef).toDataURL();
-    const shapesToSave = shapes.map((shape) => {
-      if (shape.type === "image") {
-        return {
-          ...shape,
-          image: shape.image.src,
-        };
+    const dataURItoBlob = (dataURI: string): Blob => {
+      const byteString = atob(dataURI.split(",")[1]);
+      const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
       }
 
-      return shape;
-    });
-
-    const payload = {
-      shapes: JSON.stringify(shapesToSave),
-      cardImageSrc: dataURL,
-      backgroundImage: (uploadedImage as HTMLImageElement).src,
-      cardSize: size,
-      cardImageInformation,
+      return new Blob([ab], { type: mimeString });
     };
 
-    localStorage.setItem("liket", JSON.stringify(payload));
-    // router.push("/mypage/likets/1");
+    const dataURL = getRefValue(stageRef).toDataURL();
+    const blobData = dataURItoBlob(dataURL);
+    const file = new File([blobData], "stage-image.png", { type: "image/png" });
+
+    uploadCardImg(file);
   };
-
-  useEffect(() => {
-    if (isSuccess && restoredLiket) {
-      const { shapes, backgroundImage, cardSize, cardImageInformation } =
-        restoredLiket as {
-          shapes: string;
-          backgroundImage: any;
-          cardSize: any;
-          cardImageInformation: any;
-        };
-      const $image = new window.Image();
-      $image.src = backgroundImage;
-      $image.alt = "배경 사진";
-
-      const shapesWithImage = (JSON.parse(shapes) as any[]).map((shape) => {
-        if (shape.type === "image") {
-          const image = new Image();
-          image.src = shape.image;
-          image.alt = "스티커";
-
-          return { ...shape, image };
-        }
-
-        return shape;
-      });
-
-      $image.onload = () => {
-        setUploadedImage($image);
-        setShapes(shapesWithImage);
-        setSize(cardSize);
-        setCardImageInformation(cardImageInformation);
-      };
-    }
-  }, [isSuccess, restoredLiket]);
 
   if ((error as AxiosError)?.response?.status === 404) {
     return (
@@ -216,7 +205,7 @@ export default function Page({
             <HeaderRight
               option={{
                 check: {
-                  disabled: !uploadedImage,
+                  disabled: !uploadedImage || !description,
                   onClick: handleCreateLiket,
                 },
               }}
@@ -239,30 +228,33 @@ export default function Page({
         >
           <BackSide
             reviewData={reviewData}
-            oneLineReview={oneLineReview}
+            description={description}
             onClickReview={handleClickWriteReview}
           />
         </div>
         <div className={classNames(!isFront && "hidden")}>
           <LiketUploader
-            cardImageInformation={cardImageInformation}
-            onChangeBackgroundImage={(cardImageInformation) =>
-              setCardImageInformation(cardImageInformation)
-            }
+            bgImgInfo={bgImgInfo}
+            onChangeBackgroundImage={(bgImgInfo) => setBgImgInfo(bgImgInfo)}
             selectedIndex={selectedIndex}
             uploadedImage={uploadedImage}
             stageRef={stageRef}
             size={size}
-            shapes={shapes}
-            selectedShapeId={selectedShapeId}
-            onSelectShape={setSelectedShapeId}
-            onChangeShape={setShapes}
-            onUploadImage={handleUploadImage}
+            isTextShapeSelected={isTextShapeSelected}
+            textShape={textShape}
+            imgShapes={imgShapes}
+            selectedImgShapeCode={selectedImgShapeCode}
+            onSelectImgShape={setSelectedImgShapeCode}
+            onSelectTextShape={setIsTextShapeSelected}
+            onChangeTextShape={handleChangeTextShape}
+            onChangeImgShapes={setImgShapes}
+            onUploadImage={handleUploadBgImg}
+            onUploadSuccessBgImg={setUploadedBgImgPath}
           />
         </div>
         <If condition={isFront}>
           <Then>
-            <If condition={selectedShapeId.length > 1}>
+            <If condition={selectedImgShapeCode || isTextShapeSelected}>
               <Then>
                 <button
                   className="absolute bottom-[34px] left-1/2 transform -translate-x-1/2"
@@ -275,7 +267,7 @@ export default function Page({
                 <WriteTab
                   selectedIndex={selectedIndex}
                   onChangeTab={handleChangeTab}
-                  hidden={selectedShapeId.length > 1}
+                  hidden={!!selectedImgShapeCode || !!isTextShapeSelected}
                   enabled={!!uploadedImage}
                   onClickText={handleInsertTextOnLiket}
                   onClickChangeSize={handleChangeSize}

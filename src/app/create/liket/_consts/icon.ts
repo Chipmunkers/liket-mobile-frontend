@@ -1,3 +1,20 @@
+export const STICKERS = [
+  "꽃",
+  "리본",
+  "리본끈1",
+  "리본끈2",
+  "무지개",
+  "반짝이",
+  "별1",
+  "별2",
+  "선글라스",
+  "스마일",
+  "음표1",
+  "음표2",
+  "클로버",
+  "하트",
+] as const;
+
 export const Icons = [
   "꽃",
   "리본",
@@ -20,5 +37,24 @@ export const Icons = [
   "search",
   "create",
 ] as const;
+
+export const IconToStickerNumberMap = {
+  꽃: 1,
+  리본: 2,
+  리본끈1: 3,
+  리본끈2: 4,
+  무지개: 5,
+  반짝이: 6,
+  별1: 7,
+  별2: 8,
+  선글라스: 9,
+  스마일: 10,
+  음표1: 11,
+  음표2: 12,
+  클로버: 13,
+  하트: 14,
+};
+
+export type Sticker = (typeof STICKERS)[number];
 
 export type IconName = (typeof Icons)[number];

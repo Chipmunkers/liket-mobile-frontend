@@ -2,7 +2,7 @@ import { Stage } from "konva/lib/Stage";
 import { useState, useRef } from "react";
 
 const useLiket = () => {
-  const [oneLineReview, setOnelineReview] = useState("");
+  const [description, setDescription] = useState("");
   const [isFront, setIsFront] = useState(true);
   const stageRef = useRef<Stage>(null);
   const [isTextEnteringOnBackSide, setIsTextEnteringOnBackSide] =
@@ -14,14 +14,14 @@ const useLiket = () => {
   const handleClickWriteReview = () => setIsTextEnteringOnBackSide(true);
 
   const handleClickBackTextEnteringCheck = (text: string) => {
-    setOnelineReview(text);
+    setDescription(text);
     setIsTextEnteringOnBackSide(false);
   };
 
   const handleClickSwitchFrontBack = () => setIsFront(!isFront);
 
   return {
-    oneLineReview,
+    description,
     stageRef,
     isTextEnteringOnBackSide,
     isFront,
