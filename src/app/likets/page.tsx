@@ -17,14 +17,26 @@ import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import useModalStore from "@/shared/store/modalStore";
 import Drawer from "@/shared/ui/Drawer";
+import { useGetLiketAll } from "./_hooks/useGetLiketAll";
+import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
 
 export default function Page() {
   const searchParam = useSearchParams();
+  const { data: userInfo } = useGetMyInfo();
   const order = searchParam.get("order") || "desc";
   const [isNarrow, setIsNarrow] = useState(false);
   const router = useRouter();
   const [selectedLiket, setSelectedLiket] = useState("");
   const openModal = useModalStore(({ openModal }) => openModal);
+  const { data, isFetching, refetch, error } = useGetLiketAll(
+    userInfo?.idx?.toString() || "",
+    {
+      order: "desc",
+      orderby: "time",
+    }
+  );
+
+  console.log(data);
 
   useHandleResizeScreen(setIsNarrow);
 
