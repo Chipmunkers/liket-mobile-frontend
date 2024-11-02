@@ -41,7 +41,7 @@ const useWriteTab = ({
   const handleChangeSize = (size: CardSizeType) => setSize(size);
 
   const handleInsertSticker = async (sticker: Sticker) => {
-    const num_of_images = imgShapes.map(({ type }) => type === "image").length;
+    const num_of_images = imgShapes.length;
     const stickerNumber = IconToStickerNumberMap[sticker];
 
     if (num_of_images >= 10) {
