@@ -8,6 +8,7 @@ import ModalProvider from "@/shared/provider/ModalProvider";
 import QueryProvider from "@/shared/provider/QueryProvider";
 import MuiLocalizationProvider from "@/shared/provider/MuiLocalizationProvider";
 import { classNames } from "@/shared/helpers/classNames";
+import GoogleAnalytics from "@/widgets/GoogleAnlytics";
 
 dayjs.locale("ko");
 
@@ -84,6 +85,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko" className="bg-grey-01">
+      <GoogleAnalytics />
       <body className={classNames(appleGothic.className, "bg-white")}>
         <ModalProvider>
           <QueryProvider>
