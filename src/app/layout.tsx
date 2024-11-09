@@ -85,7 +85,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko" className="bg-grey-01">
-      <GoogleAnalytics />
+      {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS && <GoogleAnalytics />}
       <body className={classNames(appleGothic.className, "bg-white")}>
         <ModalProvider>
           <QueryProvider>
