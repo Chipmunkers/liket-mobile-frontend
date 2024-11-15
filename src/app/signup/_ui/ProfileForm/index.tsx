@@ -13,8 +13,8 @@ import { DefaultLoading } from "@/shared/ui/Loading";
 import Drawer from "@/shared/ui/Drawer";
 import { Props } from "./types";
 import { profileSchema } from "./schema";
-import ProfileImgUploader from "@/shared/ui/ProfileImgUploader";
 import { compressImage } from "@/shared/helpers/compressImage";
+import ProfileImgUploader from "./components/ImageUploader";
 
 const ProfileForm = ({
   currentFormInformation = PROFILE_FORM_DEFAULT_VALUES,
