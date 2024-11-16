@@ -1,3 +1,5 @@
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon, YearCalendar } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
@@ -29,7 +31,15 @@ const ProfileForm = () => {
     useState(false);
   const [tempYear, setTempYear] = useState<Dayjs>(dayjs(new Date()));
 
-  const { formState, register, setValue, getValues, trigger, watch } = useForm({
+  const {
+    formState,
+    register,
+    setValue,
+    getValues,
+    trigger,
+    watch,
+    handleSubmit,
+  } = useForm({
     mode: "onBlur",
     defaultValues: PROFILE_FORM_DEFAULT_VALUES,
     resolver: zodResolver(profileSchema),
@@ -59,12 +69,27 @@ const ProfileForm = () => {
     setValue("gender", myData.gender?.toString() || "");
     setValue("nickname", myData.nickname);
     trigger();
-  }, [myData]);
+  }, [myData, setValue, trigger]);
 
+  console.log(formState.errors);
   return (
     <>
-      <form className="flex flex-col grow px-[24px]">
-        <div className="grow">
+      <form
+        className="flex flex-col grow"
+        onSubmit={handleSubmit(() => {
+          editProfileImg({
+            birth: isNaN(Number(getValues("birth")))
+              ? null
+              : Number(getValues("birth")),
+            gender: isNaN(Number(getValues("gender")))
+              ? null
+              : Number(getValues("gender")),
+            nickname: getValues("nickname"),
+            profileImg: getValues("file") === "" ? null : getValues("file"),
+          });
+        })}
+      >
+        <div className="grow px-[24px]">
           <div className="center mb-[34px] mt-[24px] relative">
             <ProfileImgUploader
               key={watch("file")}
@@ -137,42 +162,20 @@ const ProfileForm = () => {
             />
           </div>
         </div>
+        <BottomButtonTab shadow>
+          <Button
+            className="flex-1 h-[48px]"
+            disabled={editStatus === "pending"}
+            type="submit"
+          >
+            {editStatus === "pending" ? (
+              <DefaultLoading dotSize="8px" />
+            ) : (
+              "저장하기"
+            )}
+          </Button>
+        </BottomButtonTab>
       </form>
-      <BottomButtonTab shadow>
-        <Button
-          className="flex-1 h-[48px]"
-          disabled={editStatus === "pending"}
-          onClick={() => {
-            console.log({
-              birth: isNaN(Number(getValues("birth")))
-                ? null
-                : Number(getValues("birth")),
-              gender: isNaN(Number(getValues("gender")))
-                ? null
-                : Number(getValues("gender")),
-              nickname: getValues("nickname"),
-              profileImg: getValues("file") === "" ? null : getValues("file"),
-            });
-
-            editProfileImg({
-              birth: isNaN(Number(getValues("birth")))
-                ? null
-                : Number(getValues("birth")),
-              gender: isNaN(Number(getValues("gender")))
-                ? null
-                : Number(getValues("gender")),
-              nickname: getValues("nickname"),
-              profileImg: getValues("file") === "" ? null : getValues("file"),
-            });
-          }}
-        >
-          {editStatus === "pending" ? (
-            <DefaultLoading dotSize="8px" />
-          ) : (
-            "저장하기"
-          )}
-        </Button>
-      </BottomButtonTab>
       <Drawer
         open={isYearSelectionDrawerOpen}
         onClose={() => {
