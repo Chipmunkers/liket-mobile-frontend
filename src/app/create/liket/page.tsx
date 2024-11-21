@@ -108,7 +108,7 @@ export default function Page({
 
   const handleClickFrontTextEnteringCheck = (text: string) => {
     setTextShape({
-      fill: "black",
+      fill: "#000",
       text,
       x: getXPos(text),
       y: yPos,
