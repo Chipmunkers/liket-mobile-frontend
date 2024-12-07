@@ -1,6 +1,5 @@
 import customFetch from "@/shared/helpers/fetch";
-import { SummaryNoticeEntity } from "@/shared/types/api/notice/SummaryNoticeEntity";
+import { NoticeEntity } from "@/shared/types/api/notice/NoticeEntity";
 
-export const getNoticeDetail = async (
-  idx: string
-): Promise<SummaryNoticeEntity> => (await customFetch(`/notice/${idx}`)).json();
+export const getNoticeDetail = async (idx: string): Promise<NoticeEntity> =>
+  (await customFetch(`/notice/${idx}`)).json();
