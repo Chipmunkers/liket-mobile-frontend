@@ -3,23 +3,19 @@ import { Props } from "./types";
 import { Header, HeaderLeft, HeaderRight } from "@/shared/ui/Header";
 import ReactTextareaAutosize from "react-textarea-autosize";
 
-const TEXT_AREA_HEIGHT = 48;
-
 const TextEnteringModal = ({
+  text,
   isOpen,
   maxLength,
   allowNewLine,
   onClickClose,
   onClickCheck,
 }: Props) => {
-  const [value, setValue] = useState("");
-  const [textAreaHeight, setTextAreaHeight] =
-    useState<number>(TEXT_AREA_HEIGHT);
+  const [value, setValue] = useState(text);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     if (allowNewLine) {
       setValue(e.target.value);
-      setTextAreaHeight(e.target.scrollHeight - 5);
     } else {
       setValue(e.target.value.replace(/(\r\n|\n|\r)/gm, ""));
     }
