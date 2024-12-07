@@ -19,11 +19,9 @@ import ReviewInfiniteScroll from "./ui/ReviewInfiniteScroll";
 import StarRating from "@/entities/review/StarRating";
 import Divider from "@/shared/ui/Divider";
 import Drawer from "@/shared/ui/Drawer";
-import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 import ReloadButton from "@/shared/ui/ReloadButton";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
-import { REPORT_TYPE } from "@/app/contents/[idx]/_const/reportType";
 import CheckBox from "@/shared/ui/CheckBox";
 import Button from "@/shared/ui/Button";
 
@@ -36,10 +34,9 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
     useState(false);
 
   const searchParam = useSearchParams();
-  const { safeArea } = useGetSafeArea();
 
   // * 리뷰 쿼리 옵션
-  const [reviewPagerble, setReviewPagerble] = useState<{
+  const [reviewPageable, setPageable] = useState<{
     order?: "desc" | "asc";
     orderby: "time" | "like";
     review: string | null;
@@ -47,7 +44,7 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
 
   // * 리뷰 데이터 무한 쿼리
   const { data, fetchNextPage, hasNextPage, isFetching, refetch, error } =
-    useGetReviewAllByContentIdx(props.idx, reviewPagerble);
+    useGetReviewAllByContentIdx(props.idx, reviewPageable);
   const { data: loginUser } = useGetMyInfo();
 
   // * 옵션 변경 시 리뷰 쿼리 데이터 초기화
@@ -91,7 +88,7 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
     queryClient.removeQueries({
       queryKey: [`content-review-${props.idx}`],
     });
-    queryClient.setQueryData([`content-review-${props.idx}`, reviewPagerble], {
+    queryClient.setQueryData([`content-review-${props.idx}`, reviewPageable], {
       pages: [],
       pageParams: [],
     });
@@ -144,22 +141,22 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
           isFetching ? "min-h-[100vh]" : ""
         )}
       >
-        {data?.pages[0]?.reviewList.length ? (
+        {!!data?.pages[0]?.reviewList.length && (
           // * Review를 다시 가져올 때 깜박이지 아래 버튼이 깜박이지 않도록 하기 위함
           <button
             className="flex text-button3 justify-end w-[100%] pr-[24px]"
             onClick={() => {
               resetReview();
-              setReviewPagerble({
-                ...reviewPagerble,
-                orderby: reviewPagerble.orderby === "like" ? "time" : "like",
+              setPageable({
+                ...reviewPageable,
+                orderby: reviewPageable.orderby === "like" ? "time" : "like",
               });
             }}
           >
-            {reviewPagerble.orderby === "like" ? "인기순" : "최신순"}
+            {reviewPageable.orderby === "like" ? "인기순" : "최신순"}
             <BottomArrowIcon />
           </button>
-        ) : null}
+        )}
         {data &&
           (data.pages[0]?.reviewList.length === 0 ? (
             <EmptyReview idx={props.content.idx} />
