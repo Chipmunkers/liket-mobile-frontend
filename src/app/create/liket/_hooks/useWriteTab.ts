@@ -1,8 +1,6 @@
-import { generateRandomId } from "@/shared/helpers/random";
-import { CardSizeType, ImgShape, StrictShapeConfig, TextShape } from "../types";
+import { CardSizeType, ImgShape, TextShape } from "../types";
 import { Dispatch } from "react";
 import { findLowestMissingNumber } from "../_ui/LiketUploader/_utils/helper";
-import { ShapeConfig } from "konva/lib/Shape";
 import { IconToStickerNumberMap, Sticker } from "../_consts/icon";
 
 interface Props {
@@ -28,6 +26,7 @@ const useWriteTab = ({
 
   const handleClickRemoveItem = () => {
     if (isTextShapeSelected) {
+      setSelectedIndex(0);
       setTextShape(undefined);
     } else {
       const newShapes = imgShapes.filter(

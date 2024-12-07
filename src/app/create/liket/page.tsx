@@ -281,6 +281,7 @@ export default function Page({
         </If>
       </main>
       <TextEnteringModal
+        text={textShape?.text || ""}
         isOpen={isTextEnteringOnFrontSide}
         maxLength={18}
         allowNewLine={false}
@@ -288,6 +289,7 @@ export default function Page({
         onClickCheck={handleClickFrontTextEnteringCheck}
       />
       <TextEnteringModal
+        text={description}
         isOpen={isTextEnteringOnBackSide}
         maxLength={42}
         allowNewLine

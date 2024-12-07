@@ -1,4 +1,5 @@
 export type Props = {
+  text: string;
   isOpen: boolean;
   maxLength: number;
   allowNewLine: boolean;
