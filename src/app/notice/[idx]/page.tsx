@@ -2,7 +2,13 @@ import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import { getNoticeDetail } from "../_services/getNoticeDetail";
 import dayjs from "dayjs";
 
-export default async function Page({ idx }: { idx: string }) {
+interface PageProps {
+  params: {
+    idx: string;
+  };
+}
+
+export default async function Page({ params: { idx } }: PageProps) {
   const { title, contents, createdAt } = await getNoticeDetail(idx);
 
   return (
