@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, KeyboardEvent } from "react";
+import { useState, ChangeEvent, KeyboardEvent, useLayoutEffect } from "react";
 import { Props } from "./types";
 import { Header, HeaderLeft, HeaderRight } from "@/shared/ui/Header";
 import ReactTextareaAutosize from "react-textarea-autosize";
@@ -26,6 +26,12 @@ const TextEnteringModal = ({
       e.preventDefault();
     }
   };
+
+  useLayoutEffect(() => {
+    if (isOpen) {
+      setValue(text);
+    }
+  }, [isOpen, text]);
 
   return (
     <>
