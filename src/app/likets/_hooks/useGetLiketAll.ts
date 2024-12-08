@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axiosInstance from "@/shared/helpers/axios";
-import { ReviewEntity } from "@/shared/types/api/review/ReviewEntity";
+import { LiketEntity } from "@/shared/types/api/liket/LiketEntity";
 
 export const useGetLiketAll = (
   idx: string,
@@ -10,24 +10,23 @@ export const useGetLiketAll = (
   }
 ) =>
   useInfiniteQuery({
-    queryKey: [`content-review-${idx}`, option],
+    queryKey: [`content-liket-${idx}`, option],
     queryFn: async ({ pageParam = 1 }) => {
-      const { data } = await axiosInstance.get<{ reviewList: ReviewEntity[] }>(
-        `/apis/review/all?content=${idx}&` +
+      const { data } = await axiosInstance.get<{ liketList: LiketEntity[] }>(
+        `/apis/liket/all?user=${idx}&` +
           (option?.order ? `order=${option.order}&` : ``) +
           (option?.orderby ? `orderby=${option.orderby}&` : ``) +
           `page=${pageParam}`
       );
 
       return {
-        reviewList: data.reviewList,
-        nextPage: data.reviewList.length > 0 ? pageParam + 1 : undefined, // 다음 페이지 번호 계산
-        isLastPage: data.reviewList.length === 0, // 마지막 페이지 여부 체크
+        liketList: data.liketList,
+        nextPage: data.liketList.length > 0 ? pageParam + 1 : undefined,
+        isLastPage: data.liketList.length === 0,
       };
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
-      // 마지막 페이지 여부에 따라 다음 페이지 파라미터를 반환
       return lastPage.nextPage;
     },
     staleTime: 0,

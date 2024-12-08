@@ -220,7 +220,7 @@ export default function Page() {
                         }}
                       >
                         <div className="relative w-[112px] h-[178px]">
-                          <DefaultImg src={liket.imgPath} />
+                          <DefaultImg src={liket.cardImgPath} />
                         </div>
                       </Link>
                     ))}

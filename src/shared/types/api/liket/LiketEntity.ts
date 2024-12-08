@@ -1,4 +1,4 @@
 export interface LiketEntity {
-  idx: number;
-  imgPath: string;
+  idx: string;
+  cardImgPath: string;
 }
