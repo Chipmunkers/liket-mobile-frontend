@@ -1,5 +1,5 @@
 export interface UserEntity {
-  idx: number;
+  idx: string;
   profileImgPath: string | null;
   nickname: string;
   provider: string;

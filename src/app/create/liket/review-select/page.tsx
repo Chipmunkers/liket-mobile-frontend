@@ -13,7 +13,7 @@ import { useEffect } from "react";
 export default function Page() {
   const router = useRouter();
   const openModal = useModalStore(({ openModal }) => openModal);
-  const { data, error } = useGetMyInfo();
+  const { data, error } = useGetMyInfo({});
 
   useEffect(() => {
     if (!error) return;
@@ -50,11 +50,11 @@ export default function Page() {
         <HeaderMiddle text="리뷰 선택" />
       </Header>
       <main>
-        {data && <InfiniteReviews idx={data.idx} />}
+        {data && <InfiniteReviews idx={+data.idx} />}
         {!data &&
           Array(10)
             .fill(0)
-            .map((elem, i) => (
+            .map((i) => (
               <div className="px-[24px]" key={`review-${i}`}>
                 <ReviewChoiceCardSkeleton />
               </div>
