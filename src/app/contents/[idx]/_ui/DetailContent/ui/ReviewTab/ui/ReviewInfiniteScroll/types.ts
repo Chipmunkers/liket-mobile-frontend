@@ -5,5 +5,5 @@ export type Props = {
   reviewList: ReviewEntity[];
   loginUser?: UserEntity;
   setTarget: (target: HTMLDivElement | null) => void;
-  onClickMeatball: (userIdxOfReview: number) => void;
+  onClickMeatball: (userIdxOfReview: string) => void;
 };
