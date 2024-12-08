@@ -4,11 +4,11 @@ import InfiniteReviews from "@/app/create/liket/review-select/_ui/InfiniteReview
 import { ReviewChoiceCardSkeleton } from "@/entities/review/ReviewChoiceCard";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
-import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
 import useModalStore from "@/shared/store/modalStore";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useGetMyInfo } from "./_hooks/useGetMyInfo";
 
 export default function Page() {
   const router = useRouter();

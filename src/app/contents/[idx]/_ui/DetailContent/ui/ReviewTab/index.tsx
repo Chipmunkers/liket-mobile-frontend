@@ -27,7 +27,7 @@ import Button from "@/shared/ui/Button";
 
 const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
   const [selectedIndex, setSelectedIndex] = useState(-99);
-  const [selectReviewIdx, setSelectReviewIdx] = useState<number>();
+  const [selectReviewIdx, setSelectReviewIdx] = useState<string>();
   const [isReportDrawerOpen, setIsReportDrawerOpen] = useState(false);
   const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
   const [isSelectReportKindDrawerOpen, setIsSelectReportKindDrawerOpen] =

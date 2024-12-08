@@ -9,7 +9,7 @@ import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export const useGetRequestedContent = (idx: number | undefined) => {
+export const useGetRequestedContent = (idx: string | undefined) => {
   const router = useRouter();
   const [target, setTarget] = useState<HTMLDivElement | null>(null);
   const exceptionHandler = useExceptionHandler();

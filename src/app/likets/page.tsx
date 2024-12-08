@@ -29,7 +29,7 @@ export default function Page() {
   const queryClient = useQueryClient();
 
   const searchParam = useSearchParams();
-  const { data: userInfo } = useGetMyInfo({});
+  const { data: userInfo } = useGetMyInfo();
   const order = searchParam.get("order") || "desc";
   const [isNarrow, setIsNarrow] = useState(false);
   const router = useRouter();

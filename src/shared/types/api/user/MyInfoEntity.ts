@@ -6,7 +6,7 @@ export interface MyInfoEntity {
   reviewList: Pick<ReviewEntity, "idx" | "thumbnail" | "cultureContent">[];
   liketCount: number;
   liketList: Pick<LiketEntity, "idx" | "cardImgPath">[];
-  idx: number;
+  idx: string;
   profileImgPath: string;
   nickname: string;
   provider: string;
