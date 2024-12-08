@@ -48,12 +48,12 @@ export default function Page({
     },
   });
   const { mutate: uploadCardImg } = useUploadCardImg({
-    onSuccess: ({ fullUrl }) => {
+    onSuccess: ({ filePath }) => {
       if (bgImgInfo && uploadedBgImgPath) {
         createLiket({
           reviewIdx: searchParams.review,
           bgImgInfo,
-          cardImgPath: fullUrl,
+          cardImgPath: filePath,
           bgImgPath: uploadedBgImgPath,
           textShape,
           imgShapes,
