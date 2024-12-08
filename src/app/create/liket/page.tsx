@@ -27,6 +27,10 @@ import { AxiosError } from "axios";
 import useCreateLiket from "./_hooks/useCreateLiket";
 import { useUploadCardImg } from "./_hooks/useUploadCardImg";
 import { CARD_SIZE_TO_INDEX } from "./_util/const";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import customToast from "@/shared/helpers/customToast";
+import { useRouter } from "next/navigation";
 
 // NOTE: React Konva는 서버사이드 렌더링이 불가함.
 // https://github.com/konvajs/react-konva?tab=readme-ov-file#usage-with-nextjs
@@ -39,12 +43,18 @@ export default function Page({
 }: {
   searchParams: { review: number };
 }) {
+  const router = useRouter();
+
   const { mutate: createLiket } = useCreateLiket({
-    onSuccess: (data) => {
-      console.log("라이켓 생성됨", data);
+    onSuccess: () => {
+      stackRouterPush(router, {
+        path: `/likets`,
+        screen: WEBVIEW_SCREEN.REQUESTED_CONTENT_DETAIL,
+        isStack: false,
+      });
     },
     onError: () => {
-      console.error("라이켓 에러남");
+      customToast("라이켓 제작에 실패했어요");
     },
   });
   const { mutate: uploadCardImg } = useUploadCardImg({
@@ -63,7 +73,7 @@ export default function Page({
       }
     },
     onError: () => {
-      console.log("라이켓 카드 이미지 업로드 실패");
+      customToast("라이켓 이미지 업로드에 실패했어요.");
     },
   });
 
