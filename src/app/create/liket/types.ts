@@ -24,7 +24,6 @@ export type ImgShape = Pick<
 > & { code: number; stickerNumber: number };
 
 export interface CreateLiketPayload {
-  reviewIdx: number;
   textShape?: TextShape;
   imgShapes?: ImgShape[];
   size: 1 | 2 | 3;
