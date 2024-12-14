@@ -19,7 +19,6 @@ import FrontBackSwitch from "./FrontBackSwitch";
 import { classNames } from "@/shared/helpers/classNames";
 import WriteTab from "./WriteTab";
 import BackSide from "./BackSide";
-import LiketUploader from "./LiketUploader";
 import TextEnteringModal from "./TextEntringModal";
 import CreateLiketTemplateProps from "./types/CreateLiketTemplate";
 import {
@@ -27,6 +26,13 @@ import {
   ImgShape,
   TextShape,
 } from "../../../shared/types/liket/card";
+import dynamic from "next/dynamic";
+
+// NOTE: React Konva는 서버사이드 렌더링이 불가함.
+// https://github.com/konvajs/react-konva?tab=readme-ov-file#usage-with-nextjs
+const LiketUploader = dynamic(() => import("./LiketUploader"), {
+  ssr: false,
+});
 
 export const CreateLiketTemplate = ({
   liketInformation,
