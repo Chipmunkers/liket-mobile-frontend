@@ -1,18 +1,18 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
-import { CreateLiketPayload } from "../types";
 import axiosInstance from "@/shared/helpers/axios";
 import { useExceptionHandler } from "@/shared/hooks/useExceptionHandler";
 import { AxiosError, AxiosResponse } from "axios";
+import { CreateLiketDto } from "../models/types.tsx/dto/CreateLiketDto";
 
-const useCreateLiket = (
-  reviewIdx: string,
-  props: UseMutationOptions<AxiosResponse, AxiosError, CreateLiketPayload>
+const useEditLiket = (
+  id: string,
+  props: UseMutationOptions<AxiosResponse, AxiosError, CreateLiketDto>
 ) => {
   const exceptionHandler = useExceptionHandler();
 
   return useMutation({
     mutationFn: async (param) => {
-      return await axiosInstance.post(`/apis/review/${reviewIdx}/liket`, param);
+      return await axiosInstance.put(`/apis/liket/${id}`, param);
     },
     onError: (err) => {
       exceptionHandler(err, [401]);
@@ -21,4 +21,4 @@ const useCreateLiket = (
   });
 };
 
-export default useCreateLiket;
+export default useEditLiket;
