@@ -159,7 +159,7 @@ export default function Page() {
           <ButtonBase
             onClick={() => {
               stackRouterPush(router, {
-                path: `/edit/liket/${selectedLiket}`,
+                path: `/edit/liket?liket=${selectedLiket}`,
                 screen: WEBVIEW_SCREEN.EDIT_LIKET,
               });
             }}
@@ -186,20 +186,3 @@ export default function Page() {
     </>
   );
 }
-
-const DUMMY_LIKET_LIST: {
-  id: string;
-  imgSrc: string;
-  createdAt: string;
-}[] = Array.from(
-  {
-    length: 23,
-  },
-  (_, index) => {
-    return {
-      id: index.toString(),
-      imgSrc: `https://picsum.photos/200/300?random=${index}`,
-      createdAt: "",
-    };
-  }
-);
