@@ -1,6 +1,6 @@
 import axiosInstance from "@/shared/helpers/axios";
 import { useQuery } from "@tanstack/react-query";
-import { LiketDetailEntity } from "../uis/types/LiketDetailEntity";
+import { LiketDetailEntity } from "../../../shared/types/liket_entity/LiketEntity";
 
 const useGetLiket = (idx: string) =>
   useQuery({

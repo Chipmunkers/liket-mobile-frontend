@@ -3,7 +3,7 @@ import {
   ImgShape,
   TextShape,
 } from "../../../../shared/types/liket/card";
-import { ReviewEntity } from "../../../../shared/types/review_entity/Review";
+import { ReviewEntity } from "../../../../shared/types/review_entity/review";
 import { CreateLiketDto } from "../../models/types.tsx/dto/CreateLiketDto";
 
 export default interface CreateLiketTemplateProps {
