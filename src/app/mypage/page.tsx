@@ -239,6 +239,9 @@ export default function Page() {
             계정 관리
           </LinkItem>
           <Divider width="100%" height="8px" />
+          <LinkItem screen={WEBVIEW_SCREEN.NOTICE} href="/notices">
+            공지사항
+          </LinkItem>
           <LinkItem
             screen={WEBVIEW_SCREEN.MY_REQUEST_CONTENT}
             href="/requested-contents"
