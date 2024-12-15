@@ -37,6 +37,7 @@ export const WEBVIEW_SCREEN = {
   LIKET_LIST: "Liket list",
   LIKET_DETAIL: "Liket Detail",
   CONTENT_MAP_DETAIL: "Map Content Detail",
+  NOTICE: "Notice",
 } as const;
 
 export type WebviewScreen = keyof typeof WEBVIEW_SCREEN;
