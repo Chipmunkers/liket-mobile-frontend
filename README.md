@@ -1,5 +1,12 @@
-## About The Repo
-문화 생활 공유 컨텐츠 앱을 지원하기 위한 웹 개발 레포입니다.
+## Convention
 
-## Built With
-<img src="https://img.shields.io/badge/vercel-000000?style=for-the-badge&logo=vercel&logoColor=white"> <img src="https://img.shields.io/badge/nextjs-000000?style=for-the-badge&logo=Next.js&logoColor=white"> <img src="https://img.shields.io/badge/Typescript-3178C6?style=for-the-badge&logo=Typescript&logoColor=white"> <img src="https://img.shields.io/badge/storybook-FF4785?style=for-the-badge&logo=storybook&logoColor=white"> <img src="https://img.shields.io/badge/react_testing_library-E33332?style=for-the-badge&logo=testing-library&logoColor=white"> <img src="https://img.shields.io/badge/tailwind-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
+### Commit Rules
+커밋 메세지의 말머리는 아래 말머리들만 사용 가능합니다.
+
+- feat: 새로운 기능 도입
+- refactor: 코드 구조 개선, 변수명 변경, 성능 개선
+- fix: 버그 수정, 문제점 패치
+- config: 환경 설정 변경, 패키지 설정 변경, 빌드 설정 변경
+- ui: 레이아웃 수정, 디자인 변경 등 UI 관련 작업
+- style: 들여쓰기 수정, 세미콜론 추가, 코드 포맷팅 등 코드 스타일 변경
+- chore: 그 외 주석 추가/수정, 파일 이동 등 단순 작업
