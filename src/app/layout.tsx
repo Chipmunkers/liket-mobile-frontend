@@ -62,6 +62,9 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL("https://liket.site"),
   keywords: ["라이켓", "LIKET"],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "라이켓",
     description: "다양한 문화생활 정보를 공유하고 나만의 문화생활 기록 남기기!",
