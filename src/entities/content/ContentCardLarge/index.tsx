@@ -40,7 +40,10 @@ const ContentCardLarge = ({ content, width, onClick, className }: Props) => {
       <article className={classNames(width ? `w-[${width}]` : "w-[164px]")}>
         <div className="relative mb-[8px]">
           <div className="relative aspect-[164/232]">
-            <DefaultImg src={thumbnail} />
+            <DefaultImg
+              src={thumbnail}
+              alt={`${content.title} ${genre.name} 이미지`}
+            />
           </div>
           <Badge
             state={getStatus(startDate, endDate)}

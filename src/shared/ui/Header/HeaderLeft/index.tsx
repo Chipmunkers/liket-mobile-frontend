@@ -20,9 +20,11 @@ const HeaderLeft = ({
 
   if (logo) {
     return (
-      <Link href="/" className="ml-[24px]">
-        <Logo />
-      </Link>
+      <h1 className="center">
+        <Link href="/" className="ml-[24px]">
+          <Logo ariaLabel="라이켓 로고 이미지" />
+        </Link>
+      </h1>
     );
   }
 

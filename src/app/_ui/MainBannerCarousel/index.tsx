@@ -28,7 +28,12 @@ const MainBannerCarousel = ({ srcList }: Props) => {
               aspectRatio: `390 / 336`,
             }}
           >
-            <DefaultImg src={imgPath} cover={false} select={false} />
+            <DefaultImg
+              src={imgPath}
+              cover={false}
+              select={false}
+              alt="배너이미지"
+            />
           </div>
         );
       })}

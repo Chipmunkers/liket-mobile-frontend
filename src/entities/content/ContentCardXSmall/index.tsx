@@ -25,7 +25,7 @@ const ContentCardXSmall = ({ content, onClick }: Props) => {
     >
       <div className="flex flex-row">
         <div className="w-[48px] h-[48px] relative shrink-0 overflow-hidden">
-          <DefaultImg src={content.thumbnail} />
+          <DefaultImg src={content.thumbnail} alt={`${content.title} 이미지`} />
         </div>
         <div className="flex flex-col justify-around ml-[12px]">
           <div className="text-body2 w-[150px] overflow-hidden truncate">
