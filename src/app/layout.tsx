@@ -53,7 +53,7 @@ export const appleGothic = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "라이켓",
+  title: "라이켓: 문화생활 컨텐츠 공유하고 기록 남기기",
   description: "즐기고 만들자, 라이켓 LIKET",
   viewport: {
     width: "device-width",
