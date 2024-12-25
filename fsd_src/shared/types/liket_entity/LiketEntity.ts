@@ -12,7 +12,7 @@ export interface LiketDetailEntity {
     idx: string;
     title: string;
     location: {
-      detailAddress: string;
+      detailAddress?: string;
       address: string;
       region1Depth: string;
       region2Depth: string;

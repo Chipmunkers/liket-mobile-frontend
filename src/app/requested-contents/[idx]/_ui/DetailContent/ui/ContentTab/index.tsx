@@ -25,7 +25,7 @@ const ContentTab = (props: Props) => {
         <div className="text-h2">위치</div>
         <div className="text-grey-04 text-body5 mt-[7px] mb-[4px]">
           {location.region1Depth} {location.region2Depth} {location.address}{" "}
-          {location.detailAddress}
+          {location?.detailAddress || ""}
         </div>
         <div className="h-[171px] w-[100%] bg-grey-02 flex">
           <Map

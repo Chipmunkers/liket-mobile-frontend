@@ -78,7 +78,7 @@ export default function Page({ params: { idx } }: PageProps) {
   const [detailAddress, setDetailAddress] = useState("");
   const [currentScroll, setCurrentScroll] = useState(0);
   const [addressInformation, setAddressInformation] = useState<{
-    detailAddress: string;
+    detailAddress?: string;
     address: string;
     region1Depth: string;
     region2Depth: string;
@@ -236,7 +236,7 @@ export default function Page({ params: { idx } }: PageProps) {
       setValue("address", location.address);
       setValue("title", title);
       setValue("genre", genre.name);
-      setValue("additional-address", location.detailAddress);
+      setValue("additional-address", location.detailAddress || "");
       setValue("description", description);
       setValue("age", age.name);
       setValue("startDate", formatDate(startDate));

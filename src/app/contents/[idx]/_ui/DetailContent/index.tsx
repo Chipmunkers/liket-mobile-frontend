@@ -110,7 +110,7 @@ const DetailContent = (props: Props) => {
             <div className="text-body3 mb-[4px]">{content.openTime}</div>
             <div className="text-body3 mb-[4px]">
               {content.location.region1Depth} {content.location.region2Depth}{" "}
-              {content.location.address} {content.location.detailAddress}
+              {content.location.address} {content.location?.detailAddress || ""}
             </div>
             <Link
               href={content.websiteLink}
