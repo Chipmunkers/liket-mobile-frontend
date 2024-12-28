@@ -297,8 +297,10 @@ export default function Page({ params: { idx } }: PageProps) {
                     openTime,
                     websiteLink,
                     description,
-                    startDate: startDate.replace(/\./g, "-"),
-                    endDate: endDate.replace(/\./g, "-"),
+                    startDate: dayjs(startDate?.toString()).toISOString(),
+                    endDate: dayjs(endDate?.toString())
+                      .endOf("day")
+                      .toISOString(),
                     imgList: imgList,
                     location: {
                       ...addressInformation,
