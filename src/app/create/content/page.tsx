@@ -223,8 +223,10 @@ export default function Page() {
                     openTime,
                     websiteLink,
                     description,
-                    startDate: startDate.replace(/\./g, "-"),
-                    endDate: endDate.replace(/\./g, "-"),
+                    startDate: dayjs(startDate?.toString()).toISOString(),
+                    endDate: dayjs(endDate?.toString())
+                      .endOf("day")
+                      .toISOString(),
                     imgList: imgList,
                     location: {
                       ...address,
@@ -648,7 +650,7 @@ export default function Page() {
           <Button
             className="h-[48px] w-[100%]"
             onClick={() => {
-              tempEndDate && setValue("endDate", tempEndDate);
+              tempEndDate && setValue("endDate", tempEndDate.toString());
               setIsEndDateDrawerOpen(false);
             }}
           >
