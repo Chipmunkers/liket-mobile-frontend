@@ -7,7 +7,8 @@ export default function robots(): MetadataRoute.Robots {
     return {
       rules: {
         userAgent: "*",
-        disallow: "/",
+        disallow: ["/"],
+        allow: ["/favicon.ico"],
       },
     };
   }
@@ -16,7 +17,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: ["/", "/search", "/contents/[0-9]*"],
+        allow: ["/", "/search", "/contents/[0-9]*", "/favicon.ico"],
         disallow: ["/"],
       },
     ],
