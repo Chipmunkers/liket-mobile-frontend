@@ -1,5 +1,4 @@
 import RightArrowIcon from "@/icons/right-arrow.svg";
-import { CustomOverlayMap, Map } from "react-kakao-maps-sdk";
 import { Props } from "./types";
 import Divider from "@/shared/ui/Divider";
 import { colors } from "@/shared/style/color";
@@ -11,6 +10,7 @@ import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { useRouter } from "next/navigation";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import MapExpandIcon from "@/shared/icon/content/MapExpandIcon.svg";
+import Image from "next/image";
 
 const ContentTab = (props: Props) => {
   const router = useRouter();
@@ -24,6 +24,25 @@ const ContentTab = (props: Props) => {
     <>
       <div className="py-[16px] px-[24px] whitespace-pre-wrap w-[100%] text-center text-body3">
         {content.description}
+        <div className="w-full">
+          {content.imgList?.map((src, index) => {
+            if (index === 0) {
+              return <></>;
+            }
+
+            return (
+              <Image
+                key={src}
+                src={process.env.NEXT_PUBLIC_IMAGE_SERVER + src}
+                alt="게시글 관련 이미지"
+                width={0}
+                height={0}
+                sizes="100vw"
+                style={{ width: "100%", height: "auto" }}
+              />
+            );
+          })}
+        </div>
       </div>
       <Divider width="100%" height="8px" />
       <div className="px-[24px] py-[24px] flex-col relative">
