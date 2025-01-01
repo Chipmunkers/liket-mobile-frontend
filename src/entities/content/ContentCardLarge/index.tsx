@@ -62,8 +62,8 @@ const ContentCardLarge = ({ content, width, onClick, className }: Props) => {
           <div className="text-body2 min-h-[17px] mb-[4px]">{title}</div>
           <div className="text-body5 text-grey-04">{`${content.location.region1Depth} ${content.location.region2Depth}`}</div>
           <div className="text-body5 text-grey-04">
-            {dayjs(startDate).format("YYYY-MM-DD")} -{" "}
-            {dayjs(endDate).format("MM.DD")}
+            {dayjs(startDate).format("YYYY.MM.DD")} -{" "}
+            {dayjs(endDate).format("YYYY.MM.DD")}
           </div>
         </div>
       </article>
