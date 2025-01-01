@@ -16,23 +16,10 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: ["/"],
-        disallow: "*",
-        crawlDelay: 1,
-      },
-      {
-        userAgent: "*",
-        allow: ["/search"],
-        disallow: "*",
-        crawlDelay: 1,
-      },
-      {
-        userAgent: "*",
-        allow: ["/contents/*"],
-        disallow: "*",
-        crawlDelay: 1,
+        allow: ["/", "/search", "/contents/[0-9]*"],
+        disallow: ["/"],
       },
     ],
-    sitemap: "https://liket.site/sitemap.xml",
+    // sitemap: "https://liket.site/sitemap.xml",
   };
 }
