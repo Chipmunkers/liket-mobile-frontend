@@ -12,9 +12,7 @@ import BottomTab from "@/widgets/common/BottomTab";
 import Header from "@/shared/ui/Header/Header";
 import { HeaderLeft, HeaderRight } from "@/shared/ui/Header";
 import Divider from "@/shared/ui/Divider";
-import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
 import MainBannerCarousel from "@/app/_ui/MainBannerCarousel";
-import HotReviewCard from "@/entities/review/HotReviewCard";
 import { shuffle } from "@/shared/helpers/shuffle";
 import HotReviewSection from "@/app/_ui/HotReviewSection";
 

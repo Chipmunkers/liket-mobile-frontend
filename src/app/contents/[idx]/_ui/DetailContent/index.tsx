@@ -22,6 +22,7 @@ import ContentImgCarousel from "@/widgets/content/ContentImgCarousel";
 import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 import { useIsWebView } from "@/shared/hooks/useIsWebview";
 import DetailImgCarousel from "@/shared/ui/DetailImgCarousel";
+import { Else, If, Then } from "react-if";
 
 const DetailContent = (props: Props) => {
   const searchParams = useSearchParams();
@@ -104,8 +105,13 @@ const DetailContent = (props: Props) => {
           </div>
           <div className="mt-[16px]">
             <div className="text-body3 mb-[4px]">
-              {dayjs(content.startDate).format("YYYY.MM.DD")} ~{" "}
-              {dayjs(content.endDate).format("MM.DD")}
+              <If condition={!!content.endDate}>
+                <Then>
+                  {dayjs(content.startDate).format("YYYY.MM.DD")} -{" "}
+                  {dayjs(content.endDate).format("YYYY.MM.DD")}
+                </Then>
+                <Else>{dayjs(content.startDate).format("YYYY.MM.DD")} ~ </Else>
+              </If>
             </div>
             <div className="text-body3 mb-[4px]">{content.openTime}</div>
             <div className="text-body3 mb-[4px]">
