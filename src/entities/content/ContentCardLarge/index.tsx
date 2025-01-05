@@ -12,6 +12,7 @@ import { CONTENT_STATES } from "@/shared/consts/content/state";
 import { Props } from "./types";
 import { getStatus } from "@/shared/helpers/getStatus";
 import LikeContentButton from "@/entities/content/LikeContentButton";
+import { Else, If, Then } from "react-if";
 
 const ContentCardLarge = ({ content, width, onClick, className }: Props) => {
   const router = useRouter();
@@ -62,8 +63,13 @@ const ContentCardLarge = ({ content, width, onClick, className }: Props) => {
           <div className="text-body2 min-h-[17px] mb-[4px]">{title}</div>
           <div className="text-body5 text-grey-04">{`${content.location.region1Depth} ${content.location.region2Depth}`}</div>
           <div className="text-body5 text-grey-04">
-            {dayjs(startDate).format("YYYY-MM-DD")} -{" "}
-            {dayjs(endDate).format("MM.DD")}
+            <If condition={!!endDate}>
+              <Then>
+                {dayjs(startDate).format("YYYY.MM.DD")} -{" "}
+                {dayjs(endDate).format("YYYY.MM.DD")}
+              </Then>
+              <Else>{dayjs(startDate).format("YYYY.MM.DD")} ~ </Else>
+            </If>
           </div>
         </div>
       </article>

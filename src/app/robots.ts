@@ -7,7 +7,8 @@ export default function robots(): MetadataRoute.Robots {
     return {
       rules: {
         userAgent: "*",
-        disallow: "/",
+        disallow: ["/"],
+        allow: ["/favicon.ico"],
       },
     };
   }
@@ -16,23 +17,17 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: ["/"],
-        disallow: "*",
-        crawlDelay: 1,
-      },
-      {
-        userAgent: "*",
-        allow: ["/search"],
-        disallow: "*",
-        crawlDelay: 1,
-      },
-      {
-        userAgent: "*",
-        allow: ["/contents/*"],
-        disallow: "*",
-        crawlDelay: 1,
+        allow: [
+          "/",
+          "/search",
+          "/contents/[0-9]*",
+          "/favicon.ico",
+          "/googlefff3c7122be09534.html",
+          "/naver521d1486069128eb8190f6dc9948e518.html",
+        ],
+        disallow: ["/"],
       },
     ],
-    sitemap: "https://liket.site/sitemap.xml",
+    // sitemap: "https://liket.site/sitemap.xml",
   };
 }
