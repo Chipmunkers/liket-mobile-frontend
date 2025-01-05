@@ -4,16 +4,16 @@ import InfiniteReviews from "@/app/create/liket/review-select/_ui/InfiniteReview
 import { ReviewChoiceCardSkeleton } from "@/entities/review/ReviewChoiceCard";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
-import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
 import useModalStore from "@/shared/store/modalStore";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useGetMyInfo } from "./_hooks/useGetMyInfo";
 
 export default function Page() {
   const router = useRouter();
   const openModal = useModalStore(({ openModal }) => openModal);
-  const { data, error } = useGetMyInfo();
+  const { data, error } = useGetMyInfo({});
 
   useEffect(() => {
     if (!error) return;
@@ -50,11 +50,11 @@ export default function Page() {
         <HeaderMiddle text="리뷰 선택" />
       </Header>
       <main>
-        {data && <InfiniteReviews idx={data.idx} />}
+        {data && <InfiniteReviews idx={+data.idx} />}
         {!data &&
           Array(10)
             .fill(0)
-            .map((elem, i) => (
+            .map((i) => (
               <div className="px-[24px]" key={`review-${i}`}>
                 <ReviewChoiceCardSkeleton />
               </div>

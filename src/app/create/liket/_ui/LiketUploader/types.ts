@@ -1,21 +1,22 @@
-import {
-  CardImageInformation,
-  CardSizeType,
-  StrictShapeConfig,
-} from "../../types";
+import { BgImgInfo, CardSizeType, ImgShape, TextShape } from "../../types";
 import Konva from "konva";
-import { RefObject } from "react";
+import { Dispatch, RefObject, SetStateAction } from "react";
 
 export type Props = {
   uploadedImage: HTMLImageElement | undefined;
-  selectedShapeId: string;
-  shapes: StrictShapeConfig[];
+  imgShapes: ImgShape[];
+  textShape: TextShape | undefined;
   stageRef: RefObject<Konva.Stage>;
+  isTextShapeSelected: boolean;
   size: CardSizeType;
-  cardImageInformation: CardImageInformation | undefined;
-  onSelectShape: (shapeId: string) => void;
-  onChangeShape: (shapes: StrictShapeConfig[]) => void;
+  selectedImgShapeCode: number | undefined;
+  bgImgInfo: BgImgInfo | undefined;
+  onSelectImgShape: (code?: number) => void;
+  onSelectTextShape: (isSelected: boolean) => void;
+  onChangeImgShapes: (imgShapes: ImgShape[]) => void;
+  onChangeTextShape: (textShape: TextShape) => void;
   onUploadImage: (dataUrl: HTMLImageElement) => void;
-  onChangeBackgroundImage: (cardImageInformation: CardImageInformation) => void;
+  onChangeBackgroundImage: (bgImgInfo: BgImgInfo) => void;
+  onUploadSuccessBgImg: Dispatch<SetStateAction<string>>;
   selectedIndex: number;
 };

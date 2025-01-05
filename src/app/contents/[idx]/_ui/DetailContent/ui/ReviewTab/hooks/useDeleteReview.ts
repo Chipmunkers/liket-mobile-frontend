@@ -6,9 +6,9 @@ import {
 import axiosInstance from "@/shared/helpers/axios";
 
 export const useDeleteReview = (
-  mutationOption: MutationOptions<unknown, DefaultError, number>
+  mutationOption: MutationOptions<unknown, DefaultError, string>
 ) =>
   useMutation({
-    mutationFn: (idx: number) => axiosInstance.delete(`/apis/review/${idx}`),
+    mutationFn: (idx) => axiosInstance.delete(`/apis/review/${idx}`),
     ...mutationOption,
   });

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import SampleQR from "@/icons/sample-qr.svg";
 import { Props } from "./types";
 import { classNames } from "@/shared/helpers/classNames";
@@ -9,7 +8,7 @@ import GrayLiket from "./_assets/gray_liket.svg";
 import dayjs from "dayjs";
 import DefaultImg from "@/shared/ui/DefaultImg";
 
-const BackSide = ({ reviewData, oneLineReview, onClickReview }: Props) => {
+const BackSide = ({ reviewData, description, onClickReview }: Props) => {
   const { author, cultureContent, starRating, visitTime } = reviewData;
   return (
     <>
@@ -73,16 +72,16 @@ const BackSide = ({ reviewData, oneLineReview, onClickReview }: Props) => {
         <div className="flex justify-between">
           <div className="text-caption text-grey-04">한줄평</div>
           <div className="text-numbering3 text-grey-04">
-            {oneLineReview.length} / 42
+            {description.length} / 42
           </div>
         </div>
         <div
           className={classNames(
             "whitespace-pre-wrap w-[100%] text-center mt-[18px] text-body3",
-            !oneLineReview && "text-grey-02"
+            !description && "text-grey-02"
           )}
         >
-          {oneLineReview ? oneLineReview : "한줄평을 입력해주세요."}
+          {description ? description : "한줄평을 입력해주세요."}
         </div>
       </button>
       <div className="absolute left-0 bottom-0 mb-[16px] ml-[16px]">

@@ -1,7 +1,7 @@
 import customFetch from "@/shared/helpers/fetch";
 import { SummaryTosEntity } from "@/shared/types/api/terms-of-service/SummaryTosEntity";
 
-export const useGetTosAll = async (): Promise<{
+export const getTosAll = async (): Promise<{
   tosList: SummaryTosEntity[];
 }> =>
   (

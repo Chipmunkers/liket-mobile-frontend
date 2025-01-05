@@ -6,17 +6,16 @@ export const getStatus = (startDate: string, endDate: string): ContentState => {
   const start = dayjs(startDate);
   const end = dayjs(endDate);
 
-  if (today.isBefore(end) && today.isAfter(end.subtract(3, "day"))) {
-    return "willClosed";
+  if (today.isBefore(start)) {
+    return "willActive";
   } else if (
-    (today.isAfter(start) && today.isBefore(end)) ||
-    today.isSame(start) ||
+    (today.isBefore(end) && today.isAfter(end.subtract(4, "day"))) ||
     today.isSame(end)
   ) {
-    return "active";
+    return "willClosed";
   } else if (today.isAfter(end)) {
     return "closed";
+  } else {
+    return "active";
   }
-
-  return "willActive";
 };

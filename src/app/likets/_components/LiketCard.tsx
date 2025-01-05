@@ -8,12 +8,12 @@ import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
 interface Props {
   id: string;
-  imgSrc: string;
+  cardImgPath: string;
   isNarrow: boolean;
   onClickMeatball: () => void;
 }
 
-const LiketCard = ({ id, imgSrc, isNarrow, onClickMeatball }: Props) => {
+const LiketCard = ({ id, cardImgPath, isNarrow, onClickMeatball }: Props) => {
   const router = useRouter();
 
   return (
@@ -29,7 +29,7 @@ const LiketCard = ({ id, imgSrc, isNarrow, onClickMeatball }: Props) => {
       }}
     >
       <div className="relative overflow-hidden aspect-[164/261] rounded-[4px] shadow-03">
-        <DefaultImg src="" testSrc={imgSrc} />
+        <DefaultImg src={cardImgPath} />
         <ButtonBase
           disableRipple
           className="absolute top-0 right-0 icon-button w-[48px] h-[48px] rounded-full"

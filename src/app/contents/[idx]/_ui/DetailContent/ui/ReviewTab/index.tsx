@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDeleteReview } from "./hooks/useDeleteReview";
 import { AxiosError } from "axios";
-import ReloadIcon from "./icon/review-reload.svg";
 import { ButtonBase } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
 import { DefaultLoading } from "@/shared/ui/Loading";
@@ -20,20 +19,24 @@ import ReviewInfiniteScroll from "./ui/ReviewInfiniteScroll";
 import StarRating from "@/entities/review/StarRating";
 import Divider from "@/shared/ui/Divider";
 import Drawer from "@/shared/ui/Drawer";
-import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 import ReloadButton from "@/shared/ui/ReloadButton";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import CheckBox from "@/shared/ui/CheckBox";
+import Button from "@/shared/ui/Button";
 
 const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
-  const [isReviewMenuDrawerOpen, setIsReviewMenuDrawerOpen] = useState(false);
-  const [selectReviewIdx, setSelectReviewIdx] = useState<number>();
+  const [selectedIndex, setSelectedIndex] = useState(-99);
+  const [selectReviewIdx, setSelectReviewIdx] = useState<string>();
+  const [isReportDrawerOpen, setIsReportDrawerOpen] = useState(false);
+  const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
+  const [isSelectReportKindDrawerOpen, setIsSelectReportKindDrawerOpen] =
+    useState(false);
 
   const searchParam = useSearchParams();
-  const { safeArea } = useGetSafeArea();
 
   // * 리뷰 쿼리 옵션
-  const [reviewPagerble, setReviewPagerble] = useState<{
+  const [reviewPageable, setPageable] = useState<{
     order?: "desc" | "asc";
     orderby: "time" | "like";
     review: string | null;
@@ -41,7 +44,7 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
 
   // * 리뷰 데이터 무한 쿼리
   const { data, fetchNextPage, hasNextPage, isFetching, refetch, error } =
-    useGetReviewAllByContentIdx(props.idx, reviewPagerble);
+    useGetReviewAllByContentIdx(props.idx, reviewPageable);
   const { data: loginUser } = useGetMyInfo();
 
   // * 옵션 변경 시 리뷰 쿼리 데이터 초기화
@@ -85,7 +88,7 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
     queryClient.removeQueries({
       queryKey: [`content-review-${props.idx}`],
     });
-    queryClient.setQueryData([`content-review-${props.idx}`, reviewPagerble], {
+    queryClient.setQueryData([`content-review-${props.idx}`, reviewPageable], {
       pages: [],
       pageParams: [],
     });
@@ -97,7 +100,7 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
   const { mutate: deleteReviewApi } = useDeleteReview({
     onSuccess: () => {
       customToast("삭제되었습니다.");
-      setIsReviewMenuDrawerOpen(false);
+      setIsEditDrawerOpen(false);
       resetReview();
     },
     onError: (err) => {
@@ -105,7 +108,7 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
         if (err.response?.status === 401) return moveLoginPage();
         if (err.response?.status === 404) {
           customToast("삭제되었습니다.");
-          setIsReviewMenuDrawerOpen(false);
+          setIsEditDrawerOpen(false);
           resetReview();
           return;
         }
@@ -138,30 +141,37 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
           isFetching ? "min-h-[100vh]" : ""
         )}
       >
-        {data?.pages[0]?.reviewList.length ? (
+        {!!data?.pages[0]?.reviewList.length && (
           // * Review를 다시 가져올 때 깜박이지 아래 버튼이 깜박이지 않도록 하기 위함
           <button
             className="flex text-button3 justify-end w-[100%] pr-[24px]"
             onClick={() => {
               resetReview();
-              setReviewPagerble({
-                ...reviewPagerble,
-                orderby: reviewPagerble.orderby === "like" ? "time" : "like",
+              setPageable({
+                ...reviewPageable,
+                orderby: reviewPageable.orderby === "like" ? "time" : "like",
               });
             }}
           >
-            {reviewPagerble.orderby === "like" ? "인기순" : "최신순"}
+            {reviewPageable.orderby === "like" ? "인기순" : "최신순"}
             <BottomArrowIcon />
           </button>
-        ) : null}
+        )}
         {data &&
           (data.pages[0]?.reviewList.length === 0 ? (
             <EmptyReview idx={props.content.idx} />
           ) : (
             <ReviewInfiniteScroll
               reviewList={data.pages.map((page) => page.reviewList).flat()}
-              setIsReviewMenuDrawerOpen={setIsReviewMenuDrawerOpen}
-              setSelectReviewIdx={setSelectReviewIdx}
+              onClickMeatball={(userIdxOfReview) => {
+                setSelectReviewIdx(userIdxOfReview);
+
+                if (loginUser?.idx === userIdxOfReview) {
+                  setIsEditDrawerOpen(true);
+                } else {
+                  setIsReportDrawerOpen(true);
+                }
+              }}
               loginUser={loginUser}
               setTarget={setTarget}
             />
@@ -174,8 +184,8 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
         </ReloadButton>
       )}
       <Drawer
-        open={isReviewMenuDrawerOpen}
-        onClose={() => setIsReviewMenuDrawerOpen(false)}
+        open={isEditDrawerOpen}
+        onClose={() => setIsEditDrawerOpen(false)}
       >
         <li className="bottom-sheet-list">
           <ButtonBase
@@ -202,6 +212,107 @@ const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
             삭제
           </ButtonBase>
         </li>
+      </Drawer>
+      <Drawer
+        open={isReportDrawerOpen}
+        onClose={() => setIsReportDrawerOpen(false)}
+      >
+        <li className="bottom-sheet-list">
+          <ButtonBase
+            onClick={() => {
+              setIsReportDrawerOpen(false);
+              setIsSelectReportKindDrawerOpen(true);
+            }}
+            className="bottom-sheet-button flex justify-start px-[24px] text-rosepink-01"
+          >
+            신고하기
+          </ButtonBase>
+        </li>
+      </Drawer>
+      <Drawer
+        open={isSelectReportKindDrawerOpen}
+        onClose={() => setIsSelectReportKindDrawerOpen(false)}
+      >
+        <div className="center text-h2">신고 유형</div>
+        <ul>
+          <li className="bottom-sheet-list px-[24px]">
+            <CheckBox
+              isChecked={selectedIndex === 0}
+              onChange={() => setSelectedIndex(0)}
+              label="컨텐츠와 무관한 내용"
+              labelClassName="text-body3 text-grey-black"
+              marginBetweenTextAndCheckbox="8px"
+            />
+          </li>
+          <li className="bottom-sheet-list px-[24px]">
+            <CheckBox
+              isChecked={selectedIndex === 1}
+              onChange={() => setSelectedIndex(1)}
+              label="개인정보 노출"
+              labelClassName="text-body3 text-grey-black"
+              marginBetweenTextAndCheckbox="8px"
+            />
+          </li>
+          <li className="bottom-sheet-list px-[24px]">
+            <CheckBox
+              isChecked={selectedIndex === 2}
+              onChange={() => setSelectedIndex(2)}
+              label="광고 및 홍보성 내용"
+              labelClassName="text-body3 text-grey-black"
+              marginBetweenTextAndCheckbox="8px"
+            />
+          </li>
+          <li className="bottom-sheet-list px-[24px]">
+            <CheckBox
+              isChecked={selectedIndex === 3}
+              onChange={() => setSelectedIndex(3)}
+              label="욕설 및 선정적 내용"
+              labelClassName="text-body3 text-grey-black"
+              marginBetweenTextAndCheckbox="8px"
+            />
+          </li>
+          <li className="bottom-sheet-list px-[24px]">
+            <CheckBox
+              isChecked={selectedIndex === 4}
+              onChange={() => setSelectedIndex(4)}
+              label="저작권 침해"
+              labelClassName="text-body3 text-grey-black"
+              marginBetweenTextAndCheckbox="8px"
+            />
+          </li>
+          <li className="bottom-sheet-list px-[24px]">
+            <CheckBox
+              isChecked={selectedIndex === 5}
+              onChange={() => setSelectedIndex(5)}
+              label="기타"
+              labelClassName="text-body3 text-grey-black"
+              marginBetweenTextAndCheckbox="8px"
+            />
+          </li>
+        </ul>
+        <div className="flex px-[24px] pb-[8px] gap-[16px] pt-[24px]">
+          <Button
+            variant="ghost"
+            className="h-[48px] w-[100%]"
+            onClick={() => {
+              setIsSelectReportKindDrawerOpen(false);
+              setSelectedIndex(-99);
+            }}
+          >
+            취소
+          </Button>
+          <Button
+            disabled={selectedIndex === -99}
+            className="h-[48px] w-[100%]"
+            onClick={() => {
+              setIsSelectReportKindDrawerOpen(false);
+              setSelectedIndex(-99);
+              customToast("신고 완료되었습니다.");
+            }}
+          >
+            신고하기
+          </Button>
+        </div>
       </Drawer>
     </>
   );

@@ -1,9 +1,9 @@
-import { useGetTosAll } from "@/app/terms/_hooks/useGetTosAll";
+import { getTosAll } from "./_hooks/getTosAll";
 import TosItem from "./_ui/TosItem";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 
 export default async function Page() {
-  const { tosList } = await useGetTosAll();
+  const { tosList } = await getTosAll();
 
   return (
     <>

@@ -1,8 +1,9 @@
-import { StrictShapeConfig } from "../../../../types";
+import { TextShape } from "@/app/create/liket/types";
+import { ShapeConfig } from "konva/lib/Shape";
 
 export type Props = {
-  shapeProps: StrictShapeConfig;
+  shapeProps: TextShape;
   isSelected: boolean;
-  onChange: (newAttrs: StrictShapeConfig) => void;
+  onChange: (newAttrs: TextShape) => void;
   onSelect: () => void;
 };

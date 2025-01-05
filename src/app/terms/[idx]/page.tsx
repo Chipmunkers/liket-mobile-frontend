@@ -1,4 +1,4 @@
-import { useGetTosByIdx } from "@/app/terms/[idx]/_hooks/useGetTosByIdx";
+import { getTosByIdx } from "@/app/terms/[idx]/_hooks/getTosByIdx";
 import DetailTerms from "@/app/terms/[idx]/_ui/DetailTerms";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 
@@ -9,7 +9,7 @@ interface PageProps {
 }
 
 export default async function Page({ params: { idx } }: PageProps) {
-  const { title, contents } = await useGetTosByIdx(idx);
+  const { title, contents } = await getTosByIdx(idx);
 
   return (
     <>

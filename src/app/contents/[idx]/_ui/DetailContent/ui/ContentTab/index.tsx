@@ -49,7 +49,7 @@ const ContentTab = (props: Props) => {
         <div className="text-h2">위치</div>
         <div className="text-grey-04 text-body5 mt-[7px] mb-[4px]">
           {content.location.region1Depth} {content.location.region2Depth}{" "}
-          {content.location.address} {content.location.detailAddress}
+          {content.location.address} {content.location?.detailAddress || ""}
         </div>
         <div className="h-[171px] w-[100%] bg-grey-02 flex relative cursor-pointer">
           <div className="absolute right-[9px] top-[8px] z-[1] cursor-pointer">

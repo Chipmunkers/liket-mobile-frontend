@@ -54,11 +54,6 @@ export default async function Page({ params: { idx } }: PageProps) {
               back: true,
             }}
           />
-          <HeaderRight
-            option={{
-              search: {},
-            }}
-          />
         </Header>
         <DetailContent content={content} />
       </>
@@ -72,11 +67,6 @@ export default async function Page({ params: { idx } }: PageProps) {
           <HeaderLeft
             option={{
               back: true,
-            }}
-          />
-          <HeaderRight
-            option={{
-              search: {},
             }}
           />
         </Header>

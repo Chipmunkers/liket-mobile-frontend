@@ -13,7 +13,7 @@ export const useGetMyInfo = () => {
   const exceptionHandler = useExceptionHandler();
 
   const query = useQuery<MyInfoEntity, AxiosError>({
-    queryKey: [`get-my-info`],
+    queryKey: [],
     queryFn: async () => {
       const { data } = await axiosInstance.get<MyInfoEntity>("/apis/user/my");
 

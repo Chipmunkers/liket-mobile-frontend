@@ -1,5 +1,5 @@
 export interface LocationEntity {
-  detailAddress: string;
+  detailAddress?: string;
   address: string;
   region1Depth: string;
   region2Depth: string;
