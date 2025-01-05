@@ -89,17 +89,19 @@ const DetailContent = ({ content }: Props) => {
               {location.region1Depth} {location.region2Depth} {location.address}{" "}
               {location?.detailAddress || ""}
             </div>
-            <Link
-              href={websiteLink}
-              className="text-skyblue-01 text-body3 break-words overflow-wrap-normal"
-              onClick={(e) => {
-                e.preventDefault();
+            {websiteLink && (
+              <Link
+                href={websiteLink}
+                className="text-skyblue-01 text-body3 break-words overflow-wrap-normal"
+                onClick={(e) => {
+                  e.preventDefault();
 
-                // TODO: 모바일에서 클릭 시 갇혀버림
-              }}
-            >
-              {websiteLink}
-            </Link>
+                  // TODO: 모바일에서 클릭 시 갇혀버림
+                }}
+              >
+                {websiteLink}
+              </Link>
+            )}
             <div className="flex gap-[16px] mt-[8px]">
               {isFee && <EntranceFeeIcon />}
               {isReservation && <ReservationIcon />}

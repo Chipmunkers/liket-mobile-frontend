@@ -6,7 +6,7 @@ import { LocationEntity } from "./LocationEntity";
 export interface ContentEntity {
   idx: number;
   title: string;
-  description: string;
+  description?: string;
   thumbnail: string;
   imgList: string[];
   genre: GenreEntity;
@@ -16,8 +16,8 @@ export interface ContentEntity {
   startDate: string;
   endDate: string;
   likeState: boolean;
-  openTime: string;
-  websiteLink: string;
+  openTime?: string;
+  websiteLink?: string;
   isFee: boolean;
   isReservation: boolean;
   isPet: boolean;

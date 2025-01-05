@@ -237,7 +237,7 @@ export default function Page({ params: { idx } }: PageProps) {
       setValue("title", title);
       setValue("genre", genre.name);
       setValue("additional-address", location.detailAddress || "");
-      setValue("description", description);
+      setValue("description", description || "");
       setValue("age", age.name);
       setValue("startDate", formatDate(startDate));
       setValue("endDate", formatDate(endDate));
@@ -245,8 +245,8 @@ export default function Page({ params: { idx } }: PageProps) {
         "style",
         style.map(({ name }) => name)
       );
-      setValue("openTime", openTime);
-      setValue("websiteLink", websiteLink);
+      setValue("openTime", openTime || "");
+      setValue("websiteLink", websiteLink || "");
       setValue("condition", condition);
 
       setDetailAddress(location.address);
