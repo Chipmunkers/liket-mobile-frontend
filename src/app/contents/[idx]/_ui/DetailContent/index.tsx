@@ -118,20 +118,22 @@ const DetailContent = (props: Props) => {
               {content.location.region1Depth} {content.location.region2Depth}{" "}
               {content.location.address} {content.location?.detailAddress || ""}
             </div>
-            <Link
-              href={content.websiteLink}
-              className="text-skyblue-01 text-body3 break-words overflow-wrap-normal"
-              onClick={(e) => {
-                e.preventDefault();
+            {content.websiteLink && (
+              <Link
+                href={content.websiteLink}
+                className="text-skyblue-01 text-body3 break-words overflow-wrap-normal"
+                onClick={(e) => {
+                  e.preventDefault();
 
-                if (!isWebview) {
-                  window.open(content.websiteLink);
-                  return;
-                }
-              }}
-            >
-              {content.websiteLink}
-            </Link>
+                  if (!isWebview) {
+                    window.open(content.websiteLink);
+                    return;
+                  }
+                }}
+              >
+                {content.websiteLink}
+              </Link>
+            )}
             <div className="flex gap-[16px] mt-[8px]">
               {content.isFee && <EntranceFeeIcon />}
               {content.isReservation && <ReservationIcon />}
