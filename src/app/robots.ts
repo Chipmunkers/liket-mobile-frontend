@@ -28,6 +28,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/"],
       },
     ],
-    // sitemap: "https://liket.site/sitemap.xml",
+    sitemap: "https://liket.site/sitemap.xml",
   };
 }
