@@ -29,8 +29,6 @@ const HeaderLeft = ({
     );
   }
 
-  const naem = 1;
-
   if (townName) {
     return (
       <ButtonBase
@@ -59,13 +57,6 @@ const HeaderLeft = ({
             return;
           }
 
-          if (option.referer !== undefined && !option.referer) {
-            stackRouterPush(router, {
-              path: "/",
-              screen: WEBVIEW_SCREEN.MAIN,
-            });
-            return;
-          }
           stackRouterBack(router);
         }}
       >
