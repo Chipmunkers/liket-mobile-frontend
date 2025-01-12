@@ -76,6 +76,12 @@ export const metadata: Metadata = {
       },
     ],
   },
+  icons: {
+    icon:
+      (process.env.NEXT_PUBLIC_MODE === "production"
+        ? "https://liket.site"
+        : "https://dev.liket.site") + "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
