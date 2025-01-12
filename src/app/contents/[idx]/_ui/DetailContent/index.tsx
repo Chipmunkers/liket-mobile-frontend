@@ -23,6 +23,7 @@ import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 import { useIsWebView } from "@/shared/hooks/useIsWebview";
 import DetailImgCarousel from "@/shared/ui/DetailImgCarousel";
 import { Else, If, Then } from "react-if";
+import { colors } from "@/shared/style/color";
 
 const DetailContent = (props: Props) => {
   const searchParams = useSearchParams();
@@ -60,108 +61,146 @@ const DetailContent = (props: Props) => {
   }, []);
 
   return (
-    <main
-      className="mb-[24px]"
-      style={{ paddingBottom: safeArea.bottom + "px" }}
-    >
-      {selectedImgIndex !== undefined ? (
-        <div className="fixed max-w-[600px] w-[100%] h-[100vh] z-10 top-0">
-          <DetailImgCarousel
-            selectIdx={selectedImgIndex}
-            imgList={content.imgList}
-          />
-        </div>
-      ) : null}
-      <ContentImgCarousel list={content.imgList} />
-      <div className="px-[24px] py-[24px]">
-        <div className="flex items-center">
-          <Badge
-            state={getStatus(content.startDate, content.endDate)}
-            className="mr-[9px]"
-          >
-            {CONTENT_STATES[getStatus(content.startDate, content.endDate)].name}
-          </Badge>
-          {content.likeCount >= 5 ? (
-            <Badge state={"hotplace"}>{CONTENT_STATES["hotplace"].name}</Badge>
-          ) : null}
-        </div>
-        <div className="mt-[16px]">
-          <div className="flex justify-between">
-            <div>
-              <h1 className="mb-[4px]">{content.title}</h1>
-              <div className="text-body5 text-grey-04 mt-[4px] flex">
-                <div>{`#${content.genre.name} #${
-                  content.age.name
-                } ${content.style
-                  .map(({ name }) => "#" + name + " ")
-                  .join("")}`}</div>
-              </div>
-            </div>
-            <LikeContentButton
-              likeState={content.likeState}
-              idx={content.idx}
-              likeCount={content.likeCount}
+    <>
+      {" "}
+      <main
+        className="mb-[24px]"
+        style={{ paddingBottom: safeArea.bottom + "px" }}
+      >
+        {selectedImgIndex !== undefined ? (
+          <div className="fixed max-w-[600px] w-[100%] h-[100vh] z-10 top-0">
+            <DetailImgCarousel
+              selectIdx={selectedImgIndex}
+              imgList={content.imgList}
             />
           </div>
+        ) : null}
+        <ContentImgCarousel list={content.imgList} />
+        <div className="px-[24px] py-[24px]">
+          <div className="flex items-center">
+            <Badge
+              state={getStatus(content.startDate, content.endDate)}
+              className="mr-[9px]"
+            >
+              {
+                CONTENT_STATES[getStatus(content.startDate, content.endDate)]
+                  .name
+              }
+            </Badge>
+            {content.likeCount >= 5 ? (
+              <Badge state={"hotplace"}>
+                {CONTENT_STATES["hotplace"].name}
+              </Badge>
+            ) : null}
+          </div>
           <div className="mt-[16px]">
-            <div className="text-body3 mb-[4px]">
-              <If condition={!!content.endDate}>
-                <Then>
-                  {dayjs(content.startDate).format("YYYY.MM.DD")} -{" "}
-                  {dayjs(content.endDate).format("YYYY.MM.DD")}
-                </Then>
-                <Else>{dayjs(content.startDate).format("YYYY.MM.DD")} ~ </Else>
-              </If>
+            <div className="flex justify-between">
+              <div>
+                <h1 className="mb-[4px]">{content.title}</h1>
+                <div className="text-body5 text-grey-04 mt-[4px] flex">
+                  <div>{`#${content.genre.name} #${
+                    content.age.name
+                  } ${content.style
+                    .map(({ name }) => "#" + name + " ")
+                    .join("")}`}</div>
+                </div>
+              </div>
+              <LikeContentButton
+                likeState={content.likeState}
+                idx={content.idx}
+                likeCount={content.likeCount}
+              />
             </div>
-            <div className="text-body3 mb-[4px]">{content.openTime}</div>
-            <div className="text-body3 mb-[4px]">
-              {content.location.region1Depth} {content.location.region2Depth}{" "}
-              {content.location.address} {content.location?.detailAddress || ""}
-            </div>
-            {content.websiteLink && (
-              <Link
-                href={content.websiteLink}
-                className="text-skyblue-01 text-body3 break-words overflow-wrap-normal"
-                onClick={(e) => {
-                  e.preventDefault();
+            <div className="mt-[16px]">
+              <div className="text-body3 mb-[4px]">
+                <If condition={!!content.endDate}>
+                  <Then>
+                    {dayjs(content.startDate).format("YYYY.MM.DD")} -{" "}
+                    {dayjs(content.endDate).format("YYYY.MM.DD")}
+                  </Then>
+                  <Else>
+                    {dayjs(content.startDate).format("YYYY.MM.DD")} ~{" "}
+                  </Else>
+                </If>
+              </div>
+              <div className="text-body3 mb-[4px]">{content.openTime}</div>
+              <div className="text-body3 mb-[4px]">
+                {content.location.region1Depth} {content.location.region2Depth}{" "}
+                {content.location.address}{" "}
+                {content.location?.detailAddress || ""}
+              </div>
+              {content.websiteLink && (
+                <Link
+                  href={content.websiteLink}
+                  className="text-skyblue-01 text-body3 break-words overflow-wrap-normal"
+                  onClick={(e) => {
+                    e.preventDefault();
 
-                  if (!isWebview) {
-                    window.open(content.websiteLink);
-                    return;
-                  }
-                }}
-              >
-                {content.websiteLink}
-              </Link>
-            )}
-            <div className="flex gap-[16px] mt-[8px]">
-              {content.isFee && <EntranceFeeIcon />}
-              {content.isReservation && <ReservationIcon />}
-              {content.isPet && <PetIcon />}
-              {content.isParking && <ParkingIcon />}
+                    if (!isWebview) {
+                      window.open(content.websiteLink);
+                      return;
+                    }
+                  }}
+                >
+                  {content.websiteLink}
+                </Link>
+              )}
+              <div className="flex gap-[16px] mt-[8px]">
+                {content.isFee && <EntranceFeeIcon />}
+                {content.isReservation && <ReservationIcon />}
+                {content.isPet && <PetIcon />}
+                {content.isParking && <ParkingIcon />}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+        <Divider width="100%" height="8px" />
+        <CategoryTab
+          small={false}
+          list={["content", `review`]}
+          selectedTab={selectedTab}
+          customTabNames={["컨텐츠", `리뷰 ${content.reviewCount}`]}
+          onClickTab={(tab) => {
+            setSelectedTab(tab);
+          }}
+          wrapperStyle={{
+            marginTop: "8px",
+          }}
+        />
+        {selectedTab === "content" ? (
+          <ContentTab content={content} />
+        ) : (
+          <ReviewTab idx={content.idx.toString()} content={content} />
+        )}
+      </main>
       <Divider width="100%" height="8px" />
-      <CategoryTab
-        small={false}
-        list={["content", `review`]}
-        selectedTab={selectedTab}
-        customTabNames={["컨텐츠", `리뷰 ${content.reviewCount}`]}
-        onClickTab={(tab) => {
-          setSelectedTab(tab);
-        }}
-        wrapperStyle={{
-          marginTop: "8px",
-        }}
-      />
-      {selectedTab === "content" ? (
-        <ContentTab content={content} />
-      ) : (
-        <ReviewTab idx={content.idx.toString()} content={content} />
-      )}
-    </main>
+      <footer className="text-sm text-center p-4 ">
+        <div>
+          본 사이트는 한국문화정보원 KOPIS API와 한국관광공사 TourAPI의
+          공공데이터를 활용하고 있습니다.
+        </div>
+        <div className="flex justify-center" style={{}}>
+          <div>
+            제공:{" "}
+            <Link
+              rel="noopener noreferrer"
+              target="_blank"
+              href="https://www.kopis.or.kr/por/cs/openapi/openApiInfo.do?menuId=MNU_00074"
+            >
+              한국문화정보원
+            </Link>{" "}
+            |{" "}
+            <Link
+              rel="noopener noreferrer"
+              target="_blank"
+              href="https://api.visitkorea.or.kr/"
+            >
+              한국관광공사
+            </Link>
+          </div>
+        </div>
+      </footer>
+    </>
   );
 };
 
