@@ -4,6 +4,7 @@ import ContentNotFound from "./_ui/ContentNotFound";
 import customFetch from "@/shared/helpers/fetch";
 import { Header, HeaderLeft, HeaderRight } from "@/shared/ui/Header";
 import { Metadata } from "next";
+import { headers } from "next/headers";
 
 interface PageProps {
   params: {
@@ -39,6 +40,8 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { idx } }: PageProps) {
+  const headersList = headers();
+  const referer = headersList.get("referer");
   const res = await customFetch("/culture-content/" + idx, {
     next: { revalidate: 0 },
   });
@@ -52,6 +55,7 @@ export default async function Page({ params: { idx } }: PageProps) {
           <HeaderLeft
             option={{
               back: true,
+              referer: referer !== null && referer.includes("liket.site"),
             }}
           />
         </Header>
@@ -67,6 +71,7 @@ export default async function Page({ params: { idx } }: PageProps) {
           <HeaderLeft
             option={{
               back: true,
+              referer: referer !== null && referer.includes("liket.site"),
             }}
           />
         </Header>
