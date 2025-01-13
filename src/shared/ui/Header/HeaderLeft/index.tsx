@@ -51,7 +51,8 @@ const HeaderLeft = ({
         href={"/"}
         key={"back"}
         className="flex justify-center items-center w-[48px] h-[48px] rounded-full ml-[12px] icon-button"
-        onClick={() => {
+        onClick={(e) => {
+          e.preventDefault();
           if (typeof back === "object") {
             back.onClick && back.onClick();
             return;
