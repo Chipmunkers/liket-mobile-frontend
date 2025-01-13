@@ -1,7 +1,7 @@
 "use client";
 
 import { Header } from "@/shared/ui/Header";
-import { Props } from "./type";
+import { ModalType, Props } from "./type";
 import { useRouter, useSearchParams } from "next/navigation";
 import SearchHeader from "@/shared/ui/SearchHeader";
 import { useEffect, useState } from "react";
@@ -10,8 +10,15 @@ import AddressIcon from "../../icon/address-icon.svg";
 import PopupIcon from "../../icon/popup-icon.svg";
 import { ButtonBase } from "@mui/material";
 import { useGetContentsSearchResult } from "@/page/CreatePlan/_ui/PlaceSearch/hooks/useGetContentsSearchResult";
+import { KeywordSearchDocumentEntity } from "@/shared/types/api/address/KeywordSearchDocumentEntity";
+import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 
-export const PlaceSearch = ({}: Props) => {
+export const PlaceSearch = ({
+  setOrigin,
+  setStopover,
+  setDestination,
+  type,
+}: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -20,6 +27,22 @@ export const PlaceSearch = ({}: Props) => {
     useGetAddressSearchResult(searchKeyword);
 
   const { data: contentList } = useGetContentsSearchResult(searchKeyword);
+
+  const clickPlaceEvent =
+    (type: ModalType) => (data: KeywordSearchDocumentEntity) => {
+      if (type === "origin") setOrigin(data);
+      if (type === "stopover") setStopover((stopovers) => [...stopovers, data]);
+      if (type === "destination") setDestination(data);
+      router.back();
+    };
+
+  const clickContentEvent =
+    (type: ModalType) => (data: SummaryContentEntity) => {
+      if (type === "origin") setOrigin(data);
+      if (type === "stopover") setStopover((stopovers) => [...stopovers, data]);
+      if (type === "destination") setDestination(data);
+      router.back();
+    };
 
   return (
     <>
@@ -50,7 +73,10 @@ export const PlaceSearch = ({}: Props) => {
                         className="relative w-full h-[40px]"
                         key={`content-${i}`}
                       >
-                        <ButtonBase className="w-full h-full flex justify-start px-[24px] items-center">
+                        <ButtonBase
+                          className="w-full h-full flex justify-start px-[24px] items-center"
+                          onClick={() => clickContentEvent(type)(content)}
+                        >
                           <PopupIcon className="mr-[8px]" />
                           <span className="text-body3 line-clamp-1">
                             {content.title}
@@ -70,7 +96,10 @@ export const PlaceSearch = ({}: Props) => {
                         className="relative w-full h-[40px]"
                         key={`search-${i}`}
                       >
-                        <ButtonBase className="w-full h-full flex justify-start px-[24px] items-center">
+                        <ButtonBase
+                          className="w-full h-full flex justify-start px-[24px] items-center"
+                          onClick={() => clickPlaceEvent(type)(data)}
+                        >
                           <AddressIcon className="mr-[8px]" />
                           <span className="text-body3">
                             {data.placeName}: {data.addressName}
