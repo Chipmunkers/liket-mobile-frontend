@@ -38,8 +38,13 @@ export const CreatePlanPage = () => {
     if (result === true) stackRouterBack(router);
   };
 
-  const clickStartInputEvent = () => {
+  const clickOriginInputEvent = () => {
     setSearchModalType("origin");
+    router.push(pathName + "?modal=search");
+  };
+
+  const clickDestinationInputEvent = () => {
+    setSearchModalType("destination");
     router.push(pathName + "?modal=search");
   };
 
@@ -59,7 +64,15 @@ export const CreatePlanPage = () => {
             <InputButton
               placeholder="출발지를 선택해주세요"
               text={origin && extractTitleOrPlace(origin)}
-              onClick={clickStartInputEvent}
+              onClick={clickOriginInputEvent}
+            />
+          </div>
+          <div className="px-[24px] my-[34px]">
+            <InputLabel>도착</InputLabel>
+            <InputButton
+              placeholder="도착지를 입력해주세요"
+              text={destination && extractTitleOrPlace(destination)}
+              onClick={clickDestinationInputEvent}
             />
           </div>
         </div>

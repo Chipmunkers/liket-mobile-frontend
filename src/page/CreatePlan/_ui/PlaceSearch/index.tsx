@@ -60,7 +60,7 @@ export const PlaceSearch = ({
           <div id="search-list" className="flex flex-1">
             <div className="mt-[16px] w-full flex flex-col gap-[43px]">
               <div>
-                {contentList && (
+                {contentList && contentList.length !== 0 && (
                   <>
                     <h2 className="text-h2 ml-[24px] mb-[8px]">컨텐츠</h2>
                     {contentList.map((content, i) => (
@@ -85,27 +85,30 @@ export const PlaceSearch = ({
                 )}
               </div>
               <div>
-                {addressSearchResult && (
-                  <>
-                    <h2 className="text-h2 ml-[24px] mb-[8px]">장소</h2>
-                    {addressSearchResult.documents.map((data, i) => (
-                      <div
-                        className="relative w-full h-[40px]"
-                        key={`search-${i}`}
-                      >
-                        <ButtonBase
-                          className="w-full h-full flex justify-start px-[24px] items-center"
-                          onClick={() => clickPlaceOrContentsEvent(type)(data)}
+                {addressSearchResult &&
+                  addressSearchResult.documents.length !== 0 && (
+                    <>
+                      <h2 className="text-h2 ml-[24px] mb-[8px]">장소</h2>
+                      {addressSearchResult.documents.map((data, i) => (
+                        <div
+                          className="relative w-full h-[40px]"
+                          key={`search-${i}`}
                         >
-                          <AddressIcon className="mr-[8px]" />
-                          <span className="text-body3">
-                            {data.placeName}: {data.addressName}
-                          </span>
-                        </ButtonBase>
-                      </div>
-                    ))}
-                  </>
-                )}
+                          <ButtonBase
+                            className="w-full h-full flex justify-start px-[24px] items-center"
+                            onClick={() =>
+                              clickPlaceOrContentsEvent(type)(data)
+                            }
+                          >
+                            <AddressIcon className="mr-[8px]" />
+                            <span className="text-body3">
+                              {data.placeName}: {data.addressName}
+                            </span>
+                          </ButtonBase>
+                        </div>
+                      ))}
+                    </>
+                  )}
               </div>
             </div>
           </div>
