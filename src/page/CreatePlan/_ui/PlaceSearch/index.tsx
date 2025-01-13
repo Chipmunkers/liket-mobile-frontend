@@ -7,8 +7,9 @@ import SearchHeader from "@/shared/ui/SearchHeader";
 import { useEffect, useState } from "react";
 import { useGetAddressSearchResult } from "@/page/CreatePlan/_ui/PlaceSearch/hooks/useGetAddressSearchResult";
 import AddressIcon from "../../icon/address-icon.svg";
-import Button from "@/shared/ui/Button";
+import PopupIcon from "../../icon/popup-icon.svg";
 import { ButtonBase } from "@mui/material";
+import { useGetContentsSearchResult } from "@/page/CreatePlan/_ui/PlaceSearch/hooks/useGetContentsSearchResult";
 
 export const PlaceSearch = ({}: Props) => {
   const router = useRouter();
@@ -17,6 +18,8 @@ export const PlaceSearch = ({}: Props) => {
   const [searchKeyword, setSearchKeyword] = useState<string>();
   const { data: addressSearchResult } =
     useGetAddressSearchResult(searchKeyword);
+
+  const { data: contentList } = useGetContentsSearchResult(searchKeyword);
 
   return (
     <>
@@ -39,21 +42,39 @@ export const PlaceSearch = ({}: Props) => {
           <div id="search-list" className="flex flex-1">
             <div className="mt-[16px] w-full flex flex-col gap-[43px]">
               <div>
-                {
+                {contentList && (
                   <>
                     <h2 className="text-h2 ml-[24px] mb-[8px]">컨텐츠</h2>
+                    {contentList.map((content, i) => (
+                      <div
+                        className="relative w-full h-[40px]"
+                        key={`content-${i}`}
+                      >
+                        <ButtonBase className="w-full h-full flex justify-start px-[24px] items-center">
+                          <PopupIcon className="mr-[8px]" />
+                          <span className="text-body3 line-clamp-1">
+                            {content.title}
+                          </span>
+                        </ButtonBase>
+                      </div>
+                    ))}
                   </>
-                }
+                )}
               </div>
               <div>
                 {addressSearchResult && (
                   <>
                     <h2 className="text-h2 ml-[24px] mb-[8px]">장소</h2>
-                    {addressSearchResult.documents.map((data) => (
-                      <div className="relative w-full h-[40px]">
+                    {addressSearchResult.documents.map((data, i) => (
+                      <div
+                        className="relative w-full h-[40px]"
+                        key={`search-${i}`}
+                      >
                         <ButtonBase className="w-full h-full flex justify-start px-[24px] items-center">
                           <AddressIcon className="mr-[8px]" />
-                          <span className="text-body3">{data.placeName}</span>
+                          <span className="text-body3">
+                            {data.placeName}: {data.addressName}
+                          </span>
                         </ButtonBase>
                       </div>
                     ))}
