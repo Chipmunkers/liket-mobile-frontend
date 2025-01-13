@@ -4,11 +4,10 @@ import { PlanGoogleMap } from "@/page/CreatePlan/_ui/GoogleMap";
 import { PlaceSearch } from "@/page/CreatePlan/_ui/PlaceSearch";
 import { stackRouterBack } from "@/shared/helpers/stackRouter";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
-import { BasicInput, InputLabel } from "@/shared/ui/Input";
+import { InputLabel } from "@/shared/ui/Input";
 import InputButton from "@/shared/ui/Input/InputButton";
 import { usePathname, useRouter } from "next/navigation";
 import Script from "next/script";
-import { useState } from "react";
 
 export const CreatePlanPage = () => {
   const router = useRouter();
