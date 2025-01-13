@@ -28,19 +28,13 @@ export const PlaceSearch = ({
 
   const { data: contentList } = useGetContentsSearchResult(searchKeyword);
 
-  const clickPlaceEvent =
-    (type: ModalType) => (data: KeywordSearchDocumentEntity) => {
+  const clickPlaceOrContentsEvent =
+    (type: ModalType) =>
+    (data: KeywordSearchDocumentEntity | SummaryContentEntity) => {
       if (type === "origin") setOrigin(data);
       if (type === "stopover") setStopover((stopovers) => [...stopovers, data]);
       if (type === "destination") setDestination(data);
-      router.back();
-    };
-
-  const clickContentEvent =
-    (type: ModalType) => (data: SummaryContentEntity) => {
-      if (type === "origin") setOrigin(data);
-      if (type === "stopover") setStopover((stopovers) => [...stopovers, data]);
-      if (type === "destination") setDestination(data);
+      setSearchKeyword(undefined);
       router.back();
     };
 
@@ -57,6 +51,7 @@ export const PlaceSearch = ({
       >
         <Header>
           <SearchHeader
+            key={searchParams.get("modal")}
             onSearch={setSearchKeyword}
             placeholder="장소를 입력해주세요."
           />
@@ -75,7 +70,9 @@ export const PlaceSearch = ({
                       >
                         <ButtonBase
                           className="w-full h-full flex justify-start px-[24px] items-center"
-                          onClick={() => clickContentEvent(type)(content)}
+                          onClick={() =>
+                            clickPlaceOrContentsEvent(type)(content)
+                          }
                         >
                           <PopupIcon className="mr-[8px]" />
                           <span className="text-body3 line-clamp-1">
@@ -98,7 +95,7 @@ export const PlaceSearch = ({
                       >
                         <ButtonBase
                           className="w-full h-full flex justify-start px-[24px] items-center"
-                          onClick={() => clickPlaceEvent(type)(data)}
+                          onClick={() => clickPlaceOrContentsEvent(type)(data)}
                         >
                           <AddressIcon className="mr-[8px]" />
                           <span className="text-body3">
