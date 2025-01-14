@@ -89,3 +89,4 @@ export const CreatePlanPage = () => {
 
 // TODO: 대중교통의 경우 대중교통 관련한 정보 표시
 // TODO: 도보도 선택할 수 있도록 개선
+// TODO: 에러 났을 땐 에러 문구 표시하도록 개선
