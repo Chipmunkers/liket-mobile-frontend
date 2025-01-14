@@ -22,6 +22,7 @@ export const useMapCenter = ({
       lng: extractCoordinate(origin).x,
       lat: extractCoordinate(origin).y,
     });
+    googleMap.setZoom(16);
   }, [origin, googleMap]);
 
   useEffect(() => {
@@ -31,5 +32,6 @@ export const useMapCenter = ({
       lng: extractCoordinate(destination).x,
       lat: extractCoordinate(destination).y,
     });
+    googleMap.setZoom(16);
   }, [destination, googleMap]);
 };

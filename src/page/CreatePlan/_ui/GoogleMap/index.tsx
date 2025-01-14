@@ -51,7 +51,7 @@ export const PlanGoogleMap = ({ origin, destination, stopoverList }: Props) => {
     <>
       {isLoaded && (
         <GoogleMap
-          zoom={14}
+          zoom={10}
           mapContainerClassName="w-full h-full"
           options={{
             disableDefaultUI: true,
@@ -119,7 +119,7 @@ export const PlanGoogleMap = ({ origin, destination, stopoverList }: Props) => {
                 }}
                 label={{
                   color: "white",
-                  text: "출발",
+                  text: "도착",
                   className: "mb-[6px] text-caption",
                 }}
               />
