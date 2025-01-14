@@ -49,7 +49,7 @@ const SearchHeader = ({
   };
 
   return (
-    <div className={classNames("header", className || "")}>
+    <div className={classNames("header px-[12px]", className || "")}>
       <ButtonBase
         className="w-[48px] h-[48px] rounded-full icon-button"
         disableRipple
