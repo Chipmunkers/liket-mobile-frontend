@@ -1,5 +1,6 @@
 import { useGetPedestrianRoute } from "@/page/CreatePlan/hooks/useGetPedestrianRoute";
 import { Place } from "@/page/CreatePlan/type";
+import { PedestrianRouteEntity } from "@/shared/types/api/address/PedestrianRouteEntity";
 import { useEffect, useState } from "react";
 
 export const usePolyline = ({
@@ -7,20 +8,16 @@ export const usePolyline = ({
   origin,
   stopoverList,
   destination,
+  pedestrianRoute,
 }: {
   googleMap: google.maps.Map | null;
   origin?: Place;
   destination?: Place;
   stopoverList: Place[];
+  pedestrianRoute?: PedestrianRouteEntity;
 }) => {
   const [path, setPath] = useState<google.maps.LatLngLiteral[]>([]);
   const [polyline, setPolyline] = useState<google.maps.Polyline[]>([]);
-
-  const { data: pedestrianRoute } = useGetPedestrianRoute(
-    origin,
-    stopoverList,
-    destination
-  );
 
   useEffect(() => {
     if (!pedestrianRoute || !googleMap) return;

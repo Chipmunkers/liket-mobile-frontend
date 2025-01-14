@@ -4,6 +4,7 @@ import { PlanGoogleMap } from "@/page/CreatePlan/_ui/GoogleMap";
 import { PlaceSearch } from "@/page/CreatePlan/_ui/PlaceSearch";
 import { ModalType } from "@/page/CreatePlan/_ui/PlaceSearch/type";
 import { useGetLoginCheck } from "@/page/CreatePlan/hooks/useGetLoginCheck";
+import { useGetPedestrianRoute } from "@/page/CreatePlan/hooks/useGetPedestrianRoute";
 import { useGetUtils } from "@/page/CreatePlan/hooks/useGetUtils";
 import { Place } from "@/page/CreatePlan/type";
 import { stackRouterBack } from "@/shared/helpers/stackRouter";
@@ -21,8 +22,14 @@ export const CreatePlanPage = () => {
   const [searchModalType, setSearchModalType] = useState<ModalType>("origin");
 
   const [origin, setOrigin] = useState<Place>();
-  const [stopovers, setStopovers] = useState<Place[]>([]);
+  const [stopoverList, setStopoverList] = useState<Place[]>([]);
   const [destination, setDestination] = useState<Place>();
+
+  const { data: pedestrianRoute } = useGetPedestrianRoute(
+    origin,
+    stopoverList,
+    destination
+  );
 
   useGetLoginCheck();
 
@@ -53,9 +60,10 @@ export const CreatePlanPage = () => {
       <main>
         <div className="map-area w-full h-[300px] bg-grey-03">
           <PlanGoogleMap
+            pedestrianRoute={pedestrianRoute}
             origin={origin}
             destination={destination}
-            stopoverList={stopovers}
+            stopoverList={stopoverList}
           />
         </div>
         <div>
@@ -78,7 +86,7 @@ export const CreatePlanPage = () => {
         </div>
       </main>
       <PlaceSearch
-        setStopover={setStopovers}
+        setStopover={setStopoverList}
         setOrigin={setOrigin}
         setDestination={setDestination}
         type={searchModalType}

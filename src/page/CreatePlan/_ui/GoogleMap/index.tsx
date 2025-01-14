@@ -14,7 +14,12 @@ import { useGetUtils } from "@/page/CreatePlan/hooks/useGetUtils";
 import { usePolyline } from "@/page/CreatePlan/_ui/GoogleMap/hooks/usePolyline";
 import { useMapCenter } from "@/page/CreatePlan/_ui/GoogleMap/hooks/useMapCenter";
 
-export const PlanGoogleMap = ({ origin, destination, stopoverList }: Props) => {
+export const PlanGoogleMap = ({
+  origin,
+  destination,
+  stopoverList,
+  pedestrianRoute,
+}: Props) => {
   const [googleMap, setGoogleMap] = useState<google.maps.Map | null>(null);
   const { extractTitleOrPlace, extractCoordinate } = useGetUtils();
   const { isLoaded } = useJsApiLoader({
@@ -27,6 +32,7 @@ export const PlanGoogleMap = ({ origin, destination, stopoverList }: Props) => {
     origin,
     stopoverList,
     destination,
+    pedestrianRoute,
   });
 
   // 초기 지도 서울로 세팅하는 훅
