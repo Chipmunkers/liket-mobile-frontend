@@ -3,7 +3,7 @@
 import { PlanGoogleMap } from "@/page/CreatePlan/_ui/GoogleMap";
 import { PlaceSearch } from "@/page/CreatePlan/_ui/PlaceSearch";
 import { ModalType } from "@/page/CreatePlan/_ui/PlaceSearch/type";
-import { useGetPedestrianRoute } from "@/page/CreatePlan/hooks/useGetPedestrianRoute";
+import { useGetLoginCheck } from "@/page/CreatePlan/hooks/useGetLoginCheck";
 import { useGetUtils } from "@/page/CreatePlan/hooks/useGetUtils";
 import { Place } from "@/page/CreatePlan/type";
 import { stackRouterBack } from "@/shared/helpers/stackRouter";
@@ -23,6 +23,8 @@ export const CreatePlanPage = () => {
   const [origin, setOrigin] = useState<Place>();
   const [stopovers, setStopovers] = useState<Place[]>([]);
   const [destination, setDestination] = useState<Place>();
+
+  useGetLoginCheck();
 
   const clickHeaderBackBtnEvent = () => {
     const result = confirm(

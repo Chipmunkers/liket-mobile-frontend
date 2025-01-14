@@ -4,7 +4,7 @@ import { Header } from "@/shared/ui/Header";
 import { ModalType, Props } from "./type";
 import { useRouter, useSearchParams } from "next/navigation";
 import SearchHeader from "@/shared/ui/SearchHeader";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useGetAddressSearchResult } from "@/page/CreatePlan/_ui/PlaceSearch/hooks/useGetAddressSearchResult";
 import AddressIcon from "../../icon/address-icon.svg";
 import PopupIcon from "../../icon/popup-icon.svg";
