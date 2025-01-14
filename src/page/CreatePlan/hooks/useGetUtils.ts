@@ -1,6 +1,5 @@
 import { ModalType } from "@/page/CreatePlan/_ui/PlaceSearch/type";
 import { Place } from "@/page/CreatePlan/type";
-import { KeywordSearchDocumentEntity } from "@/shared/types/api/address/KeywordSearchDocumentEntity";
 import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 
 export const useGetUtils = () => {

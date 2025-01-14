@@ -2,7 +2,6 @@
 
 import { PlanGoogleMap } from "@/page/CreatePlan/_ui/GoogleMap";
 import { PlaceSearch } from "@/page/CreatePlan/_ui/PlaceSearch";
-import { ModalType } from "@/page/CreatePlan/_ui/PlaceSearch/type";
 import { useButtonClickEvent } from "@/page/CreatePlan/hooks/useButtonClickEvent";
 import { useGetLoginCheck } from "@/page/CreatePlan/hooks/useGetLoginCheck";
 import { useGetUtils } from "@/page/CreatePlan/hooks/useGetUtils";
@@ -11,24 +10,17 @@ import Button from "@/shared/ui/Button";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import { InputLabel } from "@/shared/ui/Input";
 import InputButton from "@/shared/ui/Input/InputButton";
-import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import DeleteCrossIcon from "@/shared/icon/common/cross/ImgDeleteCrossIcon.svg";
 
 export const CreatePlanPage = () => {
   useGetLoginCheck();
-  const router = useRouter();
-  const pathName = usePathname();
   const {
     extractTitleOrPlace,
     formatSecondToTimeString,
     getInputTitle,
     getInputType,
   } = useGetUtils();
-
-  const [searchModalType, setSearchModalType] = useState<ModalType>("origin");
-
-  const [stopoverList, setStopoverList] = useState<Place[]>([]);
 
   const [placeList, setPlaceList] = useState<(Place | null)[]>([null]);
 
@@ -40,7 +32,6 @@ export const CreatePlanPage = () => {
     clickDeleteStopoverBtnEvent,
     clickPlaceAddInputBtnEvent,
   } = useButtonClickEvent({
-    setSearchModalType,
     placeList,
     setPlaceList,
     setSelectedIndex,

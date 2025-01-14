@@ -1,4 +1,3 @@
-import { ModalType } from "@/page/CreatePlan/_ui/PlaceSearch/type";
 import { Place } from "@/page/CreatePlan/type";
 import customToast from "@/shared/helpers/customToast";
 import { stackRouterBack } from "@/shared/helpers/stackRouter";
@@ -6,12 +5,10 @@ import { SetState } from "@/shared/types/react";
 import { usePathname, useRouter } from "next/navigation";
 
 export const useButtonClickEvent = ({
-  setSearchModalType,
   placeList,
   setPlaceList,
   setSelectedIndex,
 }: {
-  setSearchModalType: SetState<ModalType>;
   placeList: (Place | null)[];
   setPlaceList: SetState<(Place | null)[]>;
   setSelectedIndex: SetState<number>;
