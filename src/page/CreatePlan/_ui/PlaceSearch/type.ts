@@ -1,19 +1,14 @@
-import { KeywordSearchDocumentEntity } from "@/shared/types/api/address/KeywordSearchDocumentEntity";
-import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
+import { Place } from "@/page/CreatePlan/type";
 import { SetState } from "@/shared/types/react";
 
 export type ModalType = "origin" | "stopover" | "destination";
 
 export type Props = {
-  setOrigin: SetState<
-    SummaryContentEntity | KeywordSearchDocumentEntity | undefined
-  >;
+  setOrigin: SetState<Place | undefined>;
 
-  setStopover: SetState<(SummaryContentEntity | KeywordSearchDocumentEntity)[]>;
+  setStopover: SetState<Place[]>;
 
-  setDestination: SetState<
-    SummaryContentEntity | KeywordSearchDocumentEntity | undefined
-  >;
+  setDestination: SetState<Place | undefined>;
 
   type: ModalType;
 };

@@ -3,32 +3,26 @@
 import { PlanGoogleMap } from "@/page/CreatePlan/_ui/GoogleMap";
 import { PlaceSearch } from "@/page/CreatePlan/_ui/PlaceSearch";
 import { ModalType } from "@/page/CreatePlan/_ui/PlaceSearch/type";
+import { useGetPedestrianRoute } from "@/page/CreatePlan/hooks/useGetPedestrianRoute";
 import { useGetUtils } from "@/page/CreatePlan/hooks/useGetUtils";
+import { Place } from "@/page/CreatePlan/type";
 import { stackRouterBack } from "@/shared/helpers/stackRouter";
-import { KeywordSearchDocumentEntity } from "@/shared/types/api/address/KeywordSearchDocumentEntity";
-import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import { InputLabel } from "@/shared/ui/Input";
 import InputButton from "@/shared/ui/Input/InputButton";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const CreatePlanPage = () => {
   const router = useRouter();
   const pathName = usePathname();
-  const { extractTitleOrPlace, isContent } = useGetUtils();
+  const { extractTitleOrPlace } = useGetUtils();
 
   const [searchModalType, setSearchModalType] = useState<ModalType>("origin");
 
-  const [origin, setOrigin] = useState<
-    SummaryContentEntity | KeywordSearchDocumentEntity
-  >();
-  const [stopovers, setStopovers] = useState<
-    (SummaryContentEntity | KeywordSearchDocumentEntity)[]
-  >([]);
-  const [destination, setDestination] = useState<
-    SummaryContentEntity | KeywordSearchDocumentEntity
-  >();
+  const [origin, setOrigin] = useState<Place>();
+  const [stopovers, setStopovers] = useState<Place[]>([]);
+  const [destination, setDestination] = useState<Place>();
 
   const clickHeaderBackBtnEvent = () => {
     const result = confirm(
@@ -56,7 +50,11 @@ export const CreatePlanPage = () => {
       </Header>
       <main>
         <div className="map-area w-full h-[300px] bg-grey-03">
-          <PlanGoogleMap />
+          <PlanGoogleMap
+            origin={origin}
+            destination={destination}
+            stopoverList={stopovers}
+          />
         </div>
         <div>
           <div className="px-[24px] my-[34px]">
