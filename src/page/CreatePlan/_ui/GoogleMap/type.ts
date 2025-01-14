@@ -1,12 +1,9 @@
-import { Place } from "@/page/CreatePlan/type";
-import { PedestrianRouteEntity } from "@/shared/types/api/address/PedestrianRouteEntity";
+import { Place, RouteSegment } from "@/page/CreatePlan/type";
+import { SetState } from "@/shared/types/react";
 
 export type Props = {
-  pedestrianRoute?: PedestrianRouteEntity;
-
-  origin?: Place;
-
-  stopoverList: Place[];
-
-  destination?: Place;
+  placeList: (Place | null)[];
+  routeList: any[];
+  setRouteList: SetState<any[]>;
+  routeSegmentList: (RouteSegment | null)[];
 };

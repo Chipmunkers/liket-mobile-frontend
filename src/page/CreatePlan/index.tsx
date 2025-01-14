@@ -2,47 +2,53 @@
 
 import { PlanGoogleMap } from "@/page/CreatePlan/_ui/GoogleMap";
 import { PlaceSearch } from "@/page/CreatePlan/_ui/PlaceSearch";
-import { ModalType } from "@/page/CreatePlan/_ui/PlaceSearch/type";
+import { useButtonClickEvent } from "@/page/CreatePlan/hooks/useButtonClickEvent";
 import { useGetLoginCheck } from "@/page/CreatePlan/hooks/useGetLoginCheck";
 import { useGetUtils } from "@/page/CreatePlan/hooks/useGetUtils";
-import { Place } from "@/page/CreatePlan/type";
-import { stackRouterBack } from "@/shared/helpers/stackRouter";
+import { Place, Route } from "@/page/CreatePlan/type";
+import Button from "@/shared/ui/Button";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import { InputLabel } from "@/shared/ui/Input";
 import InputButton from "@/shared/ui/Input/InputButton";
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import DeleteCrossIcon from "@/shared/icon/common/cross/ImgDeleteCrossIcon.svg";
+import { useRouteSegment } from "@/page/CreatePlan/hooks/useRouteSegment";
 
 export const CreatePlanPage = () => {
-  const router = useRouter();
-  const pathName = usePathname();
-  const { extractTitleOrPlace } = useGetUtils();
-
-  const [searchModalType, setSearchModalType] = useState<ModalType>("origin");
-
-  const [origin, setOrigin] = useState<Place>();
-  const [stopovers, setStopovers] = useState<Place[]>([]);
-  const [destination, setDestination] = useState<Place>();
-
   useGetLoginCheck();
 
-  const clickHeaderBackBtnEvent = () => {
-    const result = confirm(
-      "작성된 내용은 저장되지 않습니다. 정말 뒤로가시겠습니까?"
-    );
+  const [placeList, setPlaceList] = useState<(Place | null)[]>([null]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const { routeSegmentList, setRouteSegmentList } = useRouteSegment({
+    placeList,
+  });
+  const [routeList, setRouteList] = useState<(Route | null)[]>([]);
 
-    if (result === true) stackRouterBack(router);
-  };
+  // useEffect(() => {
+  //   console.log(routeList);
+  // }, [routeList]);
 
-  const clickOriginInputEvent = () => {
-    setSearchModalType("origin");
-    router.push(pathName + "?modal=search");
-  };
+  // useEffect(() => {
+  //   console.log(placeList);
+  // }, [placeList]);
 
-  const clickDestinationInputEvent = () => {
-    setSearchModalType("destination");
-    router.push(pathName + "?modal=search");
-  };
+  const {
+    clickHeaderBackBtnEvent,
+    clickAddStopoverBtnEvent,
+    clickDeleteStopoverBtnEvent,
+    clickPlaceAddInputBtnEvent,
+  } = useButtonClickEvent({
+    placeList,
+    setPlaceList,
+    setSelectedIndex,
+  });
+
+  const {
+    extractTitleOrPlace,
+    formatSecondToTimeString,
+    getInputTitle,
+    getInputType,
+  } = useGetUtils();
 
   return (
     <>
@@ -53,36 +59,65 @@ export const CreatePlanPage = () => {
       <main>
         <div className="map-area w-full h-[300px] bg-grey-03">
           <PlanGoogleMap
-            origin={origin}
-            destination={destination}
-            stopoverList={stopovers}
+            routeSegmentList={routeSegmentList}
+            setRouteList={setRouteList}
+            routeList={routeList}
+            placeList={placeList}
           />
         </div>
-        <div>
-          <div className="px-[24px] my-[34px]">
-            <InputLabel>출발</InputLabel>
-            <InputButton
-              placeholder="출발지를 선택해주세요"
-              text={origin && extractTitleOrPlace(origin)}
-              onClick={clickOriginInputEvent}
-            />
-          </div>
-          <div className="px-[24px] my-[34px]">
-            <InputLabel>도착</InputLabel>
-            <InputButton
-              placeholder="도착지를 입력해주세요"
-              text={destination && extractTitleOrPlace(destination)}
-              onClick={clickDestinationInputEvent}
-            />
+        <div className="mb-[34px]">
+          {placeList.map((elem, i) => (
+            <div className="px-[24px] my-[34px]" key={`stopover-input-${i}`}>
+              <InputLabel className="flex h-[16px]">
+                {getInputTitle(i, placeList.length)}
+                {getInputType(i, placeList.length) !== "origin" && (
+                  <button
+                    className="w-[16px] h-[16px] rounded-full flex justify-center items-center bg-grey-02 ml-[4px]"
+                    onClick={() => clickDeleteStopoverBtnEvent(i)}
+                  >
+                    <DeleteCrossIcon className="scale-[68%]" />
+                  </button>
+                )}
+              </InputLabel>
+              <InputButton
+                placeholder="장소를 선택해주세요."
+                text={
+                  (placeList[i] && extractTitleOrPlace(placeList[i])) ||
+                  undefined
+                }
+                onClick={() => clickPlaceAddInputBtnEvent(i)}
+              />
+              {routeList[i] && (
+                <div className="flex items-center mt-[24px]">
+                  <div className="h-[60px] w-[2px] bg-grey-02"></div>
+                  <div className="ml-[24px] text-body3 text-grey-04">
+                    {routeList[i].type === "transit" ? "대중교통: " : "도보: "}
+                    {formatSecondToTimeString(routeList[i].totalTime)}
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+
+          <div className="px-[24px] h-[40px]">
+            <Button
+              className="w-full h-full"
+              variant="ghost"
+              onClick={clickAddStopoverBtnEvent}
+            >
+              <span className="text-body3">경유지 추가</span>
+            </Button>
           </div>
         </div>
       </main>
       <PlaceSearch
-        setStopover={setStopovers}
-        setOrigin={setOrigin}
-        setDestination={setDestination}
-        type={searchModalType}
+        placeList={placeList}
+        setPlaceList={setPlaceList}
+        i={selectedIndex}
       />
     </>
   );
 };
+
+// TODO: 대중교통의 경우 대중교통 관련한 정보 표시
+// TODO: 도보도 선택할 수 있도록 개선

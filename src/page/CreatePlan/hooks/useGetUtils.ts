@@ -1,5 +1,5 @@
+import { ModalType } from "@/page/CreatePlan/_ui/PlaceSearch/type";
 import { Place } from "@/page/CreatePlan/type";
-import { KeywordSearchDocumentEntity } from "@/shared/types/api/address/KeywordSearchDocumentEntity";
 import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 
 export const useGetUtils = () => {
@@ -43,10 +43,35 @@ export const useGetUtils = () => {
     return data.id;
   };
 
+  const formatSecondToTimeString = (sec: number): string => {
+    return `${Math.floor(sec / 60)}분 ${sec % 60}초`;
+  };
+
+  const getInputType = (i: number, length: number): ModalType => {
+    if (i === 0) return "origin";
+
+    if (i === length - 1) return "destination";
+
+    return "stopover";
+  };
+
+  const getInputTitle = (i: number, length: number): string => {
+    const type = getInputType(i, length);
+
+    if (type === "origin") return "출발";
+
+    if (type === "destination") return "도착";
+
+    return `경유지\n${i}`;
+  };
+
   return {
     extractTitleOrPlace,
     isContent,
     extractCoordinate,
     extractKey,
+    formatSecondToTimeString,
+    getInputTitle,
+    getInputType,
   };
 };
