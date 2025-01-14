@@ -91,6 +91,7 @@ export const CreatePlanPage = () => {
                 <div className="flex items-center mt-[24px]">
                   <div className="h-[60px] w-[2px] bg-grey-02"></div>
                   <div className="ml-[24px] text-body3 text-grey-04">
+                    {routeList[i].type === "transit" ? "대중교통: " : "도보: "}
                     {formatSecondToTimeString(routeList[i].totalTime)}
                   </div>
                 </div>
