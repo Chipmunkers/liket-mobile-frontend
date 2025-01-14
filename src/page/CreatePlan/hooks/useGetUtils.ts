@@ -62,7 +62,7 @@ export const useGetUtils = () => {
 
     if (type === "destination") return "도착";
 
-    return `경유지 ${i}`;
+    return `경유지\n${i}`;
   };
 
   return {

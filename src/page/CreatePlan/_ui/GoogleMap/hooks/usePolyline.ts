@@ -1,45 +1,40 @@
-import { useGetPedestrianRoute } from "@/page/CreatePlan/hooks/useGetPedestrianRoute";
-import { Place } from "@/page/CreatePlan/type";
-import { PedestrianRouteEntity } from "@/shared/types/api/address/PedestrianRouteEntity";
+import { Route } from "@/page/CreatePlan/type";
 import { useEffect, useState } from "react";
 
 export const usePolyline = ({
   googleMap,
-  origin,
-  stopoverList,
-  destination,
-  pedestrianRoute,
+  routeList,
 }: {
   googleMap: google.maps.Map | null;
-  origin?: Place;
-  destination?: Place;
-  stopoverList: Place[];
-  pedestrianRoute?: PedestrianRouteEntity;
+  routeList: (Route | null)[];
 }) => {
   const [path, setPath] = useState<google.maps.LatLngLiteral[]>([]);
   const [polyline, setPolyline] = useState<google.maps.Polyline[]>([]);
 
   useEffect(() => {
-    if (!pedestrianRoute || !googleMap) return;
+    if (!routeList || !googleMap) return;
+
+    console.log("ㅏ아아아아ㅏ");
+
+    polyline.forEach((polyline) => polyline.setMap(null));
 
     setPath(
-      pedestrianRoute.features
-        .filter((feature) => feature.type === "LineString")
-        .flatMap((feature) => feature.coordinates)
-        .map(({ x: lng, y: lat }) => ({ lat, lng }))
+      routeList
+        .filter((route) => !!route)
+        .flatMap((route) => route.coordinateList)
+        .map((coordinate) => ({
+          lat: coordinate.y,
+          lng: coordinate.x,
+        }))
     );
-  }, [pedestrianRoute]);
+  }, [routeList]);
+
+  // useEffect(() => {
+  //   if (path.length === 0 || !googleMap) return;
+  // }, [routeList]);
 
   useEffect(() => {
     if (path.length === 0 || !googleMap) return;
-
-    polyline.forEach((polyline) => polyline.setMap(null));
-  }, [origin, stopoverList, destination]);
-
-  useEffect(() => {
-    if (path.length === 0 || !googleMap) return;
-
-    polyline.forEach((polyline) => polyline.setMap(null));
 
     // 실선 추가
     const solidPolyline = new google.maps.Polyline({

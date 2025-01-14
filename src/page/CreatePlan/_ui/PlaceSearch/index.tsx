@@ -13,7 +13,7 @@ import { useGetContentsSearchResult } from "@/page/CreatePlan/_ui/PlaceSearch/ho
 import { KeywordSearchDocumentEntity } from "@/shared/types/api/address/KeywordSearchDocumentEntity";
 import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 
-export const PlaceSearch = ({ i, setPlaceList }: Props) => {
+export const PlaceSearch = ({ i, setPlaceList, placeList }: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -26,10 +26,9 @@ export const PlaceSearch = ({ i, setPlaceList }: Props) => {
   const clickPlaceOrContentsEvent = (
     data: KeywordSearchDocumentEntity | SummaryContentEntity
   ) => {
-    setPlaceList((list) => {
-      list[i] = data;
-      return list;
-    });
+    const tempPlaceList = placeList;
+    tempPlaceList[i] = data;
+    setPlaceList([...tempPlaceList]);
     setSearchKeyword(undefined);
     router.back();
   };

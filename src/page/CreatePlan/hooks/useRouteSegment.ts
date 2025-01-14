@@ -2,19 +2,38 @@ import { Place, RouteSegment } from "@/page/CreatePlan/type";
 import { useEffect, useState } from "react";
 
 export const useRouteSegment = ({
-  origin,
-  stopoverList,
-  destination,
+  placeList,
 }: {
-  origin?: Place;
-  stopoverList: Place[];
-  destination?: Place;
+  placeList: (Place | null)[];
 }) => {
-  const [routeSegmentList, setRouteSegmentList] = useState<RouteSegment[]>([]);
+  const [routeSegmentList, setRouteSegmentList] = useState<
+    (RouteSegment | null)[]
+  >([]);
 
   useEffect(() => {
-    if (!origin) return;
+    const segmentList: (RouteSegment | null)[] = [];
 
-    if (!destination) return;
-  }, [origin]);
+    for (let i = 0; i < placeList.length - 1; i++) {
+      const startPlace = placeList[i];
+      const endPlace = placeList[i + 1];
+
+      if (!startPlace || !endPlace) {
+        segmentList.push(null);
+        continue;
+      }
+
+      segmentList.push({
+        start: startPlace,
+        end: endPlace,
+        type: "transit",
+      });
+    }
+
+    setRouteSegmentList(segmentList);
+  }, [placeList]);
+
+  return {
+    routeSegmentList,
+    setRouteSegmentList,
+  };
 };
