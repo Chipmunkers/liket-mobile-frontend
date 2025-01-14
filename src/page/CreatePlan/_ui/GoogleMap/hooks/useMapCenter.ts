@@ -2,6 +2,9 @@ import { useGetUtils } from "@/page/CreatePlan/hooks/useGetUtils";
 import { Place } from "@/page/CreatePlan/type";
 import { useEffect } from "react";
 
+/**
+ * @deprecated
+ */
 export const useMapCenter = ({
   googleMap,
   origin,

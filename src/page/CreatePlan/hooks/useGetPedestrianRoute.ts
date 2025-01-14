@@ -10,7 +10,7 @@ import { useEffect } from "react";
 
 export const useGetPedestrianRoute = (
   origin: Place | undefined,
-  stopover: Place[],
+  stopoverList: Place[],
   destination: Place | undefined
 ) => {
   const exceptionHandler = useExceptionHandler();
@@ -19,7 +19,7 @@ export const useGetPedestrianRoute = (
   const query = useQuery<PedestrianRouteEntity, AxiosError>({
     queryKey: [
       "pedestrian-route",
-      `stopover-length-${stopover.length}`,
+      `stopover-length-${stopoverList.length}`,
       extractKey(origin),
       extractKey(destination),
     ],

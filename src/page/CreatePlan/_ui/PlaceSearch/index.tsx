@@ -13,12 +13,7 @@ import { useGetContentsSearchResult } from "@/page/CreatePlan/_ui/PlaceSearch/ho
 import { KeywordSearchDocumentEntity } from "@/shared/types/api/address/KeywordSearchDocumentEntity";
 import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 
-export const PlaceSearch = ({
-  setOrigin,
-  setStopover,
-  setDestination,
-  type,
-}: Props) => {
+export const PlaceSearch = ({ i, setPlaceList }: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -28,15 +23,16 @@ export const PlaceSearch = ({
 
   const { data: contentList } = useGetContentsSearchResult(searchKeyword);
 
-  const clickPlaceOrContentsEvent =
-    (type: ModalType) =>
-    (data: KeywordSearchDocumentEntity | SummaryContentEntity) => {
-      if (type === "origin") setOrigin(data);
-      if (type === "stopover") setStopover((stopovers) => [...stopovers, data]);
-      if (type === "destination") setDestination(data);
-      setSearchKeyword(undefined);
-      router.back();
-    };
+  const clickPlaceOrContentsEvent = (
+    data: KeywordSearchDocumentEntity | SummaryContentEntity
+  ) => {
+    setPlaceList((list) => {
+      list[i] = data;
+      return list;
+    });
+    setSearchKeyword(undefined);
+    router.back();
+  };
 
   return (
     <>
@@ -70,9 +66,7 @@ export const PlaceSearch = ({
                       >
                         <ButtonBase
                           className="w-full h-full flex justify-start px-[24px] items-center"
-                          onClick={() =>
-                            clickPlaceOrContentsEvent(type)(content)
-                          }
+                          onClick={() => clickPlaceOrContentsEvent(content)}
                         >
                           <PopupIcon className="mr-[8px]" />
                           <span className="text-body3 line-clamp-1">
@@ -96,9 +90,7 @@ export const PlaceSearch = ({
                         >
                           <ButtonBase
                             className="w-full h-full flex justify-start px-[24px] items-center"
-                            onClick={() =>
-                              clickPlaceOrContentsEvent(type)(data)
-                            }
+                            onClick={() => clickPlaceOrContentsEvent(data)}
                           >
                             <AddressIcon className="mr-[8px]" />
                             <span className="text-body3">

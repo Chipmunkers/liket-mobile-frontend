@@ -3,53 +3,48 @@
 import { PlanGoogleMap } from "@/page/CreatePlan/_ui/GoogleMap";
 import { PlaceSearch } from "@/page/CreatePlan/_ui/PlaceSearch";
 import { ModalType } from "@/page/CreatePlan/_ui/PlaceSearch/type";
+import { useButtonClickEvent } from "@/page/CreatePlan/hooks/useButtonClickEvent";
 import { useGetLoginCheck } from "@/page/CreatePlan/hooks/useGetLoginCheck";
-import { useGetPedestrianRoute } from "@/page/CreatePlan/hooks/useGetPedestrianRoute";
 import { useGetUtils } from "@/page/CreatePlan/hooks/useGetUtils";
 import { Place } from "@/page/CreatePlan/type";
-import { stackRouterBack } from "@/shared/helpers/stackRouter";
+import Button from "@/shared/ui/Button";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import { InputLabel } from "@/shared/ui/Input";
 import InputButton from "@/shared/ui/Input/InputButton";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import DeleteCrossIcon from "@/shared/icon/common/cross/ImgDeleteCrossIcon.svg";
 
 export const CreatePlanPage = () => {
+  useGetLoginCheck();
   const router = useRouter();
   const pathName = usePathname();
-  const { extractTitleOrPlace } = useGetUtils();
+  const {
+    extractTitleOrPlace,
+    formatSecondToTimeString,
+    getInputTitle,
+    getInputType,
+  } = useGetUtils();
 
   const [searchModalType, setSearchModalType] = useState<ModalType>("origin");
 
-  const [origin, setOrigin] = useState<Place>();
   const [stopoverList, setStopoverList] = useState<Place[]>([]);
-  const [destination, setDestination] = useState<Place>();
 
-  const { data: pedestrianRoute } = useGetPedestrianRoute(
-    origin,
-    stopoverList,
-    destination
-  );
+  const [placeList, setPlaceList] = useState<(Place | null)[]>([null]);
 
-  useGetLoginCheck();
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const clickHeaderBackBtnEvent = () => {
-    const result = confirm(
-      "작성된 내용은 저장되지 않습니다. 정말 뒤로가시겠습니까?"
-    );
-
-    if (result === true) stackRouterBack(router);
-  };
-
-  const clickOriginInputEvent = () => {
-    setSearchModalType("origin");
-    router.push(pathName + "?modal=search");
-  };
-
-  const clickDestinationInputEvent = () => {
-    setSearchModalType("destination");
-    router.push(pathName + "?modal=search");
-  };
+  const {
+    clickHeaderBackBtnEvent,
+    clickAddStopoverBtnEvent,
+    clickDeleteStopoverBtnEvent,
+    clickPlaceAddInputBtnEvent,
+  } = useButtonClickEvent({
+    setSearchModalType,
+    placeList,
+    setPlaceList,
+    setSelectedIndex,
+  });
 
   return (
     <>
@@ -59,38 +54,47 @@ export const CreatePlanPage = () => {
       </Header>
       <main>
         <div className="map-area w-full h-[300px] bg-grey-03">
-          <PlanGoogleMap
-            pedestrianRoute={pedestrianRoute}
-            origin={origin}
-            destination={destination}
-            stopoverList={stopoverList}
-          />
+          <PlanGoogleMap placeList={placeList} />
         </div>
-        <div>
-          <div className="px-[24px] my-[34px]">
-            <InputLabel>출발</InputLabel>
-            <InputButton
-              placeholder="출발지를 선택해주세요"
-              text={origin && extractTitleOrPlace(origin)}
-              onClick={clickOriginInputEvent}
-            />
-          </div>
-          <div className="px-[24px] my-[34px]">
-            <InputLabel>도착</InputLabel>
-            <InputButton
-              placeholder="도착지를 입력해주세요"
-              text={destination && extractTitleOrPlace(destination)}
-              onClick={clickDestinationInputEvent}
-            />
+        <div className="mb-[34px]">
+          {placeList.map((elem, i) => (
+            <>
+              <div className="px-[24px] my-[34px]" key={`stopover-input-${i}`}>
+                <InputLabel className="flex h-[16px]">
+                  {getInputTitle(i, placeList.length)}
+                  {getInputType(i, placeList.length) !== "origin" && (
+                    <button
+                      className="w-[16px] h-[16px] rounded-full flex justify-center items-center bg-grey-02 ml-[4px]"
+                      onClick={() => clickDeleteStopoverBtnEvent(i)}
+                    >
+                      <DeleteCrossIcon className="scale-[68%]" />
+                    </button>
+                  )}
+                </InputLabel>
+                <InputButton
+                  placeholder="경유지를 선택해주세요."
+                  text={
+                    (placeList[i] && extractTitleOrPlace(placeList[i])) ||
+                    undefined
+                  }
+                  onClick={() => clickPlaceAddInputBtnEvent(i)}
+                />
+              </div>
+            </>
+          ))}
+
+          <div className="px-[24px] h-[40px]">
+            <Button
+              className="w-full h-full"
+              variant="ghost"
+              onClick={clickAddStopoverBtnEvent}
+            >
+              <span className="text-body3">경유지 추가</span>
+            </Button>
           </div>
         </div>
       </main>
-      <PlaceSearch
-        setStopover={setStopoverList}
-        setOrigin={setOrigin}
-        setDestination={setDestination}
-        type={searchModalType}
-      />
+      <PlaceSearch setPlaceList={setPlaceList} i={selectedIndex} />
     </>
   );
 };
