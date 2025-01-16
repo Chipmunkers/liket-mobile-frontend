@@ -81,7 +81,7 @@ export const metadata: Metadata = {
     siteName: "LIKET",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "https://liket.site/favicon.ico",
   },
 };
 
