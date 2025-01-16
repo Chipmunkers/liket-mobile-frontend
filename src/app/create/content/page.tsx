@@ -45,11 +45,6 @@ import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 import { useKakaoLoader } from "react-kakao-maps-sdk";
 
-enum AnalyzeType {
-  SIMILAR = "SIMILAR",
-  EXACT = "EXACT",
-}
-
 const MAX_IMAGES_COUNT = 10;
 const CONDITIONS = ["입장료", "예약", "반려동물", "주차"];
 
@@ -149,7 +144,7 @@ export default function Page() {
             {
               page: 1,
               size: 1,
-              analyze_type: AnalyzeType.EXACT,
+              analyze_type: kakao.maps.services.AnalyzeType.EXACT,
             }
           );
         }
