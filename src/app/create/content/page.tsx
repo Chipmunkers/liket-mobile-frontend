@@ -328,9 +328,7 @@ export default function Page() {
                 </div>
               </div>
               <div className="mt-[16px]">
-                <InputLabel htmlFor="close-date">
-                  종료날짜<span className="text-top">*</span>
-                </InputLabel>
+                <InputLabel htmlFor="close-date">종료날짜</InputLabel>
                 <div className="mt-[12px]">
                   <SelectButtonMedium
                     text={getValues("endDate")}
@@ -344,10 +342,10 @@ export default function Page() {
             <div className="mb-[34px]">
               <InputLabel
                 htmlFor="openTime"
-                maxLength={40}
+                maxLength={200}
                 currentLength={watch("openTime").length}
               >
-                오픈시간<span className="text-top">*</span>
+                오픈시간
               </InputLabel>
               <BasicInput
                 field="openTime"
@@ -490,7 +488,7 @@ export default function Page() {
                 maxLength={1000}
                 currentLength={watch("description").length}
               >
-                상세정보<span className="text-top">*</span>
+                상세정보
               </InputLabel>
               <TextareaAutosize
                 maxLength={1000}
