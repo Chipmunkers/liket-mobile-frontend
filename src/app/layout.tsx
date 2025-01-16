@@ -75,12 +75,13 @@ export const metadata: Metadata = {
         alt: "라이켓",
       },
     ],
+    siteName: "LIKET",
   },
   icons: {
-    icon:
-      (process.env.NEXT_PUBLIC_MODE === "production"
-        ? "https://liket.site"
-        : "https://dev.liket.site") + "/favicon.ico",
+    icon: "/favicon.ico",
+  },
+  other: {
+    "application-name": "라이켓",
   },
 };
 
