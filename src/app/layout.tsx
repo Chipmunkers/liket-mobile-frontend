@@ -61,6 +61,13 @@ export const metadata: Metadata = {
     initialScale: 1,
     maximumScale: 1,
   },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  other: {
+    googlebot: "index, follow",
+  },
   metadataBase: new URL("https://liket.site"),
   keywords: ["라이켓", "LIKET", "문화생활", "공유 플랫폼", "기록"],
   applicationName: "라이켓",
