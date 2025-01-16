@@ -62,12 +62,15 @@ export const metadata: Metadata = {
     maximumScale: 1,
   },
   metadataBase: new URL("https://liket.site"),
-  keywords: ["라이켓", "LIKET"],
+  keywords: ["라이켓", "LIKET", "문화생활", "공유 플랫폼", "기록"],
+  applicationName: "라이켓",
   alternates: {
     canonical: "/",
   },
   openGraph: {
+    type: "website",
     title: "라이켓",
+    url: "https://liket.site", // TODO: 환경변수로 바꿔야함
     description: "다양한 문화생활 정보를 공유하고 나만의 문화생활 기록 남기기!",
     images: [
       {
@@ -79,9 +82,6 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: "/favicon.ico",
-  },
-  other: {
-    "application-name": "라이켓",
   },
 };
 

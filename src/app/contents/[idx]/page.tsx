@@ -23,13 +23,14 @@ export async function generateMetadata({
 
   return {
     title: content.title,
-    description: content.description,
+    description: content.description || "문화 콘텐츠의 상세 정보를 확인하세요!",
     alternates: {
       canonical: `/contents/${params.idx}`,
     },
     openGraph: {
       title: content.title,
       description: content.description,
+      siteName: "LIKET",
       images: [
         { url: process.env.NEXT_PUBLIC_IMAGE_SERVER + content.thumbnail },
       ],

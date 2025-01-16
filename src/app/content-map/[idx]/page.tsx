@@ -28,6 +28,7 @@ export async function generateMetadata({
         { url: process.env.NEXT_PUBLIC_IMAGE_SERVER + content.thumbnail },
       ],
       type: "article",
+      siteName: "LIKET",
     },
   };
 }
