@@ -8,7 +8,8 @@ import { useRouter } from "next/navigation";
 import DropDown from "@/icons/dropdown.svg";
 import { ButtonBase } from "@mui/material";
 import { Props } from "./types";
-import { stackRouterBack } from "@/shared/helpers/stackRouter";
+import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 
 const HeaderLeft = ({
   logo,
@@ -22,7 +23,7 @@ const HeaderLeft = ({
     return (
       <h1 className="center">
         <Link href="/" className="ml-[24px]">
-          <Logo ariaLabel="라이켓 로고 이미지" />
+          <Logo aria-label="라이켓 로고 이미지" />
         </Link>
       </h1>
     );
@@ -46,11 +47,12 @@ const HeaderLeft = ({
     const { back, close } = option;
 
     const Back = back && (
-      <ButtonBase
+      <Link
+        href={"/"}
         key={"back"}
-        disableRipple={true}
-        className="w-[48px] h-[48px] rounded-full ml-[12px] icon-button"
-        onClick={() => {
+        className="flex justify-center items-center w-[48px] h-[48px] rounded-full ml-[12px] icon-button"
+        onClick={(e) => {
+          e.preventDefault();
           if (typeof back === "object") {
             back.onClick && back.onClick();
             return;
@@ -60,7 +62,7 @@ const HeaderLeft = ({
         }}
       >
         <BackIcon />
-      </ButtonBase>
+      </Link>
     );
 
     const Close = close && (

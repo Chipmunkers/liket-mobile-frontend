@@ -25,7 +25,6 @@ export default function robots(): MetadataRoute.Robots {
           "/googlefff3c7122be09534.html",
           "/naver521d1486069128eb8190f6dc9948e518.html",
         ],
-        disallow: ["/"],
       },
     ],
     sitemap: "https://liket.site/sitemap.xml",
