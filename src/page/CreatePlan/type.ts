@@ -10,12 +10,18 @@ export type RouteSegment = {
   type: "walking" | "transit";
   createdAt: Date;
 };
+export type RouteError = {
+  reason: string;
+};
 
-export type Route = {
-  type: "walking" | "transit";
+export type Route<T = "transit" | "walking", Error = RouteError | null> = {
+  type: T;
   coordinateList: PedestrianCoordinate[];
+  info: Error extends null
+    ? T extends "transit"
+      ? google.maps.DirectionsResult
+      : null
+    : null;
   totalTime: number;
-  error: null | {
-    reason: string;
-  };
+  error: Error;
 };

@@ -42,11 +42,12 @@ export const usePlaceRoute = ({
         coordinateList: [],
         totalTime: 0,
         error: null,
+        info: null,
       };
 
       if (result === null) {
         route.error = {
-          reason: "정보가 없습니다.",
+          reason: "탐색된 경로가 없습니다.",
         };
       } else {
         const totalDuration = result.routes[0].legs.reduce(
@@ -59,6 +60,7 @@ export const usePlaceRoute = ({
           y: point.lat(),
           x: point.lng(),
         }));
+        route.info = result;
       }
       return route;
     } catch (err) {
@@ -69,6 +71,7 @@ export const usePlaceRoute = ({
         error: {
           reason: "탐색된 경로가 없습니다.",
         },
+        info: null,
       };
     }
   };
