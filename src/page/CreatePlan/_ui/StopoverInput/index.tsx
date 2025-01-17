@@ -4,8 +4,6 @@ import { InputLabel } from "@/shared/ui/Input";
 import InputButton from "@/shared/ui/Input/InputButton";
 import { Props } from "./type";
 import { useButtonClickEvent } from "@/page/CreatePlan/hooks/useButtonClickEvent";
-import { useEffect, useState } from "react";
-import { Route } from "@/page/CreatePlan/type";
 import { usePlaceRoute } from "@/page/CreatePlan/_ui/StopoverInput/hooks/usePlaceRoute";
 
 export const StopoverInput = ({
