@@ -13,6 +13,7 @@ import { Props } from "./type";
 import { useGetUtils } from "@/page/CreatePlan/hooks/useGetUtils";
 import { Route, RouteSegment } from "@/page/CreatePlan/type";
 import { usePolyline } from "@/page/CreatePlan/_ui/GoogleMap/hooks/usePolyline";
+import { useMapCenter } from "@/page/CreatePlan/_ui/GoogleMap/hooks/useMapCenter";
 
 export const PlanGoogleMap = ({
   placeList,
@@ -27,6 +28,9 @@ export const PlanGoogleMap = ({
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY || "",
   });
+
+  // 장소 선택할 때 지도 중앙 정렬 시켜주는 훅
+  useMapCenter({ googleMap, placeList });
 
   // 경로 그리는 훅
   usePolyline({

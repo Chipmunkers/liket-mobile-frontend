@@ -2,7 +2,12 @@ import { KeywordSearchDocumentEntity } from "@/shared/types/api/address/KeywordS
 import { PedestrianCoordinate } from "@/shared/types/api/address/PedestrianRouteEntity";
 import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 
-export type Place = SummaryContentEntity | KeywordSearchDocumentEntity;
+export type Place = (SummaryContentEntity | KeywordSearchDocumentEntity) & {
+  /**
+   * place list에 삽입된 시간
+   */
+  insertedAt: Date;
+};
 
 export type RouteSegment = {
   start: Place;
