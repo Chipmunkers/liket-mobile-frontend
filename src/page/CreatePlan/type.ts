@@ -8,6 +8,7 @@ export type RouteSegment = {
   start: Place;
   end: Place;
   type: "walking" | "transit";
+  createdAt: Date;
 };
 
 export type Route = {

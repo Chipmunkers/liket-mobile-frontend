@@ -1,4 +1,4 @@
-import { Place, Route } from "@/page/CreatePlan/type";
+import { Place, Route, RouteSegment } from "@/page/CreatePlan/type";
 import { SetState } from "@/shared/types/react";
 
 export type Props = {
@@ -23,7 +23,14 @@ export type Props = {
   setSelectedIndex: SetState<number>;
 
   /**
+   * route segment list
+   */
+  routeSegmentList: (RouteSegment | null)[];
+
+  /**
    * route list
    */
   routeList: (Route | null)[];
+
+  setRouteList: SetState<(Route | null)[]>;
 };

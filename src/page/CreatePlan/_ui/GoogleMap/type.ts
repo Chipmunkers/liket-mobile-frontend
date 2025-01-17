@@ -6,4 +6,6 @@ export type Props = {
   routeList: any[];
   setRouteList: SetState<any[]>;
   routeSegmentList: (RouteSegment | null)[];
+  googleMap: google.maps.Map | null;
+  setGoogleMap: SetState<google.maps.Map | null>;
 };

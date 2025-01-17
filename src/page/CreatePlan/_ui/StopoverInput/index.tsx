@@ -4,14 +4,18 @@ import { InputLabel } from "@/shared/ui/Input";
 import InputButton from "@/shared/ui/Input/InputButton";
 import { Props } from "./type";
 import { useButtonClickEvent } from "@/page/CreatePlan/hooks/useButtonClickEvent";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Route } from "@/page/CreatePlan/type";
+import { usePlaceRoute } from "@/page/CreatePlan/_ui/StopoverInput/hooks/usePlaceRoute";
 
 export const StopoverInput = ({
   i,
   placeList,
   setPlaceList,
   setSelectedIndex,
-  routeList, // TODO: 이거 여기서 필요없을 것 같음. route를 여기서 만들어도 될 듯
+  routeSegmentList,
+  routeList,
+  setRouteList,
 }: Props) => {
   const {
     extractTitleOrPlace,
@@ -27,10 +31,12 @@ export const StopoverInput = ({
       setSelectedIndex,
     });
 
-  useEffect(() => {
-    console.log(`${i}번 째 place list 변경 확인`);
-    console.log(routeList[i]);
-  }, [placeList[i]]);
+  usePlaceRoute({
+    i,
+    routeList,
+    routeSegmentList,
+    setRouteList,
+  });
 
   return (
     <div className="px-[24px] my-[34px]">

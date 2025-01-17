@@ -4,7 +4,7 @@ import { PlanGoogleMap } from "@/page/CreatePlan/_ui/GoogleMap";
 import { PlaceSearch } from "@/page/CreatePlan/_ui/PlaceSearch";
 import { useButtonClickEvent } from "@/page/CreatePlan/hooks/useButtonClickEvent";
 import { useGetLoginCheck } from "@/page/CreatePlan/hooks/useGetLoginCheck";
-import { Place, Route } from "@/page/CreatePlan/type";
+import { Place, Route, RouteSegment } from "@/page/CreatePlan/type";
 import Button from "@/shared/ui/Button";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import { useState } from "react";
@@ -14,12 +14,18 @@ import { StopoverInput } from "@/page/CreatePlan/_ui/StopoverInput";
 export const CreatePlanPage = () => {
   useGetLoginCheck();
 
+  const [googleMap, setGoogleMap] = useState<google.maps.Map | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [placeList, setPlaceList] = useState<(Place | null)[]>([null]);
   const [routeList, setRouteList] = useState<(Route | null)[]>([]);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [routeSegmentList, setRouteSegmentList] = useState<
+    (RouteSegment | null)[]
+  >([]);
 
-  const { routeSegmentList, setRouteSegmentList } = useRouteSegment({
+  useRouteSegment({
     placeList,
+    routeSegmentList,
+    setRouteSegmentList,
   });
 
   const { clickHeaderBackBtnEvent, clickAddStopoverBtnEvent } =
@@ -38,6 +44,8 @@ export const CreatePlanPage = () => {
       <main>
         <div className="map-area w-full h-[300px] bg-grey-03">
           <PlanGoogleMap
+            googleMap={googleMap}
+            setGoogleMap={setGoogleMap}
             routeSegmentList={routeSegmentList}
             setRouteList={setRouteList}
             routeList={routeList}
@@ -49,10 +57,12 @@ export const CreatePlanPage = () => {
             <StopoverInput
               key={`stopover-input-${i}`}
               i={i}
+              routeList={routeList}
+              setRouteList={setRouteList}
               placeList={placeList}
               setPlaceList={setPlaceList}
               setSelectedIndex={setSelectedIndex}
-              routeList={routeList}
+              routeSegmentList={routeSegmentList}
             />
           ))}
 
