@@ -8,56 +8,59 @@ export const usePolyline = ({
   googleMap: google.maps.Map | null;
   routeList: (Route | null)[];
 }) => {
-  const [path, setPath] = useState<google.maps.LatLngLiteral[]>([]);
-  const [polyline, setPolyline] = useState<google.maps.Polyline[]>([]);
+  const [polylines, setPolylines] = useState<google.maps.Polyline[]>([]);
 
   useEffect(() => {
     if (!routeList || !googleMap) return;
 
-    polyline.forEach((polyline) => polyline.setMap(null));
+    // 기존 경로 삭제
+    polylines.forEach((polyline) => polyline.setMap(null));
 
-    setPath(
-      routeList
-        .filter((route) => !!route)
-        .flatMap((route) => route.coordinateList)
-        .map((coordinate) => ({
-          lat: coordinate.y,
-          lng: coordinate.x,
-        }))
-    );
-  }, [routeList]);
+    // 새 경로 추가
+    const newPolylines: google.maps.Polyline[] = [];
 
-  useEffect(() => {
-    if (path.length === 0 || !googleMap) return;
+    routeList.forEach((route, index) => {
+      if (!route) return;
 
-    // 실선 추가
-    const solidPolyline = new google.maps.Polyline({
-      path,
-      strokeColor: "#00C2FF",
-      strokeWeight: 6,
-      map: googleMap,
-    });
+      const path = route.coordinateList.map((coordinate) => ({
+        lat: coordinate.y,
+        lng: coordinate.x,
+      }));
 
-    // 점선 추가
-    const dottedPolyline = new google.maps.Polyline({
-      path,
-      strokeColor: "white",
-      strokeWeight: 4,
-      strokeOpacity: 0,
-      icons: [
-        {
-          icon: {
-            path: "M 0,-1 0,1",
-            strokeOpacity: 1,
-            scale: 2,
+      // 각 경로에 고유 색상 지정 (예: HSL 색상으로 분산)
+      const color = `hsl(${(index * 360) / routeList.length}, 100%, 50%)`;
+
+      // 실선
+      const solidPolyline = new google.maps.Polyline({
+        path,
+        strokeColor: color,
+        strokeWeight: 6,
+        map: googleMap,
+      });
+
+      // 점선
+      const dottedPolyline = new google.maps.Polyline({
+        path,
+        strokeColor: "white",
+        strokeWeight: 4,
+        strokeOpacity: 0,
+        icons: [
+          {
+            icon: {
+              path: "M 0,-1 0,1",
+              strokeOpacity: 1,
+              scale: 2,
+            },
+            offset: "0",
+            repeat: "10px",
           },
-          offset: "0",
-          repeat: "10px",
-        },
-      ],
-      map: googleMap,
+        ],
+        map: googleMap,
+      });
+
+      newPolylines.push(solidPolyline, dottedPolyline);
     });
 
-    setPolyline([...polyline, solidPolyline, dottedPolyline]);
-  }, [path, googleMap]);
+    setPolylines(newPolylines);
+  }, [routeList, googleMap]);
 };
