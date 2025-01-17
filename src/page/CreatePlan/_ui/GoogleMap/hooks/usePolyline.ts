@@ -14,8 +14,6 @@ export const usePolyline = ({
   useEffect(() => {
     if (!routeList || !googleMap) return;
 
-    console.log("ㅏ아아아아ㅏ");
-
     polyline.forEach((polyline) => polyline.setMap(null));
 
     setPath(
@@ -28,10 +26,6 @@ export const usePolyline = ({
         }))
     );
   }, [routeList]);
-
-  // useEffect(() => {
-  //   if (path.length === 0 || !googleMap) return;
-  // }, [routeList]);
 
   useEffect(() => {
     if (path.length === 0 || !googleMap) return;
