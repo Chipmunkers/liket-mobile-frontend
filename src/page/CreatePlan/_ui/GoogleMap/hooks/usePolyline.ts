@@ -58,6 +58,6 @@ export const usePolyline = ({
       map: googleMap,
     });
 
-    setPolyline([solidPolyline, dottedPolyline]);
+    setPolyline([...polyline, solidPolyline, dottedPolyline]);
   }, [path, googleMap]);
 };

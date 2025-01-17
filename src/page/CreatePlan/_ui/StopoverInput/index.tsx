@@ -38,10 +38,6 @@ export const StopoverInput = ({
     setRouteList,
   });
 
-  useEffect(() => {
-    console.log(routeList[i]);
-  }, [routeList[i]]);
-
   return (
     <div className="px-[24px] my-[34px]">
       <InputLabel className="flex h-[16px]">
