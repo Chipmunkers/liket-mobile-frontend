@@ -24,14 +24,6 @@ export const CreatePlanPage = () => {
   });
   const [routeList, setRouteList] = useState<(Route | null)[]>([]);
 
-  // useEffect(() => {
-  //   console.log(routeList);
-  // }, [routeList]);
-
-  // useEffect(() => {
-  //   console.log(placeList);
-  // }, [placeList]);
-
   const {
     clickHeaderBackBtnEvent,
     clickAddStopoverBtnEvent,
