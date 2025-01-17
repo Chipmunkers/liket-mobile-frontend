@@ -63,6 +63,7 @@ export const CreatePlanPage = () => {
               setPlaceList={setPlaceList}
               setSelectedIndex={setSelectedIndex}
               routeSegmentList={routeSegmentList}
+              setRouteSegmentList={setRouteSegmentList}
             />
           ))}
 

@@ -5,6 +5,7 @@ import InputButton from "@/shared/ui/Input/InputButton";
 import { Props } from "./type";
 import { useButtonClickEvent } from "@/page/CreatePlan/hooks/useButtonClickEvent";
 import { usePlaceRoute } from "@/page/CreatePlan/_ui/StopoverInput/hooks/usePlaceRoute";
+import Button from "@/shared/ui/Button";
 
 export const StopoverInput = ({
   i,
@@ -14,6 +15,7 @@ export const StopoverInput = ({
   routeSegmentList,
   routeList,
   setRouteList,
+  setRouteSegmentList,
 }: Props) => {
   const {
     extractTitleOrPlace,
@@ -36,6 +38,19 @@ export const StopoverInput = ({
     setRouteList,
   });
 
+  const typeChangeButtonClickEvent = (type: "transit" | "walking") => {
+    const tempRouteSegmentList = routeSegmentList;
+
+    if (!tempRouteSegmentList[i]) return;
+
+    const routeSegment = { ...tempRouteSegmentList[i] };
+    routeSegment.type = type === "transit" ? "walking" : "transit";
+
+    tempRouteSegmentList[i] = routeSegment;
+
+    setRouteSegmentList([...tempRouteSegmentList]);
+  };
+
   return (
     <div className="px-[24px] my-[34px]">
       <InputLabel className="flex h-[16px]">
@@ -56,6 +71,19 @@ export const StopoverInput = ({
       />
       {routeList[i] && (
         <div className="flex flex-col mt-[24px]">
+          <div className="h-[40px]">
+            <Button
+              className="w-fit h-[30px] py-[4px] px-[8px] text-button6"
+              variant="ghost"
+              onClick={() =>
+                typeChangeButtonClickEvent(routeList[i]?.type || "transit")
+              }
+            >
+              {routeList[i].type === "transit"
+                ? "도보 경로로 알아보기"
+                : "대중교통 경로로 알아보기"}
+            </Button>
+          </div>
           <div className="relative flex items-center">
             <div className="absolute h-full w-[2px] bg-grey-02"></div>
             {/* 대중교통 정보 */}
@@ -88,6 +116,14 @@ export const StopoverInput = ({
                       )
                       .join(" -> ")}
                   </p>
+                </div>
+              </div>
+            )}
+            {/* 도보 정보 */}
+            {routeList[i].type === "walking" && (
+              <div className="ml-[24px] text-body3 text-grey-04">
+                <div>
+                  걸어서: {formatSecondToTimeString(routeList[i].totalTime)}
                 </div>
               </div>
             )}

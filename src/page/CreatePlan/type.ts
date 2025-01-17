@@ -14,14 +14,22 @@ export type RouteError = {
   reason: string;
 };
 
-export type Route<T = "transit" | "walking", Error = RouteError | null> = {
-  type: T;
+type RouteDefault<Error = RouteError | null> = {
   coordinateList: PedestrianCoordinate[];
-  info: Error extends null
-    ? T extends "transit"
-      ? google.maps.DirectionsResult
-      : null
-    : null;
   totalTime: number;
   error: Error;
 };
+
+type TransitRoute<Error = RouteError | null> = RouteDefault<Error> & {
+  type: "transit";
+  info: Error extends null ? google.maps.DirectionsResult : null;
+};
+
+type PedestrianRoute<Error = RouteError | null> = RouteDefault<Error> & {
+  type: "walking";
+  info: Error extends null ? any : null;
+};
+
+export type Route<Error = RouteError | null> =
+  | TransitRoute<Error>
+  | PedestrianRoute<Error>;

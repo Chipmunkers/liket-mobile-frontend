@@ -1,5 +1,7 @@
 import { useGetUtils } from "@/page/CreatePlan/hooks/useGetUtils";
 import { Route, RouteSegment } from "@/page/CreatePlan/type";
+import axiosInstance from "@/shared/helpers/axios";
+import { PedestrianRouteEntity } from "@/shared/types/api/address/PedestrianRouteEntity";
 import { SetState } from "@/shared/types/react";
 import { useEffect, useMemo } from "react";
 
@@ -76,6 +78,52 @@ export const usePlaceRoute = ({
     }
   };
 
+  /**
+   * 도보 경로 가져오기
+   */
+  const getWalkingRoute = async (
+    routeSegment: RouteSegment
+  ): Promise<Route | null> => {
+    const origin = routeSegment.start;
+    const destination = routeSegment.end;
+
+    try {
+      const { data } = await axiosInstance.post<PedestrianRouteEntity>(
+        "/apis/address/pedestrian/all",
+        {
+          startName: "시작",
+          startX: extractCoordinate(origin).x,
+          startY: extractCoordinate(origin).y,
+          endName: "도착",
+          endX: extractCoordinate(destination).x,
+          endY: extractCoordinate(destination).y,
+        }
+      );
+
+      return {
+        type: "walking",
+        coordinateList: data.features
+          .filter((feature) => feature.type === "LineString") // LineString만 사용
+          .flatMap((feature) => feature.coordinates), // 각 feature의 coordinates 병합,
+        info: data.features,
+        error: null,
+        totalTime:
+          data.features.filter((feat) => feat.properties.pointType === "SP")[0]
+            .properties.totalTime || 0,
+      };
+    } catch (err) {
+      return {
+        coordinateList: [],
+        totalTime: 0,
+        type: "walking",
+        error: {
+          reason: "탐색된 경로가 없습니다.",
+        },
+        info: null,
+      };
+    }
+  };
+
   useEffect(() => {
     (async () => {
       const tempRouteList = routeList;
@@ -84,6 +132,8 @@ export const usePlaceRoute = ({
         tempRouteList[i] = null;
       } else if (routeSegmentList[i].type === "transit") {
         tempRouteList[i] = await getTransitRoute(routeSegmentList[i]);
+      } else if (routeSegmentList[i].type === "walking") {
+        tempRouteList[i] = await getWalkingRoute(routeSegmentList[i]);
       }
 
       setRouteList([...tempRouteList]);

@@ -27,6 +27,8 @@ export type Props = {
    */
   routeSegmentList: (RouteSegment | null)[];
 
+  setRouteSegmentList: SetState<(RouteSegment | null)[]>;
+
   /**
    * route list
    */
