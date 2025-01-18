@@ -6,6 +6,8 @@ import { Props } from "./type";
 import { useButtonClickEvent } from "@/page/CreatePlan/hooks/useButtonClickEvent";
 import { usePlaceRoute } from "@/page/CreatePlan/_ui/StopoverInput/hooks/usePlaceRoute";
 import Button from "@/shared/ui/Button";
+import DefaultImg from "@/shared/ui/DefaultImg";
+import { DateTimePicker, TimePicker } from "@mui/x-date-pickers";
 
 export const StopoverInput = ({
   i,
@@ -22,6 +24,8 @@ export const StopoverInput = ({
     formatSecondToTimeString,
     getInputTitle,
     getInputType,
+    isContent,
+    extractImgPath,
   } = useGetUtils();
 
   const { clickDeleteStopoverBtnEvent, clickPlaceAddInputBtnEvent } =
@@ -64,11 +68,44 @@ export const StopoverInput = ({
           </button>
         )}
       </InputLabel>
-      <InputButton
-        placeholder="장소를 선택해주세요."
-        text={(placeList[i] && extractTitleOrPlace(placeList[i])) || undefined}
-        onClick={() => clickPlaceAddInputBtnEvent(i)}
-      />
+      <div className="flex mt-[8px] gap-[8px]">
+        {placeList[i] && isContent(placeList[i]) && (
+          <div className="relative w-[41px] h-[58px]">
+            <DefaultImg src={placeList[i].thumbnail} />
+          </div>
+        )}
+        <InputButton
+          placeholder="장소를 선택해주세요."
+          text={
+            (placeList[i] && extractTitleOrPlace(placeList[i])) || undefined
+          }
+          onClick={() => clickPlaceAddInputBtnEvent(i)}
+        />
+      </div>
+      <div className="relative mt-[12px]">
+        <TimePicker
+          views={["hours", "minutes"]}
+          label="시간 선택"
+          className="h-[40px] w-[140px]"
+          sx={{
+            "& .MuiInputBase-root": {
+              height: "40px", // 입력 필드 높이
+              alignItems: "center", // 텍스트 중앙 정렬
+            },
+            "& .MuiInputLabel-root": {
+              transform: "translate(12px, 9px)", // 라벨 초기 위치 조정
+              fontSize: "16px", // 라벨 크기
+            },
+            "& .MuiInputLabel-root.Mui-focused, & .MuiInputLabel-root.MuiFormLabel-filled":
+              {
+                transform: "translate(12px, -8px) scale(0.75)", // 포커스/값 있을 때 라벨 위치 및 크기
+              },
+            "& .MuiSvgIcon-root": {
+              fontSize: "20px", // 아이콘 크기
+            },
+          }}
+        />
+      </div>
       {routeList[i] && (
         <div className="flex flex-col mt-[24px]">
           <div className="h-[40px]">

@@ -90,22 +90,17 @@ export const PlanGoogleMap = ({
                   }}
                   mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
                 >
-                  <span
-                    className="absolute 
-                        w-[100px] max-w-[100px] 
-                        text-center break-words text-body4 text-white
-                        flex justify-center items-center
-                        bg-black bg-opacity-[60%] 
-                        py-[1px] px-[8px]
-                        translate-x-[-50%] translate-y-[-50%] mt-[20px]
-                        rounded-[8px]"
-                    style={{
-                      textShadow:
-                        "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
-                    }}
-                  >
-                    {extractTitleOrPlace(place)}
-                  </span>
+                  <div className="absolute w-[100px] bg-black bg-opacity-[60%] translate-x-[-50%] translate-y-[-50%] rounded-[8px] mt-[20px]">
+                    <span
+                      className="relative text-body4 text-white py-[1px] px-[8px] line-clamp-2 text-center"
+                      style={{
+                        textShadow:
+                          "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                      }}
+                    >
+                      {extractTitleOrPlace(place)}
+                    </span>
+                  </div>
                 </OverlayViewF>
               </div>
             ))}

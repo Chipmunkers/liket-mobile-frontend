@@ -11,12 +11,22 @@ export const useGetUtils = () => {
     return `${data.addressName} ${data.placeName}`;
   };
 
-  const isContent = (data: Place): data is SummaryContentEntity => {
+  const isContent = (
+    data: Place
+  ): data is SummaryContentEntity & { insertedAt: Date } => {
     if ((data as SummaryContentEntity).idx === undefined) {
       return false;
     }
 
     return true;
+  };
+
+  const extractImgPath = (data: Place) => {
+    if (isContent(data)) {
+      return data.thumbnail;
+    }
+
+    return null;
   };
 
   const extractCoordinate = (data: Place): { x: number; y: number } => {
@@ -73,5 +83,6 @@ export const useGetUtils = () => {
     formatSecondToTimeString,
     getInputTitle,
     getInputType,
+    extractImgPath,
   };
 };
