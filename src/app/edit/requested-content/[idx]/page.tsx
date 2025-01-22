@@ -492,6 +492,7 @@ export default function Page({ params: { idx } }: PageProps) {
                 ref={inputRef}
                 type="file"
                 multiple
+                accept="image/*"
                 className="hidden grow"
                 onChange={(e) => {
                   if (uploadedImgs.length > MAX_IMAGES_COUNT) {

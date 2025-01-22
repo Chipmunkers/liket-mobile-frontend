@@ -416,6 +416,7 @@ export default function Page() {
                 ref={inputRef}
                 type="file"
                 multiple
+                accept="image/*"
                 className="hidden grow"
                 onChange={async (e) => {
                   const uploadedFileCount = e.target.files?.length || 0;

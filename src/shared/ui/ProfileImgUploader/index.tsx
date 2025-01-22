@@ -34,6 +34,7 @@ const ProfileImgUploader = ({
       <input
         ref={inputRef}
         type="file"
+        accept="image/*"
         className="hidden"
         onChange={async (e) => {
           const files = e.target.files;

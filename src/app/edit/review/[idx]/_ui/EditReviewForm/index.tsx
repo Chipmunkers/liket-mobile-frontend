@@ -136,6 +136,7 @@ const EditReviewForm = ({
             ref={inputRef}
             type="file"
             multiple
+            accept="image/*"
             className="hidden grow"
             onChange={async (e) => {
               if (uploadedImgs.length + (e.target.files?.length || 0) > 10) {
