@@ -29,6 +29,7 @@ const MainBannerCarousel = ({ srcList }: Props) => {
             }}
           >
             <DefaultImg
+              isPriority={true}
               src={imgPath}
               cover={false}
               select={false}
