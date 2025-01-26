@@ -145,7 +145,7 @@ const CustomGoogleMap = ({
     isLoaded && (
       <GoogleMap
         key={`${loadState}`}
-        mapContainerClassName="h-[calc(100vh-96px)]"
+        mapContainerClassName="flex-1"
         zoom={8}
         options={{
           disableDefaultUI: true,

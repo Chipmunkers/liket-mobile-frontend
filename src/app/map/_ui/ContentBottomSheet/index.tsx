@@ -3,13 +3,16 @@
 import ContentCardMedium from "@/entities/content/ContentCardMedium";
 import { Props } from "./types";
 import CustomBottomSheet from "@/shared/ui/BottomSheet";
+import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 
 const ContentBottomSheet = ({ contentList, open, title }: Props) => {
+  const { safeArea } = useGetSafeArea();
   return (
     <CustomBottomSheet
       isOpen={true}
       defaultSnap={20}
       title={title}
+      safeArea={safeArea.bottom}
       snapPoints={({ maxHeight }) => {
         if (open) {
           // * 처음부터 열려있는 경우
