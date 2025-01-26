@@ -1,7 +1,6 @@
 import { BottomSheet } from "react-spring-bottom-sheet";
 import "react-spring-bottom-sheet/dist/style.css";
 import { Props } from "./types";
-import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 import { styled } from "@mui/material";
 
 const CustomBottomSheet = ({
@@ -53,6 +52,10 @@ const StyledBottomSheet = styled(BottomSheet)<StyledBottomSheetProps>`
   div[data-rsbs-backdrop] {
     margin: 0 auto;
     border-radius: 24px 24px 0 0;
+    bottom: var(--bottom-tab-height);
     margin-bottom: ${(props) => props.safeArea + "px"};
+  }
+  div[data-rsbs-header] {
+    padding-bottom: 12px;
   }
 `;
