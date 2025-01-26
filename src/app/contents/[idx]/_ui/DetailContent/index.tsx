@@ -23,7 +23,6 @@ import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 import { useIsWebView } from "@/shared/hooks/useIsWebview";
 import DetailImgCarousel from "@/shared/ui/DetailImgCarousel";
 import { Else, If, Then } from "react-if";
-import { colors } from "@/shared/style/color";
 
 const DetailContent = (props: Props) => {
   const searchParams = useSearchParams();
@@ -62,7 +61,6 @@ const DetailContent = (props: Props) => {
 
   return (
     <>
-      {" "}
       <main
         className="mb-[24px]"
         style={{ paddingBottom: safeArea.bottom + "px" }}
@@ -173,35 +171,6 @@ const DetailContent = (props: Props) => {
           <ReviewTab idx={content.idx.toString()} content={content} />
         )}
       </main>
-      <Divider width="100%" height="8px" />
-      <footer className="text-sm text-left p-[24px] text-body5 text-grey-04">
-        <div>
-          * 본 사이트는 한국문화정보원 KOPIS API와 한국관광공사 TourAPI의
-          공공데이터를 활용하고 있습니다.
-        </div>
-        <div>
-          <div>
-            제공:{" "}
-            <Link
-              className="underline"
-              rel="noopener noreferrer"
-              target="_blank"
-              href="https://www.kopis.or.kr/por/cs/openapi/openApiInfo.do?menuId=MNU_00074"
-            >
-              한국문화정보원
-            </Link>{" "}
-            |{" "}
-            <Link
-              className="underline"
-              rel="noopener noreferrer"
-              target="_blank"
-              href="https://api.visitkorea.or.kr/"
-            >
-              한국관광공사
-            </Link>
-          </div>
-        </div>
-      </footer>
     </>
   );
 };

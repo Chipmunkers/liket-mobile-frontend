@@ -10,6 +10,7 @@ import { STYLES } from "@/shared/consts/content/style";
 import BottomButtonTabWrapper from "@/shared/ui/BottomButtonTabWrapper";
 import Button from "@/shared/ui/Button";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
+import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 
 const FilterDrawer = ({
   isOpen,
@@ -28,11 +29,14 @@ const FilterDrawer = ({
 }: Props) => {
   const router = useRouter();
 
+  const { safeArea } = useGetSafeArea();
+
   return (
     <div
       className="full-modal"
       style={{
         transform: !!isOpen ? "translateY(0)" : "translateY(100%)",
+        paddingBottom: safeArea.bottom + "px",
       }}
     >
       <Header>
@@ -133,7 +137,7 @@ const FilterDrawer = ({
           </ul>
         </div>
       </div>
-      <BottomButtonTabWrapper>
+      <div className="flex px-[24px] mb-[8px]">
         <Button
           onClick={() => {
             setGenre(undefined);
@@ -164,7 +168,7 @@ const FilterDrawer = ({
         >
           적용하기
         </Button>
-      </BottomButtonTabWrapper>
+      </div>
     </div>
   );
 };

@@ -2,9 +2,8 @@ import ErrorPage from "../../error";
 import DetailContent from "./_ui/DetailContent";
 import ContentNotFound from "./_ui/ContentNotFound";
 import customFetch from "@/shared/helpers/fetch";
-import { Header, HeaderLeft, HeaderRight } from "@/shared/ui/Header";
+import { Header, HeaderLeft } from "@/shared/ui/Header";
 import { Metadata } from "next";
-import { headers } from "next/headers";
 
 interface PageProps {
   params: {

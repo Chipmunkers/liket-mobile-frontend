@@ -128,17 +128,6 @@
   }
 }
 
-/* react-spring-bottom-sheet */
-div[data-rsbs-overlay],
-div[data-rsbs-backdrop] {
-  margin: 0 auto;
-  border-radius: 24px 24px 0 0;
-  bottom: var(--bottom-tab-height);
-}
-div[data-rsbs-header] {
-  padding-bottom: 12px;
-}
-
 /* carousel */
 .dot {
   opacity: 1 !important;

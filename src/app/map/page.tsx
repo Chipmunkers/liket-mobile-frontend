@@ -23,6 +23,7 @@ import LocationDrawer from "./_ui/LocationDrawer";
 import CustomGoogleMap from "@/app/map/_ui/GoogleMap";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
+import CustomBottomSheet from "@/shared/ui/BottomSheet";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -98,7 +99,12 @@ export default function MapPage() {
         />
         <HeaderRight option={{ search: true, like: true }} />
       </Header>
-      <main>
+      <main
+        className="relative"
+        style={{
+          marginBottom: 48 + safeArea.bottom + "px",
+        }}
+      >
         <CustomGoogleMap
           contentList={contentList}
           setContentList={setContentList}
@@ -162,12 +168,7 @@ export default function MapPage() {
 
         {/* 클릭한 컨텐츠 */}
         {clickedContent ? (
-          <div
-            className="bottom-[48px] absolute z-10 w-[calc(100%-16px)] left-[8px]"
-            style={{
-              marginBottom: 8 + safeArea.bottom + "px",
-            }}
-          >
+          <div className="bottom-[8px] absolute z-10 w-[calc(100%-16px)] left-[8px]">
             <div className="p-[16px] bg-white rounded-[24px]">
               <ContentCardMedium
                 content={{
@@ -180,14 +181,14 @@ export default function MapPage() {
         ) : null}
 
         {/* 클러스터링 컨텐츠 바텀 시트 */}
-        <BottomSheet
+        <CustomBottomSheet
           defaultSnap={({ maxHeight }) => maxHeight / 2 - 45}
-          open={!!clickedClusteredContents.length}
-          blocking={false}
+          isOpen={!!clickedClusteredContents.length}
           snapPoints={({ maxHeight }) => [maxHeight / 2 - 45, 0]}
           onBlur={() => {
             setClickedClusteredContent([]);
           }}
+          safeArea={safeArea.bottom}
         >
           {clickedClusteredContents.map((content) => (
             <li key={content.idx} className="w-[100%] mb-[16px] px-[24px]">
@@ -199,7 +200,7 @@ export default function MapPage() {
               />
             </li>
           ))}
-        </BottomSheet>
+        </CustomBottomSheet>
       </main>
 
       <FilterDrawer
