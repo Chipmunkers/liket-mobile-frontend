@@ -61,10 +61,7 @@ const DetailContent = (props: Props) => {
 
   return (
     <>
-      <main
-        className="mb-[24px]"
-        style={{ paddingBottom: safeArea.bottom + "px" }}
-      >
+      <main style={{ paddingBottom: safeArea.bottom + "px" }}>
         {selectedImgIndex !== undefined ? (
           <div className="fixed max-w-[600px] w-[100%] h-[100vh] z-10 top-0">
             <DetailImgCarousel
