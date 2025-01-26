@@ -5,7 +5,7 @@ export const useGetSafeArea = () => {
 
   useLayoutEffect(() => {
     setSafeArea({
-      bottom: window.safeAreaBottom || 34,
+      bottom: window.safeAreaBottom || 0,
     });
   }, []);
 
