@@ -361,7 +361,7 @@ export default function Page({ params: { idx } }: PageProps) {
             <div className="mb-[34px]">
               <BasicInput
                 field="additional-address"
-                placeholder="상세주소를 입력해주세요. (필수)"
+                placeholder="상세주소를 입력해주세요."
                 register={register}
                 formState={formState}
               />
@@ -404,9 +404,7 @@ export default function Page({ params: { idx } }: PageProps) {
                 </div>
               </div>
               <div className="mt-[16px]">
-                <InputLabel htmlFor="close-date">
-                  종료날짜<span className="text-top">*</span>
-                </InputLabel>
+                <InputLabel htmlFor="close-date">종료날짜</InputLabel>
                 <div className="mt-[12px]">
                   <SelectButtonMedium
                     text={getValues("endDate")}
@@ -423,7 +421,7 @@ export default function Page({ params: { idx } }: PageProps) {
                 maxLength={40}
                 currentLength={watch("openTime").length}
               >
-                오픈시간<span className="text-top">*</span>
+                오픈시간
               </InputLabel>
               <BasicInput
                 field="openTime"
@@ -439,7 +437,7 @@ export default function Page({ params: { idx } }: PageProps) {
                 maxLength={2000}
                 currentLength={watch("websiteLink").length}
               >
-                웹사이트<span className="text-top">*</span>
+                웹사이트
               </InputLabel>
               <BasicInput
                 field="websiteLink"
@@ -494,6 +492,7 @@ export default function Page({ params: { idx } }: PageProps) {
                 ref={inputRef}
                 type="file"
                 multiple
+                accept="image/*"
                 className="hidden grow"
                 onChange={(e) => {
                   if (uploadedImgs.length > MAX_IMAGES_COUNT) {
@@ -559,7 +558,7 @@ export default function Page({ params: { idx } }: PageProps) {
                 maxLength={1000}
                 currentLength={watch("description").length}
               >
-                상세정보<span className="text-top">*</span>
+                상세정보
               </InputLabel>
               <TextareaAutosize
                 maxLength={1000}

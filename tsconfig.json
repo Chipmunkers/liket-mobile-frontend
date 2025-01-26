@@ -24,7 +24,8 @@
       "@/shared": ["./src/shared/*"],
       "@/entities": ["./src/entities/*"]
     },
-    "types": ["kakao.maps.d.ts", "jest"]
+
+    "types": ["kakao.maps.d.ts"]
   },
   "include": [
     "next-env.d.ts",

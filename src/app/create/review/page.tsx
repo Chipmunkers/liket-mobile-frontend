@@ -261,6 +261,7 @@ export default function Page() {
                 ref={inputRef}
                 type="file"
                 multiple
+                accept="image/*"
                 className="hidden grow"
                 onChange={handleUploadImage}
               />

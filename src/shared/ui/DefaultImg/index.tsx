@@ -12,6 +12,7 @@ import EmptyImgIcon from "./icon/EmptyImgIcon.svg";
 import LIKETLogo from "@/shared/icon/common/LIKETBlackLogo.svg";
 
 const DefaultImg = ({
+  isPriority = false,
   alt = "",
   className = "",
   srcHost = process.env.NEXT_PUBLIC_IMAGE_SERVER,
@@ -74,6 +75,7 @@ const DefaultImg = ({
       {/* fallbackImgSrc가 있을 경우 */}
       {isErrorEmit && fallbackImgSrc && (
         <Image
+          priority={isPriority}
           src={
             (fallbackImgHost || process.env.NEXT_PUBLIC_IMAGE_SERVER) +
             fallbackImgSrc
@@ -103,6 +105,7 @@ const DefaultImg = ({
       {/* TODO: 라이켓 리스트 개발용으로 사용함. 사용하고 삭제 필요 */}
       {testSrc && (
         <Image
+          priority={isPriority}
           className={classNames(!select ? "select-none" : "")}
           src={testSrc}
           onError={handleError}
@@ -121,6 +124,7 @@ const DefaultImg = ({
       {/* TODO: testSrc 조건은 라이켓 리스트 개발용으로 사용함. 사용하고 삭제 필요 */}
       {!isErrorEmit && !testSrc && (
         <Image
+          priority={isPriority}
           className={classNames(!select ? "select-none" : "")}
           src={srcHost + src}
           onError={handleError}

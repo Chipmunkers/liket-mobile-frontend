@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 export const useGetSafeArea = () => {
   const [safeArea, setSafeArea] = useState<{ bottom: number }>({ bottom: 0 });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setSafeArea({
       bottom: window.safeAreaBottom || 0,
     });

@@ -285,7 +285,7 @@ export default function Page() {
             <div className="mb-[34px]">
               <BasicInput
                 field="additional-address"
-                placeholder="상세주소를 입력해주세요. (필수)"
+                placeholder="상세주소를 입력해주세요."
                 register={register}
                 formState={formState}
               />
@@ -361,7 +361,7 @@ export default function Page() {
                 maxLength={2000}
                 currentLength={watch("websiteLink").length}
               >
-                웹사이트<span className="text-top">*</span>
+                웹사이트
               </InputLabel>
               <BasicInput
                 field="websiteLink"
@@ -416,6 +416,7 @@ export default function Page() {
                 ref={inputRef}
                 type="file"
                 multiple
+                accept="image/*"
                 className="hidden grow"
                 onChange={async (e) => {
                   const uploadedFileCount = e.target.files?.length || 0;

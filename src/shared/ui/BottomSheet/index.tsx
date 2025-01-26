@@ -1,6 +1,7 @@
 import { BottomSheet } from "react-spring-bottom-sheet";
 import "react-spring-bottom-sheet/dist/style.css";
 import { Props } from "./types";
+import { styled } from "@mui/material";
 
 const CustomBottomSheet = ({
   title,
@@ -10,6 +11,8 @@ const CustomBottomSheet = ({
   snapPoints,
   onClickBackDrop,
   className,
+  safeArea = 0,
+  onBlur,
 }: Props) => {
   return (
     <>
@@ -20,18 +23,39 @@ const CustomBottomSheet = ({
           onClick={onClickBackDrop}
         />
       )}
-      <BottomSheet
+      <StyledBottomSheet
         defaultSnap={defaultSnap}
         open={isOpen}
         blocking={false}
         snapPoints={snapPoints}
         className={className || ""}
+        safeArea={safeArea}
+        onBlur={() => {
+          onBlur && onBlur();
+        }}
       >
         {title && <h2 className="w-[100%] text-center text-h2">{title}</h2>}
         {children}
-      </BottomSheet>
+      </StyledBottomSheet>
     </>
   );
 };
 
 export default CustomBottomSheet;
+
+interface StyledBottomSheetProps {
+  safeArea: number;
+}
+
+const StyledBottomSheet = styled(BottomSheet)<StyledBottomSheetProps>`
+  div[data-rsbs-overlay],
+  div[data-rsbs-backdrop] {
+    margin: 0 auto;
+    border-radius: 24px 24px 0 0;
+    bottom: var(--bottom-tab-height);
+    margin-bottom: ${(props) => props.safeArea + "px"};
+  }
+  div[data-rsbs-header] {
+    padding-bottom: 12px;
+  }
+`;

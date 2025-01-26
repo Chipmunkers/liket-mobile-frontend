@@ -1,5 +1,8 @@
 import { SharedUiProps, StrictPropsWithChildren } from "@/shared/types/react";
-import { SnapPointProps } from "react-spring-bottom-sheet/dist/types";
+import {
+  defaultSnapProps,
+  SnapPointProps,
+} from "react-spring-bottom-sheet/dist/types";
 
 export type Props = StrictPropsWithChildren<
   SharedUiProps<{
@@ -13,11 +16,18 @@ export type Props = StrictPropsWithChildren<
      */
     title?: string;
 
-    defaultSnap?: number;
+    defaultSnap?: number | ((props: defaultSnapProps) => number);
     snapPoints?: ({
       minHeight,
       maxHeight,
     }: SnapPointProps) => number | number[];
     onClickBackDrop?: () => void;
+
+    /**
+     * safe area를 고려해야하는 만큼
+     */
+    safeArea?: number;
+
+    onBlur?: () => void;
   }>
 >;

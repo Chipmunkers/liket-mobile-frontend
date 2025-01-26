@@ -2,39 +2,36 @@ import { useGetUtils } from "@/page/CreatePlan/hooks/useGetUtils";
 import { Place } from "@/page/CreatePlan/type";
 import { useEffect } from "react";
 
-/**
- * @deprecated
- */
 export const useMapCenter = ({
   googleMap,
-  origin,
-  stopoverList,
-  destination,
+  placeList,
 }: {
   googleMap: google.maps.Map | null;
-  origin?: Place;
-  destination?: Place;
-  stopoverList: Place[];
+  placeList: (Place | null)[];
 }) => {
   const { extractCoordinate } = useGetUtils();
 
   useEffect(() => {
-    if (!origin || !googleMap) return;
+    if (!googleMap) {
+      return;
+    }
+
+    const notNullPlaceList = placeList.filter(
+      (place): place is Place => !!place
+    );
+    if (!notNullPlaceList.length) return;
+
+    const mostRecent = notNullPlaceList.reduce((latest, current) =>
+      new Date(latest.insertedAt) > new Date(current.insertedAt)
+        ? latest
+        : current
+    );
+
+    googleMap.setZoom(15);
 
     googleMap.setCenter({
-      lng: extractCoordinate(origin).x,
-      lat: extractCoordinate(origin).y,
+      lat: extractCoordinate(mostRecent).y,
+      lng: extractCoordinate(mostRecent).x,
     });
-    googleMap.setZoom(16);
-  }, [origin, googleMap]);
-
-  useEffect(() => {
-    if (!destination || !googleMap) return;
-
-    googleMap.setCenter({
-      lng: extractCoordinate(destination).x,
-      lat: extractCoordinate(destination).y,
-    });
-    googleMap.setZoom(16);
-  }, [destination, googleMap]);
+  }, [placeList, googleMap]);
 };

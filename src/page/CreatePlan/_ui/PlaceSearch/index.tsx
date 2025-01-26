@@ -27,7 +27,7 @@ export const PlaceSearch = ({ i, setPlaceList, placeList }: Props) => {
     data: KeywordSearchDocumentEntity | SummaryContentEntity
   ) => {
     const tempPlaceList = placeList;
-    tempPlaceList[i] = data;
+    tempPlaceList[i] = { ...data, insertedAt: new Date() };
     setPlaceList([...tempPlaceList]);
     setSearchKeyword(undefined);
     router.back();

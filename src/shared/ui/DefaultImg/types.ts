@@ -3,6 +3,11 @@ import { SharedUiProps } from "../../types/react";
 
 export type DefaultProps = {
   /**
+   * 이미지 우선로드
+   */
+  isPriority?: boolean;
+
+  /**
    * 가로
    *
    * @example 336px
