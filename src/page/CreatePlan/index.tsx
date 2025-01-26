@@ -4,51 +4,36 @@ import { PlanGoogleMap } from "@/page/CreatePlan/_ui/GoogleMap";
 import { PlaceSearch } from "@/page/CreatePlan/_ui/PlaceSearch";
 import { useButtonClickEvent } from "@/page/CreatePlan/hooks/useButtonClickEvent";
 import { useGetLoginCheck } from "@/page/CreatePlan/hooks/useGetLoginCheck";
-import { useGetUtils } from "@/page/CreatePlan/hooks/useGetUtils";
-import { Place, Route } from "@/page/CreatePlan/type";
+import { Place, Route, RouteSegment } from "@/page/CreatePlan/type";
 import Button from "@/shared/ui/Button";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
-import { InputLabel } from "@/shared/ui/Input";
-import InputButton from "@/shared/ui/Input/InputButton";
-import { useEffect, useState } from "react";
-import DeleteCrossIcon from "@/shared/icon/common/cross/ImgDeleteCrossIcon.svg";
+import { useState } from "react";
 import { useRouteSegment } from "@/page/CreatePlan/hooks/useRouteSegment";
+import { StopoverInput } from "@/page/CreatePlan/_ui/StopoverInput";
 
 export const CreatePlanPage = () => {
   useGetLoginCheck();
 
-  const [placeList, setPlaceList] = useState<(Place | null)[]>([null]);
+  const [googleMap, setGoogleMap] = useState<google.maps.Map | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const { routeSegmentList, setRouteSegmentList } = useRouteSegment({
-    placeList,
-  });
+  const [placeList, setPlaceList] = useState<(Place | null)[]>([null]);
   const [routeList, setRouteList] = useState<(Route | null)[]>([]);
+  const [routeSegmentList, setRouteSegmentList] = useState<
+    (RouteSegment | null)[]
+  >([]);
 
-  // useEffect(() => {
-  //   console.log(routeList);
-  // }, [routeList]);
-
-  // useEffect(() => {
-  //   console.log(placeList);
-  // }, [placeList]);
-
-  const {
-    clickHeaderBackBtnEvent,
-    clickAddStopoverBtnEvent,
-    clickDeleteStopoverBtnEvent,
-    clickPlaceAddInputBtnEvent,
-  } = useButtonClickEvent({
+  useRouteSegment({
     placeList,
-    setPlaceList,
-    setSelectedIndex,
+    routeSegmentList,
+    setRouteSegmentList,
   });
 
-  const {
-    extractTitleOrPlace,
-    formatSecondToTimeString,
-    getInputTitle,
-    getInputType,
-  } = useGetUtils();
+  const { clickHeaderBackBtnEvent, clickAddStopoverBtnEvent } =
+    useButtonClickEvent({
+      placeList,
+      setPlaceList,
+      setSelectedIndex,
+    });
 
   return (
     <>
@@ -59,6 +44,8 @@ export const CreatePlanPage = () => {
       <main>
         <div className="map-area w-full h-[300px] bg-grey-03">
           <PlanGoogleMap
+            googleMap={googleMap}
+            setGoogleMap={setGoogleMap}
             routeSegmentList={routeSegmentList}
             setRouteList={setRouteList}
             routeList={routeList}
@@ -67,36 +54,17 @@ export const CreatePlanPage = () => {
         </div>
         <div className="mb-[34px]">
           {placeList.map((elem, i) => (
-            <div className="px-[24px] my-[34px]" key={`stopover-input-${i}`}>
-              <InputLabel className="flex h-[16px]">
-                {getInputTitle(i, placeList.length)}
-                {getInputType(i, placeList.length) !== "origin" && (
-                  <button
-                    className="w-[16px] h-[16px] rounded-full flex justify-center items-center bg-grey-02 ml-[4px]"
-                    onClick={() => clickDeleteStopoverBtnEvent(i)}
-                  >
-                    <DeleteCrossIcon className="scale-[68%]" />
-                  </button>
-                )}
-              </InputLabel>
-              <InputButton
-                placeholder="장소를 선택해주세요."
-                text={
-                  (placeList[i] && extractTitleOrPlace(placeList[i])) ||
-                  undefined
-                }
-                onClick={() => clickPlaceAddInputBtnEvent(i)}
-              />
-              {routeList[i] && (
-                <div className="flex items-center mt-[24px]">
-                  <div className="h-[60px] w-[2px] bg-grey-02"></div>
-                  <div className="ml-[24px] text-body3 text-grey-04">
-                    {routeList[i].type === "transit" ? "대중교통: " : "도보: "}
-                    {formatSecondToTimeString(routeList[i].totalTime)}
-                  </div>
-                </div>
-              )}
-            </div>
+            <StopoverInput
+              key={`stopover-input-${i}`}
+              i={i}
+              routeList={routeList}
+              setRouteList={setRouteList}
+              placeList={placeList}
+              setPlaceList={setPlaceList}
+              setSelectedIndex={setSelectedIndex}
+              routeSegmentList={routeSegmentList}
+              setRouteSegmentList={setRouteSegmentList}
+            />
           ))}
 
           <div className="px-[24px] h-[40px]">
