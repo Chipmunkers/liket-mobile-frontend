@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import MapExpandIcon from "@/shared/icon/content/MapExpandIcon.svg";
 import Image from "next/image";
+import { ContentFooter } from "@/app/contents/[idx]/_ui/DetailContent/ui/ContentFooter";
 
 const ContentTab = (props: Props) => {
   const router = useRouter();
@@ -93,49 +94,22 @@ const ContentTab = (props: Props) => {
               />
             </GoogleMap>
           )}
-          {/* <Map
-            className="w-[100%] h-[100%]"
-            center={{
-              lng: content.location.positionX,
-              lat: content.location.positionY,
-            }}
-            isPanto={false}
-            level={4}
-          >
-            <CustomOverlayMap
-              position={{
-                lng: content.location.positionX,
-                lat: content.location.positionY,
-              }}
-              key={content.idx}
-            >
-              <div className="flex items-end justify-center h-[50px] select-none cursor-pointer">
-                <img
-                  className="w-[40px]"
-                  src={`https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${content.genre.idx}_icon.svg`}
-                />
-              </div>
-              <div
-                className="w-[120px] mt-[4px] text-base text-center text-wrap whitespace-nowrap leading-[14.4px] text-white p-[8px] rounded-[16px]"
-                style={{
-                  textShadow:
-                    "-1px -1px 0 #222, 1px -1px 0 #222, -1px 1px 0 #222, 1px 1px 0 #222",
-                }}
-              ></div>
-            </CustomOverlayMap>
-          </Map> */}
         </div>
-        <ButtonBase
-          disableRipple
-          className="center absolute right-[24px] bottom-0 text-button4 text-skyblue-03"
-          onClick={() => {
-            customToast("열심히 준비중입니다!");
-          }}
-        >
-          구글맵에서 길찾기
-          <RightArrowIcon fill={colors["skyblue"]["03"]} />
-        </ButtonBase>
+        <div className="flex justify-end mt-[10px]">
+          <ButtonBase
+            disableRipple
+            className=" text-button4 text-skyblue-03"
+            onClick={() => {
+              customToast("열심히 준비중입니다!");
+            }}
+          >
+            구글맵에서 길찾기
+            <RightArrowIcon fill={colors["skyblue"]["03"]} />
+          </ButtonBase>
+        </div>
       </div>
+      <Divider width="100%" height="8px" />
+      <ContentFooter />
     </>
   );
 };
