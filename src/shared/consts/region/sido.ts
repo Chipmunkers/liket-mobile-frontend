@@ -7,6 +7,33 @@ export interface Sido {
   name: string;
 }
 
+export const INTERESTING_SIDO_LIST: Sido[] = [
+  {
+    bjd_cd: "1100000000",
+    cd: "11",
+    lng: "126.9918052066339",
+    lat: "37.551902938787826",
+    fullName: "서울특별시",
+    name: "서울",
+  },
+  {
+    bjd_cd: "2800000000",
+    cd: "28",
+    lng: "126.37855001725096",
+    lat: "37.583943670458446",
+    fullName: "인천광역시",
+    name: "인천",
+  },
+  {
+    bjd_cd: "4100000000",
+    cd: "41",
+    lng: "127.18088731826974",
+    lat: "37.533052513062366",
+    fullName: "경기도",
+    name: "경기",
+  },
+];
+
 export const SIDO_LIST: Sido[] = [
   {
     bjd_cd: "1100000000",

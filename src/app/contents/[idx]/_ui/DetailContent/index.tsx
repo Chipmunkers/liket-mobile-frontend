@@ -23,6 +23,7 @@ import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 import { useIsWebView } from "@/shared/hooks/useIsWebview";
 import DetailImgCarousel from "@/shared/ui/DetailImgCarousel";
 import { Else, If, Then } from "react-if";
+import { DefaultLink } from "@/shared/ui/DefaultLink";
 
 const DetailContent = (props: Props) => {
   const searchParams = useSearchParams();
@@ -61,10 +62,7 @@ const DetailContent = (props: Props) => {
 
   return (
     <>
-      <main
-        className="mb-[24px]"
-        style={{ paddingBottom: safeArea.bottom + "px" }}
-      >
+      <main style={{ paddingBottom: safeArea.bottom + "px" }}>
         {selectedImgIndex !== undefined ? (
           <div className="fixed max-w-[600px] w-[100%] h-[100vh] z-10 top-0">
             <DetailImgCarousel
@@ -128,20 +126,12 @@ const DetailContent = (props: Props) => {
                 {content.location?.detailAddress || ""}
               </div>
               {content.websiteLink && (
-                <Link
+                <DefaultLink
                   href={content.websiteLink}
                   className="text-skyblue-01 text-body3 break-words overflow-wrap-normal"
-                  onClick={(e) => {
-                    e.preventDefault();
-
-                    if (!isWebview) {
-                      window.open(content.websiteLink);
-                      return;
-                    }
-                  }}
                 >
                   {content.websiteLink}
-                </Link>
+                </DefaultLink>
               )}
               <div className="flex gap-[16px] mt-[8px]">
                 {content.isFee && <EntranceFeeIcon />}

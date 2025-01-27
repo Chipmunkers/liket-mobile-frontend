@@ -12,4 +12,11 @@ export type Props = SharedUiProps<{
    * @default 아무일도 일어나지 않음
    */
   onClick?: () => void;
+
+  /**
+   * 햅틱 피드백 끄기
+   *
+   * @default false
+   */
+  disableHaptic?: boolean;
 }>;

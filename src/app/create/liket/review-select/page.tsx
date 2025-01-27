@@ -54,8 +54,8 @@ export default function Page() {
         {!data &&
           Array(10)
             .fill(0)
-            .map((i) => (
-              <div className="px-[24px]" key={`review-${i}`}>
+            .map((_, index) => (
+              <div className="px-[24px]" key={`review-${index}`}>
                 <ReviewChoiceCardSkeleton />
               </div>
             ))}

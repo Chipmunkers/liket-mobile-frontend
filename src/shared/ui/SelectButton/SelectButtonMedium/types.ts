@@ -30,4 +30,11 @@ export type Props = SharedUiProps<{
    * @default false
    */
   readonly?: boolean;
+
+  /**
+   * 햅틱 피드백 끄기
+   *
+   * @default false
+   */
+  disableHaptic?: boolean;
 }>;

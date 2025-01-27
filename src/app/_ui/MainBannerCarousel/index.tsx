@@ -4,8 +4,9 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from "react-responsive-carousel";
 import { Props } from "./types";
 import DefaultImg from "@/shared/ui/DefaultImg";
+import { DefaultLink } from "@/shared/ui/DefaultLink";
 
-const MainBannerCarousel = ({ srcList }: Props) => {
+const MainBannerCarousel = ({ bannerList }: Props) => {
   return (
     <Carousel
       autoPlay
@@ -17,10 +18,10 @@ const MainBannerCarousel = ({ srcList }: Props) => {
       swipeScrollTolerance={10}
       preventMovementUntilSwipeScrollTolerance={true}
     >
-      {srcList.map((imgPath, index) => {
+      {bannerList.map((banner, index) => {
         return (
           <div
-            key={imgPath + index}
+            key={`banner-${index}`}
             className="relative"
             style={{
               objectFit: "cover",
@@ -28,13 +29,15 @@ const MainBannerCarousel = ({ srcList }: Props) => {
               aspectRatio: `390 / 336`,
             }}
           >
-            <DefaultImg
-              isPriority={true}
-              src={imgPath}
-              cover={false}
-              select={false}
-              alt="배너이미지"
-            />
+            <DefaultLink href={banner.link}>
+              <DefaultImg
+                isPriority={true}
+                src={banner.imgPath}
+                cover={false}
+                select={false}
+                alt="배너이미지"
+              />
+            </DefaultLink>
           </div>
         );
       })}

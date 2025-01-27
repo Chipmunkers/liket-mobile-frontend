@@ -15,13 +15,13 @@ import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 const FilterDrawer = ({
   isOpen,
 
-  selectGenre,
+  selectedGenre,
   setGenre,
 
-  selectStyles,
+  selectedStyles,
   setStyle,
 
-  selectAge,
+  selectedAge,
   setAge,
 
   setMapFilter,
@@ -55,85 +55,99 @@ const FilterDrawer = ({
         />
         <HeaderMiddle text="필터" />
       </Header>
+
       <div className="full-modal-main px-[24px] py-[16px] gap-[48px]">
-        {/* 장르 선택 */}
-        <div key={"genre_filter"}>
+        <div>
           <div className="text-h2 mb-[15px]">장르</div>
           <ul className="flex flex-wrap gap-[8px]">
-            {GENRES.map((genre) => (
-              <li key={genre.idx}>
-                <Chip
-                  isSelected={selectGenre?.idx === genre.idx}
-                  onClick={() => {
-                    if (selectGenre?.idx === genre.idx)
-                      return setGenre(undefined);
-                    setGenre(genre);
-                  }}
-                >
-                  {genre.name}
-                </Chip>
-              </li>
-            ))}
+            {GENRES.map((genre) => {
+              const isSelected = selectedGenre?.idx === genre.idx;
+
+              return (
+                <li key={genre.idx}>
+                  <Chip
+                    isSelected={isSelected}
+                    onClick={() => {
+                      if (isSelected) {
+                        setGenre(undefined);
+                        return;
+                      }
+
+                      setGenre(genre);
+                    }}
+                  >
+                    {genre.name}
+                  </Chip>
+                </li>
+              );
+            })}
           </ul>
         </div>
 
-        {/* 연령대 선택 */}
-        <div key={"age_filter"}>
+        <div>
           <div className="text-h2 mb-[15px]">연령대</div>
           <ul className="flex flex-wrap gap-[8px]">
-            {AGES.map((age) => (
-              <li key={age.idx}>
-                <Chip
-                  isSelected={selectAge?.idx === age.idx}
-                  onClick={() => {
-                    if (selectAge?.idx === age.idx) return setAge(undefined);
-                    setAge(age);
-                  }}
-                >
-                  {age.name}
-                </Chip>
-              </li>
-            ))}
+            {AGES.map((age) => {
+              const isSelected = selectedAge?.idx === age.idx;
+
+              return (
+                <li key={age.idx}>
+                  <Chip
+                    isSelected={isSelected}
+                    onClick={() => {
+                      if (isSelected) {
+                        setAge(undefined);
+                        return;
+                      }
+
+                      setAge(age);
+                    }}
+                  >
+                    {age.name}
+                  </Chip>
+                </li>
+              );
+            })}
           </ul>
         </div>
 
-        {/* 스타일 */}
-        <div key={"style_filter"}>
+        <div>
           <div className="text-h2 mb-[15px]">스타일</div>
           <ul className="flex flex-wrap gap-[8px]">
-            {STYLES.map((style) => (
-              <li key={style.idx}>
-                <Chip
-                  isSelected={selectStyles
-                    .map((style) => style.idx)
-                    .includes(style.idx)}
-                  onClick={() => {
-                    const alreadyExistStyleIdxs = selectStyles.map(
-                      (style) => style.idx
-                    );
+            {STYLES.map((style) => {
+              const isSelected = selectedStyles.some(
+                (selectedStyle) => selectedStyle.idx === style.idx
+              );
 
-                    if (alreadyExistStyleIdxs.includes(style.idx)) {
-                      // * 이미 선택된 스타일의 경우 선택되지 않은 것으로 표시
-                      return setStyle([
-                        ...selectStyles.filter(
+              return (
+                <li key={style.idx}>
+                  <Chip
+                    isSelected={isSelected}
+                    onClick={() => {
+                      if (isSelected) {
+                        const newStyles = selectedStyles.filter(
                           (selectedStyle) => selectedStyle.idx !== style.idx
-                        ),
-                      ]);
-                    }
+                        );
 
-                    if (alreadyExistStyleIdxs.length >= 3) {
-                      return customToast(
-                        "스타일은 최대 3개까지 선택할 수 있습니다."
-                      );
-                    }
+                        setStyle(newStyles);
+                        return;
+                      }
 
-                    setStyle([...selectStyles, style]);
-                  }}
-                >
-                  {style.name}
-                </Chip>
-              </li>
-            ))}
+                      if (selectedStyles.length >= 3) {
+                        customToast(
+                          "스타일은 최대 3개까지 선택할 수 있습니다."
+                        );
+                        return;
+                      }
+
+                      setStyle([...selectedStyles, style]);
+                    }}
+                  >
+                    {style.name}
+                  </Chip>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>
@@ -158,9 +172,9 @@ const FilterDrawer = ({
         <Button
           onClick={() => {
             setMapFilter({
-              genre: selectGenre,
-              age: selectAge,
-              styles: selectStyles,
+              genre: selectedGenre,
+              age: selectedAge,
+              styles: selectedStyles,
             });
             router.replace("/map");
           }}

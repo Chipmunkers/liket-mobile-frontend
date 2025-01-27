@@ -21,13 +21,8 @@ const SoonEndContentSection = (props: {
     exceptionHandler(error, [418, 429, 500, 502, 504]);
   }, [error]);
 
-  const { safeArea } = useGetSafeArea();
-
   return (
-    <ContentCardSection
-      contentList={data.contentList}
-      paddingBottom={props.reviewLength ? 0 : safeArea.bottom}
-    >
+    <ContentCardSection contentList={data.contentList}>
       종료예정 컨텐츠
     </ContentCardSection>
   );

@@ -6,15 +6,12 @@ import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 export const useUploadLiketImg = (
-  props: UseMutationOptions<UploadedFileEntity, AxiosError, File>
+  props: UseMutationOptions<UploadedFileEntity, AxiosError, FormData>
 ) => {
   const exceptionHandler = useExceptionHandler();
 
   return useMutation({
-    mutationFn: async (file: File) => {
-      const formData = new FormData();
-      formData.append("file", file);
-
+    mutationFn: async (formData: FormData) => {
       const { data } = await axiosInstance.post<UploadedFileEntity>(
         "/apis/upload/liket",
         formData,

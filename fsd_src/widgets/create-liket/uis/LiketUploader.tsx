@@ -15,6 +15,7 @@ import {
   ImgShape,
   TextShape,
 } from "../../../shared/types/liket/card";
+import { compressImage } from "@/shared/helpers/compressImage";
 
 type LiketUploaderProps = {
   uploadedImage: HTMLImageElement | undefined;
@@ -139,7 +140,6 @@ const LiketUploader = ({
       if (bgImage) {
         const newX = bgImage.x() + p1.x - touchStateRefForOneTouch.current.x;
         const newY = bgImage.y() + p1.y - touchStateRefForOneTouch.current.y;
-        console.log(touchStateRefForOneTouch.current);
 
         bgImage.position({
           x: newX,
@@ -372,7 +372,7 @@ const LiketUploader = ({
                 const reader = new FileReader();
                 const file = files[0];
 
-                reader.onloadend = () => {
+                reader.onloadend = async () => {
                   const image = new window.Image();
                   image.onload = () => {
                     const { width: IMAGE_WIDTH, height: IMAGE_HEIGHT } = image;
@@ -395,7 +395,10 @@ const LiketUploader = ({
                   };
 
                   image.src = reader.result as string;
-                  uploadImage(files[0]);
+
+                  const formData = new FormData();
+                  formData.append("file", await compressImage(files[0]));
+                  uploadImage(formData);
                 };
 
                 reader.readAsDataURL(file);

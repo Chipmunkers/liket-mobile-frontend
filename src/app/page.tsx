@@ -15,6 +15,8 @@ import Divider from "@/shared/ui/Divider";
 import MainBannerCarousel from "@/app/_ui/MainBannerCarousel";
 import { shuffle } from "@/shared/helpers/shuffle";
 import HotReviewSection from "@/app/_ui/HotReviewSection";
+import { MainFooter } from "@/app/_ui/MainFooter";
+import InterestingTagAlert from "@/app/_ui/InterestingTag";
 
 const Home = async () => {
   const { contentList: soonOpenContents } =
@@ -30,9 +32,9 @@ const Home = async () => {
         <HeaderLeft logo />
         <HeaderRight option={{ search: true, like: true }} />
       </Header>
-      <main className="mb-[48px]">
+      <main className="pb-[48px]">
         {/* 배너 */}
-        <MainBannerCarousel srcList={bannerList.map((img) => img.imgPath)} />
+        <MainBannerCarousel bannerList={bannerList} />
 
         {/* 인기 스타일  문화생활 컨텐츠*/}
         <HotStyleSection />
@@ -57,8 +59,13 @@ const Home = async () => {
         />
 
         {reviews.length ? <HotReviewSection reviews={reviews} /> : null}
+        <Divider height="8px" width="100%" />
+        <div className="mt-[16px]">
+          <MainFooter />
+        </div>
       </main>
       <BottomTab shadow={true} />
+      <InterestingTagAlert />
     </>
   );
 };

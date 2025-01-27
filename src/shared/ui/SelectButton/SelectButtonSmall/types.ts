@@ -22,4 +22,11 @@ export type Props = SharedUiProps<{
    * @default true
    */
   rippleEffect?: boolean;
+
+  /**
+   * 햅틱 피드백 끄기
+   *
+   * @default false
+   */
+  disableHaptic?: boolean;
 }>;

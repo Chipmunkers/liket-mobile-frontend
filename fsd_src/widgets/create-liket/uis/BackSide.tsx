@@ -26,13 +26,23 @@ const BackSide = ({
             height="14"
           />
         </div>
-        <div className="ml-[4px] text-grey-02">{author.nickname}</div>
+        <div className="ml-[4px] text-body5 text-grey-02">
+          {author.nickname}
+        </div>
       </div>
-      <div className="relative h-[80px] center border-y-[1px] border-solid border-y-grey-01">
-        <div className="absolute top-[13px] left-0 text-caption text-grey-04">
+      <div className="flex flex-col border-y-[1px] border-solid border-y-grey-01">
+        <div className="text-left text-caption text-grey-04 w-full mt-[13px]">
           컨텐츠
         </div>
-        <div className="text-body-01">{title}</div>
+        <div
+          className="text-center mt-[4px]"
+          // TODO: mb-[20px]이 안먹혀서 스타일로 넣어놓음. 테일윈드로 바꿔놔야함
+          style={{
+            marginBottom: "20px",
+          }}
+        >
+          {title}
+        </div>
       </div>
       <div className="flex items-center h-[40px]">
         <div className="text-caption text-grey-04">장르</div>
@@ -60,7 +70,7 @@ const BackSide = ({
         </div>
       </div>
       <div className="flex items-center h-[40px] border-y-[1px] border-solid border-y-grey-01">
-        <div className="text-caption text-grey-04">평점</div>
+        <div className="text-caption text-grey-04 text-[12px]">평점</div>
         <div className="ml-[16px] w-[131px]">
           <StarRating
             readOnly
