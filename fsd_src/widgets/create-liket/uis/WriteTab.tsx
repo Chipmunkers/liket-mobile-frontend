@@ -56,7 +56,7 @@ const WriteTab = ({
               aria-hidden={!enabled || !selectedIndex}
               role="tabpanel"
               className={classNames(
-                "bg-white bg-opacity-80 translate-y-[-100%] absolute left-[24px] right-[24px] border-grey-01 border-solid border-t-[1px] min-w-[342px]",
+                "bg-white bg-opacity-80 translate-y-[-100%] absolute left-[24px] right-[24px] border-grey-01 border-solid border-t-[1px]",
                 isSelected && enabled ? "block" : "hidden"
               )}
             >
@@ -68,7 +68,7 @@ const WriteTab = ({
       <div
         role="tablist"
         aria-label="적용 가능 편집 리스트"
-        className="w-[100%] h-[100%] flex pl-[24px] pr-[24px]  shadow-[0px_-8px_16px_0px_rgba(0,0,0,0.04)]"
+        className="w-[100%] h-[100%] flex px-[24px] shadow-[0px_-8px_16px_0px_rgba(0,0,0,0.04)]"
       >
         {items.map(({ label }, index) => {
           const isSelected = index === selectedIndex;
