@@ -17,9 +17,10 @@ import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
 import { useEffect, useState } from "react";
 import { useExceptionHandler } from "@/shared/hooks/useExceptionHandler";
 import { useRouter } from "next/navigation";
-import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import customToast from "@/shared/helpers/customToast";
+import BottomButtonTab from "@/shared/ui/BottomButtonTab";
 
 export default function Page() {
   const router = useRouter();
@@ -78,7 +79,7 @@ export default function Page() {
         <HeaderLeft
           option={{
             close: {
-              onClick: () => router.back(),
+              onClick: () => stackRouterBack(router),
             },
           }}
         />
@@ -233,7 +234,7 @@ export default function Page() {
           </>
         )}
       </main>
-      <BottomButtonTabWrapper shadow className="bg-white">
+      <BottomButtonTab shadow className="bg-white">
         <Button
           disabled={isLoading}
           className="h-[48px] flex-1"
@@ -248,7 +249,7 @@ export default function Page() {
         >
           적용하기
         </Button>
-      </BottomButtonTabWrapper>
+      </BottomButtonTab>
     </>
   );
 }
