@@ -219,7 +219,7 @@ export default function Page() {
                           e.preventDefault();
                         }}
                       >
-                        <div className="relative w-[112px] h-[178px]">
+                        <div className="relative w-[112px] h-[178px] border-solid border border-grey-03">
                           <DefaultImg src={liket.cardImgPath} />
                         </div>
                       </Link>
