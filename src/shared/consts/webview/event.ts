@@ -4,6 +4,7 @@ export const WEBVIEW_EVENT_TYPE = {
   CLICK: "CLICK_EVENT",
   SEARCH_SUBMIT: "SEARCH_SUBMIT",
   SOCIAL_LOGIN: "SOCIAL_LOGIN",
+  OPEN_EXTERNAL_LINK: "OPEN_EXTERNAL_LINK",
 } as const;
 
 export type WebviewEvent = keyof typeof WEBVIEW_EVENT_TYPE;

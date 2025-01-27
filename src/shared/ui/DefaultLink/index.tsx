@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { isExternalLink } from "@/shared/ui/DefaultLink/utils/isExternalLink";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { classNames } from "@/shared/helpers/classNames";
+import { useIsWebView } from "@/shared/hooks/useIsWebview";
+import { openExternalLinkOnWebview } from "@/shared/helpers/sendMessageToWebview";
 
 /**
  * 링크 태그 대신 사용하는 Link 태그
@@ -20,6 +22,7 @@ export const DefaultLink = ({
   children,
 }: Props) => {
   const router = useRouter();
+  const isWebview = useIsWebView();
 
   useEffect(() => {
     if (!isExternalLink(href)) {
@@ -42,7 +45,12 @@ export const DefaultLink = ({
         }
 
         if (isExternalLink(href)) {
-          window.open(href);
+          if (isWebview) {
+            openExternalLinkOnWebview(href);
+          } else {
+            window.open(href);
+          }
+
           return;
         }
 
