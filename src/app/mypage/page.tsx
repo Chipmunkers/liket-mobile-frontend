@@ -238,6 +238,12 @@ export default function Page() {
           <LinkItem screen={WEBVIEW_SCREEN.ACCOUNT} href="/account">
             계정 관리
           </LinkItem>
+          <LinkItem
+            screen={WEBVIEW_SCREEN.INTERESTING_TAG}
+            href="/interesting-tag"
+          >
+            관심태그 설정
+          </LinkItem>
           <Divider width="100%" height="8px" />
           <LinkItem screen={WEBVIEW_SCREEN.NOTICE} href="/notices">
             공지사항
