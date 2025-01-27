@@ -7,8 +7,12 @@ import tagImage from "../_asset/interesting_tag_alert.png";
 import Button from "@/shared/ui/Button";
 import { setAppNavBack } from "@/shared/helpers/setAppNavState";
 import useGetInterestingTag from "../_hooks/useGetInterestingTag";
+import { stackRouterPush } from "@/shared/helpers/stackRouter";
+import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { useRouter } from "next/navigation";
 
 const InterestingTagAlert = () => {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const { data, error } = useGetInterestingTag();
 
@@ -61,7 +65,10 @@ const InterestingTagAlert = () => {
         <Button
           className="h-[48px] w-[100%]"
           onClick={() => {
-            setIsOpen(false);
+            stackRouterPush(router, {
+              path: "/interesting-tag",
+              screen: WEBVIEW_SCREEN.INTERESTING_TAG,
+            });
           }}
         >
           설정하기
