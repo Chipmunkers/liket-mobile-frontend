@@ -10,6 +10,7 @@ import { ButtonBase } from "@mui/material";
 import { Props } from "./types";
 import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { hapticFeedback } from "@/shared/helpers/hapticFeedback";
 
 const HeaderLeft = ({
   logo,
@@ -53,6 +54,7 @@ const HeaderLeft = ({
         className="flex justify-center items-center w-[48px] h-[48px] rounded-full ml-[12px] icon-button"
         onClick={(e) => {
           e.preventDefault();
+          hapticFeedback({ feedback: "select" });
           if (typeof back === "object") {
             back.onClick && back.onClick();
             return;
@@ -71,6 +73,7 @@ const HeaderLeft = ({
         disableRipple={true}
         className="w-[48px] h-[48px] rounded-full ml-[12px] icon-button"
         onClick={() => {
+          hapticFeedback({ feedback: "select" });
           if (typeof close === "object") {
             close.onClick && close.onClick();
           }
