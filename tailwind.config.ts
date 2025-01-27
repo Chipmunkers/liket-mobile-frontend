@@ -8,7 +8,10 @@ import { PAGE_CONTENT_MAX_WIDTH } from "./src/shared/style/page";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./fsd_src/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
   important: true,
   theme: {
     extend: {
