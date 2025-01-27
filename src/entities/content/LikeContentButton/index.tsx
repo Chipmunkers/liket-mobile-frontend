@@ -10,6 +10,10 @@ import customToast from "@/shared/helpers/customToast";
 import { colors } from "@/shared/style/color";
 import Lottie from "react-lottie-player";
 import heartButtonAnimation from "@/shared/animation/heart-button.json";
+import {
+  hapticFeedback,
+  ImpactFeedbackStyle,
+} from "@/shared/helpers/hapticFeedback";
 
 const LikeContentButton = (props: Props) => {
   const [like, setLike] = useState(props.likeState);
@@ -53,6 +57,10 @@ const LikeContentButton = (props: Props) => {
       onClick={(e) => {
         e.stopPropagation();
         e.preventDefault();
+
+        hapticFeedback({
+          feedback: "select",
+        });
 
         if (!like) {
           return likeContentApi();

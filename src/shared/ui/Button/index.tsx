@@ -2,6 +2,7 @@ import { ButtonBase } from "@mui/material";
 import { Props } from "./types";
 import { disabledVariantToStyle, variantToStyle } from "@/shared/style/variant";
 import { classNames } from "@/shared/helpers/classNames";
+import { hapticFeedback } from "@/shared/helpers/hapticFeedback";
 
 const Button = ({
   type = "button",
@@ -12,6 +13,7 @@ const Button = ({
   onClick,
   className,
   style = {},
+  disableHaptic = false,
 }: Props) => {
   return (
     <ButtonBase
@@ -25,7 +27,12 @@ const Button = ({
         fullWidth && "flex-1",
         className || ""
       )}
-      onClick={(e) => onClick && onClick(e)}
+      onClick={(e) => {
+        if (onClick) {
+          if (!disableHaptic) hapticFeedback({ feedback: "select" });
+          onClick(e);
+        }
+      }}
       style={style}
     >
       {children}

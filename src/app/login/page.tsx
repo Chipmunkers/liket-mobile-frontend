@@ -16,6 +16,7 @@ import customToast from "@/shared/helpers/customToast";
 import { useIsWebView } from "@/shared/hooks/useIsWebview";
 import { WEBVIEW_EVENT_TYPE } from "@/shared/consts/webview/event";
 import useOnMessageFromWebview from "@/app/login/_hooks/useOnMessageFromWebview";
+import { hapticFeedback } from "@/shared/helpers/hapticFeedback";
 
 export default function Page() {
   const router = useRouter();
@@ -79,6 +80,7 @@ export default function Page() {
               className="h-[100%] flex justify-center w-[100%]"
               onClick={(e) => {
                 e.preventDefault();
+                hapticFeedback({ feedback: "select" });
                 socialLoginClickEvent("kakao");
               }}
             >
@@ -96,6 +98,7 @@ export default function Page() {
               className="h-[100%] flex justify-center w-[100%]"
               onClick={(e) => {
                 e.preventDefault();
+                hapticFeedback({ feedback: "select" });
 
                 stackRouterPush(router, {
                   path: process.env.NEXT_PUBLIC_API_SERVER + "/auth/apple",
@@ -119,6 +122,7 @@ export default function Page() {
               className="h-[100%] flex justify-center w-[100%]"
               onClick={(e) => {
                 e.preventDefault();
+                hapticFeedback({ feedback: "select" });
 
                 stackRouterPush(router, {
                   path: process.env.NEXT_PUBLIC_API_SERVER + "/auth/naver",

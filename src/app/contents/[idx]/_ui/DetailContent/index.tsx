@@ -23,6 +23,7 @@ import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 import { useIsWebView } from "@/shared/hooks/useIsWebview";
 import DetailImgCarousel from "@/shared/ui/DetailImgCarousel";
 import { Else, If, Then } from "react-if";
+import { DefaultLink } from "@/shared/ui/DefaultLink";
 
 const DetailContent = (props: Props) => {
   const searchParams = useSearchParams();
@@ -125,14 +126,12 @@ const DetailContent = (props: Props) => {
                 {content.location?.detailAddress || ""}
               </div>
               {content.websiteLink && (
-                <a
+                <DefaultLink
                   href={content.websiteLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="text-skyblue-01 text-body3 break-words overflow-wrap-normal"
                 >
                   {content.websiteLink}
-                </a>
+                </DefaultLink>
               )}
               <div className="flex gap-[16px] mt-[8px]">
                 {content.isFee && <EntranceFeeIcon />}

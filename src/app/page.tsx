@@ -34,7 +34,7 @@ const Home = async () => {
       </Header>
       <main className="pb-[48px]">
         {/* 배너 */}
-        <MainBannerCarousel srcList={bannerList.map((img) => img.imgPath)} />
+        <MainBannerCarousel bannerList={bannerList} />
 
         {/* 인기 스타일  문화생활 컨텐츠*/}
         <HotStyleSection />

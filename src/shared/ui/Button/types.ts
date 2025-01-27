@@ -46,5 +46,12 @@ export type Props = StrictPropsWithChildren<
      * @default {}
      */
     style?: CSSProperties;
+
+    /**
+     * 햅틱 피드백 끄기
+     *
+     * @default false
+     */
+    disableHaptic?: boolean;
   }>
 >;
