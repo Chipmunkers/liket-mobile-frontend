@@ -15,6 +15,13 @@ export type Props = StrictPropsWithChildren<
      * @default ""
      */
     textClassName?: string;
+
+    /**
+     * 햅틱 피드백 끄기
+     *
+     * @default false
+     */
+    disableHaptic?: boolean;
   }>,
   string
 >;
