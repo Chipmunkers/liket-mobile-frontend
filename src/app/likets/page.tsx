@@ -106,8 +106,7 @@ export default function Page() {
           option={{
             create: {
               onClick: () => {
-                customToast("열심히 준비중입니다!");
-                // router.push("/create/liket/review-select")
+                router.push("/create/liket/review-select");
               },
             },
           }}
@@ -131,20 +130,13 @@ export default function Page() {
         </div>
 
         <ul className="flex flex-wrap gap-[14px] px-[24px] pb-[14px]">
-          {/* {data &&
+          {data &&
             data.pages
               .map((page) => page.liketList)
               .flat()
               .map((liket) => {
                 return (
-                  <li
-                    key={liket.idx}
-                    className={
-                      isNarrow
-                        ? "w-[calc(50%-7px)]"
-                        : "w-[calc(33.33%-9.33334px)]"
-                    }
-                  >
+                  <li key={liket.idx} className={"w-[calc(50%-7px)]"}>
                     <LiketCard
                       id={liket.idx}
                       key={liket.idx}
@@ -154,24 +146,7 @@ export default function Page() {
                     />
                   </li>
                 );
-              })} */}
-          {/* {DUMMY_LIKET_LIST.map((content) => {
-            return (
-              <li
-                key={content.id}
-                className={
-                  isNarrow ? "w-[calc(50%-7px)]" : "w-[calc(33.33%-9.33334px)]"
-                }
-              >
-                <LiketCard
-                  key={content.id}
-                  {...content}
-                  isNarrow={isNarrow}
-                  onClickMeatball={() => setSelectedLiket(content.id)}
-                />
-              </li>
-            );
-          })} */}
+              })}
         </ul>
       </main>
       <Drawer open={!!selectedLiket} onClose={() => setSelectedLiket("")}>
