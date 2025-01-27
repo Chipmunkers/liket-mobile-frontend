@@ -154,7 +154,7 @@ export default function Page() {
           <ButtonBase
             onClick={() => {
               stackRouterPush(router, {
-                path: `/edit/liket?liket=${selectedLiket}`,
+                path: `/edit/liket?liketIdx=${selectedLiket}`,
                 screen: WEBVIEW_SCREEN.EDIT_LIKET,
               });
             }}

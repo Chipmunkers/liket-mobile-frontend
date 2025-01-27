@@ -6,17 +6,22 @@ import useGetLiket from "../../../../fsd_src/widgets/create-liket/apis/useGetLik
 import { CreateLiketTemplate } from "../../../../fsd_src/widgets/create-liket/uis/CreateLiketTemplate";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Page({
-  searchParams: { liket },
+  searchParams: { liketIdx },
 }: {
-  searchParams: { liket: string };
+  searchParams: { liketIdx: string };
 }) {
+  const queryClient = useQueryClient();
   const router = useRouter();
 
-  const { data } = useGetLiket(liket);
-  const { mutate: editLiket } = useEditLiket(liket, {
+  const { data } = useGetLiket(liketIdx);
+  const { mutate: editLiket } = useEditLiket(liketIdx, {
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["liket", liketIdx],
+      });
       stackRouterPush(router, {
         path: `/likets`,
         screen: WEBVIEW_SCREEN.LIKET_LIST,
@@ -25,7 +30,7 @@ export default function Page({
     },
   });
 
-  if (!liket || !data) {
+  if (!liketIdx || !data) {
     return <></>;
   }
 
