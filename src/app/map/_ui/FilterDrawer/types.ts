@@ -7,13 +7,13 @@ import { SetState } from "@/shared/types/react";
 export type Props = {
   isOpen: boolean;
 
-  selectStyles: StyleEntity[];
+  selectedStyles: StyleEntity[];
   setStyle: SetState<StyleEntity[]>;
 
-  selectGenre?: GenreEntity;
+  selectedGenre?: GenreEntity;
   setGenre: SetState<GenreEntity | undefined>;
 
-  selectAge?: AgeEntity;
+  selectedAge?: AgeEntity;
   setAge: SetState<AgeEntity | undefined>;
 
   mapFilter: MapFilter;

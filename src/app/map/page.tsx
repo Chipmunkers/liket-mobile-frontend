@@ -155,7 +155,6 @@ export default function MapPage() {
             ) : null}
           </div>
         </CustomGoogleMap>
-
         {/* 컨텐츠 바텀 시트 */}
         {!clickedContent && contentList.length !== 0 ? (
           <ContentBottomSheet
@@ -205,14 +204,14 @@ export default function MapPage() {
 
       <FilterDrawer
         isOpen={!!isFilterModalOpen}
-        selectGenre={selectedGenre}
-        selectStyles={selectedStyles}
-        selectAge={selectedAge}
+        selectedGenre={selectedGenre}
+        selectedStyles={selectedStyles}
+        selectedAge={selectedAge}
         setStyle={setSelectedStyles}
         setAge={setSelectedAge}
         setGenre={setSelectedGenre}
-        mapFilter={mapFilter}
         setMapFilter={setMapFilter}
+        mapFilter={mapFilter}
       />
 
       {/* 지역 모달 */}
