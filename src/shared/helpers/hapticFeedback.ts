@@ -62,6 +62,7 @@ export type HapticFeedbackEvent =
     };
 
 export const hapticFeedback = (option: HapticFeedbackEvent) => {
+  if (!window.ReactNativeWebView) return;
   window.ReactNativeWebView.postMessage(
     JSON.stringify({
       type: WEBVIEW_EVENT_TYPE.HAPTIC_FEEDBACK,
