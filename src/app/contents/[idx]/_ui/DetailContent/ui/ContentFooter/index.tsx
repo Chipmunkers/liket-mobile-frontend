@@ -10,23 +10,23 @@ export const ContentFooter = () => {
       <div>
         <div>
           제공:{" "}
-          <Link
+          <a
             className="underline"
             rel="noopener noreferrer"
             target="_blank"
             href="https://www.kopis.or.kr/por/cs/openapi/openApiInfo.do?menuId=MNU_00074"
           >
             한국문화정보원
-          </Link>{" "}
+          </a>{" "}
           |{" "}
-          <Link
+          <a
             className="underline"
             rel="noopener noreferrer"
             target="_blank"
             href="https://api.visitkorea.or.kr/"
           >
             한국관광공사
-          </Link>
+          </a>
         </div>
       </div>
     </footer>

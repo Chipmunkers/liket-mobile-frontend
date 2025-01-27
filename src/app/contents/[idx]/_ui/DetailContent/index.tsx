@@ -125,20 +125,14 @@ const DetailContent = (props: Props) => {
                 {content.location?.detailAddress || ""}
               </div>
               {content.websiteLink && (
-                <Link
+                <a
                   href={content.websiteLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-skyblue-01 text-body3 break-words overflow-wrap-normal"
-                  onClick={(e) => {
-                    e.preventDefault();
-
-                    if (!isWebview) {
-                      window.open(content.websiteLink);
-                      return;
-                    }
-                  }}
                 >
                   {content.websiteLink}
-                </Link>
+                </a>
               )}
               <div className="flex gap-[16px] mt-[8px]">
                 {content.isFee && <EntranceFeeIcon />}
