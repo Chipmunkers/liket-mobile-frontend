@@ -7,7 +7,7 @@ import { isExternalLink } from "@/shared/ui/DefaultLink/utils/isExternalLink";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { classNames } from "@/shared/helpers/classNames";
 import { useIsWebView } from "@/shared/hooks/useIsWebview";
-import { openExternalLinkOnWebview } from "@/shared/helpers/sendMessageToWebview";
+import { openExternalLinkOnWebview } from "@/shared/helpers/openExternalLinkOnWebview";
 
 /**
  * 링크 태그 대신 사용하는 Link 태그
