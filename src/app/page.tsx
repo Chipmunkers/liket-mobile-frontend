@@ -16,6 +16,7 @@ import MainBannerCarousel from "@/app/_ui/MainBannerCarousel";
 import { shuffle } from "@/shared/helpers/shuffle";
 import HotReviewSection from "@/app/_ui/HotReviewSection";
 import { MainFooter } from "@/app/_ui/MainFooter";
+import InterestingTagAlert from "@/app/_ui/InterestingTag";
 
 const Home = async () => {
   const { contentList: soonOpenContents } =
@@ -64,6 +65,7 @@ const Home = async () => {
         </div>
       </main>
       <BottomTab shadow={true} />
+      <InterestingTagAlert />
     </>
   );
 };
