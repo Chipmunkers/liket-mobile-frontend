@@ -1,25 +1,12 @@
 "use client";
 
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
-import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
+import { DefaultLink } from "@/shared/ui/DefaultLink";
 import Divider from "@/shared/ui/Divider";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 export const MainFooter = () => {
   const { safeArea } = useGetSafeArea();
-  const router = useRouter();
-
-  const linkClickEvent =
-    (termsIdx: number): React.MouseEventHandler<HTMLAnchorElement> =>
-    (e) => {
-      e.preventDefault();
-      stackRouterPush(router, {
-        path: `/terms/${termsIdx}`,
-        screen: WEBVIEW_SCREEN.TERMS_DETAIL,
-      });
-    };
 
   return (
     <footer
@@ -29,17 +16,35 @@ export const MainFooter = () => {
       }}
     >
       <header className="pl-[25px] flex gap-[16px] text-button5 text-grey-04 items-center py-[8px]">
-        <Link href={"/terms/3"} onClick={linkClickEvent(3)}>
+        <DefaultLink
+          href="/terms/3"
+          routerOption={{
+            path: "/terms/3",
+            screen: WEBVIEW_SCREEN.TERMS_DETAIL,
+          }}
+        >
           청소년보호정책
-        </Link>
+        </DefaultLink>
         <div className="w-[1px] h-[8px] bg-grey-02"></div>
-        <Link href={"/terms/1"} onClick={linkClickEvent(1)}>
+        <DefaultLink
+          href="/terms/1"
+          routerOption={{
+            path: "/terms/1",
+            screen: WEBVIEW_SCREEN.TERMS_DETAIL,
+          }}
+        >
           이용약관
-        </Link>
+        </DefaultLink>
         <div className="w-[1px] h-[8px] bg-grey-02"></div>
-        <Link href={"/terms/2"} onClick={linkClickEvent(2)}>
+        <DefaultLink
+          href="/terms/2"
+          routerOption={{
+            path: "/terms/1",
+            screen: WEBVIEW_SCREEN.TERMS_DETAIL,
+          }}
+        >
           개인정보처리방침
-        </Link>
+        </DefaultLink>
       </header>
       <Divider width="100%" height="2px" />
       <span className="ml-[24px] text-body5 mt-[8px] mb-[4px] text-grey-04">
