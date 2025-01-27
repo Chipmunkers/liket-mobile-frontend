@@ -35,9 +35,14 @@ export const DefaultLink = ({
       target={isExternalLink(href) ? "_blank" : ""}
       className={classNames(className)}
       rel={isExternalLink(href) ? "noopener noreferrer" : ""}
+      draggable={false}
       href={href}
       onClick={(e) => {
         e.preventDefault();
+
+        if (href === "") {
+          return;
+        }
 
         if (routerOption) {
           stackRouterPush(router, routerOption);
