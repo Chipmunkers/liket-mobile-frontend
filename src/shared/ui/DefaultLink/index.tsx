@@ -29,6 +29,7 @@ export const DefaultLink = ({
 
   return (
     <a
+      target={isExternalLink(href) ? "_blank" : ""}
       className={classNames(className)}
       rel={isExternalLink(href) ? "noopener noreferrer" : ""}
       href={href}
@@ -37,6 +38,11 @@ export const DefaultLink = ({
 
         if (routerOption) {
           stackRouterPush(router, routerOption);
+          return;
+        }
+
+        if (isExternalLink(href)) {
+          window.open(href);
           return;
         }
 

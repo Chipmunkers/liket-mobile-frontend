@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { DefaultLink } from "@/shared/ui/DefaultLink";
 
 export const ContentFooter = () => {
   return (
@@ -10,23 +10,19 @@ export const ContentFooter = () => {
       <div>
         <div>
           제공:{" "}
-          <a
-            className="underline"
-            rel="noopener noreferrer"
-            target="_blank"
+          <DefaultLink
             href="https://www.kopis.or.kr/por/cs/openapi/openApiInfo.do?menuId=MNU_00074"
+            className="underline"
           >
             한국문화정보원
-          </a>{" "}
+          </DefaultLink>{" "}
           |{" "}
-          <a
-            className="underline"
-            rel="noopener noreferrer"
-            target="_blank"
+          <DefaultLink
             href="https://api.visitkorea.or.kr/"
+            className="underline"
           >
             한국관광공사
-          </a>
+          </DefaultLink>
         </div>
       </div>
     </footer>
