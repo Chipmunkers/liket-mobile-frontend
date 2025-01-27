@@ -19,7 +19,8 @@ export default function Page({
     onSuccess: () => {
       stackRouterPush(router, {
         path: `/likets`,
-        screen: WEBVIEW_SCREEN.SEARCH,
+        screen: WEBVIEW_SCREEN.LIKET_LIST,
+        isStack: false,
       });
     },
   });
