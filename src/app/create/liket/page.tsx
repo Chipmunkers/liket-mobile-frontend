@@ -22,7 +22,7 @@ export default function Page({
     onSuccess: () => {
       stackRouterPush(router, {
         path: `/likets`,
-        screen: WEBVIEW_SCREEN.REQUESTED_CONTENT_DETAIL,
+        screen: WEBVIEW_SCREEN.LIKET_LIST,
         isStack: false,
       });
     },

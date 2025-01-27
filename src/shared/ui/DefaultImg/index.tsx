@@ -25,6 +25,7 @@ const DefaultImg = ({
   ...props
 }: Props) => {
   const [isErrorEmit, setIsErrorTriggered] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   const handleError = () => setIsErrorTriggered(true);
 
@@ -61,7 +62,7 @@ const DefaultImg = ({
         height: height || "100%",
       }}
     >
-      {!isErrorEmit && (
+      {!isErrorEmit && !isImageLoaded && (
         <div className="w-[100%] h-[100%] absolute bg-grey-01 flex justify-center items-center">
           <LIKETLogo
             style={{
@@ -124,6 +125,7 @@ const DefaultImg = ({
       {/* TODO: testSrc 조건은 라이켓 리스트 개발용으로 사용함. 사용하고 삭제 필요 */}
       {!isErrorEmit && !testSrc && (
         <Image
+          onLoad={() => setIsImageLoaded(true)}
           priority={isPriority}
           className={classNames(!select ? "select-none" : "")}
           src={srcHost + src}

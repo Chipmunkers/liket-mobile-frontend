@@ -17,19 +17,20 @@ const LiketCard = ({ id, cardImgPath, isNarrow, onClickMeatball }: Props) => {
   const router = useRouter();
 
   return (
-    <Link
-      href={`/likets/${id}`}
-      onClick={(e) => {
-        e.preventDefault();
+    <div
+    // 상세 페이지는 기획 후 추후에 개발
+    // href={`/likets/${id}`}
+    // onClick={(e) => {
+    //   e.preventDefault();
 
-        stackRouterPush(router, {
-          path: `/likets/${id}`,
-          screen: WEBVIEW_SCREEN.LIKET_DETAIL,
-        });
-      }}
+    //   stackRouterPush(router, {
+    //     path: `/likets/${id}`,
+    //     screen: WEBVIEW_SCREEN.LIKET_DETAIL,
+    //   });
+    // }}
     >
-      <div className="relative overflow-hidden aspect-[164/261] rounded-[4px] shadow-03">
-        <DefaultImg src={cardImgPath} />
+      <div className="relative overflow-hidden aspect-[164/261] rounded-[4px] bg-white shadow-03 transform transition duration-200 hover:scale-[102%] active:scale-[102%]">
+        <DefaultImg src={cardImgPath} fallbackComponent={<div />} />
         <ButtonBase
           disableRipple
           className="absolute top-0 right-0 icon-button w-[48px] h-[48px] rounded-full"
@@ -39,10 +40,10 @@ const LiketCard = ({ id, cardImgPath, isNarrow, onClickMeatball }: Props) => {
             onClickMeatball();
           }}
         >
-          <MeatballIcon fill="white" />
+          <MeatballIcon fill="black" />
         </ButtonBase>
       </div>
-    </Link>
+    </div>
   );
 };
 

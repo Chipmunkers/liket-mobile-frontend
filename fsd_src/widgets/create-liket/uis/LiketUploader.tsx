@@ -139,7 +139,6 @@ const LiketUploader = ({
       if (bgImage) {
         const newX = bgImage.x() + p1.x - touchStateRefForOneTouch.current.x;
         const newY = bgImage.y() + p1.y - touchStateRefForOneTouch.current.y;
-        console.log(touchStateRefForOneTouch.current);
 
         bgImage.position({
           x: newX,
