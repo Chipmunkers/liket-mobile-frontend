@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import SmallDownArrow from "@/icons/down-arrow-small.svg";
 import { ButtonBase } from "@mui/material";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useGetContentAll } from "./_hooks/useGetContentAll";
 import { AxiosError } from "axios";
 import { SearchPagerble } from "./_types/pagerble";
@@ -26,10 +26,10 @@ import CheckBox from "@/shared/ui/CheckBox";
 import Drawer from "@/shared/ui/Drawer";
 import ReloadButton from "@/shared/ui/ReloadButton";
 import ReloadIcon from "@/shared/icon/common/ReloadIcon.svg";
+import { hapticFeedback } from "@/shared/helpers/hapticFeedback";
 
 export default function Page() {
   const searchParams = useSearchParams();
-  const pathname = usePathname();
 
   const [pagerble, setPagerble] = useState<SearchPagerble>(
     getQuerystring(searchParams)

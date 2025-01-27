@@ -1,6 +1,7 @@
 import { classNames } from "@/shared/helpers/classNames";
 import { Props } from "./types";
 import { ButtonBase } from "@mui/material";
+import { hapticFeedback } from "@/shared/helpers/hapticFeedback";
 
 const SelectButtonMedium = ({
   Icon,
@@ -9,12 +10,15 @@ const SelectButtonMedium = ({
   className,
   onClick,
   readonly = false,
+  disableHaptic = false,
 }: Props) => {
   return (
     <ButtonBase
       type="button"
       onClick={(e) => {
         if (readonly) return;
+
+        if (!disableHaptic) hapticFeedback({ feedback: "select" });
 
         onClick && onClick(e);
       }}
