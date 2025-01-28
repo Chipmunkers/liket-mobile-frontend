@@ -21,18 +21,18 @@ import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import customToast from "@/shared/helpers/customToast";
 import BottomButtonTab from "@/shared/ui/BottomButtonTab";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Page() {
+  const queryClient = useQueryClient();
   const router = useRouter();
-  const {
-    data,
-    error,
-    isLoading,
-    refetch: refetchInterestingTags,
-  } = useGetInterestingTag();
+  const { data, error, isLoading } = useGetInterestingTag();
+
   const { mutate: setInterestingTags } = useSetInterestingTags({
     onSuccess: () => {
-      refetchInterestingTags();
+      queryClient.invalidateQueries({
+        queryKey: ["interesting-tag"],
+      });
       customToast("관심 태그를 설정했어요");
     },
   });
@@ -85,7 +85,7 @@ export default function Page() {
         />
         <HeaderMiddle text="관심태그" />
       </Header>
-      <main className="full-modal-main px-[24px] py-[16px] gap-[48px]">
+      <main className="full-modal-main px-[24px] pt-[16px] gap-[48px]">
         <div className="flex items-center flex-col">
           <div className="text-h2 m-0">추천 받을 관심태그를 선택해주세요.</div>
           <div className="text-body5 text-grey-03">
@@ -200,7 +200,7 @@ export default function Page() {
               </ul>
             </div>
 
-            <div>
+            <div className="mb-[40%]">
               <div className="text-h2 mb-[15px]">스타일</div>
               <ul className="flex flex-wrap gap-[8px]">
                 {STYLES.map((style) => {
