@@ -8,7 +8,7 @@ import { useCancelLikeContent } from "./hooks/useCancelLikeContent";
 import { Props } from "./types";
 import customToast from "@/shared/helpers/customToast";
 import { colors } from "@/shared/style/color";
-import Lottie from "react-lottie-player";
+import Lottie from "react-lottie-player/dist/LottiePlayerLight";
 import heartButtonAnimation from "@/shared/animation/heart-button.json";
 import {
   hapticFeedback,
