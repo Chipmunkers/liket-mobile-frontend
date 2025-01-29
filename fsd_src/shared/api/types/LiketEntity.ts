@@ -1,4 +1,4 @@
-import { BgImgInfo, ImgShape, TextShape } from "../../types/liket";
+import { BgImgInfo, ImgShape, TextShape } from "../../type/liket";
 
 export interface LiketDetailEntity {
   idx: string;

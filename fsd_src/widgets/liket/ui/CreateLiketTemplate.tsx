@@ -1,13 +1,13 @@
 import customToast from "@/shared/helpers/customToast";
-import { useUploadCardImg } from "../apis/useUploadCardImg";
+import { useUploadCardImg } from "../api/useUploadCardImg";
 import { CARD_SIZE_TO_INDEX } from "./consts/card";
 import { Else, If, Then } from "react-if";
 import CircleCross from "@/icons/circle-cross.svg";
 import { useState } from "react";
 import { CardSizeType, ColorTokensType } from "./types/Card";
-import useWriteTab from "../hooks/useWriteTab";
-import { getXPos, yPos } from "../utils/helper";
-import useLiket from "../hooks/useLiket";
+import useWriteTab from "../hook/useWriteTab";
+import { getXPos, yPos } from "../util/helper";
+import useLiket from "../hook/useLiket";
 import { getRefValue } from "@/shared/helpers/getRefValue";
 import {
   Header,
@@ -20,10 +20,10 @@ import { classNames } from "@/shared/helpers/classNames";
 import WriteTab from "./WriteTab";
 import BackSide from "./BackSide";
 import TextEnteringModal from "./TextEntringModal";
-import { BgImgInfo, ImgShape, TextShape } from "../../../shared/types/liket";
+import { BgImgInfo, ImgShape, TextShape } from "../../../shared/type/liket";
 import dynamic from "next/dynamic";
 import { ReviewEntity } from "../../../shared/api/types/ReviewEntity";
-import { CreateLiketDto } from "../apis/CreateLiketDto";
+import { CreateLiketDto } from "../api/CreateLiketDto";
 
 interface CreateLiketTemplateProps {
   liketInformation: FrontInformation;

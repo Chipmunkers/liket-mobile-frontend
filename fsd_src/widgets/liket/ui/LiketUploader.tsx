@@ -9,8 +9,8 @@ import KonvaImage from "./KonvaImage";
 import KonvaText from "./KonvaText";
 import { CardSizeType, StrictShapeConfig } from "./types/Card";
 import { STAGE_SIZE } from "./consts/card";
-import { useUploadLiketImg } from "../apis/useUploadLiketImg";
-import { BgImgInfo, ImgShape, TextShape } from "../../../shared/types/liket";
+import { useUploadLiketImg } from "../api/useUploadLiketImg";
+import { BgImgInfo, ImgShape, TextShape } from "../../../shared/type/liket";
 import { compressImage } from "@/shared/helpers/compressImage";
 
 type LiketUploaderProps = {

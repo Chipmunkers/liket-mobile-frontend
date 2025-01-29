@@ -6,7 +6,7 @@ import {
   LIKET_CARD_HEIGHT,
   LIKET_CARD_WIDTH,
 } from "@/app/create/liket/_consts/size";
-import { ImgShape } from "../../../shared/types/liket";
+import { ImgShape } from "../../../shared/type/liket";
 
 const stickerNumberToSticker = {
   1: "꽃",

@@ -6,7 +6,7 @@ import {
 import { getPxLength } from "@/app/create/liket/_util/position";
 import { colors } from "@/shared/style/color";
 import { Text, Rect, Group } from "react-konva";
-import { TextShape } from "../../../shared/types/liket";
+import { TextShape } from "../../../shared/type/liket";
 
 type Props = {
   shapeProps: TextShape;

@@ -1,9 +1,9 @@
-import { ImgShape, TextShape } from "../../../shared/types/liket";
-import { SetState } from "../../../shared/types/react";
-import { IconToStickerNumberMap } from "../uis/consts/icon";
-import { CardSizeType } from "../uis/types/Card";
-import { Sticker } from "../uis/types/Icon";
-import { findLowestMissingNumber } from "../utils/helper";
+import { ImgShape, TextShape } from "../../../shared/type/liket";
+import { SetState } from "../../../shared/type/react";
+import { IconToStickerNumberMap } from "../ui/consts/icon";
+import { CardSizeType } from "../ui/types/Card";
+import { Sticker } from "../ui/types/Icon";
+import { findLowestMissingNumber } from "../util/helper";
 
 interface UseWriteTabProps {
   imgShapes: ImgShape[];
