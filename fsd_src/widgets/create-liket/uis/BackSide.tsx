@@ -6,7 +6,16 @@ import { colors } from "@/shared/style/color";
 import GrayLiket from "./assets/gray_liket.svg";
 import dayjs from "dayjs";
 import DefaultImg from "@/shared/ui/DefaultImg";
-import { BackSideProps } from "./types/BackSide";
+import { ReviewEntity } from "@/shared/types/api/review/ReviewEntity";
+
+type BackSideProps = {
+  reviewData: Pick<ReviewEntity, "author" | "starRating" | "visitTime"> & {
+    title: string;
+    genre: string;
+  };
+  description: string;
+  onClickReview: () => void;
+};
 
 const BackSide = ({
   reviewData,

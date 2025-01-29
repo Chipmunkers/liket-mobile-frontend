@@ -1,7 +1,11 @@
 "use client";
 
 import { classNames } from "@/shared/helpers/classNames";
-import { FrontBackSwitchProps } from "./types/FrontBackSwitch";
+
+type FrontBackSwitchProps = {
+  isFront: boolean;
+  onClickSwitch: () => void;
+};
 
 const FrontBackSwitch = ({ isFront, onClickSwitch }: FrontBackSwitchProps) => {
   return (

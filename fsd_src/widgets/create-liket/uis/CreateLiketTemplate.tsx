@@ -20,13 +20,32 @@ import { classNames } from "@/shared/helpers/classNames";
 import WriteTab from "./WriteTab";
 import BackSide from "./BackSide";
 import TextEnteringModal from "./TextEntringModal";
-import CreateLiketTemplateProps from "./types/CreateLiketTemplate";
 import {
   BgImgInfo,
   ImgShape,
   TextShape,
 } from "../../../shared/types/liket/card";
 import dynamic from "next/dynamic";
+import { ReviewEntity } from "../../../shared/types/review_entity/review";
+import { CreateLiketDto } from "../models/types.tsx/dto/CreateLiketDto";
+
+interface CreateLiketTemplateProps {
+  liketInformation: FrontInformation;
+  reviewData: Pick<ReviewEntity, "author" | "starRating" | "visitTime"> & {
+    title: string;
+    genre: string;
+  };
+  onSave: (payload: CreateLiketDto) => void;
+}
+
+interface FrontInformation {
+  bgImgPath: string;
+  bgImgInfo?: BgImgInfo;
+  imgShapes: ImgShape[];
+  textShape?: TextShape | undefined;
+  size: 1 | 2 | 3;
+  description: string;
+}
 
 // NOTE: React Konva는 서버사이드 렌더링이 불가함.
 // https://github.com/konvajs/react-konva?tab=readme-ov-file#usage-with-nextjs

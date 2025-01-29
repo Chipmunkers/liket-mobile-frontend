@@ -6,7 +6,19 @@ import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 import SizeEdit from "./SizeEdit";
 import TextEdit from "./TextEdit";
 import StickerEdit from "./StickerEdit";
-import WriteTabProps from "./types/WriteTab";
+import { CardSizeType, ColorTokensType } from "./types/Card";
+import { Sticker } from "./types/Icon";
+
+interface WriteTabProps {
+  hidden: boolean;
+  enabled: boolean;
+  selectedIndex: number;
+  onChangeTab: (index: number) => void;
+  onClickText: () => void;
+  onClickChangeSize: (size: CardSizeType) => void;
+  onClickSticker: (sticker: Sticker) => void;
+  onClickColor: (color: ColorTokensType) => void;
+}
 
 const WriteTab = ({
   selectedIndex,

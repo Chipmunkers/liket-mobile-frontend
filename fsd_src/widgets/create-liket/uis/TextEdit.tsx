@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { classNames } from "@/shared/helpers/classNames";
 import { ColorTokensType } from "./types/Card";
-import { TextEditProps } from "./types/TextEdit";
 import { COLOR_TOKENS } from "./consts/color";
+
+type TextEditProps = {
+  onClickColor: (color: ColorTokensType) => void;
+};
 
 const TextEdit = ({ onClickColor }: TextEditProps) => {
   const [clickedColor, setClickedColor] = useState<ColorTokensType>("#000");

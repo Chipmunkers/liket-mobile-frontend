@@ -1,7 +1,15 @@
 import { useState, ChangeEvent, KeyboardEvent, useLayoutEffect } from "react";
 import { Header, HeaderLeft, HeaderRight } from "@/shared/ui/Header";
 import ReactTextareaAutosize from "react-textarea-autosize";
-import { TextEnteringModalProps } from "./types/TextEntringModal";
+
+type TextEnteringModalProps = {
+  text: string;
+  isOpen: boolean;
+  maxLength: number;
+  allowNewLine: boolean;
+  onClickClose: () => void;
+  onClickCheck: (text: string) => void;
+};
 
 const TextEnteringModal = ({
   text,
