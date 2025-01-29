@@ -29,7 +29,7 @@ const LiketCard = ({ id, cardImgPath, isNarrow, onClickMeatball }: Props) => {
     //   });
     // }}
     >
-      <div className="relative overflow-hidden aspect-[164/261] rounded-[4px] bg-white shadow-03 transform transition duration-200 hover:scale-[102%] active:scale-[102%]">
+      <div className="relative overflow-hidden aspect-[164/261] rounded-[4px] bg-white shadow-03 transform transition duration-200 hover:scale-[105%] active:scale-[105%]">
         <DefaultImg src={cardImgPath} fallbackComponent={<div />} />
         <ButtonBase
           disableRipple
