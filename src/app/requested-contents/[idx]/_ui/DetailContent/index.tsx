@@ -17,6 +17,7 @@ import Badge from "@/shared/ui/Badge";
 import CategoryTab from "@/shared/ui/CategoryTab";
 import Divider from "@/shared/ui/Divider";
 import ContentImgCarousel from "@/widgets/content/ContentImgCarousel";
+import { If, Then, Else } from "react-if";
 
 const DetailContent = ({ content }: Props) => {
   const [selectedTab, setSelectedTab] = useState<"content" | "review">(
@@ -81,8 +82,13 @@ const DetailContent = ({ content }: Props) => {
           </div>
           <div className="mt-[16px]">
             <div className="text-body3">
-              {dayjs(startDate).format("YYYY.MM.DD")} ~{" "}
-              {dayjs(endDate).format("MM.DD")}
+              <If condition={!!content.endDate}>
+                <Then>
+                  {dayjs(content.startDate).format("YYYY.MM.DD")} -{" "}
+                  {dayjs(content.endDate).format("YYYY.MM.DD")}
+                </Then>
+                <Else>{dayjs(content.startDate).format("YYYY.MM.DD")} ~ </Else>
+              </If>
             </div>
             <div className="text-body3">{openTime}</div>
             <div className="text-body3">

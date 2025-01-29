@@ -1,5 +1,4 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -215,17 +214,17 @@ export default function Page() {
                     ageIdx,
                     styleIdxList: styleIdxList as number[],
                     title,
-                    openTime,
-                    websiteLink,
-                    description,
+                    openTime: openTime || null,
+                    websiteLink: websiteLink || null,
+                    description: description || null,
                     startDate: dayjs(startDate?.toString()).toISOString(),
-                    endDate: dayjs(endDate?.toString())
-                      .endOf("day")
-                      .toISOString(),
+                    endDate: endDate
+                      ? dayjs(endDate.toString()).endOf("day").toISOString()
+                      : null,
                     imgList: imgList,
                     location: {
                       ...address,
-                      detailAddress: getValues("additional-address"),
+                      detailAddress: getValues("additional-address") || null,
                     },
                   });
                 }

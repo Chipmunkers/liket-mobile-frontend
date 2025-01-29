@@ -1,9 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  CalendarIcon,
   YearCalendar,
+  CalendarIcon,
 } from "@/shared/ui/MuiDateComponent/MuiDateComponent";
-
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
