@@ -3,14 +3,15 @@
 import BottomArrowIcon from "@/icons/down-arrow-small.svg";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useDeleteReview } from "./hook/useDeleteReview";
+import { useDeleteReview } from "./hooks/useDeleteReview";
 import { AxiosError } from "axios";
 import { ButtonBase } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
 import { DefaultLoading } from "@/shared/ui/Loading";
 import { classNames } from "@/shared/helpers/classNames";
+import { ContentEntity } from "@/shared/types/api/content/ContentEntity";
 import customToast from "@/shared/helpers/customToast";
-import { useGetReviewAllByContentIdx } from "./hook/useGetReviewAllByContentIdx";
+import { useGetReviewAllByContentIdx } from "./hooks/useGetReviewAllByContentIdx";
 import { useGetMyInfo } from "@/shared/hooks/useGetMyInfo";
 import EmptyReview from "./ui/EmptyReview";
 import useMoveLoginPage from "@/shared/hooks/useMoveLoginPage";
@@ -23,25 +24,14 @@ import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import CheckBox from "@/shared/ui/CheckBox";
 import Button from "@/shared/ui/Button";
-import useReportReview from "./hook/useReportReview";
-import { ReviewTabProps } from "./types";
-import { REPORT_NAME_TO_TYPE_MAP } from "./util/const";
 
-const ReviewTab = ({ content }: ReviewTabProps) => {
-  const { idx, avgStarRating, reviewCount } = content;
-
-  const [selectedReportType, setSelectedReportType] = useState(-1);
-  const [selectedReviewIdx, setSelectedReviewIdx] = useState<string>();
+const ReviewTab = (props: { idx: string; content: ContentEntity }) => {
+  const [selectedIndex, setSelectedIndex] = useState(-99);
+  const [selectReviewIdx, setSelectReviewIdx] = useState<string>();
   const [isReportDrawerOpen, setIsReportDrawerOpen] = useState(false);
   const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
   const [isSelectReportKindDrawerOpen, setIsSelectReportKindDrawerOpen] =
     useState(false);
-  const { mutate: reportReview } = useReportReview({
-    onSuccess: () => {
-      customToast("리뷰 신고가 완료됐습니다.");
-      refetch();
-    },
-  });
 
   const searchParam = useSearchParams();
 
@@ -54,7 +44,7 @@ const ReviewTab = ({ content }: ReviewTabProps) => {
 
   // * 리뷰 데이터 무한 쿼리
   const { data, fetchNextPage, hasNextPage, isFetching, refetch, error } =
-    useGetReviewAllByContentIdx(idx.toString(), reviewPageable);
+    useGetReviewAllByContentIdx(props.idx, reviewPageable);
   const { data: loginUser } = useGetMyInfo();
 
   // * 옵션 변경 시 리뷰 쿼리 데이터 초기화
@@ -77,16 +67,13 @@ const ReviewTab = ({ content }: ReviewTabProps) => {
     );
 
     observer.observe(target);
-
     return () => {
       observer.unobserve(target);
     };
   }, [target, hasNextPage, isFetching]);
 
   useEffect(() => {
-    if (!error) {
-      return;
-    }
+    if (!error) return;
 
     customToast("리뷰를 불러오는 중 에러가 발생했습니다.");
   }, [error]);
@@ -99,15 +86,12 @@ const ReviewTab = ({ content }: ReviewTabProps) => {
   // * 리뷰 무한 스크롤 초기화
   const resetReview = () => {
     queryClient.removeQueries({
-      queryKey: [`content-review-${content.idx}`],
+      queryKey: [`content-review-${props.idx}`],
     });
-    queryClient.setQueryData(
-      [`content-review-${content.idx}`, reviewPageable],
-      {
-        pages: [],
-        pageParams: [],
-      }
-    );
+    queryClient.setQueryData([`content-review-${props.idx}`, reviewPageable], {
+      pages: [],
+      pageParams: [],
+    });
   };
 
   const moveLoginPage = useMoveLoginPage();
@@ -116,16 +100,15 @@ const ReviewTab = ({ content }: ReviewTabProps) => {
   const { mutate: deleteReviewApi } = useDeleteReview({
     onSuccess: () => {
       customToast("삭제되었습니다.");
+      setIsEditDrawerOpen(false);
       resetReview();
     },
     onError: (err) => {
       if (err instanceof AxiosError) {
-        if (err.response?.status === 401) {
-          moveLoginPage();
-          return;
-        }
+        if (err.response?.status === 401) return moveLoginPage();
         if (err.response?.status === 404) {
           customToast("삭제되었습니다.");
+          setIsEditDrawerOpen(false);
           resetReview();
           return;
         }
@@ -141,11 +124,11 @@ const ReviewTab = ({ content }: ReviewTabProps) => {
     <>
       <div className="flex flex-col items-center mt-[16px] mb-[24px] justify-between">
         <div>
-          <StarRating value={avgStarRating} readOnly />
+          <StarRating value={props.content.avgStarRating} readOnly />
         </div>
-        {reviewCount ? (
+        {props.content.reviewCount ? (
           <div className="text-numbering1 mt-[16px]">
-            {avgStarRating.toFixed(1)}{" "}
+            {props.content.avgStarRating.toFixed(1)}{" "}
             <span className="text-grey-02">/ 5.0</span>
           </div>
         ) : null}
@@ -176,12 +159,12 @@ const ReviewTab = ({ content }: ReviewTabProps) => {
         )}
         {data &&
           (data.pages[0]?.reviewList.length === 0 ? (
-            <EmptyReview idx={idx} />
+            <EmptyReview idx={props.content.idx} />
           ) : (
             <ReviewInfiniteScroll
               reviewList={data.pages.map((page) => page.reviewList).flat()}
-              onClickMeatball={(userIdxOfReview, reviewIdx) => {
-                setSelectedReviewIdx(reviewIdx?.toString());
+              onClickMeatball={(userIdxOfReview) => {
+                setSelectReviewIdx(userIdxOfReview);
 
                 if (loginUser?.idx === userIdxOfReview) {
                   setIsEditDrawerOpen(true);
@@ -196,7 +179,7 @@ const ReviewTab = ({ content }: ReviewTabProps) => {
       </div>
       {/* TODO: shared ui에 reload button으로 변경해야함 */}
       {error && (
-        <ReloadButton onClick={refetch} className="my-[24px]">
+        <ReloadButton onClick={refetch} className="mt-[24px] mb-[24px]">
           새로고침
         </ReloadButton>
       )}
@@ -208,7 +191,7 @@ const ReviewTab = ({ content }: ReviewTabProps) => {
           <ButtonBase
             onClick={() => {
               stackRouterPush(router, {
-                path: `/edit/review/${selectedReviewIdx}`,
+                path: `/edit/review/${selectReviewIdx}`,
                 screen: WEBVIEW_SCREEN.EDIT_REVIEW,
               });
             }}
@@ -220,12 +203,9 @@ const ReviewTab = ({ content }: ReviewTabProps) => {
         <li className="bottom-sheet-list">
           <ButtonBase
             onClick={() => {
-              if (!selectedReviewIdx) {
-                return;
-              }
+              if (!selectReviewIdx) return;
 
-              deleteReviewApi(selectedReviewIdx);
-              setIsEditDrawerOpen(false);
+              deleteReviewApi(selectReviewIdx);
             }}
             className="bottom-sheet-button flex justify-start px-[24px] text-rosepink-01"
           >
@@ -255,21 +235,60 @@ const ReviewTab = ({ content }: ReviewTabProps) => {
       >
         <div className="center text-h2">신고 유형</div>
         <ul>
-          {Object.entries(REPORT_NAME_TO_TYPE_MAP).map(
-            ([REPORT_NAME, REPORT_TYPE]) => {
-              return (
-                <li className="bottom-sheet-list px-[24px]" key={REPORT_NAME}>
-                  <CheckBox
-                    isChecked={selectedReportType === REPORT_TYPE}
-                    onChange={() => setSelectedReportType(REPORT_TYPE)}
-                    label={REPORT_NAME}
-                    labelClassName="text-body3 text-grey-black"
-                    marginBetweenTextAndCheckbox="8px"
-                  />
-                </li>
-              );
-            }
-          )}
+          <li className="bottom-sheet-list px-[24px]">
+            <CheckBox
+              isChecked={selectedIndex === 0}
+              onChange={() => setSelectedIndex(0)}
+              label="컨텐츠와 무관한 내용"
+              labelClassName="text-body3 text-grey-black"
+              marginBetweenTextAndCheckbox="8px"
+            />
+          </li>
+          <li className="bottom-sheet-list px-[24px]">
+            <CheckBox
+              isChecked={selectedIndex === 1}
+              onChange={() => setSelectedIndex(1)}
+              label="개인정보 노출"
+              labelClassName="text-body3 text-grey-black"
+              marginBetweenTextAndCheckbox="8px"
+            />
+          </li>
+          <li className="bottom-sheet-list px-[24px]">
+            <CheckBox
+              isChecked={selectedIndex === 2}
+              onChange={() => setSelectedIndex(2)}
+              label="광고 및 홍보성 내용"
+              labelClassName="text-body3 text-grey-black"
+              marginBetweenTextAndCheckbox="8px"
+            />
+          </li>
+          <li className="bottom-sheet-list px-[24px]">
+            <CheckBox
+              isChecked={selectedIndex === 3}
+              onChange={() => setSelectedIndex(3)}
+              label="욕설 및 선정적 내용"
+              labelClassName="text-body3 text-grey-black"
+              marginBetweenTextAndCheckbox="8px"
+            />
+          </li>
+          <li className="bottom-sheet-list px-[24px]">
+            <CheckBox
+              isChecked={selectedIndex === 4}
+              onChange={() => setSelectedIndex(4)}
+              label="저작권 침해"
+              labelClassName="text-body3 text-grey-black"
+              marginBetweenTextAndCheckbox="8px"
+            />
+          </li>
+          <li className="bottom-sheet-list px-[24px]">
+            <CheckBox
+              isChecked={selectedIndex === 5}
+              onChange={() => setSelectedIndex(5)}
+              label="기타"
+              labelClassName="text-body3 text-grey-black"
+              marginBetweenTextAndCheckbox="8px"
+            />
+          </li>
         </ul>
         <div className="flex px-[24px] pb-[8px] gap-[16px] pt-[24px]">
           <Button
@@ -277,24 +296,18 @@ const ReviewTab = ({ content }: ReviewTabProps) => {
             className="h-[48px] w-[100%]"
             onClick={() => {
               setIsSelectReportKindDrawerOpen(false);
-              setSelectedReportType(-1);
+              setSelectedIndex(-99);
             }}
           >
             취소
           </Button>
           <Button
-            disabled={selectedReportType === -1}
+            disabled={selectedIndex === -99}
             className="h-[48px] w-[100%]"
             onClick={() => {
               setIsSelectReportKindDrawerOpen(false);
-              setSelectedReportType(-1);
-
-              if (selectedReviewIdx) {
-                reportReview({
-                  reviewIdx: selectedReviewIdx,
-                  reportTypeIdx: selectedReportType,
-                });
-              }
+              setSelectedIndex(-99);
+              customToast("신고 완료되었습니다.");
             }}
           >
             신고하기
