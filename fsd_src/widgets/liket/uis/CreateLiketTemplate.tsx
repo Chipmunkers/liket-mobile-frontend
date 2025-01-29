@@ -27,7 +27,7 @@ import {
 } from "../../../shared/types/liket/card";
 import dynamic from "next/dynamic";
 import { ReviewEntity } from "../../../shared/types/review_entity/review";
-import { CreateLiketDto } from "../models/types.tsx/dto/CreateLiketDto";
+import { CreateLiketDto } from "../models/types/dto/CreateLiketDto";
 
 interface CreateLiketTemplateProps {
   liketInformation: FrontInformation;
