@@ -156,7 +156,7 @@ const DetailContent = (props: Props) => {
         {selectedTab === "content" ? (
           <ContentTab content={content} />
         ) : (
-          <ReviewTab idx={content.idx.toString()} content={content} />
+          <ReviewTab content={content} />
         )}
       </main>
     </>
