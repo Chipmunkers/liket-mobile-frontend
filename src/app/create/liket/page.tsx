@@ -1,7 +1,7 @@
 "use client";
 
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
-import { CreateLiketTemplate } from "../../../../fsd_src/widgets/create-liket/uis/CreateLiketTemplate";
+import { CreateLiketTemplate } from "../../../../fsd_src/widgets/liket/ui/CreateLiketTemplate";
 import useCreateLiket from "./_hooks/useCreateLiket";
 import { useRouter } from "next/navigation";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";

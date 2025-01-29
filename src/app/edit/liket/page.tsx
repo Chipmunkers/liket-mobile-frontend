@@ -1,9 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import useEditLiket from "../../../../fsd_src/widgets/create-liket/apis/useEditLiket";
-import useGetLiket from "../../../../fsd_src/widgets/create-liket/apis/useGetLiket";
-import { CreateLiketTemplate } from "../../../../fsd_src/widgets/create-liket/uis/CreateLiketTemplate";
+import useEditLiket from "../../../../fsd_src/widgets/liket/api/useEditLiket";
+import useGetLiket from "../../../../fsd_src/widgets/liket/api/useGetLiket";
+import { CreateLiketTemplate } from "../../../../fsd_src/widgets/liket/ui/CreateLiketTemplate";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { useQueryClient } from "@tanstack/react-query";
