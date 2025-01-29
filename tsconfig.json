@@ -33,7 +33,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "tailwind.config.js",
-    "fsd_src/widgets/liket/models/types"
+    "fsd_src/features/liket/models/types"
   ],
   "exclude": ["node_modules"]
 }
