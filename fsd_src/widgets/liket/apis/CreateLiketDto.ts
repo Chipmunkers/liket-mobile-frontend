@@ -1,8 +1,4 @@
-import {
-  BgImgInfo,
-  ImgShape,
-  TextShape,
-} from "../../../../../shared/types/liket/card";
+import { BgImgInfo, ImgShape, TextShape } from "../../../shared/types/liket";
 
 export interface CreateLiketDto {
   textShape?: TextShape;

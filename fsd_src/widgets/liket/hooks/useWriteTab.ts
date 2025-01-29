@@ -1,7 +1,19 @@
+import { ImgShape, TextShape } from "../../../shared/types/liket";
+import { SetState } from "../../../shared/types/react";
+import { IconToStickerNumberMap } from "../uis/consts/icon";
 import { CardSizeType } from "../uis/types/Card";
-import { IconToStickerNumberMap, Sticker } from "../uis/types/Icon";
+import { Sticker } from "../uis/types/Icon";
 import { findLowestMissingNumber } from "../utils/helper";
-import UseWriteTabProps from "./types/UseWriteTab";
+
+interface UseWriteTabProps {
+  imgShapes: ImgShape[];
+  isTextShapeSelected: boolean;
+  selectedImgShapeCode: number | undefined;
+  setTextShape: SetState<TextShape | undefined>;
+  setImgShapes: SetState<ImgShape[]>;
+  setSize: SetState<CardSizeType>;
+  setSelectedIndex: SetState<number>;
+}
 
 const useWriteTab = ({
   imgShapes,

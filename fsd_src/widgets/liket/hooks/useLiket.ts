@@ -1,6 +1,9 @@
 import { Stage } from "konva/lib/Stage";
 import { useState, useRef } from "react";
-import { UseLiketProps } from "./types/UseLiket";
+
+interface UseLiketProps {
+  edittedDescription: string;
+}
 
 const useLiket = ({ edittedDescription }: UseLiketProps) => {
   const [description, setDescription] = useState(edittedDescription);

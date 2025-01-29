@@ -2,7 +2,7 @@ import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import axiosInstance from "@/shared/helpers/axios";
 import { useExceptionHandler } from "@/shared/hooks/useExceptionHandler";
 import { AxiosError, AxiosResponse } from "axios";
-import { CreateLiketDto } from "../models/types/dto/CreateLiketDto";
+import { CreateLiketDto } from "./CreateLiketDto";
 
 const useCreateLiket = (
   reviewIdx: string,

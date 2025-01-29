@@ -20,14 +20,10 @@ import { classNames } from "@/shared/helpers/classNames";
 import WriteTab from "./WriteTab";
 import BackSide from "./BackSide";
 import TextEnteringModal from "./TextEntringModal";
-import {
-  BgImgInfo,
-  ImgShape,
-  TextShape,
-} from "../../../shared/types/liket/card";
+import { BgImgInfo, ImgShape, TextShape } from "../../../shared/types/liket";
 import dynamic from "next/dynamic";
-import { ReviewEntity } from "../../../shared/types/review_entity/review";
-import { CreateLiketDto } from "../models/types/dto/CreateLiketDto";
+import { ReviewEntity } from "../../../shared/api/types/ReviewEntity";
+import { CreateLiketDto } from "../apis/CreateLiketDto";
 
 interface CreateLiketTemplateProps {
   liketInformation: FrontInformation;
