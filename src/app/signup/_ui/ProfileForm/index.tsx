@@ -1,5 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarIcon, YearCalendar } from "@mui/x-date-pickers";
+import {
+  CalendarIcon,
+  YearCalendar,
+} from "@/shared/ui/MuiDateComponent/MuiDateComponent";
+
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -145,7 +149,7 @@ const ProfileForm = ({
           minDate={dayjs(new Date().getFullYear() - 1)}
           maxDate={dayjs(new Date())}
           onChange={(date) => {
-            setTempYear(date);
+            setTempYear(date as Dayjs);
           }}
         />
         <div className="flex mb-[8px] px-[24px]">

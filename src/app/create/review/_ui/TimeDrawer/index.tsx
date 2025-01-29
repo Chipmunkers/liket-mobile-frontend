@@ -1,9 +1,9 @@
 "use client";
 
-import { MultiSectionDigitalClock } from "@mui/x-date-pickers";
 import { Props } from "./types";
 import Button from "@/shared/ui/Button";
 import Drawer from "@/shared/ui/Drawer";
+import { MultiSectionDigitalClock } from "@/shared/ui/MuiDateComponent/MuiDateComponent";
 
 const TimeDrawer = (props: Props) => {
   const { isOpen, setIsOpen, time, setTime } = props;

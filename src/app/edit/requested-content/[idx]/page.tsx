@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import CalendarIcon from "@/icons/calendar.svg";
 import { ButtonBase, TextareaAutosize } from "@mui/material";
 import dayjs from "dayjs";
-import { DateCalendar } from "@mui/x-date-pickers";
+import { DateCalendar } from "@/shared/ui/MuiDateComponent/MuiDateComponent";
 import Script from "next/script";
 import {
   Header,

@@ -7,7 +7,7 @@ import { useButtonClickEvent } from "@/page/CreatePlan/hooks/useButtonClickEvent
 import { usePlaceRoute } from "@/page/CreatePlan/_ui/StopoverInput/hooks/usePlaceRoute";
 import Button from "@/shared/ui/Button";
 import DefaultImg from "@/shared/ui/DefaultImg";
-import { DateTimePicker, TimePicker } from "@mui/x-date-pickers";
+import { TimePicker } from "@/shared/ui/MuiDateComponent/MuiDateComponent";
 
 export const StopoverInput = ({
   i,
