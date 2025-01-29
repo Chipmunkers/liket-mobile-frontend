@@ -13,12 +13,17 @@ import { useRouter } from "next/navigation";
 
 const InterestingTagAlert = () => {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
+
+  const [
+    isInterestingTagSettingDrawerOpen,
+    setIsInterestingTagSettingDrawerOpen,
+  ] = useState(false);
+
   const { data, error } = useGetInterestingTag();
 
   useEffect(() => {
-    setAppNavBack(isOpen);
-  }, [isOpen]);
+    setAppNavBack(isInterestingTagSettingDrawerOpen);
+  }, [isInterestingTagSettingDrawerOpen]);
 
   useEffect(() => {
     // 로그인을 하지 않은 경우
@@ -38,11 +43,14 @@ const InterestingTagAlert = () => {
       return;
     }
 
-    setIsOpen(true);
+    setIsInterestingTagSettingDrawerOpen(true);
   }, [data, error]);
 
   return (
-    <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
+    <Drawer
+      open={isInterestingTagSettingDrawerOpen}
+      onClose={() => setIsInterestingTagSettingDrawerOpen(false)}
+    >
       <h2 className="center text-h2">관심태그를 설정하시겠어요?</h2>
       <div className="text-center text-body3 text-grey-03">
         관심있는 태그들을 설정해서 <br /> 딱 필요한 컨테츠 정보들만 추천
@@ -56,7 +64,7 @@ const InterestingTagAlert = () => {
           variant="ghost"
           className="h-[48px] w-[100%]"
           onClick={() => {
-            setIsOpen(false);
+            setIsInterestingTagSettingDrawerOpen(false);
             document.cookie = "postponeTagAlert=true; max-age=604800";
           }}
         >

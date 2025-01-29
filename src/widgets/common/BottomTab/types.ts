@@ -6,5 +6,5 @@ export type Props = WidgetUiProps<{
    *
    * @default false
    */
-  shadow?: boolean;
+  shadow: boolean;
 }>;

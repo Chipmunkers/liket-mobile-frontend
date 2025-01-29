@@ -8,8 +8,7 @@ import { useRouter } from "next/navigation";
 import DropDown from "@/icons/dropdown.svg";
 import { ButtonBase } from "@mui/material";
 import { Props } from "./types";
-import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
-import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { stackRouterBack } from "@/shared/helpers/stackRouter";
 import { hapticFeedback } from "@/shared/helpers/hapticFeedback";
 
 const HeaderLeft = ({
