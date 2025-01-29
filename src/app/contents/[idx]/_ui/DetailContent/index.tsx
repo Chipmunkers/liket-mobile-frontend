@@ -20,7 +20,6 @@ import CategoryTab from "@/shared/ui/CategoryTab";
 import Divider from "@/shared/ui/Divider";
 import ContentImgCarousel from "@/widgets/content/ContentImgCarousel";
 import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
-import { useIsWebView } from "@/shared/hooks/useIsWebview";
 import DetailImgCarousel from "@/shared/ui/DetailImgCarousel";
 import { Else, If, Then } from "react-if";
 import { DefaultLink } from "@/shared/ui/DefaultLink";
@@ -54,7 +53,6 @@ const DetailContent = (props: Props) => {
   );
 
   const { safeArea } = useGetSafeArea();
-  const isWebview = useIsWebView();
 
   useEffect(() => {
     window.scrollTo(0, 0);
