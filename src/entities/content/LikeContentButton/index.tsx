@@ -1,19 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import FilledHeartIcon from "@/shared/icon/content/FilledHeart.svg";
-import EmptyHeaderIcon from "@/shared/icon/content/EmptyHeart.svg";
 import { useLikeContent } from "./hooks/useLikeContent";
 import { useCancelLikeContent } from "./hooks/useCancelLikeContent";
 import { Props } from "./types";
 import customToast from "@/shared/helpers/customToast";
-import { colors } from "@/shared/style/color";
-import Lottie from "react-lottie-player/dist/LottiePlayerLight";
 import heartButtonAnimation from "@/shared/animation/heart-button.json";
-import {
-  hapticFeedback,
-  ImpactFeedbackStyle,
-} from "@/shared/helpers/hapticFeedback";
+import { hapticFeedback } from "@/shared/helpers/hapticFeedback";
+import dynamic from "next/dynamic";
+
+const Lottie = dynamic(
+  () => import("react-lottie-player/dist/LottiePlayerLight"),
+  { ssr: false }
+);
 
 const LikeContentButton = (props: Props) => {
   const [like, setLike] = useState(props.likeState);
