@@ -10,6 +10,7 @@ import MuiLocalizationProvider from "@/shared/provider/MuiLocalizationProvider";
 import { classNames } from "@/shared/helpers/classNames";
 import GoogleAnalytics from "@/widgets/GoogleAnlytics";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 dayjs.locale("ko");
 
@@ -103,6 +104,7 @@ export default function RootLayout({
       {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS && <GoogleAnalytics />}
       <body className={classNames(appleGothic.className, "bg-white")}>
         <Analytics />
+        <SpeedInsights />
         <ModalProvider>
           <QueryProvider>
             <MuiLocalizationProvider>
