@@ -11,11 +11,11 @@ interface CreateContentRequestDto {
   styleIdxList: number[];
   title: string;
   location: LocationEntity;
-  description: string;
-  websiteLink: string;
+  description: string | null;
+  websiteLink: string | null;
   startDate: string;
-  endDate: string;
-  openTime: string;
+  endDate: string | null;
+  openTime: string | null;
   isFee: boolean;
   isReservation: boolean;
   isPet: boolean;

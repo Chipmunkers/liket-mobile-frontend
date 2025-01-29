@@ -1,24 +1,28 @@
 import { WEBVIEW_EVENT_TYPE } from "@/shared/consts/webview/event";
-import { setAppNavBack } from "@/shared/helpers/setAppNavState";
-import { SetState } from "@/shared/types/react";
-import useGetClickEvent from "@/widgets/common/BottomTab/hooks/useGetClickEvent";
 import { useEffect } from "react";
 
-const useMessageWebview = (isOpen: boolean, setIsOpen: SetState<boolean>) => {
-  const { mainButtonClickEvent, createButtonClickEvent } =
-    useGetClickEvent(setIsOpen);
-
+const useMessageWebview = ({
+  mainButtonClickEvent,
+  createButtonClickEvent,
+}: {
+  mainButtonClickEvent: () => void;
+  createButtonClickEvent: () => void;
+}) => {
   const messageEvent = (e: MessageEvent) => {
-    if (typeof e.data !== "string") return;
+    if (typeof e.data !== "string") {
+      return;
+    }
 
     const data: { type: string; click: string } = JSON.parse(e.data);
     if (data.type === WEBVIEW_EVENT_TYPE.CLICK) {
       if (data.click === "nav-main-button") {
-        return mainButtonClickEvent();
+        mainButtonClickEvent();
+        return;
       }
 
       if (data.click === "nav-create-button") {
-        return createButtonClickEvent();
+        createButtonClickEvent();
+        return;
       }
     }
   };
@@ -35,10 +39,6 @@ const useMessageWebview = (isOpen: boolean, setIsOpen: SetState<boolean>) => {
       document.removeEventListener("message", messageEvent as any);
     };
   });
-
-  useEffect(() => {
-    setAppNavBack(isOpen);
-  }, [isOpen]);
 };
 
 export default useMessageWebview;

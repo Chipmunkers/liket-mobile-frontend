@@ -136,7 +136,14 @@ export default function Page() {
               .flat()
               .map((liket) => {
                 return (
-                  <li key={liket.idx} className={"w-[calc(50%-7px)]"}>
+                  <li
+                    key={liket.idx}
+                    className={
+                      isNarrow
+                        ? "w-[calc(50%-7px)]"
+                        : "w-[calc(33.33%-9.33334px)]"
+                    }
+                  >
                     <LiketCard
                       id={liket.idx}
                       key={liket.idx}

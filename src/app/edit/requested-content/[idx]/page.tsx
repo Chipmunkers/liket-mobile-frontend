@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import CalendarIcon from "@/icons/calendar.svg";
 import { ButtonBase, TextareaAutosize } from "@mui/material";
 import dayjs from "dayjs";
-import { DateCalendar } from "@mui/x-date-pickers";
+import { DateCalendar } from "@/shared/ui/MuiDateComponent/MuiDateComponent";
 import Script from "next/script";
 import {
   Header,
@@ -78,7 +78,7 @@ export default function Page({ params: { idx } }: PageProps) {
   const [detailAddress, setDetailAddress] = useState("");
   const [currentScroll, setCurrentScroll] = useState(0);
   const [addressInformation, setAddressInformation] = useState<{
-    detailAddress?: string;
+    detailAddress?: string | null;
     address: string;
     region1Depth: string;
     region2Depth: string;
@@ -240,7 +240,7 @@ export default function Page({ params: { idx } }: PageProps) {
       setValue("description", description || "");
       setValue("age", age.name);
       setValue("startDate", formatDate(startDate));
-      setValue("endDate", formatDate(endDate));
+      setValue("endDate", endDate ? formatDate(endDate) : "");
       setValue(
         "style",
         style.map(({ name }) => name)
@@ -294,17 +294,17 @@ export default function Page({ params: { idx } }: PageProps) {
                     ageIdx,
                     styleIdxList: styleIdxList as number[],
                     title,
-                    openTime,
-                    websiteLink,
-                    description,
+                    openTime: openTime || null,
+                    websiteLink: websiteLink || null,
+                    description: description || null,
                     startDate: dayjs(startDate?.toString()).toISOString(),
-                    endDate: dayjs(endDate?.toString())
-                      .endOf("day")
-                      .toISOString(),
+                    endDate: endDate
+                      ? dayjs(endDate.toString()).endOf("day").toISOString()
+                      : null,
                     imgList: imgList,
                     location: {
                       ...addressInformation,
-                      detailAddress: getValues("additional-address"),
+                      detailAddress: getValues("additional-address") || null,
                     },
                   });
                 }
@@ -407,7 +407,7 @@ export default function Page({ params: { idx } }: PageProps) {
                 <InputLabel htmlFor="close-date">종료날짜</InputLabel>
                 <div className="mt-[12px]">
                   <SelectButtonMedium
-                    text={getValues("endDate")}
+                    text={getValues("endDate") || ""}
                     placeholder="날짜 선택"
                     onClick={() => setIsEndDateSelectionDrawerOpen(true)}
                     Icon={<CalendarIcon />}

@@ -1,7 +1,7 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import HomeIcon from "@/icons/home.svg";
 import FilledHomeIcon from "@/icons/home-filled.svg";
 import MapIcon from "@/icons/map.svg";
@@ -18,20 +18,24 @@ import useMessageWebview from "@/widgets/common/BottomTab/hooks/useMessageWebvie
 import { colors } from "@/shared/style/color";
 import { classNames } from "@/shared/helpers/classNames";
 import useGetClickEvent from "./hooks/useGetClickEvent";
+import { setAppNavBack } from "@/shared/helpers/setAppNavState";
 
 const BottomTab = ({ shadow = false }: Props) => {
-  const router = useRouter();
   const pathname = usePathname();
   const [isCreateDrawerOpen, setIsCreateDrawerOpen] = useState(false);
   const isWebview = useIsWebView();
 
-  useMessageWebview(isCreateDrawerOpen, setIsCreateDrawerOpen);
-  const {
+  const { mainButtonClickEvent, mapButtonClickEvent, mypageButtonClickEvent } =
+    useGetClickEvent();
+
+  useMessageWebview({
     mainButtonClickEvent,
-    mapButtonClickEvent,
-    createButtonClickEvent,
-    mypageButtonClickEvent,
-  } = useGetClickEvent(setIsCreateDrawerOpen);
+    createButtonClickEvent: () => setIsCreateDrawerOpen(true),
+  });
+
+  useEffect(() => {
+    setAppNavBack(isCreateDrawerOpen);
+  }, [isCreateDrawerOpen]);
 
   const buttonStyle = {
     width: "20%",
@@ -44,7 +48,7 @@ const BottomTab = ({ shadow = false }: Props) => {
         isOpen={isCreateDrawerOpen}
         setIsOpen={setIsCreateDrawerOpen}
       />
-      <div className={classNames("bottom-tab z-10", isWebview ? "hidden" : "")}>
+      <div className={classNames("bottom-tab z-10", isWebview && "hidden")}>
         <div
           role="tablist"
           className={classNames(
@@ -56,7 +60,7 @@ const BottomTab = ({ shadow = false }: Props) => {
             style={buttonStyle}
             className="icon-button"
             disableRipple={true}
-            onClick={() => mainButtonClickEvent()}
+            onClick={mainButtonClickEvent}
           >
             {pathname === "/" ? (
               <FilledHomeIcon color={colors.skyblue["01"]} />
@@ -68,7 +72,7 @@ const BottomTab = ({ shadow = false }: Props) => {
             style={buttonStyle}
             disableRipple={true}
             className="icon-button"
-            onClick={(e) => mapButtonClickEvent()}
+            onClick={mapButtonClickEvent}
           >
             {pathname === "/map" ? (
               <FilledMapIcon color={colors.skyblue["01"]} />
@@ -84,7 +88,7 @@ const BottomTab = ({ shadow = false }: Props) => {
             aria-selected={isCreateDrawerOpen}
             type="button"
             data-twe-ripple-init
-            onClick={() => createButtonClickEvent()}
+            onClick={() => setIsCreateDrawerOpen(true)}
           >
             {isCreateDrawerOpen ? (
               <FilledCreateIcon color={colors.skyblue["01"]} />
@@ -94,9 +98,9 @@ const BottomTab = ({ shadow = false }: Props) => {
           </ButtonBase>
           <ButtonBase
             style={buttonStyle}
-            disableRipple={true}
+            disableRipple
             className="icon-button"
-            onClick={() => mypageButtonClickEvent()}
+            onClick={mypageButtonClickEvent}
           >
             {pathname === "/mypage" ? (
               <FilledMyPageIcon color={colors.skyblue["01"]} />

@@ -1,10 +1,9 @@
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { useIsWebView } from "@/shared/hooks/useIsWebview";
-import { SetState } from "@/shared/types/react";
 import { usePathname, useRouter } from "next/navigation";
 
-const useGetClickEvent = (setIsCreateDrawerOpen: SetState<boolean>) => {
+const useGetClickEvent = () => {
   const pathname = usePathname();
   const router = useRouter();
   const isWebview = useIsWebView();
@@ -44,13 +43,6 @@ const useGetClickEvent = (setIsCreateDrawerOpen: SetState<boolean>) => {
   };
 
   /**
-   * 생성 버튼 클릭 이벤트
-   */
-  const createButtonClickEvent = () => {
-    setIsCreateDrawerOpen(true);
-  };
-
-  /**
    * 마이 페이지 버튼 클릭 이벤트
    */
   const mypageButtonClickEvent = () => {
@@ -67,7 +59,6 @@ const useGetClickEvent = (setIsCreateDrawerOpen: SetState<boolean>) => {
   return {
     mainButtonClickEvent,
     mapButtonClickEvent,
-    createButtonClickEvent,
     mypageButtonClickEvent,
   };
 };

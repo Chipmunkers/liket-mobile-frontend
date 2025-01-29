@@ -1,11 +1,11 @@
 "use client";
 
-import { DateCalendar } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { DateAndTime } from "../../_types/DateAndTime";
 import { SetState } from "@/shared/types/react";
 import Button from "@/shared/ui/Button";
 import Drawer from "@/shared/ui/Drawer";
+import { DateCalendar } from "@/shared/ui/MuiDateComponent/MuiDateComponent";
 
 interface Props {
   isOpen: boolean;

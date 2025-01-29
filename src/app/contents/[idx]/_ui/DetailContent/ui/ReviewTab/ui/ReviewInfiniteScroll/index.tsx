@@ -10,7 +10,7 @@ const ReviewInfiniteScroll = (props: Props) => {
           review={review}
           key={`shared-review-${i}`}
           meatballButton={!!loginUser?.idx}
-          onClickMeatball={() => onClickMeatball(review.author.idx)}
+          onClickMeatball={() => onClickMeatball(review.author.idx, review.idx)}
         />
       ))}
       <div ref={setTarget}></div>

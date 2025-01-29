@@ -1,6 +1,6 @@
 "use client";
 
-import { DateCalendar } from "@mui/x-date-pickers";
+import { DateCalendar } from "@/shared/ui/MuiDateComponent/MuiDateComponent";
 import dayjs from "dayjs";
 import { DateAndTime } from "../../_types/DateAndTime";
 import { SetState } from "@/shared/types/react";
