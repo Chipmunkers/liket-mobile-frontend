@@ -113,48 +113,56 @@ export default function Page() {
         />
       </Header>
       <main>
-        <div className="flex justify-end px-[24px] my-[8px]">
-          <SelectButtonSmall
-            rippleEffect={false}
-            withBorder={false}
-            placeholder={order === "desc" ? "최신순" : "오래된순"}
-            className="text-button3"
-            text=""
-            onClick={() => {
-              router.replace(
-                `/likets?order=${order === "desc" ? "asc" : "desc"}`
-              );
-            }}
-            Icon={<SmallDownArrow />}
-          />
-        </div>
-
-        <ul className="flex flex-wrap gap-[14px] px-[24px] pb-[14px]">
-          {data &&
-            data.pages
-              .map((page) => page.liketList)
-              .flat()
-              .map((liket) => {
-                return (
-                  <li
-                    key={liket.idx}
-                    className={
-                      isNarrow
-                        ? "w-[calc(50%-7px)]"
-                        : "w-[calc(33.33%-9.33334px)]"
-                    }
-                  >
-                    <LiketCard
-                      id={liket.idx}
-                      key={liket.idx}
-                      {...liket}
-                      isNarrow={isNarrow}
-                      onClickMeatball={() => setSelectedLiket(liket.idx)}
-                    />
-                  </li>
+        {!data?.pages[0].liketList[0] && (
+          <div className="absolute text-body3 text-grey-03 top-[50%] left-[50%] translate-x-[-50%] translate-y-[50%]">
+            작성된 라이켓이 없습니다
+          </div>
+        )}
+        {data?.pages[0].liketList[0] && (
+          <div className="flex justify-end px-[24px] my-[8px]">
+            <SelectButtonSmall
+              rippleEffect={false}
+              withBorder={false}
+              placeholder={order === "desc" ? "최신순" : "오래된순"}
+              className="text-button3"
+              text=""
+              onClick={() => {
+                router.replace(
+                  `/likets?order=${order === "desc" ? "asc" : "desc"}`
                 );
-              })}
-        </ul>
+              }}
+              Icon={<SmallDownArrow />}
+            />
+          </div>
+        )}
+        {data?.pages[0].liketList[0] && (
+          <ul className="flex flex-wrap gap-[14px] px-[24px] pb-[14px]">
+            {data &&
+              data.pages
+                .map((page) => page.liketList)
+                .flat()
+                .map((liket) => {
+                  return (
+                    <li
+                      key={liket.idx}
+                      className={
+                        isNarrow
+                          ? "w-[calc(50%-7px)]"
+                          : "w-[calc(33.33%-9.33334px)]"
+                      }
+                    >
+                      <LiketCard
+                        id={liket.idx}
+                        key={liket.idx}
+                        {...liket}
+                        isNarrow={isNarrow}
+                        onClickMeatball={() => setSelectedLiket(liket.idx)}
+                      />
+                    </li>
+                  );
+                })}
+          </ul>
+        )}
       </main>
       <Drawer open={!!selectedLiket} onClose={() => setSelectedLiket("")}>
         <li className="bottom-sheet-list">
