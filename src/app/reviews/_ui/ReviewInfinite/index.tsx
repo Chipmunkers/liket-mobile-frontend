@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import Drawer from "@/shared/ui/Drawer";
 import { useState } from "react";
 import { ButtonBase } from "@mui/material";
-import customToast from "@/shared/helpers/customToast";
 import { useDeleteReview } from "./hooks/useDeleteReview";
 import useModalStore from "@/shared/store/modalStore";
 import { useQueryClient } from "@tanstack/react-query";
@@ -55,6 +54,11 @@ const ReviewInfinite = ({ idx }: Props) => {
                 <Divider width="100%" height="8px" margin="8px 0" />
               </>
             ))}
+        {data && data.pages[0]?.reviewList.length === 0 && (
+          <div className="absolute text-body3 text-grey-03 top-[50%] left-[50%] translate-x-[-50%] translate-y-[50%]">
+            작성된 리뷰가 없습니다
+          </div>
+        )}
         {data &&
           data.pages
             .map((page) => page.reviewList)
