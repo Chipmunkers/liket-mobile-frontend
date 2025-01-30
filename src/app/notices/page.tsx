@@ -67,7 +67,9 @@ export default function Page() {
       <main className="px-[24px]">
         {isFetching && !data?.pages[0] && <DefaultLoading center />}
         {data && data.pages[0]?.noticeList.length === 0 ? (
-          <></>
+          <div className="absolute text-body3 text-grey-03 top-[50%] left-[50%] translate-x-[-50%] translate-y-[50%]">
+            작성된 공지사항이 없습니다
+          </div>
         ) : (
           <ul>
             {data?.pages
