@@ -1,6 +1,5 @@
 "use client";
 
-import BottomButtonTabWrapper from "@/shared/ui/BottomButtonTabWrapper";
 import Button from "@/shared/ui/Button";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import { DefaultLoading } from "@/shared/ui/Loading";
@@ -8,7 +7,7 @@ import useSetInterestingTags from "./_hook/useSetInterestingTags";
 import useGetInterestingTag from "./_hook/useGetInterestingTag";
 import { AGES } from "@/shared/consts/content/age";
 import { GENRES } from "@/shared/consts/content/genre";
-import { INTERESTING_SIDO_LIST } from "@/shared/consts/region/sido";
+import { SIDO_LIST } from "@/shared/consts/region/sido";
 import { STYLES } from "@/shared/consts/content/style";
 import Chip from "@/shared/ui/Chip";
 import { AgeEntity } from "@/shared/types/api/tag/AgeEntity";
@@ -70,8 +69,16 @@ export default function Page() {
         502,
         504,
       ]);
+      return;
     }
-  }, [error]);
+
+    if (data) {
+      setSelectedAges(data.ageList);
+      setSelectedGenres(data.genreList);
+      setSelectedSidos(data.locationList);
+      setSelectedStyles(data.styleList);
+    }
+  }, [data, error]);
 
   return (
     <>
@@ -132,7 +139,7 @@ export default function Page() {
             <div>
               <div className="text-h2 mb-[15px]">지역</div>
               <ul className="flex flex-wrap gap-[8px]">
-                {INTERESTING_SIDO_LIST.map((sido) => {
+                {SIDO_LIST.map((sido) => {
                   const isSelected = selectedSidos.some(
                     (selectedSido) => selectedSido.bCode === sido.cd
                   );
