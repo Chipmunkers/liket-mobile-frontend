@@ -132,7 +132,7 @@ export default function Page() {
             <div>
               <div className="text-h2 mb-[15px]">지역</div>
               <ul className="flex flex-wrap gap-[8px]">
-                {INTERESTING_SIDO_LIST.map((sido) => {
+                {SIDO_LIST.map((sido) => {
                   const isSelected = selectedSidos.some(
                     (selectedSido) => selectedSido.bCode === sido.cd
                   );
