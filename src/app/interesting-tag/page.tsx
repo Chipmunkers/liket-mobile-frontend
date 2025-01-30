@@ -80,8 +80,6 @@ export default function Page() {
     }
   }, [data, error]);
 
-  console.log(data);
-
   return (
     <>
       <Header>
