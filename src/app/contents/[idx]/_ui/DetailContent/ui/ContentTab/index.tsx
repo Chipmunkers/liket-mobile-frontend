@@ -4,7 +4,7 @@ import Divider from "@/shared/ui/Divider";
 import { colors } from "@/shared/style/color";
 import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api";
 import { mapStyle } from "@/app/map/_ui/GoogleMap/style/mapStyle";
-import { ButtonBase } from "@mui/material";
+import { ButtonBase, styled } from "@mui/material";
 import customToast from "@/shared/helpers/customToast";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { useRouter } from "next/navigation";
@@ -13,18 +13,21 @@ import MapExpandIcon from "@/shared/icon/content/MapExpandIcon.svg";
 import Image from "next/image";
 import { ContentFooter } from "@/app/contents/[idx]/_ui/DetailContent/ui/ContentFooter";
 
-const ContentTab = (props: Props) => {
+const ContentTab = ({ content }: Props) => {
   const router = useRouter();
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY || "",
   });
 
-  const { content } = props;
-
   return (
     <>
-      <div className="py-[16px] px-[24px] whitespace-pre-wrap w-[100%] text-center text-body3">
-        {content.description}
+      <div className="py-[16px] px-[24px] w-[100%] whitespace-pre-wrap text-center text-body3">
+        <Description
+          id="content-description"
+          dangerouslySetInnerHTML={{
+            __html: content.description || "",
+          }}
+        />
         <div className="w-full">
           {content.imgList?.map((src, index) => {
             if (index === 0) {
@@ -115,3 +118,17 @@ const ContentTab = (props: Props) => {
 };
 
 export default ContentTab;
+
+const Description = styled("div")`
+  p {
+    margin-top: -40px;
+  }
+
+  ul {
+    margin-top: -80px;
+  }
+
+  li {
+    margin-bottom: -80px;
+  }
+`;
