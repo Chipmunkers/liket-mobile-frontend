@@ -5,6 +5,7 @@ import { Props } from "./types";
 import { useRouter } from "next/navigation";
 import { stackRouterPush } from "@/shared/helpers/stackRouter";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import { Else, If, Then } from "react-if";
 
 const ContentCardXSmall = ({ content, onClick }: Props) => {
   const router = useRouter();
@@ -32,8 +33,13 @@ const ContentCardXSmall = ({ content, onClick }: Props) => {
             {content.title}
           </div>
           <div className="text-body5 text-grey-04">
-            {dayjs(content.startDate).format("YYYY.MM.DD")} -{" "}
-            {dayjs(content.endDate).format("MM.DD")}
+            <If condition={!!content.endDate}>
+              <Then>
+                {dayjs(content.startDate).format("YYYY.MM.DD")} -{" "}
+                {dayjs(content.endDate).format("YYYY.MM.DD")}
+              </Then>
+              <Else>{dayjs(content.startDate).format("YYYY.MM.DD")} ~ </Else>
+            </If>
           </div>
         </div>
       </div>
