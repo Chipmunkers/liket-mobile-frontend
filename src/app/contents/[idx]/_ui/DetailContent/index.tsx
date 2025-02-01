@@ -90,7 +90,9 @@ const DetailContent = (props: Props) => {
           <div className="mt-[16px]">
             <div className="flex justify-between">
               <div>
-                <h1 className="mb-[4px]">{content.title}</h1>
+                <h1 className="mb-1 break-all overflow-hidden pr-2">
+                  {content.title}
+                </h1>
                 <div className="text-body5 text-grey-04 mt-[4px] flex">
                   <div>{`#${content.genre.name} #${
                     content.age.name
