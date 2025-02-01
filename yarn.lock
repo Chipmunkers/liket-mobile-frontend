@@ -12180,7 +12180,6 @@ __metadata:
     jest-environment-jsdom: "npm:^29.7.0"
     konva: "npm:^9.3.3"
     next: "npm:13.5.6"
-    next-navigation-guard: "npm:^0.1.2"
     postcss: "npm:^8"
     react: "npm:^18"
     react-dom: "npm:^18"
@@ -13288,16 +13287,6 @@ __metadata:
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: 10c0/c2f5a604a54a8ec5438a342e1f356dff4bc33ccccdb6dc668d94fe8e5eccfc9d2c2eea6064b0967a767ba63b33763f51ccf2cd2441b461a7322656c1f06b3f5d
-  languageName: node
-  linkType: hard
-
-"next-navigation-guard@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "next-navigation-guard@npm:0.1.2"
-  peerDependencies:
-    next: ^14 || ^15
-    react: ^18.3.1
-  checksum: 10c0/c4c1444e9e676d4a117635ea28c761cb6dcd7c0da02cc9574364dfeaaddeba5fa122089dee44645ea5bfe70ac55d34ed209c2fb172d6484a1793ccca16182a82
   languageName: node
   linkType: hard
 
