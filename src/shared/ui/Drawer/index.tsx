@@ -1,6 +1,10 @@
-import { Wrapper } from "@/shared/ui/Drawer/style";
 import { Props } from "./types";
 import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
+import dynamic from "next/dynamic";
+
+const Wrapper = dynamic(() => import("@mui/material/Drawer/Drawer"), {
+  ssr: false,
+});
 
 const Drawer = ({ children, bottomSafeArea = true, ...props }: Props) => {
   const { safeArea } = useGetSafeArea();
