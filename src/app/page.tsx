@@ -58,7 +58,7 @@ const Home = async () => {
           reviewLength={reviews.length}
         />
 
-        {reviews.length && <HotReviewSection reviews={reviews} />}
+        {!!reviews.length && <HotReviewSection reviews={reviews} />}
         <Divider height="8px" width="100%" />
         <div className="mt-[16px]">
           <MainFooter />
