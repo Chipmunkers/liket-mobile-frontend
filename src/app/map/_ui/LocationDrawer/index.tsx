@@ -6,9 +6,9 @@ import { SIDO_LIST } from "@/shared/consts/region/sido";
 import { classNames } from "@/shared/helpers/classNames";
 import { ButtonBase } from "@mui/material";
 import { SIGUNGU_LIST } from "@/shared/consts/region/sigungu";
-import BottomButtonTabWrapper from "@/shared/ui/BottomButtonTabWrapper";
 import Button from "@/shared/ui/Button";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
+import BottomButtonTab from "@/shared/ui/BottomButtonTab";
 
 const LocationDrawer = ({
   isOpen,
@@ -94,7 +94,7 @@ const LocationDrawer = ({
           </div>
         </div>
       </div>
-      <BottomButtonTabWrapper shadow className="bg-white">
+      <BottomButtonTab shadow className="bg-white">
         <Button
           className="h-[48px] flex-1"
           onClick={() => {
@@ -116,7 +116,7 @@ const LocationDrawer = ({
         >
           설정하기
         </Button>
-      </BottomButtonTabWrapper>
+      </BottomButtonTab>
     </div>
   );
 };
