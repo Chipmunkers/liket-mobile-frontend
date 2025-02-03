@@ -36,6 +36,9 @@ import { compressImage } from "@/shared/helpers/compressImage";
 import customToast from "@/shared/helpers/customToast";
 import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 import ImgDeleteCrossIcon from "@/shared/icon/common/cross/ImgDeleteCrossIcon.svg";
+import useUnsavedChangesWarning from "../../../../fsd_src/shared/hook/useUnsavedChangeWarning";
+import PageEscapeBlockModal from "../../../../fsd_src/shared/ui/Modal/PageEscapeBlockModal";
+import useModalStore from "@/shared/store/modalStore";
 
 const MAX_IMAGES_COUNT = 10;
 const MAX_REVIEW_LENGTH = 1000;
@@ -63,6 +66,9 @@ export default function Page() {
     before: dayjs(new Date()),
     selected: undefined,
   });
+
+  const { showModal, navigatingType, confirmNavigation, cancelNavigation } =
+    useUnsavedChangesWarning(true);
 
   // * Hooks
   const { mutate: uploadImages } = useUploadReviewImages({
@@ -351,6 +357,12 @@ export default function Page() {
           setSelectedContent(content);
           closeSearchDrawer();
         }}
+      />
+
+      <PageEscapeBlockModal
+        isOpen={showModal}
+        onClickNegative={cancelNavigation}
+        onClickPositive={confirmNavigation}
       />
     </>
   );
