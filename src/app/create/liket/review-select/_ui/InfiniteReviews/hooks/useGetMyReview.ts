@@ -24,6 +24,7 @@ export const useGetMyReviews = (idx: number) => {
     queryFn: async ({ pageParam = 1 }) => {
       const { data } = await axiosInstance.get<{ reviewList: ReviewEntity[] }>(
         `/apis/review/all?user=${idx}&` +
+          `liket=false&` +
           `order=${order}&` +
           `page=${pageParam}`
       );
