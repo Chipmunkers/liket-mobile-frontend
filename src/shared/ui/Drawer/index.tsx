@@ -2,7 +2,7 @@ import { Props } from "./types";
 import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 import dynamic from "next/dynamic";
 
-const Wrapper = dynamic(() => import("@mui/material/Drawer/Drawer"), {
+const Wrapper = dynamic(() => import("@/shared/ui/Drawer/style"), {
   ssr: false,
 });
 

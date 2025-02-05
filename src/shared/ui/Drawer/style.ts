@@ -2,7 +2,7 @@ import { colors } from "@/shared/style/color";
 import styled from "@emotion/styled";
 import Drawer from "@mui/material/Drawer/Drawer";
 
-export const Wrapper = styled(Drawer)(
+export default styled(Drawer)(
   () =>
     ({
       // Year Calendar

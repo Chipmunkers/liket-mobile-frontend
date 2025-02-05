@@ -1,4 +1,4 @@
-import { Wrapper } from "@/shared/ui/Drawer/style";
+import Wrapper from "@/shared/ui/Drawer/style";
 import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 import { StrictPropsWithChildren } from "../type/react";
 import { DrawerProps } from "@mui/material";
