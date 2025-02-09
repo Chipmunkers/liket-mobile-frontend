@@ -1,17 +1,14 @@
 import {
   LIKET_CARD_HEIGHT,
   LIKET_CARD_WIDTH,
-} from "./src/app/create/liket/_consts/size";
+} from "./src/widgets/content/CreateLiketTemplate/consts/card";
 import { colors } from "./src/shared/style/color";
 import { ButtonTextScale, TypographyTextScale } from "./src/shared/style/font";
 import { PAGE_CONTENT_MAX_WIDTH } from "./src/shared/style/page";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
-    "./fsd_src/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   important: true,
   theme: {
     extend: {
