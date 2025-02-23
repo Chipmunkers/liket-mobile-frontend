@@ -22,9 +22,19 @@ export const useGetMapContent = (mapInfo: MapInfo, mapFilter: MapFilter) => {
     },
     AxiosError
   >({
-    queryKey: ["map-contents", mapInfo, mapFilter],
+    queryKey: [
+      "map-contents",
+      mapInfo.zoomLevel,
+      mapInfo.bound.top.x,
+      mapInfo.bound.top.y,
+      mapInfo.bound.bottom.x,
+      mapInfo.bound.bottom.y,
+      mapFilter.age?.idx,
+      mapFilter.genre?.idx,
+      mapFilter.styles?.length,
+    ],
     queryFn: async () => {
-      if (mapInfo.level < 15) return null;
+      if (mapInfo.zoomLevel < 14) return null;
 
       const { data } = await axiosInstance.get(
         `/apis/map/culture-content/all?` +
@@ -37,6 +47,7 @@ export const useGetMapContent = (mapInfo: MapInfo, mapFilter: MapFilter) => {
 
       return data;
     },
+    placeholderData: (prev) => prev,
   });
 
   useEffect(() => {

@@ -15,7 +15,7 @@ export type MapInfo = {
       y: number;
     };
   };
-  level: number;
+  zoomLevel: number;
 };
 
 export type MapFilter = {

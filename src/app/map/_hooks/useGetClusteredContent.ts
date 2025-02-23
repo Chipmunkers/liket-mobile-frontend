@@ -44,12 +44,12 @@ export const useGetClusteredContent = (
   >({
     queryKey: ["clustered-map", mapInfo, mapFilter],
     queryFn: async () => {
-      if (mapInfo.level >= 15) return null;
+      if (mapInfo.zoomLevel >= 14) return null;
 
       const clusteredLevel =
-        mapInfo.level >= 13
+        mapInfo.zoomLevel >= 13
           ? ClusterLevel.DONG
-          : mapInfo.level === 10
+          : mapInfo.zoomLevel === 10
           ? ClusterLevel.SIDO
           : ClusterLevel.SIGUNGU;
 
@@ -65,6 +65,39 @@ export const useGetClusteredContent = (
           generateMapFilterQuerystring(mapFilter)
       );
       return data;
+    },
+    placeholderData: (prev) => prev,
+    select: (data) => {
+      if (!data || (data && data.clusteredContentList.length === 0)) {
+        return {
+          clusteredContentList: [],
+        };
+      }
+
+      const countList = data.clusteredContentList.map((data) => data.count);
+
+      // 평균
+      const mean =
+        countList.reduce((sum, value) => sum + value, 0) / countList.length;
+
+      // 분산
+      const variance =
+        countList.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) /
+        countList.length;
+
+      const standardDeviation = Math.sqrt(variance);
+
+      // 각 zValue 계산
+      const zValueList = countList.map(
+        (count) => ((count - mean) / standardDeviation) * 3
+      );
+
+      return {
+        clusteredContentList: data.clusteredContentList.map((data, i) => ({
+          ...data,
+          scale: zValueList[i],
+        })),
+      };
     },
   });
 
