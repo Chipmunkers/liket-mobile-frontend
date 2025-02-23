@@ -4,10 +4,12 @@ import { Props } from "./types";
 import { styled } from "@mui/material";
 
 const CustomBottomSheet = ({
+  sheetRef,
   title,
   isOpen,
   defaultSnap,
   children,
+  skipInitialTransition,
   snapPoints,
   onClickBackDrop,
   className,
@@ -24,6 +26,8 @@ const CustomBottomSheet = ({
         />
       )}
       <StyledBottomSheet
+        skipInitialTransition={skipInitialTransition}
+        ref={sheetRef}
         defaultSnap={defaultSnap}
         open={isOpen}
         blocking={false}
