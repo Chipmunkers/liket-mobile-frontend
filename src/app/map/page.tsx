@@ -27,6 +27,8 @@ import { FixedSizeList } from "react-window";
 import { useGetClusteredContent } from "./_hooks/useGetClusteredContent";
 import CustomGoogleMap from "./_ui/CustomGoogleMap";
 
+//
+
 export default function MapPage() {
   const searchParams = useSearchParams();
   const sheetRef = useRef<BottomSheetRef>(null);
