@@ -16,12 +16,34 @@ export const CreatePlanPage = () => {
 
   const [googleMap, setGoogleMap] = useState<google.maps.Map | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  /**
+   * 사용자가 선택한 장소 목록입니다.
+   * 출발지는 반드시 존재해야하기 때문에, null이 기본적으로 담겨있습니다.
+   * null일 경우, 장소 선택 input은 존재하지만 아직 사용자가 장소를 선택하지 않은 경우입니다.
+   */
   const [placeList, setPlaceList] = useState<(Place | null)[]>([null]);
+
+  /**
+   * routeSegment의 값이 null이 아닌 값으로 변경되었을 때,
+   * routeSegment의 값을 통해 API를 호출하여, 그 값을 같은 순번의 routeList에 담음
+   * 따라서 실제 보여줄 경로 목록을 가지는 상태 값임
+   *
+   * ! 주의: GoogleMap 컴포넌트에서 polyline을 위해 routeList를 사용하고 있음. 따라서 상태로 관리
+   */
   const [routeList, setRouteList] = useState<(Route | null)[]>([]);
+
+  /**
+   * 장소간 이동 경로에 대한 메타 데이터를 보유하는 state입니다.
+   * 출발지와 도착지, 도보 경로인지 대중 교통 경로 인지에 대한 데이터입니다.
+   */
   const [routeSegmentList, setRouteSegmentList] = useState<
     (RouteSegment | null)[]
   >([]);
 
+  /**
+   * place 목록을 통해 routeSegment 데이터를 가공하는 훅
+   */
   useRouteSegment({
     placeList,
     routeSegmentList,
