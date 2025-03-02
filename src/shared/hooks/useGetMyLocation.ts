@@ -9,8 +9,8 @@ interface LocationState {
   lng: number | null;
   accuracy: number | null;
   timestamp: number | null;
-  error: string | null;
-  permission: PermissionStatus;
+  WEB_PERMISSION: PermissionStatus;
+  WEBVIEW_PERMISSION: PermissionStatus;
   canAskAgain: boolean;
 }
 
@@ -18,7 +18,8 @@ interface RNLocationMessage {
   type: string;
   lat?: number;
   lng?: number;
-  permission?: PermissionStatus;
+  WEB_PERMISSION: PermissionStatus;
+  WEBVIEW_PERMISSION?: PermissionStatus;
   canAskAgain?: boolean;
 }
 
@@ -31,8 +32,8 @@ interface UseLocationOptions {
 interface UseLocationReturn {
   lat: number | null;
   lng: number | null;
-  permission: PermissionStatus;
-  error: string | null;
+  WEB_PERMISSION: PermissionStatus;
+  WEBVIEW_PERMISSION: PermissionStatus;
   canAskAgain: boolean;
   getLocation?: () => void;
 }
@@ -53,8 +54,8 @@ const useLocation = ({
     lng: null,
     accuracy: null,
     timestamp: null,
-    error: null,
-    permission: "undetermined",
+    WEB_PERMISSION: "undetermined",
+    WEBVIEW_PERMISSION: "undetermined",
     canAskAgain: true,
   });
 
@@ -65,8 +66,7 @@ const useLocation = ({
     if (!navigator.geolocation) {
       setLocation((prev) => ({
         ...prev,
-        error: "이 브라우저는 위치 정보를 지원하지 않습니다.",
-        permission: "denied",
+        WEBVIEW_PERMISSION: "denied",
       }));
       return;
     }
@@ -81,20 +81,16 @@ const useLocation = ({
           lng: longitude,
           accuracy,
           timestamp: position.timestamp,
-          error: null,
-          permission: "granted",
+          WEB_PERMISSION: "granted",
         }));
       },
       (error: GeolocationPositionError): void => {
-        // 권한 거부 오류 확인
         const permissionDenied = error.code === error.PERMISSION_DENIED;
 
         setLocation((prev) => ({
           ...prev,
-          error: `위치 정보를 가져오는데 실패했습니다: ${error.message}`,
-          permission: permissionDenied ? "denied" : prev.permission,
-          // 브라우저에서는 거부 시 다시 물어볼 수 있음
-          canAskAgain: true,
+          WEB_PERMISSION: permissionDenied ? "denied" : prev.WEB_PERMISSION,
+          canAskAgain: false, // 브라우저에서는 거부시 다시 물어볼 수 없음
         }));
       },
       {
@@ -110,7 +106,6 @@ const useLocation = ({
     if (!isRNWebView) {
       getWebLocation();
     } else {
-      // React Native에 위치 정보 요청
       window.ReactNativeWebView?.postMessage(
         JSON.stringify({
           type: "REQUEST_LOCATION",
@@ -135,17 +130,15 @@ const useLocation = ({
               ...prev,
               lat: data.lat ?? null,
               lng: data.lng ?? null,
-              permission: "granted",
+              WEBVIEW_PERMISSION: "granted",
               canAskAgain: true,
-              error: null,
             }));
             break;
           case "PERMISSION_DENIED":
             setLocation((prev) => ({
               ...prev,
-              permission: "denied",
+              WEBVIEW_PERMISSION: "denied",
               canAskAgain: data.canAskAgain ?? false,
-              error: "위치 정보 권한이 거부되었습니다.",
             }));
             break;
           case "LOCATION_UPDATED":
@@ -153,7 +146,6 @@ const useLocation = ({
               ...prev,
               lat: data.lat ?? null,
               lng: data.lng ?? null,
-              error: null,
             }));
             break;
         }
@@ -189,7 +181,6 @@ const useLocation = ({
     getWebLocation(); // 추적 시작할 때 즉시 위치 확인
     timerId = setInterval(getWebLocation, interval);
 
-    // 정리 함수 (인터벌 클리어)
     return () => {
       if (timerId) {
         clearInterval(timerId);
@@ -200,8 +191,8 @@ const useLocation = ({
   return {
     lat: location.lat,
     lng: location.lng,
-    permission: location.permission,
-    error: location.error,
+    WEB_PERMISSION: location.WEB_PERMISSION,
+    WEBVIEW_PERMISSION: location.WEBVIEW_PERMISSION,
     canAskAgain: location.canAskAgain,
     getLocation,
   };

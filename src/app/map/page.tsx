@@ -28,6 +28,7 @@ import CustomGoogleMap from "./_ui/CustomGoogleMap";
 import useScreenHeight from "@/shared/hooks/useScreenHeight";
 import useLocation from "@/shared/hooks/useGetMyLocation";
 import MyLocation from "@/shared/icon/map/myLocation.svg";
+import customToast from "@/shared/helpers/customToast";
 
 const CIRCLE_CLUSTER_LEVEL = {
   circleZoomLevel: 14,
@@ -37,31 +38,38 @@ const CIRCLE_CLUSTER_LEVEL = {
 
 export default function MapPage() {
   const googleMapRef = useRef<google.maps.Map | null>(null);
-  const { lat, lng, permission, canAskAgain } = useLocation();
+  const { lat, lng, WEBVIEW_PERMISSION, WEB_PERMISSION, canAskAgain } =
+    useLocation();
 
   const handleClickMyLocation = () => {
-    if (window?.isWebview && permission === "undetermined" && canAskAgain) {
-      // 아직 권한 요청을 한 번도 안 했거나, 다시 물어볼 수 있는 상태
-      window.ReactNativeWebView.postMessage(
-        JSON.stringify({ type: "REQUEST_PERMISSION_AGAIN" })
-      );
-    } else if (window?.isWebview && permission === "denied") {
-      // 권한 요청이 거절된 상태
-      if (canAskAgain) {
-        // 권한 요청은 거절됐으나 다시 요청이 가능한 상태
+    if (window?.isWebview) {
+      if (WEBVIEW_PERMISSION === "undetermined" && canAskAgain) {
+        // 아직 권한 요청을 한 번도 안 했거나, 다시 물어볼 수 있는 상태
         window.ReactNativeWebView.postMessage(
           JSON.stringify({ type: "REQUEST_PERMISSION_AGAIN" })
         );
-      } else {
-        // 권한 요청이 아얘 불가능한 상태
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({ type: "OPEN_SETTINGS" })
-        );
+      } else if (WEBVIEW_PERMISSION === "denied") {
+        // 권한 요청이 거절된 상태
+        if (canAskAgain) {
+          // 권한 요청은 거절됐으나 다시 요청이 가능한 상태
+          window.ReactNativeWebView.postMessage(
+            JSON.stringify({ type: "REQUEST_PERMISSION_AGAIN" })
+          );
+        } else {
+          // 권한 요청이 아얘 불가능한 상태
+          window.ReactNativeWebView.postMessage(
+            JSON.stringify({ type: "OPEN_SETTINGS" })
+          );
+        }
       }
-    } else if (permission === "granted") {
+    }
+
+    if ([WEB_PERMISSION, WEBVIEW_PERMISSION].includes("granted")) {
       if (lat && lng) {
         googleMapRef.current?.setCenter({ lat, lng });
       }
+    } else if (WEB_PERMISSION === "denied") {
+      customToast("브라우저에서 먼저 내 위치 접근 권한을 허용해주세요.");
     }
   };
 
