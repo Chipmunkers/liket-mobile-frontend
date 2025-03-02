@@ -1,9 +1,11 @@
 import { LatLngBounds } from "google-maps-react-markers";
 import dynamic from "next/dynamic";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Props } from "./types";
 import CircleClusteredMarker from "@/shared/ui/Marker/CircleClusteredMarker";
 import Marker from "@/shared/ui/Marker/Marker";
+import useLocation from "@/shared/hooks/useGetMyLocation";
+import AnimatedLocationMarker from "@/shared/ui/Marker/UserPosition";
 
 const LazyGoogleMap = dynamic(
   () => import("@/shared/ui/GoogleMap").then((mod) => mod.CommonGoogleMap),
@@ -13,17 +15,16 @@ const LazyGoogleMap = dynamic(
 );
 
 const CustomGoogleMap = ({
-  children,
+  googleMapRef,
   selectedMarkerId,
   markerClusteredContents,
   latLng,
   mapInfo,
+  userPosition,
   setMapInfo,
   onClickMarkerCluster,
   onClickGoogleMap,
 }: Props) => {
-  const googleMapRef = useRef<google.maps.Map | null>(null);
-
   return (
     <LazyGoogleMap
       center={latLng}
@@ -122,7 +123,9 @@ const CustomGoogleMap = ({
           );
         }
       })}
-      {children}
+      {userPosition.lat && userPosition.lng && (
+        <AnimatedLocationMarker lat={userPosition.lat} lng={userPosition.lng} />
+      )}
     </LazyGoogleMap>
   );
 };

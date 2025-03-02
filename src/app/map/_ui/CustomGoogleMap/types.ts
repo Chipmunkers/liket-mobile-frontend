@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { MutableRefObject, ReactNode } from "react";
 import { SetState } from "@/shared/types/react";
 import { MapContentEntity } from "@/shared/types/api/map/MapContentEntity";
 import { MapInfo } from "../../_types/types";
@@ -6,13 +6,17 @@ import Supercluster from "supercluster";
 import { ClusteredContentEntity } from "@/shared/types/api/map/ClusteredContentEntity";
 
 export type Props = {
-  children?: ReactNode;
+  googleMapRef: MutableRefObject<google.maps.Map | null>;
   selectedMarkerId?: number;
   markerClusteredContents: (
     | Supercluster.PointFeature<MapContentEntity>
     | Supercluster.PointFeature<Supercluster.ClusterProperties & any>
   )[];
   mapInfo: MapInfo;
+  userPosition: {
+    lat: number | null;
+    lng: number | null;
+  };
   latLng: {
     lat: number;
     lng: number;

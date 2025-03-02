@@ -32,8 +32,39 @@ const CIRCLE_CLUSTER_LEVEL = {
   circleClusteringRadius: 100,
   markerClusteringRadius: 100,
 };
+import MyLocationIcon from "@mui/icons-material/MyLocation";
+import useLocation from "@/shared/hooks/useGetMyLocation";
 
 export default function MapPage() {
+  const googleMapRef = useRef<google.maps.Map | null>(null);
+  const { lat, lng, permission, canAskAgain } = useLocation();
+
+  const handleClickMyLocation = () => {
+    if (window?.isWebview && permission === "undetermined" && canAskAgain) {
+      // 아직 권한 요청을 한 번도 안 했거나, 다시 물어볼 수 있는 상태
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({ type: "REQUEST_PERMISSION_AGAIN" })
+      );
+    } else if (window?.isWebview && permission === "denied") {
+      // 권한 요청이 거절된 상태
+      if (canAskAgain) {
+        // 권한 요청은 거절됐으나 다시 요청이 가능한 상태
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({ type: "REQUEST_PERMISSION_AGAIN" })
+        );
+      } else {
+        // 권한 요청이 아얘 불가능한 상태
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({ type: "OPEN_SETTINGS" })
+        );
+      }
+    } else if (permission === "granted") {
+      if (lat && lng) {
+        googleMapRef.current?.setCenter({ lat, lng });
+      }
+    }
+  };
+
   const searchParams = useSearchParams();
   const sheetRef = useRef<BottomSheetRef>(null);
   const listRef = useRef<FixedSizeList | null>(null);
@@ -182,8 +213,13 @@ export default function MapPage() {
         }}
       >
         <CustomGoogleMap
+          googleMapRef={googleMapRef}
           selectedMarkerId={selectedMarkerId}
           markerClusteredContents={clusters}
+          userPosition={{
+            lat,
+            lng,
+          }}
           latLng={latLng}
           mapInfo={mapInfo}
           setMapInfo={setMapInfo}
@@ -227,6 +263,19 @@ export default function MapPage() {
             </div>
           )}
         </div>
+        <ButtonBase
+          className={classNames(
+            "absolute  mt-[16px] mr-[16px] right-0 w-[36px] h-[36px] shadow-[0_0_8px_0_rgba(0,0,0,0.16)] icon-button rounded-lg",
+            isMapFilterApplied ? "bg-skyblue-01" : "bg-white"
+          )}
+          onClick={handleClickMyLocation}
+          disableRipple={true}
+        >
+          <MyLocationIcon
+            className={!isMapFilterApplied ? "fill-grey-black" : "fill-white"}
+            fill="white"
+          />
+        </ButtonBase>
 
         {bottomSheetContents.length > 1 && (
           <ContentBottomSheet
@@ -240,7 +289,7 @@ export default function MapPage() {
         )}
 
         {bottomSheetContents.length === 1 && (
-          <div className="bottom-[8px] absolute z-10 w-[calc(100%-16px)] left-[8px]">
+          <div className="bottom-[calc(8px+48px)] absolute z-10 w-[calc(100%-16px)] left-[8px]">
             <div className="p-[16px] bg-white rounded-[24px]">
               <ContentCardMedium
                 content={{
