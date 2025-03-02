@@ -8,7 +8,6 @@ import { ClusteredContentEntity } from "@/shared/types/api/map/ClusteredContentE
 export type Props = {
   children?: ReactNode;
   selectedMarkerId?: number;
-  circleClusteredContentList?: ClusteredContentEntity[] | null;
   markerClusteredContents: (
     | Supercluster.PointFeature<MapContentEntity>
     | Supercluster.PointFeature<Supercluster.ClusterProperties & any>

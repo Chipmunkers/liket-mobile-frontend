@@ -34,8 +34,6 @@ export const useGetMapContent = (mapInfo: MapInfo, mapFilter: MapFilter) => {
       mapFilter.styles?.length,
     ],
     queryFn: async () => {
-      if (mapInfo.zoomLevel < 14) return null;
-
       const { data } = await axiosInstance.get(
         `/apis/map/culture-content/all?` +
           `top-x=${mapInfo.bound.top.x}&` +

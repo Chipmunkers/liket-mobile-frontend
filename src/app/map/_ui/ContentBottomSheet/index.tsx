@@ -5,6 +5,7 @@ import { Props } from "./types";
 import CustomBottomSheet from "@/shared/ui/BottomSheet";
 import { useGetSafeArea } from "@/shared/hooks/useGetSafeArea";
 import { FixedSizeList as List, ListChildComponentProps } from "react-window";
+import { useRef, useState } from "react";
 
 const ContentBottomSheet = ({
   contentList,
@@ -14,6 +15,7 @@ const ContentBottomSheet = ({
   listRef,
 }: Props) => {
   const { safeArea } = useGetSafeArea();
+  const maxHeightRef = useRef(0);
 
   const renderItem = ({ index, style }: ListChildComponentProps) => {
     const content = contentList[index];
@@ -40,6 +42,10 @@ const ContentBottomSheet = ({
       title={title}
       safeArea={safeArea.bottom}
       snapPoints={({ maxHeight }) => {
+        if (!maxHeightRef.current) {
+          maxHeightRef.current = maxHeight;
+        }
+
         if (open) {
           // * 처음부터 열려있는 경우
           return [maxHeight / 2 - 45, 0];
@@ -56,7 +62,7 @@ const ContentBottomSheet = ({
           }}
           className="windowList"
           itemCount={contentList.length}
-          height={584}
+          height={maxHeightRef.current - 190 - 24}
           itemSize={116}
           width="100%"
           overscanCount={3}

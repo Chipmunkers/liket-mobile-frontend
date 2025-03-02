@@ -24,10 +24,14 @@ import { SIDO_LIST } from "@/shared/consts/region/sido";
 import ContentCardMedium from "@/entities/content/ContentCardMedium";
 import { BottomSheetRef } from "react-spring-bottom-sheet";
 import { FixedSizeList } from "react-window";
-import { useGetClusteredContent } from "./_hooks/useGetClusteredContent";
 import CustomGoogleMap from "./_ui/CustomGoogleMap";
+import useScreenHeight from "@/shared/hooks/useScreenHeight";
 
-//
+const CIRCLE_CLUSTER_LEVEL = {
+  circleZoomLevel: 14,
+  circleClusteringRadius: 100,
+  markerClusteringRadius: 100,
+};
 
 export default function MapPage() {
   const searchParams = useSearchParams();
@@ -36,6 +40,7 @@ export default function MapPage() {
   const router = useRouter();
   const pathname = usePathname();
   const { safeArea } = useGetSafeArea();
+  const { innerHeight } = useScreenHeight();
 
   const isTownSelectionModalOpen = searchParams.get("isTownSelectionModalOpen");
   const isFilterModalOpen = searchParams.get("isFilterModalOpen");
@@ -113,7 +118,10 @@ export default function MapPage() {
     zoom: mapInfo.zoomLevel,
     options: {
       maxZoom: 23,
-      radius: 100,
+      radius:
+        mapInfo.zoomLevel > CIRCLE_CLUSTER_LEVEL.circleZoomLevel
+          ? CIRCLE_CLUSTER_LEVEL.markerClusteringRadius
+          : CIRCLE_CLUSTER_LEVEL.circleClusteringRadius,
     },
   });
 
@@ -141,11 +149,6 @@ export default function MapPage() {
 
   useCheckModalOpenForWebview(isTownSelectionModalOpen, isFilterModalOpen);
 
-  const { data: clusteredApiResult } = useGetClusteredContent(
-    mapInfo,
-    mapFilter
-  );
-
   const bottomSheetContents =
     (clickedMarkerContents.length !== 0
       ? clickedMarkerContents
@@ -172,14 +175,14 @@ export default function MapPage() {
         <HeaderRight option={{ search: true, like: true }} />
       </Header>
       <main
-        className="relative h-[1px]"
+        className="relative"
         style={{
+          height: `${innerHeight - 48}px`,
           marginBottom: 48 + safeArea.bottom + "px",
         }}
       >
         <CustomGoogleMap
           selectedMarkerId={selectedMarkerId}
-          circleClusteredContentList={clusteredApiResult?.clusteredContentList}
           markerClusteredContents={clusters}
           latLng={latLng}
           mapInfo={mapInfo}

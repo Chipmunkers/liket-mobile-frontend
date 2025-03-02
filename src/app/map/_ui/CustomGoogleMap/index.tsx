@@ -15,7 +15,6 @@ const LazyGoogleMap = dynamic(
 const CustomGoogleMap = ({
   children,
   selectedMarkerId,
-  circleClusteredContentList,
   markerClusteredContents,
   latLng,
   mapInfo,
@@ -51,31 +50,8 @@ const CustomGoogleMap = ({
         onClickGoogleMap();
       }}
     >
-      {circleClusteredContentList?.map(({ count, lat, lng }) => {
-        return (
-          <CircleClusteredMarker
-            lat={lat}
-            lng={lng}
-            key={`${lat}-${lng}`}
-            onClickMarker={(lat, lng) => {
-              const currentZoom = googleMapRef.current?.getZoom();
-
-              if (currentZoom) {
-                googleMapRef.current?.setZoom(currentZoom + 1);
-                googleMapRef.current?.setCenter({
-                  lat: lat,
-                  lng: lng,
-                });
-                setMapInfo({ ...mapInfo, zoomLevel: currentZoom + 1 });
-              }
-            }}
-          >
-            {count}
-          </CircleClusteredMarker>
-        );
-      })}
       {markerClusteredContents?.map(({ properties, geometry, id }) => {
-        if (properties.cluster && id) {
+        if (mapInfo.zoomLevel >= 14 && properties.cluster && id) {
           const lat = geometry.coordinates[1];
           const lng = geometry.coordinates[0];
 
@@ -95,7 +71,33 @@ const CustomGoogleMap = ({
               }}
             />
           );
-        } else {
+        } else if (mapInfo.zoomLevel < 14 && properties.cluster && id) {
+          const lat = geometry.coordinates[1];
+          const lng = geometry.coordinates[0];
+          const count = properties.point_count;
+
+          return (
+            <CircleClusteredMarker
+              lat={lat}
+              lng={lng}
+              key={`${lat}-${lng}`}
+              onClickMarker={(lat, lng) => {
+                const currentZoom = googleMapRef.current?.getZoom();
+
+                if (currentZoom) {
+                  googleMapRef.current?.setZoom(currentZoom + 1);
+                  googleMapRef.current?.setCenter({
+                    lat: lat,
+                    lng: lng,
+                  });
+                  setMapInfo({ ...mapInfo, zoomLevel: currentZoom + 1 });
+                }
+              }}
+            >
+              {count}
+            </CircleClusteredMarker>
+          );
+        } else if (mapInfo.zoomLevel >= 14) {
           const lat = properties.location.positionY;
           const lng = properties.location.positionX;
 
