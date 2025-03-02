@@ -26,14 +26,14 @@ import { BottomSheetRef } from "react-spring-bottom-sheet";
 import { FixedSizeList } from "react-window";
 import CustomGoogleMap from "./_ui/CustomGoogleMap";
 import useScreenHeight from "@/shared/hooks/useScreenHeight";
+import useLocation from "@/shared/hooks/useGetMyLocation";
+import MyLocation from "@/shared/icon/map/myLocation.svg";
 
 const CIRCLE_CLUSTER_LEVEL = {
   circleZoomLevel: 14,
   circleClusteringRadius: 100,
   markerClusteringRadius: 100,
 };
-import MyLocationIcon from "@mui/icons-material/MyLocation";
-import useLocation from "@/shared/hooks/useGetMyLocation";
 
 export default function MapPage() {
   const googleMapRef = useRef<google.maps.Map | null>(null);
@@ -271,10 +271,7 @@ export default function MapPage() {
           onClick={handleClickMyLocation}
           disableRipple={true}
         >
-          <MyLocationIcon
-            className={!isMapFilterApplied ? "fill-grey-black" : "fill-white"}
-            fill="white"
-          />
+          <MyLocation fill="white" />
         </ButtonBase>
 
         {bottomSheetContents.length > 1 && (
