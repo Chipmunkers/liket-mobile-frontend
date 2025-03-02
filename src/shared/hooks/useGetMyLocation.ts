@@ -16,8 +16,8 @@ interface LocationState {
 
 interface RNLocationMessage {
   type: string;
-  latitude?: number;
-  longitude?: number;
+  lat?: number;
+  lng?: number;
   permission?: PermissionStatus;
   canAskAgain?: boolean;
 }
@@ -129,13 +129,12 @@ const useLocation = ({
       try {
         const data: RNLocationMessage = JSON.parse(e.data);
 
-        alert(data.latitude);
         switch (data.type) {
           case "PERMISSION_GRANTED":
             setLocation((prev) => ({
               ...prev,
-              lat: data.latitude ?? null,
-              lng: data.longitude ?? null,
+              lat: data.lat ?? null,
+              lng: data.lng ?? null,
               permission: "granted",
               canAskAgain: true,
               error: null,
@@ -152,8 +151,8 @@ const useLocation = ({
           case "LOCATION_UPDATED":
             setLocation((prev) => ({
               ...prev,
-              lat: data.latitude ?? null,
-              lng: data.longitude ?? null,
+              lat: data.lat ?? null,
+              lng: data.lng ?? null,
               error: null,
             }));
             break;
