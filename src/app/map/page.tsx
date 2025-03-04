@@ -216,8 +216,8 @@ export default function MapPage() {
       <main
         className="relative"
         style={{
-          height: `${innerHeight - 48}px`,
-          marginBottom: 48 + safeArea.bottom + "px",
+          height: `${innerHeight - 96}px`,
+          marginBottom: safeArea.bottom,
         }}
       >
         <CustomGoogleMap
