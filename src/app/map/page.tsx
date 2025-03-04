@@ -29,6 +29,7 @@ import useScreenHeight from "@/shared/hooks/useScreenHeight";
 import useLocation from "@/shared/hooks/useGetMyLocation";
 import MyLocation from "@/shared/icon/map/myLocation.svg";
 import customToast from "@/shared/helpers/customToast";
+import useModalStore from "@/shared/store/modalStore";
 
 const CIRCLE_CLUSTER_LEVEL = {
   circleZoomLevel: 14,
@@ -37,6 +38,8 @@ const CIRCLE_CLUSTER_LEVEL = {
 };
 
 export default function MapPage() {
+  const openModal = useModalStore(({ openModal }) => openModal);
+
   const googleMapRef = useRef<google.maps.Map | null>(null);
   const { lat, lng, WEBVIEW_PERMISSION, WEB_PERMISSION, canAskAgain } =
     useLocation();
@@ -57,9 +60,13 @@ export default function MapPage() {
           );
         } else {
           // 권한 요청이 아얘 불가능한 상태
-          window.ReactNativeWebView.postMessage(
-            JSON.stringify({ type: "OPEN_SETTINGS" })
-          );
+          openModal("PermissionModal", {
+            onClickPositive() {
+              window.ReactNativeWebView.postMessage(
+                JSON.stringify({ type: "OPEN_SETTINGS" })
+              );
+            },
+          });
         }
       }
     }
