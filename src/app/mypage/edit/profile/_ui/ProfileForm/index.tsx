@@ -74,7 +74,6 @@ const ProfileForm = () => {
     trigger();
   }, [myData, setValue, trigger]);
 
-  console.log(formState.errors);
   return (
     <>
       <form

@@ -98,10 +98,6 @@ export default function Page() {
     trigger("imgList");
   };
 
-  useEffect(() => {
-    console.log(getValues());
-  }, [formState]);
-
   return (
     <>
       <Header>
