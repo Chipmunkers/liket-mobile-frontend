@@ -1,9 +1,9 @@
-import { memo, useRef } from "react";
+import { memo, MouseEvent } from "react";
 
 interface Props {
   lat: number;
   lng: number;
-  onClickMarker: (lat: number, lng: number) => void;
+  onClickMarker: (e: MouseEvent<HTMLButtonElement>) => void;
   children: number;
 }
 
@@ -14,14 +14,14 @@ interface Props {
  */
 const CircleMarker = ({ lat, lng, children, onClickMarker }: Props) => {
   return (
-    <div
+    <button
       className={`rounded-full w-[48px] h-[48px] border-[1px] bg-skyblue-01 flex justify-center items-center text-body4 text-white border-skyblue-02 bg-opacity-[80%] absolute translate-x-[-50%] translate-y-[-50%]`}
-      onClick={() => {
-        onClickMarker(lat, lng);
+      onClick={(e) => {
+        onClickMarker(e);
       }}
     >
       {children > 0 && <span className="text-xs">{children}</span>}
-    </div>
+    </button>
   );
 };
 

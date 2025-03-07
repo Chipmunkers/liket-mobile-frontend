@@ -13,6 +13,7 @@ interface GoogleMapProps {
     zoom: number;
   }) => void;
   onClickMap?: () => void;
+  onDragStart?: () => void;
   handleGoogleApiLoaded?: ({
     map,
     maps,
@@ -26,6 +27,7 @@ export const CommonGoogleMap = ({
   zoom = 10,
   onChangeMap,
   onClickMap,
+  onDragStart,
   handleGoogleApiLoaded,
 }: GoogleMapProps) => {
   const mapRef = useRef<google.maps.Map | null>(null);
@@ -106,6 +108,9 @@ export const CommonGoogleMap = ({
           });
 
           mapRef.current = map;
+          if (onDragStart) {
+            mapRef.current.addListener("dragstart", onDragStart);
+          }
           handleGoogleApiLoaded && handleGoogleApiLoaded({ map, maps, ref });
         }}
         options={{

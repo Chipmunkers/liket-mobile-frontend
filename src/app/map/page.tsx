@@ -202,9 +202,11 @@ export default function MapPage() {
       ? clickedMarkerContents
       : contentApiResult?.contentList) || [];
 
-  const handleClickGoogleMap = () => {
+  const handleClickMap = () => {
     listRef.current?.scrollTo(0);
     setClickedMarkerContents([]);
+    setSelectedMarkerId(undefined);
+    sheetRef.current?.snapTo(() => 20);
   };
 
   return (
@@ -241,7 +243,9 @@ export default function MapPage() {
           mapInfo={mapInfo}
           setMapInfo={setMapInfo}
           onClickMarkerCluster={handleClickMarkerCluster}
-          onClickGoogleMap={handleClickGoogleMap}
+          onDragStart={handleClickMap}
+          onClickMap={handleClickMap}
+          onChangeMap={handleClickMap}
         />
         <div className="absolute z-[2] mt-[16px] ml-[24px] w-100 flex items-center">
           {/* 필터링 아이콘 */}
