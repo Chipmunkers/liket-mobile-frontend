@@ -32,7 +32,7 @@ import customToast from "@/shared/helpers/customToast";
 import useModalStore from "@/shared/store/modalStore";
 
 const CIRCLE_CLUSTER_LEVEL = {
-  circleZoomLevel: 14,
+  markerTypeThreshold: 14,
   circleClusteringRadius: 100,
   markerClusteringRadius: 100,
 };
@@ -137,6 +137,9 @@ export default function MapPage() {
     zoomLevel: 8,
   });
 
+  const isCircleMarkerShown =
+    CIRCLE_CLUSTER_LEVEL.markerTypeThreshold > mapInfo.zoomLevel;
+
   const { data: contentApiResult } = useGetMapContent(mapInfo, mapFilter);
 
   const { clusters, supercluster } = useSupercluster({
@@ -164,10 +167,9 @@ export default function MapPage() {
     zoom: mapInfo.zoomLevel,
     options: {
       maxZoom: 23,
-      radius:
-        mapInfo.zoomLevel > CIRCLE_CLUSTER_LEVEL.circleZoomLevel
-          ? CIRCLE_CLUSTER_LEVEL.markerClusteringRadius
-          : CIRCLE_CLUSTER_LEVEL.circleClusteringRadius,
+      radius: isCircleMarkerShown
+        ? CIRCLE_CLUSTER_LEVEL.markerClusteringRadius
+        : CIRCLE_CLUSTER_LEVEL.circleClusteringRadius,
     },
   });
 
@@ -291,7 +293,7 @@ export default function MapPage() {
           <MyLocation fill="white" />
         </ButtonBase>
 
-        {bottomSheetContents.length > 1 && (
+        {!isCircleMarkerShown && bottomSheetContents.length > 1 && (
           <ContentBottomSheet
             sheetRef={sheetRef}
             listRef={listRef}
@@ -302,7 +304,7 @@ export default function MapPage() {
           />
         )}
 
-        {bottomSheetContents.length === 1 && (
+        {!isCircleMarkerShown && bottomSheetContents.length === 1 && (
           <div className="bottom-[calc(8px+48px)] absolute z-10 w-[calc(100%-16px)] left-[8px]">
             <div className="p-[16px] bg-white rounded-[24px]">
               <ContentCardMedium
