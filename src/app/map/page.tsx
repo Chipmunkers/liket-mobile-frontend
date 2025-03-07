@@ -278,9 +278,11 @@ export default function MapPage() {
             </div>
           )}
         </div>
+
+        {/* 내위치 보기 버튼 */}
         <ButtonBase
           className={classNames(
-            "absolute  mt-[16px] mr-[16px] right-0 w-[36px] h-[36px] shadow-[0_0_8px_0_rgba(0,0,0,0.16)] icon-button rounded-lg",
+            "absolute  mt-[16px] mr-[16px] right-0 w-[36px] h-[36px] shadow-[0_0_8px_0_rgba(0,0,0,0.16)] icon-button rounded-full",
             isMapFilterApplied ? "bg-skyblue-01" : "bg-white"
           )}
           onClick={handleClickMyLocation}
