@@ -11,7 +11,7 @@ import {
   OverlayViewF,
   useJsApiLoader,
 } from "@react-google-maps/api";
-import { mapStyle } from "@/app/map/_ui/GoogleMap/style/mapStyle";
+import { mapStyle } from "@/app/map/_ui/LegacyGoogleMap/style/mapStyle";
 
 const DetailGoogleMap = ({ content }: Props) => {
   const router = useRouter();

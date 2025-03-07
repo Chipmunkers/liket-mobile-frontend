@@ -13,7 +13,7 @@ import Chip from "@/shared/ui/Chip";
 import { AgeEntity } from "@/shared/types/api/tag/AgeEntity";
 import { GenreEntity } from "@/shared/types/api/tag/GenreEntity";
 import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useExceptionHandler } from "@/shared/hooks/useExceptionHandler";
 import { useRouter } from "next/navigation";
 import { stackRouterBack, stackRouterPush } from "@/shared/helpers/stackRouter";
@@ -51,7 +51,7 @@ export default function Page() {
     data?.locationList || []
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (error?.status === 401) {
       exceptionHandler(error, [
         {

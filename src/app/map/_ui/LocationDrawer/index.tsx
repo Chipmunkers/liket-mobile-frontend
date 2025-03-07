@@ -2,24 +2,26 @@
 
 import { useRouter } from "next/navigation";
 import { Props } from "./types";
-import { SIDO_LIST } from "@/shared/consts/region/sido";
+import { Sido, SIDO_LIST } from "@/shared/consts/region/sido";
 import { classNames } from "@/shared/helpers/classNames";
 import { ButtonBase } from "@mui/material";
-import { SIGUNGU_LIST } from "@/shared/consts/region/sigungu";
-import BottomButtonTabWrapper from "@/shared/ui/BottomButtonTabWrapper";
+import { Sigungu, SIGUNGU_LIST } from "@/shared/consts/region/sigungu";
 import Button from "@/shared/ui/Button";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
+import BottomButtonTab from "@/shared/ui/BottomButtonTab";
+import { useState } from "react";
 
 const LocationDrawer = ({
   isOpen,
-  selectSido,
-  setSelectSido,
-  selectSigungu,
-  setSelectSigungu,
   selectLocation,
   setSelectLocation,
+  setLatLng,
 }: Props) => {
   const router = useRouter();
+  const [selectSido, setSelectSido] = useState<Sido>(selectLocation.sido);
+  const [selectSigungu, setSelectSigungu] = useState<Sigungu | null>(
+    selectLocation.sigungu
+  );
 
   return (
     <div
@@ -28,13 +30,14 @@ const LocationDrawer = ({
         transform: !!isOpen ? "translateY(0)" : "translateY(100%)",
       }}
     >
-      <Header key={"town-filter-header"}>
+      <Header>
         <HeaderLeft
           option={{
             close: {
               onClick: () => {
-                setSelectSido(selectLocation.sido);
-                setSelectSigungu(selectLocation.sigungu);
+                const { sido, sigungu } = selectLocation;
+                setSelectSido(sido);
+                setSelectSigungu(sigungu);
                 router.replace("/map");
               },
             },
@@ -49,7 +52,7 @@ const LocationDrawer = ({
               {SIDO_LIST.map((sido, index) => {
                 return (
                   <li
-                    key={`city_${index}`}
+                    key={index}
                     className={classNames(
                       "center h-[48px]",
                       selectSido.cd === sido.cd
@@ -69,7 +72,7 @@ const LocationDrawer = ({
             </ul>
           </div>
           <div className="w-[50%]">
-            <ul className="flex flex-col w-[100%] h-[100%] overflow-y-auto">
+            <ul className="flex flex-col size-full overflow-y-auto">
               {SIGUNGU_LIST.filter((sigungu) =>
                 sigungu.bjd_cd.startsWith(selectSido.cd)
               ).map((sigungu, index) => {
@@ -82,7 +85,7 @@ const LocationDrawer = ({
                     )}
                   >
                     <ButtonBase
-                      className="w-[100%] h-[100%]"
+                      className="size-full"
                       onClick={() => setSelectSigungu(sigungu)}
                     >
                       {sigungu.name}
@@ -94,7 +97,7 @@ const LocationDrawer = ({
           </div>
         </div>
       </div>
-      <BottomButtonTabWrapper shadow className="bg-white">
+      <BottomButtonTab shadow className="bg-white">
         <Button
           className="h-[48px] flex-1"
           onClick={() => {
@@ -107,8 +110,16 @@ const LocationDrawer = ({
                 sido: selectSido,
                 sigungu: null,
               });
+              setLatLng({
+                lat: Number(selectSido.lat),
+                lng: Number(selectSido.lng),
+              });
             } else {
               setSelectLocation({ sido: selectSido, sigungu: selectSigungu });
+              setLatLng({
+                lat: Number(selectSigungu.lat),
+                lng: Number(selectSigungu.lng),
+              });
             }
 
             router.replace("/map");
@@ -116,7 +127,7 @@ const LocationDrawer = ({
         >
           설정하기
         </Button>
-      </BottomButtonTabWrapper>
+      </BottomButtonTab>
     </div>
   );
 };

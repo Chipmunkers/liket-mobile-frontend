@@ -49,7 +49,10 @@ const InterestingTagAlert = () => {
   return (
     <Drawer
       open={isInterestingTagSettingDrawerOpen}
-      onClose={() => setIsInterestingTagSettingDrawerOpen(false)}
+      onClose={() => {
+        document.cookie = "postponeTagAlert=true; max-age=86400";
+        setIsInterestingTagSettingDrawerOpen(false);
+      }}
     >
       <h2 className="center text-h2">관심태그를 설정하시겠어요?</h2>
       <div className="text-center text-body3 text-grey-03">

@@ -14,7 +14,6 @@ export const useGetInquiries = () => {
   const query = useInfiniteQuery({
     queryKey: ["all-inquiry"],
     queryFn: async ({ pageParam = 1 }) => {
-      console.log("call");
       const { data } = await axiosInstance.get<{
         inquiryList: SummaryInquiryEntity[];
       }>(`/apis/inquiry/all?` + `page=${pageParam}`);
