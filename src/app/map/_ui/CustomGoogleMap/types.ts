@@ -1,9 +1,8 @@
-import { MutableRefObject, ReactNode } from "react";
+import { MutableRefObject } from "react";
 import { SetState } from "@/shared/types/react";
 import { MapContentEntity } from "@/shared/types/api/map/MapContentEntity";
 import { MapInfo } from "../../_types/types";
 import Supercluster from "supercluster";
-import { ClusteredContentEntity } from "@/shared/types/api/map/ClusteredContentEntity";
 
 export type Props = {
   googleMapRef: MutableRefObject<google.maps.Map | null>;
@@ -21,7 +20,9 @@ export type Props = {
     lat: number;
     lng: number;
   };
+  onDragStart: () => void;
+  onClickMap: () => void;
   setMapInfo: SetState<MapInfo>;
   onClickMarkerCluster: (id: number) => void;
-  onClickGoogleMap: () => void;
+  onChangeMap: () => void;
 };

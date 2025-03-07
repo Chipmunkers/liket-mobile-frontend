@@ -21,12 +21,16 @@ const CustomGoogleMap = ({
   userPosition,
   setMapInfo,
   onClickMarkerCluster,
-  onClickGoogleMap,
+  onClickMap,
+  onChangeMap,
+  onDragStart,
 }: Props) => {
   return (
     <LazyGoogleMap
       center={latLng}
       handleGoogleApiLoaded={({ map }) => (googleMapRef.current = map)}
+      onDragStart={() => onDragStart()}
+      onClickMap={onClickMap}
       onChangeMap={({
         zoom,
         bounds,
@@ -46,7 +50,7 @@ const CustomGoogleMap = ({
           zoomLevel: zoom,
         });
 
-        onClickGoogleMap();
+        onChangeMap();
       }}
     >
       {markerClusteredContents?.map(({ properties, geometry, id }) => {
@@ -57,15 +61,14 @@ const CustomGoogleMap = ({
           return (
             <IconMarker
               key={`${lat}-${lng}`}
-              isClustered
-              selected={selectedMarkerId === id}
               numberOfMarkers={
                 properties.point_count >= 99 ? 99 : properties.point_count
               }
               icon="https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/clustered_marker.svg"
               lat={lat}
               lng={lng}
-              onClickMarker={() => {
+              onClickMarker={(e) => {
+                e.stopPropagation();
                 onClickMarkerCluster(+id);
               }}
             />
@@ -80,7 +83,16 @@ const CustomGoogleMap = ({
               lat={lat}
               lng={lng}
               key={`${lat}-${lng}`}
-              onClickMarker={(lat, lng) => {
+              onClickMarker={(e) => {
+                /**
+                 * INFO 지도 터치 이벤트 전파 방지
+                 *
+                 * 지도를 터치할 경우 Drawer가 닫히고,
+                 * 마커를 터치할 경우 Drawer가 유지되어야 함
+                 * 마커 이벤트가 지도로 전파되지 않도록 stopPropagation 사용
+                 */
+                e.stopPropagation();
+
                 const currentZoom = googleMapRef.current?.getZoom();
 
                 if (currentZoom) {
@@ -103,7 +115,6 @@ const CustomGoogleMap = ({
           return (
             <IconMarker
               key={`${lat}-${lng}`}
-              selected={selectedMarkerId === id}
               numberOfMarkers={
                 properties.point_count >= 99 ? 99 : properties.point_count
               }
@@ -114,7 +125,15 @@ const CustomGoogleMap = ({
               }
               lat={lat}
               lng={lng}
-              onClickMarker={() => {
+              onClickMarker={(e) => {
+                /**
+                 * INFO 지도 터치 이벤트 전파 방지
+                 *
+                 * 지도를 터치할 경우 Drawer가 닫히고,
+                 * 마커를 터치할 경우 Drawer가 유지되어야 함
+                 * 마커 이벤트가 지도로 전파되지 않도록 stopPropagation 사용
+                 */
+                e.stopPropagation();
                 onClickMarkerCluster(+properties.idx);
               }}
             />

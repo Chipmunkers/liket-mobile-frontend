@@ -36,8 +36,8 @@ const ContentBottomSheet = ({
       skipInitialTransition
       sheetRef={sheetRef}
       isOpen
-      defaultSnap={({ maxHeight }) => {
-        return maxHeight / 2 - 45;
+      defaultSnap={() => {
+        return 20;
       }}
       title={title}
       safeArea={safeArea.bottom}

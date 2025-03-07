@@ -1,6 +1,13 @@
-import { memo, MouseEvent, useEffect, useRef, useState } from "react";
+import { memo, useRef, MouseEvent } from "react";
 import Image from "next/image";
-import { styled, Typography, Box } from "@mui/material";
+
+interface Props {
+  lat: number;
+  lng: number;
+  icon: string;
+  numberOfMarkers?: number;
+  onClickMarker: (e: MouseEvent<HTMLButtonElement>) => void;
+}
 
 /**
  * lat과 lng는 지우면 안됨. CustomMarker 내부에서 안쓰더라도 라이브러리가 인식하고 동작함.
@@ -13,7 +20,7 @@ const CustomMarker = ({
   icon,
   numberOfMarkers = 1,
   onClickMarker,
-}: any) => {
+}: Props) => {
   const wrapperRef = useRef(null);
 
   return (

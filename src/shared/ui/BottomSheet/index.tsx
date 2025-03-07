@@ -51,15 +51,16 @@ interface StyledBottomSheetProps {
   safeArea: number;
 }
 
-const StyledBottomSheet = styled(BottomSheet)<StyledBottomSheetProps>`
-  div[data-rsbs-overlay],
-  div[data-rsbs-backdrop] {
-    margin: 0 auto;
-    border-radius: 24px 24px 0 0;
-    bottom: var(--bottom-tab-height);
-    margin-bottom: ${(props) => props.safeArea + "px"};
-  }
-  div[data-rsbs-header] {
-    padding-bottom: 12px;
-  }
-`;
+const StyledBottomSheet = styled(BottomSheet, {
+  shouldForwardProp: (prop): boolean => prop !== "safeArea",
+})<StyledBottomSheetProps>(({ safeArea = 0 }) => ({
+  "& div[data-rsbs-overlay], & div[data-rsbs-backdrop]": {
+    margin: "0 auto",
+    borderRadius: "24px 24px 0 0",
+    bottom: "var(--bottom-tab-height)",
+    marginBottom: `${safeArea}px`,
+  },
+  "& div[data-rsbs-header]": {
+    paddingBottom: "12px",
+  },
+}));
