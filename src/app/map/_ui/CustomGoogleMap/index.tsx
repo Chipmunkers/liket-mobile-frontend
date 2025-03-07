@@ -1,10 +1,8 @@
 import { LatLngBounds } from "google-maps-react-markers";
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
 import { Props } from "./types";
 import CircleClusteredMarker from "@/shared/ui/Marker/CircleClusteredMarker";
-import Marker from "@/shared/ui/Marker/Marker";
-import useLocation from "@/shared/hooks/useGetMyLocation";
+import IconMarker from "@/shared/ui/Marker/IconMarker";
 import AnimatedLocationMarker from "@/shared/ui/Marker/UserPosition";
 
 const LazyGoogleMap = dynamic(
@@ -57,7 +55,7 @@ const CustomGoogleMap = ({
           const lng = geometry.coordinates[0];
 
           return (
-            <Marker
+            <IconMarker
               key={`${lat}-${lng}`}
               isClustered
               selected={selectedMarkerId === id}
@@ -103,7 +101,7 @@ const CustomGoogleMap = ({
           const lng = properties.location.positionX;
 
           return (
-            <Marker
+            <IconMarker
               key={`${lat}-${lng}`}
               selected={selectedMarkerId === id}
               numberOfMarkers={
