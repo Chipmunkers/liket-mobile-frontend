@@ -1,9 +1,9 @@
 import { LatLngBounds } from "google-maps-react-markers";
 import dynamic from "next/dynamic";
 import { Props } from "./types";
-import CircleClusteredMarker from "@/shared/ui/Marker/CircleClusteredMarker";
 import IconMarker from "@/shared/ui/Marker/IconMarker";
 import AnimatedLocationMarker from "@/shared/ui/Marker/UserPosition";
+import CircleMarker from "@/shared/ui/Marker/CircleMarker";
 
 const LazyGoogleMap = dynamic(
   () => import("@/shared/ui/GoogleMap").then((mod) => mod.CommonGoogleMap),
@@ -76,7 +76,7 @@ const CustomGoogleMap = ({
           const count = properties.point_count;
 
           return (
-            <CircleClusteredMarker
+            <CircleMarker
               lat={lat}
               lng={lng}
               key={`${lat}-${lng}`}
@@ -94,7 +94,7 @@ const CustomGoogleMap = ({
               }}
             >
               {count}
-            </CircleClusteredMarker>
+            </CircleMarker>
           );
         } else if (mapInfo.zoomLevel >= 14) {
           const lat = properties.location.positionY;
