@@ -21,6 +21,7 @@ import useGetClickEvent from "./hooks/useGetClickEvent";
 import { setAppNavBack } from "@/shared/helpers/setAppNavState";
 
 const BottomTab = ({ shadow = false }: Props) => {
+  //
   const pathname = usePathname();
   const [isCreateDrawerOpen, setIsCreateDrawerOpen] = useState(false);
   const isWebview = useIsWebView();
