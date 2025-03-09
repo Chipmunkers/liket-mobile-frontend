@@ -8,6 +8,7 @@ export type Props = WidgetUiProps<{
 
   /**
    * isOpen 상태를 바꿔주는 함수
+   * 
    */
   setIsOpen: SetState<boolean>;
 }>;
