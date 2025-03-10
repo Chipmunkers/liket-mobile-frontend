@@ -30,6 +30,7 @@ import useLocation from "@/shared/hooks/useGetMyLocation";
 import MyLocation from "@/shared/icon/map/myLocation.svg";
 import customToast from "@/shared/helpers/customToast";
 import useModalStore from "@/shared/store/modalStore";
+import useDeviceOrientation from "./_hooks/useDeviceOrientation";
 
 const CIRCLE_CLUSTER_LEVEL = {
   markerTypeThreshold: 14,

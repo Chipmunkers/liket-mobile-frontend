@@ -4,6 +4,9 @@ import { Props } from "./types";
 import IconMarker from "@/shared/ui/Marker/IconMarker";
 import AnimatedLocationMarker from "@/shared/ui/Marker/UserPosition";
 import CircleMarker from "@/shared/ui/Marker/CircleMarker";
+import useDeviceOrientation from "../../_hooks/useDeviceOrientation";
+import { useEffect } from "react";
+import AnimatedDirectionMarker from "../AnimatedDirectionMarker";
 
 const LazyGoogleMap = dynamic(
   () => import("@/shared/ui/GoogleMap").then((mod) => mod.CommonGoogleMap),
@@ -25,6 +28,20 @@ const CustomGoogleMap = ({
   onChangeMap,
   onDragStart,
 }: Props) => {
+  // 방향 센서 활성화
+  const { startTracking, stopTracking } = useDeviceOrientation({
+    autoStart: false,
+  });
+
+  // 지도가 보여질 때 방향 센서 시작/중지
+  useEffect(() => {
+    startTracking();
+
+    return () => {
+      stopTracking();
+    };
+  }, [startTracking, stopTracking]);
+
   return (
     <LazyGoogleMap
       center={latLng}
@@ -141,8 +158,19 @@ const CustomGoogleMap = ({
         }
       })}
       {userPosition.lat && userPosition.lng && (
-        <AnimatedLocationMarker lat={userPosition.lat} lng={userPosition.lng} />
+        <AnimatedDirectionMarker
+          lat={userPosition.lat}
+          lng={userPosition.lng}
+          markerColor="bg-blue-500"
+          rippleColor="bg-blue-500"
+          borderColor="border-white"
+          arrowColor="fill-red-500"
+          arrowBorderColor="stroke-white"
+        />
       )}
+      {/* {userPosition.lat && userPosition.lng && (
+        <AnimatedLocationMarker lat={userPosition.lat} lng={userPosition.lng} />
+      )} */}
     </LazyGoogleMap>
   );
 };
