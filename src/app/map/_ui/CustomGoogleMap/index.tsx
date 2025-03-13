@@ -55,11 +55,14 @@ const CustomGoogleMap = ({
     >
       {markerClusteredContents?.map(({ properties, geometry, id }) => {
         if (mapInfo.zoomLevel >= 14 && properties.cluster && id) {
+          // 클러스터링 된 경우 IconMarker
           const lat = geometry.coordinates[1];
           const lng = geometry.coordinates[0];
+          const isSelected = selectedMarkerId === id;
 
           return (
             <IconMarker
+              isSelected={isSelected}
               key={`${lat}-${lng}`}
               numberOfMarkers={
                 properties.point_count >= 99 ? 99 : properties.point_count
@@ -73,10 +76,43 @@ const CustomGoogleMap = ({
               }}
             />
           );
-        } else if (mapInfo.zoomLevel < 14 && properties.cluster && id) {
+        } else if (mapInfo.zoomLevel >= 14 && !properties.cluster) {
+          // 클러스터링 되지 않은 경우 IconMarker
+          const lat = properties.location.positionY;
+          const lng = properties.location.positionX;
+          const isSelected = selectedMarkerId === properties.idx;
+
+          return (
+            <IconMarker
+              key={`${lat}-${lng}`}
+              numberOfMarkers={
+                properties.point_count >= 99 ? 99 : properties.point_count
+              }
+              isSelected={isSelected}
+              icon={
+                isSelected
+                  ? `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${properties.genre.idx}_icon.svg`
+                  : `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/default_marker_${properties.genre.idx}_icon.svg`
+              }
+              lat={lat}
+              lng={lng}
+              onClickMarker={(e) => {
+                /**
+                 * INFO 지도 터치 이벤트 전파 방지
+                 *
+                 * 지도를 터치할 경우 Drawer가 닫히고,
+                 * 마커를 터치할 경우 Drawer가 유지되어야 함
+                 * 마커 이벤트가 지도로 전파되지 않도록 stopPropagation 사용
+                 */
+                e.stopPropagation();
+                onClickMarkerCluster(+properties.idx);
+              }}
+            />
+          );
+        } else if (mapInfo.zoomLevel < 14 && !properties.cluster) {
+          // 클러스터링 되지 않은 경우, 그러니까 1개만 존재하는 경우
           const lat = geometry.coordinates[1];
           const lng = geometry.coordinates[0];
-          const count = properties.point_count;
 
           return (
             <CircleMarker
@@ -105,26 +141,20 @@ const CustomGoogleMap = ({
                 }
               }}
             >
-              {count}
+              {1}
             </CircleMarker>
           );
-        } else if (mapInfo.zoomLevel >= 14) {
-          const lat = properties.location.positionY;
-          const lng = properties.location.positionX;
+        } else if (mapInfo.zoomLevel < 14 && properties.cluster && id) {
+          // 클러스터링 된 경우
+          const lat = geometry.coordinates[1];
+          const lng = geometry.coordinates[0];
+          const count = properties.point_count;
 
           return (
-            <IconMarker
-              key={`${lat}-${lng}`}
-              numberOfMarkers={
-                properties.point_count >= 99 ? 99 : properties.point_count
-              }
-              icon={
-                selectedMarkerId === properties.idx
-                  ? `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${properties.genre.idx}_icon.svg`
-                  : `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/default_marker_${properties.genre.idx}_icon.svg`
-              }
+            <CircleMarker
               lat={lat}
               lng={lng}
+              key={`${lat}-${lng}`}
               onClickMarker={(e) => {
                 /**
                  * INFO 지도 터치 이벤트 전파 방지
@@ -134,9 +164,20 @@ const CustomGoogleMap = ({
                  * 마커 이벤트가 지도로 전파되지 않도록 stopPropagation 사용
                  */
                 e.stopPropagation();
-                onClickMarkerCluster(+properties.idx);
+                const currentZoom = googleMapRef.current?.getZoom();
+
+                if (currentZoom) {
+                  googleMapRef.current?.setZoom(currentZoom + 1);
+                  googleMapRef.current?.setCenter({
+                    lat: lat,
+                    lng: lng,
+                  });
+                  setMapInfo({ ...mapInfo, zoomLevel: currentZoom + 1 });
+                }
               }}
-            />
+            >
+              {count}
+            </CircleMarker>
           );
         }
       })}
