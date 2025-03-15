@@ -296,8 +296,16 @@ export default function MapPage() {
           <MyLocation fill="white" />
         </ButtonBase>
 
+        {/*
+         * INFO 바텀시트의 동작 정의
+         * 1. ClusteredIconMarker가 최초로 보여질 때 높이 20까지 바텀시트가 등장한다.
+         * 2. SingleIconMarker가 선택되면 바텀시트는 보이지 않는다.
+         * 3. ClusteredIconMarker가 선택되지 않으면 20까지 바텀시트가 등장한다.
+         * 4. ClusteredIconMarker가 선택되면 화면 절반까지 바텀시트가 등장한다.
+         */}
         {!isCircleMarkerShown && bottomSheetContents.length > 1 && (
           <ContentBottomSheet
+            isClusteredIconMarkerClicked={clickedMarkerContents.length > 1}
             sheetRef={sheetRef}
             listRef={listRef}
             contentList={bottomSheetContents.map((content) => ({
@@ -307,18 +315,20 @@ export default function MapPage() {
           />
         )}
 
-        {!isCircleMarkerShown && bottomSheetContents.length === 1 && (
-          <div className="bottom-[calc(8px+48px)] absolute z-10 w-[calc(100%-16px)] left-[8px]">
-            <div className="p-[16px] bg-white rounded-[24px]">
-              <ContentCardMedium
-                content={{
-                  ...bottomSheetContents[0],
-                  thumbnail: bottomSheetContents[0].imgList[0],
-                }}
-              />
+        {!isCircleMarkerShown &&
+          bottomSheetContents.length === 1 &&
+          selectedMarkerId && (
+            <div className="bottom-[calc(8px+48px)] absolute z-10 w-[calc(100%-16px)] left-[8px]">
+              <div className="p-[16px] bg-white rounded-[24px]">
+                <ContentCardMedium
+                  content={{
+                    ...bottomSheetContents[0],
+                    thumbnail: bottomSheetContents[0].imgList[0],
+                  }}
+                />
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </main>
 
       <FilterDrawer

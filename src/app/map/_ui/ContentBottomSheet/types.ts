@@ -17,13 +17,6 @@ export type Props = {
   >[];
 
   /**
-   * 열린채로 둘 것인지 여부
-   *
-   * @default false
-   */
-  open?: boolean;
-
-  /**
    * 바텀시트
    */
   title?: string;
@@ -39,4 +32,9 @@ export type Props = {
    * 스크롤 위치 수동 컨트롤시 사용
    */
   listRef: MutableRefObject<FixedSizeList | null>;
+
+  /**
+   * ClusteredIconMarker 클릭 여부
+   */
+  isClusteredIconMarkerClicked: boolean;
 };
