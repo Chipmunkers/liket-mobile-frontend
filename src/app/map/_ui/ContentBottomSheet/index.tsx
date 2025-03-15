@@ -19,6 +19,12 @@ const ContentBottomSheet = ({
 
   return (
     <CustomBottomSheet
+      /**
+       * INFO 얘가 필요한 이유와 언제 문제가 되는지
+       * 얘를 제거하면 npm run build & npm run start로 실행한 뒤
+       * SingleIconMarker 클릭 -> 지도 클릭 -> ClusteredIconMarker 클릭 하는 과정을 빠르게 진행하면
+       * ClusteredIconMarker를 클릭했을 때 바텀시트가 절반 높이까지 올라오지 않는 이슈가 존재함
+       */
       skipInitialTransition
       sheetRef={sheetRef}
       isOpen
@@ -80,9 +86,11 @@ export default memo(ContentBottomSheet, (prevState, nextState) => {
    * INFO 매우 중요
    * memo를 사용하지 않는 경우,
    * 내 위치를 주기적으로 가져오는 로직이 좋아요 아이콘을 주기적으로 rerendering하면서 깜빡이는 현상 존재.
+   * 이미지는 안그런데 좋아요 아이콘만 그러는 이유는 개인적인 추측으로 lottie 때문으로 보임.
    * 만약 이 안의 로직이 너무 길어지는 경우 바텀시트가 의도한 대로 동작하지 않을 수 있음.
    * 예를들면 SingleIconMarker 클릭 => 지도 클릭 => ClusteredIconMarker 클릭을 하는 경우 바텀시트는 화면 절반까지 올라와야함.
    * 그런데 위 과정을 빠르게 진행하는 경우 바텀시트가 화면 절반까지 못 올라오는 경우가 존재함.
+   * 그리고 위 과정이 npm run dev에서만 안되고 npm run build & npm run start 에서는 또 기능이 동작할 수도 있음.
    */
 
   try {
