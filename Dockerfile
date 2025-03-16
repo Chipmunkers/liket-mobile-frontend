@@ -5,11 +5,11 @@ RUN apk add --no-cache libc6-compat
 # 명령어를 실행할 디렉터리 지정
 WORKDIR /usr/src/app
 
-# Dependancy install을 위해 package.json, package-lock.json, yarn.lock 복사 
-COPY package.json yarn.lock ./ 
+# Dependancy install을 위해 package.json과 package-lock.json 복사 
+COPY package.json package-lock.json ./ 
 
 # Dependancy 설치 (새로운 lock 파일 수정 또는 생성 방지)
-RUN yarn install
+RUN npm ci
 
 ###########################################################
 
@@ -26,7 +26,7 @@ WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
 
-RUN yarn build
+RUN npm run build
 
 ###########################################################
 
@@ -51,4 +51,4 @@ COPY --from=builder --chown=nextjs:nodejs /usr/src/app/.next/static ./.next/stat
 EXPOSE 3000
 
 # node로 애플리케이션 실행
-CMD ["node", "server.js"] 
+CMD ["node", "server.js"]

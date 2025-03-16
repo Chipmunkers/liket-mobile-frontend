@@ -45,39 +45,44 @@ export default function MapPage() {
     useLocation();
 
   const handleClickMyLocation = () => {
-    if (window?.isWebview) {
-      if (WEBVIEW_PERMISSION === "undetermined" && canAskAgain) {
-        // 아직 권한 요청을 한 번도 안 했거나, 다시 물어볼 수 있는 상태
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({ type: "REQUEST_PERMISSION_AGAIN" })
-        );
-      } else if (WEBVIEW_PERMISSION === "denied") {
-        // 권한 요청이 거절된 상태
-        if (canAskAgain) {
-          // 권한 요청은 거절됐으나 다시 요청이 가능한 상태
-          window.ReactNativeWebView.postMessage(
-            JSON.stringify({ type: "REQUEST_PERMISSION_AGAIN" })
-          );
-        } else {
-          // 권한 요청이 아얘 불가능한 상태
-          openModal("PermissionModal", {
-            onClickPositive() {
-              window.ReactNativeWebView.postMessage(
-                JSON.stringify({ type: "OPEN_SETTINGS" })
-              );
-            },
-          });
-        }
-      }
-    }
+    customToast("열심히 준비중입니다!");
+    return;
 
-    if ([WEB_PERMISSION, WEBVIEW_PERMISSION].includes("granted")) {
-      if (lat && lng) {
-        googleMapRef.current?.setCenter({ lat, lng });
-      }
-    } else if (WEB_PERMISSION === "denied") {
-      customToast("브라우저에서 먼저 내 위치 접근 권한을 허용해주세요.");
-    }
+    // INFO: 준비중인 기능
+
+    // if (window?.isWebview) {
+    //   if (WEBVIEW_PERMISSION === "undetermined" && canAskAgain) {
+    //     // 아직 권한 요청을 한 번도 안 했거나, 다시 물어볼 수 있는 상태
+    //     window.ReactNativeWebView.postMessage(
+    //       JSON.stringify({ type: "REQUEST_PERMISSION_AGAIN" })
+    //     );
+    //   } else if (WEBVIEW_PERMISSION === "denied") {
+    //     // 권한 요청이 거절된 상태
+    //     if (canAskAgain) {
+    //       // 권한 요청은 거절됐으나 다시 요청이 가능한 상태
+    //       window.ReactNativeWebView.postMessage(
+    //         JSON.stringify({ type: "REQUEST_PERMISSION_AGAIN" })
+    //       );
+    //     } else {
+    //       // 권한 요청이 아얘 불가능한 상태
+    //       openModal("PermissionModal", {
+    //         onClickPositive() {
+    //           window.ReactNativeWebView.postMessage(
+    //             JSON.stringify({ type: "OPEN_SETTINGS" })
+    //           );
+    //         },
+    //       });
+    //     }
+    //   }
+    // }
+
+    // if ([WEB_PERMISSION, WEBVIEW_PERMISSION].includes("granted")) {
+    //   if (lat && lng) {
+    //     googleMapRef.current?.setCenter({ lat, lng });
+    //   }
+    // } else if (WEB_PERMISSION === "denied") {
+    //   customToast("브라우저에서 먼저 내 위치 접근 권한을 허용해주세요.");
+    // }
   };
 
   const searchParams = useSearchParams();
@@ -296,8 +301,16 @@ export default function MapPage() {
           <MyLocation fill="white" />
         </ButtonBase>
 
+        {/*
+         * INFO 바텀시트의 동작 정의
+         * 1. ClusteredIconMarker가 최초로 보여질 때 높이 20까지 바텀시트가 등장한다.
+         * 2. SingleIconMarker가 선택되면 바텀시트는 보이지 않는다.
+         * 3. ClusteredIconMarker가 선택되지 않으면 20까지 바텀시트가 등장한다.
+         * 4. ClusteredIconMarker가 선택되면 화면 절반까지 바텀시트가 등장한다.
+         */}
         {!isCircleMarkerShown && bottomSheetContents.length > 1 && (
           <ContentBottomSheet
+            isClusteredIconMarkerClicked={clickedMarkerContents.length > 1}
             sheetRef={sheetRef}
             listRef={listRef}
             contentList={bottomSheetContents.map((content) => ({
@@ -307,18 +320,20 @@ export default function MapPage() {
           />
         )}
 
-        {!isCircleMarkerShown && bottomSheetContents.length === 1 && (
-          <div className="bottom-[calc(8px+48px)] absolute z-10 w-[calc(100%-16px)] left-[8px]">
-            <div className="p-[16px] bg-white rounded-[24px]">
-              <ContentCardMedium
-                content={{
-                  ...bottomSheetContents[0],
-                  thumbnail: bottomSheetContents[0].imgList[0],
-                }}
-              />
+        {!isCircleMarkerShown &&
+          bottomSheetContents.length === 1 &&
+          selectedMarkerId && (
+            <div className="bottom-[calc(8px+48px)] absolute z-10 w-[calc(100%-16px)] left-[8px]">
+              <div className="p-[16px] bg-white rounded-[24px]">
+                <ContentCardMedium
+                  content={{
+                    ...bottomSheetContents[0],
+                    thumbnail: bottomSheetContents[0].imgList[0],
+                  }}
+                />
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </main>
 
       <FilterDrawer
