@@ -12,12 +12,18 @@ import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
 import MapExpandIcon from "@/shared/icon/content/MapExpandIcon.svg";
 import Image from "next/image";
 import { ContentFooter } from "@/app/contents/[idx]/_ui/DetailContent/ui/ContentFooter";
+import CopyIcon from "../../../../_asset/copy.svg";
 
 const ContentTab = ({ content }: Props) => {
   const router = useRouter();
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY || "",
   });
+
+  const address = `${content.location.region1Depth} ${
+    content.location.region2Depth
+  }${" "}
+  ${content.location.address} ${content.location?.detailAddress || ""}`;
 
   return (
     <>
@@ -51,10 +57,22 @@ const ContentTab = ({ content }: Props) => {
       <Divider width="100%" height="8px" />
       <div className="px-[24px] py-[24px] flex-col relative">
         <div className="text-h2">위치</div>
-        <div className="text-grey-04 text-body5 mt-[7px] mb-[4px]">
-          {content.location.region1Depth} {content.location.region2Depth}{" "}
-          {content.location.address} {content.location?.detailAddress || ""}
-        </div>
+        <button
+          className="mt-[7px] mb-[4px] flex items-center"
+          onClick={() => {
+            try {
+              navigator.clipboard.writeText(address);
+              customToast("주소를 복사했어요");
+            } catch (e) {
+              customToast("주소를 복사하는 과정에서 에러가 발생했어요");
+            }
+          }}
+        >
+          <div className="text-grey-04 text-body5">{address}</div>
+          <span className="ml-[4px] mb-[4px]">
+            <CopyIcon />
+          </span>
+        </button>
         <div className="h-[171px] w-[100%] bg-grey-02 flex relative cursor-pointer">
           <div className="absolute right-[9px] top-[8px] z-[1] cursor-pointer">
             <MapExpandIcon />
