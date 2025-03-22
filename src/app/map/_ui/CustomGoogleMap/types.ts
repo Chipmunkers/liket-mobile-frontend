@@ -5,6 +5,7 @@ import { MapInfo } from "../../_types/types";
 import Supercluster from "supercluster";
 
 export type Props = {
+  isOnlyOneSingleIconMarkerVisibleInMap: boolean;
   googleMapRef: MutableRefObject<google.maps.Map | null>;
   selectedMarkerId?: number;
   markerClusteredContents: (

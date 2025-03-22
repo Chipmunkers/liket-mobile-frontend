@@ -11,12 +11,7 @@ import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import BottomButtonTab from "@/shared/ui/BottomButtonTab";
 import { useState } from "react";
 
-const LocationDrawer = ({
-  isOpen,
-  selectLocation,
-  setSelectLocation,
-  setLatLng,
-}: Props) => {
+const LocationDrawer = ({ isOpen, selectLocation, onChangeRegion }: Props) => {
   const router = useRouter();
   const [selectSido, setSelectSido] = useState<Sido>(selectLocation.sido);
   const [selectSigungu, setSelectSigungu] = useState<Sigungu | null>(
@@ -106,20 +101,24 @@ const LocationDrawer = ({
               !selectSigungu.bjd_cd.startsWith(selectSido.cd)
             ) {
               setSelectSigungu(null);
-              setSelectLocation({
-                sido: selectSido,
-                sigungu: null,
-              });
-              setLatLng({
-                lat: Number(selectSido.lat),
-                lng: Number(selectSido.lng),
-              });
+              onChangeRegion(
+                {
+                  sido: selectSido,
+                  sigungu: null,
+                },
+                {
+                  lat: Number(selectSido.lat),
+                  lng: Number(selectSido.lng),
+                }
+              );
             } else {
-              setSelectLocation({ sido: selectSido, sigungu: selectSigungu });
-              setLatLng({
-                lat: Number(selectSigungu.lat),
-                lng: Number(selectSigungu.lng),
-              });
+              onChangeRegion(
+                { sido: selectSido, sigungu: selectSigungu },
+                {
+                  lat: Number(selectSigungu.lat),
+                  lng: Number(selectSigungu.lng),
+                }
+              );
             }
 
             router.replace("/map");

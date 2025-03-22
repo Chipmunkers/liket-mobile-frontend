@@ -13,6 +13,7 @@ const LazyGoogleMap = dynamic(
 );
 
 const CustomGoogleMap = ({
+  isOnlyOneSingleIconMarkerVisibleInMap,
   googleMapRef,
   selectedMarkerId,
   markerClusteredContents,
@@ -88,9 +89,9 @@ const CustomGoogleMap = ({
               numberOfMarkers={
                 properties.point_count >= 99 ? 99 : properties.point_count
               }
-              isSelected={isSelected}
+              isSelected={isSelected || isOnlyOneSingleIconMarkerVisibleInMap}
               icon={
-                isSelected
+                isSelected || isOnlyOneSingleIconMarkerVisibleInMap
                   ? `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${properties.genre.idx}_icon.svg`
                   : `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/default_marker_${properties.genre.idx}_icon.svg`
               }
