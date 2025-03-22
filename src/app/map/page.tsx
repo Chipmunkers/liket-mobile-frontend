@@ -239,7 +239,7 @@ export default function MapPage() {
         className="relative"
         style={{
           height: `${innerHeight - 96}px`,
-          marginBottom: safeArea.bottom,
+          marginBottom: safeArea.bottom + 48,
         }}
       >
         <CustomGoogleMap
@@ -302,8 +302,11 @@ export default function MapPage() {
         {/* 내위치 보기 버튼 */}
         <ButtonBase
           className={classNames(
-            "absolute  mt-[16px] mr-[16px] bottom-[82px] left-[24px] bg-white w-[36px] h-[36px] shadow-[0_0_8px_0_rgba(0,0,0,0.16)] icon-button rounded-full"
+              "absolute mr-[16px] left-[24px] size-[36px] bg-white shadow-[0_0_8px_0_rgba(0,0,0,0.16)] icon-button rounded-full"
           )}
+            style={{
+              bottom: safeArea.bottom + 48,
+            }}
           onClick={handleClickMyLocation}
           disableRipple={true}
         >
