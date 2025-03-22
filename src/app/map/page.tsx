@@ -214,6 +214,12 @@ export default function MapPage() {
     sheetRef.current?.snapTo(() => 20);
   };
 
+  const isOnlyOneSingleIconMarkerVisibleInMap =
+    contentApiResult?.contentList.length === 1;
+
+  const isSingleIconMarkerSelected =
+    selectedMarkerId && bottomSheetContents.length === 1;
+
   return (
     <>
       <Header>
@@ -237,6 +243,9 @@ export default function MapPage() {
         }}
       >
         <CustomGoogleMap
+          isOnlyOneSingleIconMarkerVisibleInMap={
+            isOnlyOneSingleIconMarkerVisibleInMap
+          }
           googleMapRef={googleMapRef}
           selectedMarkerId={selectedMarkerId}
           markerClusteredContents={clusters}
@@ -321,9 +330,14 @@ export default function MapPage() {
         )}
 
         {!isCircleMarkerShown &&
-          bottomSheetContents.length === 1 &&
-          selectedMarkerId && (
-            <div className="bottom-[calc(8px+48px)] absolute z-10 w-[calc(100%-16px)] left-[8px]">
+          (isOnlyOneSingleIconMarkerVisibleInMap ||
+            isSingleIconMarkerSelected) && (
+            <div
+              className="absolute z-10 w-[calc(100%-16px)] left-[8px]"
+              style={{
+                bottom: safeArea.bottom ? safeArea.bottom + 8 : 8,
+              }}
+            >
               <div className="p-[16px] bg-white rounded-[24px]">
                 <ContentCardMedium
                   content={{
