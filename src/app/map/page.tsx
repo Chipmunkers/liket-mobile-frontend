@@ -223,6 +223,7 @@ export default function MapPage() {
   ) => {
     setSelectLocation(newRegion);
     googleMapRef.current?.setCenter(newLatLng);
+    googleMapRef.current?.setZoom(14);
   };
 
   const isOnlyOneSingleIconMarkerVisibleInMap =
