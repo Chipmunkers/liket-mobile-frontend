@@ -41,8 +41,13 @@ export default function MapPage() {
   const openModal = useModalStore(({ openModal }) => openModal);
 
   const googleMapRef = useRef<google.maps.Map | null>(null);
-  const { lat, lng, WEBVIEW_PERMISSION, WEB_PERMISSION, canAskAgain } =
-    useLocation();
+  const {
+    lat: userPosLat,
+    lng: userPosLng,
+    WEBVIEW_PERMISSION,
+    WEB_PERMISSION,
+    canAskAgain,
+  } = useLocation();
 
   const handleClickMyLocation = () => {
     customToast("열심히 준비중입니다!");
@@ -250,8 +255,8 @@ export default function MapPage() {
           selectedMarkerId={selectedMarkerId}
           markerClusteredContents={clusters}
           userPosition={{
-            lat,
-            lng,
+            lat: userPosLat,
+            lng: userPosLng,
           }}
           latLng={latLng}
           mapInfo={mapInfo}
