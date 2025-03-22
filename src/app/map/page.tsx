@@ -254,7 +254,7 @@ export default function MapPage() {
       <main
         className="relative"
         style={{
-          height: `${innerHeight - 96}px`,
+          height: `${innerHeight - safeArea.bottom - 96}px`,
           marginBottom: safeArea.bottom + 48,
         }}
       >
