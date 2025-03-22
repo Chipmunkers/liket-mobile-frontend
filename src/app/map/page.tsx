@@ -50,44 +50,41 @@ export default function MapPage() {
   } = useLocation();
 
   const handleClickMyLocation = () => {
-    customToast("열심히 준비중입니다!");
-    return;
-
     // INFO: 준비중인 기능
+    if (window?.isWebview) {
+      if (WEBVIEW_PERMISSION === "undetermined" && canAskAgain) {
+        // 아직 권한 요청을 한 번도 안 했거나, 다시 물어볼 수 있는 상태
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({ type: "REQUEST_PERMISSION_AGAIN" })
+        );
+      } else if (WEBVIEW_PERMISSION === "denied") {
+        // 권한 요청이 거절된 상태
+        if (canAskAgain) {
+          // 권한 요청은 거절됐으나 다시 요청이 가능한 상태
+          window.ReactNativeWebView.postMessage(
+            JSON.stringify({ type: "REQUEST_PERMISSION_AGAIN" })
+          );
+        } else {
+          // 권한 요청이 아얘 불가능한 상태
+          openModal("PermissionModal", {
+            onClickPositive() {
+              window.ReactNativeWebView.postMessage(
+                JSON.stringify({ type: "OPEN_SETTINGS" })
+              );
+            },
+          });
+        }
+      }
+    }
 
-    // if (window?.isWebview) {
-    //   if (WEBVIEW_PERMISSION === "undetermined" && canAskAgain) {
-    //     // 아직 권한 요청을 한 번도 안 했거나, 다시 물어볼 수 있는 상태
-    //     window.ReactNativeWebView.postMessage(
-    //       JSON.stringify({ type: "REQUEST_PERMISSION_AGAIN" })
-    //     );
-    //   } else if (WEBVIEW_PERMISSION === "denied") {
-    //     // 권한 요청이 거절된 상태
-    //     if (canAskAgain) {
-    //       // 권한 요청은 거절됐으나 다시 요청이 가능한 상태
-    //       window.ReactNativeWebView.postMessage(
-    //         JSON.stringify({ type: "REQUEST_PERMISSION_AGAIN" })
-    //       );
-    //     } else {
-    //       // 권한 요청이 아얘 불가능한 상태
-    //       openModal("PermissionModal", {
-    //         onClickPositive() {
-    //           window.ReactNativeWebView.postMessage(
-    //             JSON.stringify({ type: "OPEN_SETTINGS" })
-    //           );
-    //         },
-    //       });
-    //     }
-    //   }
-    // }
-
-    // if ([WEB_PERMISSION, WEBVIEW_PERMISSION].includes("granted")) {
-    //   if (lat && lng) {
-    //     googleMapRef.current?.setCenter({ lat, lng });
-    //   }
-    // } else if (WEB_PERMISSION === "denied") {
-    //   customToast("브라우저에서 먼저 내 위치 접근 권한을 허용해주세요.");
-    // }
+    if ([WEB_PERMISSION, WEBVIEW_PERMISSION].includes("granted")) {
+      if (userPosLat && userPosLng) {
+        googleMapRef.current?.setZoom(14);
+        googleMapRef.current?.setCenter({ lat: userPosLat, lng: userPosLng });
+      }
+    } else if (WEB_PERMISSION === "denied") {
+      customToast("브라우저에서 먼저 내 위치 접근 권한을 허용해주세요.");
+    }
   };
 
   const searchParams = useSearchParams();
@@ -306,18 +303,18 @@ export default function MapPage() {
 
         {/* 내위치 보기 버튼 */}
         {typeof window !== "undefined" && (
-        <ButtonBase
-          className={classNames(
+          <ButtonBase
+            className={classNames(
               "absolute mr-[16px] left-[24px] size-[36px] bg-white shadow-[0_0_8px_0_rgba(0,0,0,0.16)] icon-button rounded-full"
-          )}
+            )}
             style={{
               bottom: safeArea.bottom + 48,
             }}
-          onClick={handleClickMyLocation}
-          disableRipple={true}
-        >
-          <MyLocation fill="white" />
-        </ButtonBase>
+            onClick={handleClickMyLocation}
+            disableRipple={true}
+          >
+            <MyLocation fill="white" />
+          </ButtonBase>
         )}
 
         {/*
