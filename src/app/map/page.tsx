@@ -300,6 +300,7 @@ export default function MapPage() {
         </div>
 
         {/* 내위치 보기 버튼 */}
+        {typeof window !== "undefined" && (
         <ButtonBase
           className={classNames(
               "absolute mr-[16px] left-[24px] size-[36px] bg-white shadow-[0_0_8px_0_rgba(0,0,0,0.16)] icon-button rounded-full"
@@ -312,6 +313,7 @@ export default function MapPage() {
         >
           <MyLocation fill="white" />
         </ButtonBase>
+        )}
 
         {/*
          * INFO 바텀시트의 동작 정의
