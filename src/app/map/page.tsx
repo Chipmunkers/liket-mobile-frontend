@@ -217,6 +217,14 @@ export default function MapPage() {
     sheetRef.current?.snapTo(() => 20);
   };
 
+  const handleChangeRegion = (
+    newRegion: SelectLocation,
+    newLatLng: { lat: number; lng: number }
+  ) => {
+    setSelectLocation(newRegion);
+    googleMapRef.current?.setCenter(newLatLng);
+  };
+
   const isOnlyOneSingleIconMarkerVisibleInMap =
     contentApiResult?.contentList.length === 1;
 
@@ -374,8 +382,7 @@ export default function MapPage() {
       <LocationDrawer
         isOpen={!!isTownSelectionModalOpen}
         selectLocation={selectLocation}
-        setSelectLocation={setSelectLocation}
-        setLatLng={setLatLng}
+        onChangeRegion={handleChangeRegion}
       />
 
       <BottomTab />
