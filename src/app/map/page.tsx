@@ -319,11 +319,8 @@ export default function MapPage() {
         <ClientOnlyWrapper>
           <ButtonBase
             className={classNames(
-              "absolute mr-[16px] left-[24px] size-[36px] bg-white shadow-[0_0_8px_0_rgba(0,0,0,0.16)] icon-button rounded-full"
+              "absolute mr-[16px] left-[24px] size-[36px] bg-white shadow-[0_0_8px_0_rgba(0,0,0,0.16)] icon-button rounded-full bottom-[34px]"
             )}
-            style={{
-              bottom: safeArea.bottom + 48,
-            }}
             onClick={handleClickMyLocation}
             disableRipple={true}
           >
@@ -353,12 +350,7 @@ export default function MapPage() {
         {!isCircleMarkerShown &&
           (isOnlyOneSingleIconMarkerVisibleInMap ||
             isSingleIconMarkerSelected) && (
-            <div
-              className="absolute z-10 w-[calc(100%-16px)] left-[8px]"
-              style={{
-                bottom: safeArea.bottom ? safeArea.bottom + 8 : 8,
-              }}
-            >
+            <div className="absolute z-10 w-[calc(100%-16px)] left-[8px] bottom-[8px]">
               <div className="p-[16px] bg-white rounded-[24px]">
                 <ContentCardMedium
                   content={{
