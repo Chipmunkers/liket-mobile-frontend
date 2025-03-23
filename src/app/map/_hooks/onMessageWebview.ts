@@ -1,4 +1,5 @@
-import { setAppNavBack } from "@/shared/helpers/setAppNavState";
+import { WEBVIEW_EVENT_TYPE } from "@/shared/consts/webview/event";
+import { messageToRN } from "@/shared/helpers/messageToRN";
 import { useEffect } from "react";
 
 const useCheckModalOpenForWebview = (
@@ -6,11 +7,17 @@ const useCheckModalOpenForWebview = (
   target2: string | null
 ) => {
   useEffect(() => {
-    setAppNavBack(target1 === "true");
+    messageToRN({
+      type: WEBVIEW_EVENT_TYPE.NAV_BACK,
+      back: target1 === "true",
+    });
   }, [target1]);
 
   useEffect(() => {
-    setAppNavBack(target2 === "true");
+    messageToRN({
+      type: WEBVIEW_EVENT_TYPE.NAV_BACK,
+      back: target2 === "true",
+    });
   }, [target2]);
 };
 
