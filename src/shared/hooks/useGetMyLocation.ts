@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { WEBVIEW_EVENT_TYPE } from "../consts/webview/event";
 
 type PermissionStatus = "granted" | "denied" | "undetermined";
 
@@ -143,7 +144,7 @@ const useLocation = ({
     // RN에 준비 완료 알리기
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({
-        type: "WEB_READY_FOR_MESSAGES",
+        type: WEBVIEW_EVENT_TYPE.WEB_READY_FOR_MESSAGES,
       })
     );
 
