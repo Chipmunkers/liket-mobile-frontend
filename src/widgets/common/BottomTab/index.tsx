@@ -18,7 +18,8 @@ import useMessageWebview from "@/widgets/common/BottomTab/hooks/useMessageWebvie
 import { colors } from "@/shared/style/color";
 import { classNames } from "@/shared/helpers/classNames";
 import useGetClickEvent from "./hooks/useGetClickEvent";
-import { setAppNavBack } from "@/shared/helpers/setAppNavState";
+import { WEBVIEW_EVENT_TYPE } from "@/shared/consts/webview/event";
+import { messageToRN } from "@/shared/helpers/messageToRN";
 
 const BottomTab = ({ shadow = false }: Props) => {
   //
@@ -35,7 +36,10 @@ const BottomTab = ({ shadow = false }: Props) => {
   });
 
   useEffect(() => {
-    setAppNavBack(isCreateDrawerOpen);
+    messageToRN({
+      type: WEBVIEW_EVENT_TYPE.NAV_BACK,
+      back: isCreateDrawerOpen,
+    });
   }, [isCreateDrawerOpen]);
 
   const buttonStyle = {
