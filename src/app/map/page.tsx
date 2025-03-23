@@ -131,12 +131,6 @@ export default function MapPage() {
     MapContentEntity[]
   >([]);
 
-  // * 현재 보고 있는 위치
-  const [latLng, setLatLng] = useState<{ lng: number; lat: number }>({
-    lng: Number(selectLocation.sigungu?.lng || selectLocation.sido.lng),
-    lat: Number(selectLocation.sigungu?.lat || selectLocation.sido.lat),
-  });
-
   const [mapInfo, setMapInfo] = useState<MapInfo>({
     bound: {
       top: { x: 0, y: 0 },
@@ -269,7 +263,10 @@ export default function MapPage() {
             lat: userPosLat,
             lng: userPosLng,
           }}
-          latLng={latLng}
+          latLng={{
+            lat: Number(selectLocation.sido.lat),
+            lng: Number(selectLocation.sido.lng),
+          }}
           mapInfo={mapInfo}
           setMapInfo={setMapInfo}
           onClickMarkerCluster={handleClickMarkerCluster}
