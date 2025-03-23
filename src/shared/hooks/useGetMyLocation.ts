@@ -35,7 +35,6 @@ interface UseLocationReturn {
   WEB_PERMISSION: PermissionStatus;
   WEBVIEW_PERMISSION: PermissionStatus;
   canAskAgain: boolean;
-  getLocation?: () => void;
 }
 
 /**
@@ -100,19 +99,6 @@ const useLocation = ({
       }
     );
   }, []);
-
-  // 위치 정보 가져오기 (환경에 따라 다른 방식 사용)
-  const getLocation = useCallback((): void => {
-    if (!isRNWebView) {
-      getWebLocation();
-    } else {
-      window.ReactNativeWebView?.postMessage(
-        JSON.stringify({
-          type: "REQUEST_LOCATION",
-        })
-      );
-    }
-  }, [isRNWebView, getWebLocation]);
 
   // React Native WebView 메시지 이벤트 처리
   useEffect(() => {
@@ -194,7 +180,6 @@ const useLocation = ({
     WEB_PERMISSION: location.WEB_PERMISSION,
     WEBVIEW_PERMISSION: location.WEBVIEW_PERMISSION,
     canAskAgain: location.canAskAgain,
-    getLocation,
   };
 };
 
