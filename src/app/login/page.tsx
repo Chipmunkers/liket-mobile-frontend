@@ -17,6 +17,7 @@ import { useIsWebView } from "@/shared/hooks/useIsWebview";
 import { WEBVIEW_EVENT_TYPE } from "@/shared/consts/webview/event";
 import useOnMessageFromWebview from "@/app/login/_hooks/useOnMessageFromWebview";
 import { hapticFeedback } from "@/shared/helpers/hapticFeedback";
+import { messageToRN } from "@/shared/helpers/messageToRN";
 
 export default function Page() {
   const router = useRouter();
@@ -36,13 +37,11 @@ export default function Page() {
   // * 소셜 로그인 클릭 전송
   const socialLoginClickEvent = (provider: "kakao" | "apple" | "naver") => {
     if (isWebview) {
-      window.ReactNativeWebView.postMessage(
-        JSON.stringify({
-          type: WEBVIEW_EVENT_TYPE.CLICK,
-          action: "social-login",
-          provider: provider,
-        })
-      );
+      messageToRN({
+        type: WEBVIEW_EVENT_TYPE.CLICK,
+        action: "social-login",
+        provider: provider,
+      });
       return;
     }
 

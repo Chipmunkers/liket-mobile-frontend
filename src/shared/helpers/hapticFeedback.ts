@@ -1,4 +1,5 @@
 import { WEBVIEW_EVENT_TYPE } from "@/shared/consts/webview/event";
+import { messageToRN } from "./messageToRN";
 
 // !주의: 하단 enum은 expo-haptics 라이브러리에서 선언된 타입입니다.
 
@@ -63,10 +64,8 @@ export type HapticFeedbackEvent =
 
 export const hapticFeedback = (option: HapticFeedbackEvent) => {
   if (!window.ReactNativeWebView) return;
-  window.ReactNativeWebView.postMessage(
-    JSON.stringify({
-      type: WEBVIEW_EVENT_TYPE.HAPTIC_FEEDBACK,
-      ...option,
-    })
-  );
+  messageToRN({
+    type: WEBVIEW_EVENT_TYPE.HAPTIC_FEEDBACK,
+    ...option,
+  });
 };

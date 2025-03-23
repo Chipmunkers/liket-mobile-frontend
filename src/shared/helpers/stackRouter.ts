@@ -3,6 +3,7 @@ import { WEBVIEW_EVENT_TYPE } from "../consts/webview/event";
 import { WEBVIEW_SCREEN } from "../consts/webview/screen";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { StackRouterPushOption } from "../consts/webview/option";
+import { messageToRN } from "./messageToRN";
 
 /**
  * 앱에서 띄운 웹뷰인지 판단하는 메서드
@@ -30,14 +31,12 @@ const sendRouterEvent = <T extends "back" | string>(
     ? undefined
     : Required<Omit<StackRouterPushOption, "path">>
 ): void => {
-  window.ReactNativeWebView.postMessage(
-    JSON.stringify({
-      type: WEBVIEW_EVENT_TYPE.ROUTER_EVENT,
-      path: path,
-      screen: option?.screen,
-      isStack: option?.isStack,
-    })
-  );
+  messageToRN({
+    type: WEBVIEW_EVENT_TYPE.ROUTER_EVENT,
+    path: path,
+    screen: option?.screen,
+    isStack: option?.isStack,
+  });
 };
 
 /**
