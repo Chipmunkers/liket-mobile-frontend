@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { WEBVIEW_EVENT_TYPE } from "../consts/webview/event";
+import { messageToRN } from "../helpers/messageToRN";
 
 type PermissionStatus = "granted" | "denied" | "undetermined";
 
@@ -142,11 +143,9 @@ const useLocation = ({
     };
 
     // RN에 준비 완료 알리기
-    window.ReactNativeWebView?.postMessage(
-      JSON.stringify({
-        type: WEBVIEW_EVENT_TYPE.WEB_READY_FOR_MESSAGES,
-      })
-    );
+    messageToRN({
+      type: WEBVIEW_EVENT_TYPE.WEB_READY_FOR_MESSAGES,
+    });
 
     document.addEventListener("message", handleMessage as any);
     window.addEventListener("message", handleMessage);

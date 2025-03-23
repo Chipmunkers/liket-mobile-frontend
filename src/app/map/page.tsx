@@ -28,6 +28,7 @@ import customToast from "@/shared/helpers/customToast";
 import useModalStore from "@/shared/store/modalStore";
 import ClientOnlyWrapper from "@/shared/ui/ClientOnlyWrapper";
 import { WEBVIEW_EVENT_TYPE } from "@/shared/consts/webview/event";
+import { messageToRN } from "@/shared/helpers/messageToRN";
 
 const CIRCLE_CLUSTER_LEVEL = {
   markerTypeThreshold: 14,
@@ -65,25 +66,19 @@ export default function MapPage() {
     if (window?.isWebview) {
       if (WEBVIEW_PERMISSION === "undetermined" && canAskAgain) {
         // 아직 권한 요청을 한 번도 안 했거나, 다시 물어볼 수 있는 상태
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({ type: WEBVIEW_EVENT_TYPE.REQUEST_PERMISSION_AGAIN })
-        );
+        messageToRN({ type: WEBVIEW_EVENT_TYPE.REQUEST_PERMISSION_AGAIN });
       } else if (WEBVIEW_PERMISSION === "denied") {
         // 권한 요청이 거절된 상태
         if (canAskAgain) {
           // 권한 요청은 거절됐으나 다시 요청이 가능한 상태
-          window.ReactNativeWebView.postMessage(
-            JSON.stringify({
-              type: WEBVIEW_EVENT_TYPE.REQUEST_PERMISSION_AGAIN,
-            })
-          );
+          messageToRN({
+            type: WEBVIEW_EVENT_TYPE.REQUEST_PERMISSION_AGAIN,
+          });
         } else {
           // 권한 요청이 아얘 불가능한 상태
           openModal("PermissionModal", {
             onClickPositive() {
-              window.ReactNativeWebView.postMessage(
-                JSON.stringify({ type: WEBVIEW_EVENT_TYPE.OPEN_SETTINGS })
-              );
+              messageToRN({ type: WEBVIEW_EVENT_TYPE.OPEN_SETTINGS });
             },
           });
         }
