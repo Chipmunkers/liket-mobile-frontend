@@ -104,6 +104,7 @@ export default function Page() {
         </div>
         <BottomButtonTab shadow>
           <Button
+            type="submit"
             disabled={!formState.isValid || status === "pending"}
             onClick={() => onSubmit()}
             className="h-[48px] w-[100%]"
