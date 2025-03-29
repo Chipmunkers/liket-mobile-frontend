@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const useGetTosAll = () =>
   useQuery({
-    queryKey: [],
+    queryKey: ["tos-list"],
     queryFn: async () =>
       (
         await axiosInstance.get<{
