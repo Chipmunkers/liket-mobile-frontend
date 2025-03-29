@@ -18,7 +18,6 @@ export const useEditProfile = (
     }
   >
 ) => {
-  const router = useRouter();
   const exceptionHandler = useExceptionHandler();
 
   const mutation = useMutation({

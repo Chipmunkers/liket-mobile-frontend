@@ -7,7 +7,7 @@ import {
 } from "@/shared/ui/MuiDateComponent/MuiDateComponent";
 import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { PROFILE_FORM_DEFAULT_VALUES } from "./consts/initialForm";
 import { BasicInput, InputLabel } from "@/shared/ui/Input";
 import Chip from "@/shared/ui/Chip";
@@ -35,6 +35,8 @@ const ProfileForm = () => {
 
   const {
     formState,
+    control,
+    reset,
     register,
     setValue,
     getValues,
@@ -53,7 +55,7 @@ const ProfileForm = () => {
     },
   });
 
-  const { mutate: editProfileImg, status: editStatus } = useEditProfile({
+  const { mutate: editProfile, status: editStatus } = useEditProfile({
     onSuccess() {
       stackRouterPush(router, {
         path: "/mypage",
@@ -63,30 +65,41 @@ const ProfileForm = () => {
     },
   });
 
+  const handleGenderSelection = (
+    value: string,
+    onChange: (...event: any[]) => void,
+    selectedValue: string
+  ) => {
+    if (value === selectedValue) {
+      onChange("");
+    } else {
+      onChange(selectedValue);
+    }
+  };
+
   useEffect(() => {
     if (!myData) return;
 
-    setValue("birth", myData.birth?.toString() || "");
-    setValue("file", myData.profileImgPath || "");
-    setValue("gender", myData.gender?.toString() || "");
-    setValue("nickname", myData.nickname);
-    trigger();
-  }, [myData, setValue, trigger]);
+    reset({
+      birth: myData.birth?.toString() || "",
+      file: myData.profileImgPath || "",
+      gender: myData.gender?.toString() || "",
+      nickname: myData.nickname,
+    });
+  }, [myData, reset]);
 
   return (
     <>
       <form
         className="flex flex-col grow"
         onSubmit={handleSubmit(() => {
-          editProfileImg({
-            birth: isNaN(Number(getValues("birth")))
-              ? null
-              : Number(getValues("birth")),
-            gender: isNaN(Number(getValues("gender")))
-              ? null
-              : Number(getValues("gender")),
-            nickname: getValues("nickname"),
-            profileImg: getValues("file") === "" ? null : getValues("file"),
+          const { birth, gender, nickname, file } = getValues();
+
+          editProfile({
+            profileImg: file || null,
+            nickname: nickname,
+            gender: gender ? +gender : null,
+            birth: birth ? +birth : null,
           });
         })}
       >
@@ -115,51 +128,50 @@ const ProfileForm = () => {
           <div className="mt-[34px]">
             <InputLabel htmlFor="gender">성별</InputLabel>
             <ul id="gender" className="flex mt-[12px] gap-[8px]">
-              <li key={`gender-1`}>
-                <Chip
-                  isSelected={getValues("gender") === "1"}
-                  onClick={() => {
-                    trigger();
-
-                    if (getValues("gender") === "1") {
-                      setValue("gender", "");
-                      return;
-                    }
-
-                    setValue("gender", "1");
-                  }}
-                >
-                  남자
-                </Chip>
-              </li>
-              <li key={`gender-2`}>
-                <Chip
-                  isSelected={getValues("gender") === "2"}
-                  onClick={() => {
-                    trigger();
-
-                    if (getValues("gender") === "2") {
-                      setValue("gender", "");
-                      return;
-                    }
-
-                    setValue("gender", "2");
-                  }}
-                >
-                  여자
-                </Chip>
-              </li>
+              {[
+                { value: "1", label: "남자" },
+                { value: "2", label: "여자" },
+              ].map((option) => (
+                <li key={option.value}>
+                  <Controller
+                    name="gender"
+                    control={control}
+                    render={({ field }) => (
+                      <Chip
+                        isSelected={field.value === option.value}
+                        onClick={() =>
+                          handleGenderSelection(
+                            field.value,
+                            field.onChange,
+                            option.value
+                          )
+                        }
+                      >
+                        {option.label}
+                      </Chip>
+                    )}
+                  />
+                </li>
+              ))}
             </ul>
           </div>
           <div className="mt-[34px]">
             <InputLabel className="mb-[12px]" htmlFor="birth-year">
               연령
             </InputLabel>
-            <SelectButtonMedium
-              text={getValues("birth").toString()}
-              placeholder="출생년도"
-              onClick={() => setIsYearSelectionDrawerOpen(true)}
-              Icon={<CalendarIcon />}
+            <Controller
+              name="birth"
+              control={control}
+              render={({ field }) => {
+                return (
+                  <SelectButtonMedium
+                    text={field.value}
+                    placeholder="출생년도"
+                    onClick={() => setIsYearSelectionDrawerOpen(true)}
+                    Icon={<CalendarIcon />}
+                  />
+                );
+              }}
             />
           </div>
         </div>
@@ -192,16 +204,23 @@ const ProfileForm = () => {
           }}
         />
         <div className="flex mb-[8px] px-[24px]">
-          <Button
-            className="flex-1 h-[48px]"
-            onClick={() => {
-              setValue("birth", dayjs(tempYear).year() + "");
-              setIsYearSelectionDrawerOpen(false);
-              trigger();
+          <Controller
+            name="birth"
+            control={control}
+            render={({ field }) => {
+              return (
+                <Button
+                  className="flex-1 h-[48px]"
+                  onClick={() => {
+                    field.onChange(dayjs(tempYear).year() + "");
+                    setIsYearSelectionDrawerOpen(false);
+                  }}
+                >
+                  확인
+                </Button>
+              );
             }}
-          >
-            확인
-          </Button>
+          />
         </div>
       </Drawer>
     </>
