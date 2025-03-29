@@ -16,7 +16,6 @@ import Button from "@/shared/ui/Button";
 import Drawer from "@/shared/ui/Drawer";
 import { profileSchema } from "./schema";
 import ProfileImgUploader from "@/shared/ui/ProfileImgUploader";
-import { compressImage } from "@/shared/helpers/compressImage";
 import BottomButtonTab from "@/shared/ui/BottomButtonTab";
 import { DefaultLoading } from "@/shared/ui/Loading";
 import { useGetMyInfo } from "./hooks/useGetMyInfo";
@@ -97,7 +96,7 @@ const ProfileForm = () => {
               key={watch("file")}
               src={watch("file")}
               onUpload={async (file) => {
-                uploadProfileImg(await compressImage(file));
+                uploadProfileImg(file);
               }}
               preview={false}
             />
