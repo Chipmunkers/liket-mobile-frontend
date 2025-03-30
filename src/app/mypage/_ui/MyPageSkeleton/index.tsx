@@ -5,7 +5,7 @@ import SkeletonItem from "@/shared/ui/SkeletonItem";
 
 const MyPageSkeleton = () => {
   return (
-    <main className="grow mb-[48px]">
+    <main className="mb-[48px]">
       <div className="mx-[24px]">
         <div className="flex mt-[68px]">
           <div className="grow">
