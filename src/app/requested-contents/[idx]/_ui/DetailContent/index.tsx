@@ -119,7 +119,6 @@ const DetailContent = ({ content }: Props) => {
       </div>
       <Divider width="100%" height="8px" />
       <CategoryTab
-        small={false}
         list={["content", `review`]}
         selectedTab={selectedTab}
         customTabNames={["컨텐츠", `리뷰 ${content.reviewCount}`]}
