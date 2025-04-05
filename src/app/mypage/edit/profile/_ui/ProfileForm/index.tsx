@@ -197,7 +197,7 @@ const ProfileForm = () => {
       >
         <YearCalendar
           value={dayjs(tempYear)}
-          minDate={dayjs(new Date().getFullYear() - 1)}
+          minDate={dayjs(new Date("1930-01-01"))}
           maxDate={dayjs(new Date())}
           onChange={(date) => {
             setTempYear(date as Dayjs);
