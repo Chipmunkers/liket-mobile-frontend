@@ -29,9 +29,9 @@ const ContentCardXSmall = ({ content, onClick }: Props) => {
           <DefaultImg src={content.thumbnail} alt={`${content.title} 이미지`} />
         </div>
         <div className="flex flex-col justify-around ml-[12px]">
-          <div className="text-body2 w-[150px] overflow-hidden truncate">
+          <h3 className="text-body2 w-[150px] overflow-hidden truncate">
             {content.title}
-          </div>
+          </h3>
           <div className="text-body5 text-grey-04">
             <If condition={!!content.endDate}>
               <Then>

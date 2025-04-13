@@ -60,7 +60,7 @@ const ContentCardLarge = ({ content, width, onClick, className }: Props) => {
           <div className="text-body4 text-skyblue-01 mb-[4px]">
             {genre.name}
           </div>
-          <div className="text-body2 min-h-[17px] mb-[4px]">{title}</div>
+          <h3 className="text-body2 min-h-[17px] mb-[4px]">{title}</h3>
           <div className="text-body5 text-grey-04">{`${content.location.region1Depth} ${content.location.region2Depth}`}</div>
           <div className="text-body5 text-grey-04">
             <If condition={!!endDate}>

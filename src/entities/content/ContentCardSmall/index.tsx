@@ -36,7 +36,7 @@ const ContentCardSmall = ({ content, onClick }: Props) => {
         </div>
         <div className="flex flex-col justify-between">
           <div className="text-body4 text-skyblue-01">{content.genre.name}</div>
-          <div className="text-body2">{content.title}</div>
+          <h2 className="text-body2">{content.title}</h2>
           <div className="text-body5 text-grey-04">
             {formatDate(content.createdAt)}
           </div>
