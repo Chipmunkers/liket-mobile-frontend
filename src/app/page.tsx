@@ -64,7 +64,7 @@ const Home = async () => {
           <MainFooter />
         </div>
       </main>
-      <BottomTab shadow={true} />
+      <BottomTab shadow />
       <InterestingTagAlert />
     </>
   );
