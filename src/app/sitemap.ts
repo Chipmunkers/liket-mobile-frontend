@@ -19,14 +19,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // contents/1000부터 contents/2000까지의 경로 생성
-  const contentRoutes = Array.from({ length: 1001 }, (_, i) => i + 1000).map(
-    (id) => ({
-      url: `${baseUrl}/contents/${id}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    })
-  );
+  const contentRoutes = Array.from({ length: 7500 }, (_, i) => i).map((id) => ({
+    url: `${baseUrl}/contents/${id}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
 
   return [...staticRoutes, ...contentRoutes];
 }
