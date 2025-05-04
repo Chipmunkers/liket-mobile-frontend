@@ -510,7 +510,6 @@ export default function MapPage() {
         dispatchMapFilter={dispatchMapFilter}
       />
 
-      {/* 지역 모달 */}
       <LocationDrawer
         isOpen={!!isTownSelectionModalOpen}
         selectedLocation={selectedLocation}

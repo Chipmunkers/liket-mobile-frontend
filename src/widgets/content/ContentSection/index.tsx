@@ -5,6 +5,7 @@ import ContentCardLarge from "@/entities/content/ContentCardLarge";
 import { Props } from "./types";
 import CustomScrollContainer from "@/shared/ui/CustomScrollContainer";
 import { classNames } from "@/shared/helpers/classNames";
+import Link from "next/link";
 
 const ContentCardSection = (props: Props) => {
   const { contentList, children, className = "" } = props;
@@ -12,7 +13,16 @@ const ContentCardSection = (props: Props) => {
   if (contentList) {
     return (
       <section className={classNames("mt-[24px] mb-[24px]", className)}>
-        <h2 className="pl-[24px] mb-[8px] h-[20px] text-h2">{children}</h2>
+        <div className="flex justify-between items-center px-[24px] mb-[8px] h-[20px]">
+          <h2 className="text-h2">{children}</h2>
+          <Link
+            className="text-button4 text-grey-03"
+            // 성수 지역
+            href={`/map?lat=${37.55102968913442}&lng=${127.04105853332118}`}
+          >
+            더보기
+          </Link>
+        </div>
         <CustomScrollContainer className="flex flex-row gap-[8px] overflow-y-hidden w-[100%] pr-[24px] [&>*:first-child]:ml-[24px]">
           <If condition={contentList.length >= 1}>
             <Then>

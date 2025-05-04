@@ -92,7 +92,7 @@
   }
 
   .full-modal-main {
-    @apply flex flex-col grow overflow-y-auto;
+    @apply flex flex-col grow;
   }
 
   .header {
