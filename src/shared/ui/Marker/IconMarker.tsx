@@ -42,13 +42,13 @@ const CustomMarker = ({
             "overflow-hidden absolute w-4 h-4 flex items-center justify-center border-0 rounded-full",
             isSelected
               ? "left-[22px] top-[26.8px]"
-              : "left-[14.5px] top-[14.9px]"
+              : "left-[14.7px] top-[14.5px]"
           )}
         >
           <div
             className={classNames(
               "text-white font-bold",
-              isSelected ? "text-[13px]" : "text-[10.8px]"
+              isSelected ? "text-[12px]" : "text-[10px]"
             )}
           >
             {numberOfMarkers}
