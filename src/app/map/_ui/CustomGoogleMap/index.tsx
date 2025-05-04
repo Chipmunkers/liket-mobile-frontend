@@ -75,7 +75,7 @@ const CustomGoogleMap = ({
               numberOfMarkers={
                 properties.point_count >= 99 ? 99 : properties.point_count
               }
-              icon="https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/clustered_marker.svg"
+              icon="/map-marker/clustering-marker.png"
               lat={lat}
               lng={lng}
               onClickMarker={(e) => {
@@ -99,8 +99,8 @@ const CustomGoogleMap = ({
               isSelected={isSelected || isOnlyOneSingleIconMarkerVisibleInMap}
               icon={
                 isSelected || isOnlyOneSingleIconMarkerVisibleInMap
-                  ? `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/click_marker_${properties.genre.idx}_icon.svg`
-                  : `https://liket.s3.ap-northeast-2.amazonaws.com/map-marker/default_marker_${properties.genre.idx}_icon.svg`
+                  ? `/map-marker/click_marker_${properties.genre.idx}_icon.png`
+                  : `/map-marker/default_marker_${properties.genre.idx}_icon.png`
               }
               lat={lat}
               lng={lng}
