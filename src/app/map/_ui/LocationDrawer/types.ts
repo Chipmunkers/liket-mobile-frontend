@@ -1,9 +1,14 @@
+import { Dispatch } from "react";
 import { SelectLocation } from "../../_types/types";
-import { SetState } from "@/shared/types/react";
+import { SelectLocationAction } from "../../_util/locationFilterReducer";
 
 export type Props = {
   isOpen: boolean;
-  selectLocation: SelectLocation;
+  selectedLocation: {
+    draft: SelectLocation;
+    applied: SelectLocation;
+  };
+  dispatchSelectedLocation: Dispatch<SelectLocationAction>;
   onChangeRegion: (
     newRegion: SelectLocation,
     newLatLng: { lat: number; lng: number }
