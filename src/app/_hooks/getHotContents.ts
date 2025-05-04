@@ -6,6 +6,7 @@ import { StyleEntity } from "@/shared/types/api/tag/StyleEntity";
 import { SummaryContentEntity } from "@/shared/types/api/content/SummaryContentEntity";
 import { AgeEntity } from "@/shared/types/api/tag/AgeEntity";
 import { AxiosError } from "axios";
+import { GENRES } from "@/shared/consts/content/genre";
 
 export const getHotContentsForServer = async (): Promise<HotContentEntity[]> =>
   (
@@ -53,6 +54,51 @@ export const useGetHotAgeContents = () =>
         age: AgeEntity;
         contentList: SummaryContentEntity[];
       }>("/apis/culture-content/hot-age/all", {
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      });
+
+      return data;
+    },
+  });
+
+export const usePopupContents = () =>
+  useQuery<
+    {
+      contentList: SummaryContentEntity[];
+    },
+    AxiosError
+  >({
+    queryKey: ["main-popup-contents"],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get<{
+        contentList: SummaryContentEntity[];
+      }>(
+        `/apis/culture-content/all?accept=true&genre=${GENRES[0].idx}&page=1`,
+        {
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        }
+      );
+
+      return data;
+    },
+  });
+
+export const useSeongsuContents = () =>
+  useQuery<
+    {
+      contentList: SummaryContentEntity[];
+    },
+    AxiosError
+  >({
+    queryKey: ["main-seongsu-contents"],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get<{
+        contentList: SummaryContentEntity[];
+      }>(`/apis/culture-content/all?accept=true&region=1120&page=1`, {
         headers: {
           "Cache-Control": "no-cache",
         },

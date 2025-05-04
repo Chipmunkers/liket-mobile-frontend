@@ -17,6 +17,8 @@ import { shuffle } from "@/shared/helpers/shuffle";
 import HotReviewSection from "@/app/_ui/HotReviewSection";
 import { MainFooter } from "@/app/_ui/MainFooter";
 import InterestingTagAlert from "@/app/_ui/InterestingTag";
+import PopupSection from "@/app/_ui/PopupSection";
+import SeongsuSection from "@/app/_ui/SeongsuSection";
 
 const Home = async () => {
   const { contentList: soonOpenContents } =
@@ -37,10 +39,10 @@ const Home = async () => {
         <MainBannerCarousel bannerList={bannerList} />
 
         {/* 인기 스타일  문화생활 컨텐츠*/}
-        <HotStyleSection />
+        <PopupSection />
 
         {/* 인기 연령대 문화생활 컨텐츠 */}
-        <HotAgeSection />
+        <SeongsuSection />
 
         <Divider height="8px" width="100%" />
 
