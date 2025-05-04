@@ -9,8 +9,8 @@ export const profileSchema = z
       .regex(/^[a-zA-Z0-9가-힣_-]+$/, {
         message: "닉네임은 한글, 영문, 숫자, _, - 만 입력할 수 있습니다.",
       }),
-    gender: z.string().min(1),
+    gender: z.string(),
     file: z.string().min(1),
-    birth: z.string().min(1),
+    birth: z.string(),
   })
   .required();

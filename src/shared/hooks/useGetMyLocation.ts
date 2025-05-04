@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { WEBVIEW_EVENT_TYPE } from "../consts/webview/event";
+import { messageToRN } from "../helpers/messageToRN";
 
 type PermissionStatus = "granted" | "denied" | "undetermined";
 
@@ -35,7 +37,6 @@ interface UseLocationReturn {
   WEB_PERMISSION: PermissionStatus;
   WEBVIEW_PERMISSION: PermissionStatus;
   canAskAgain: boolean;
-  getLocation?: () => void;
 }
 
 /**
@@ -101,19 +102,6 @@ const useLocation = ({
     );
   }, []);
 
-  // 위치 정보 가져오기 (환경에 따라 다른 방식 사용)
-  const getLocation = useCallback((): void => {
-    if (!isRNWebView) {
-      getWebLocation();
-    } else {
-      window.ReactNativeWebView?.postMessage(
-        JSON.stringify({
-          type: "REQUEST_LOCATION",
-        })
-      );
-    }
-  }, [isRNWebView, getWebLocation]);
-
   // React Native WebView 메시지 이벤트 처리
   useEffect(() => {
     if (!isRNWebView) {
@@ -155,11 +143,9 @@ const useLocation = ({
     };
 
     // RN에 준비 완료 알리기
-    window.ReactNativeWebView?.postMessage(
-      JSON.stringify({
-        type: "WEB_READY_FOR_MESSAGES",
-      })
-    );
+    messageToRN({
+      type: WEBVIEW_EVENT_TYPE.WEB_READY_FOR_MESSAGES,
+    });
 
     document.addEventListener("message", handleMessage as any);
     window.addEventListener("message", handleMessage);
@@ -194,7 +180,6 @@ const useLocation = ({
     WEB_PERMISSION: location.WEB_PERMISSION,
     WEBVIEW_PERMISSION: location.WEBVIEW_PERMISSION,
     canAskAgain: location.canAskAgain,
-    getLocation,
   };
 };
 

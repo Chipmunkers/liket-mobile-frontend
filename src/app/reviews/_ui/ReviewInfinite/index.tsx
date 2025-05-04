@@ -14,6 +14,7 @@ import PersonalReviewCard, {
   PersonalReviewCardSkeleton,
 } from "@/entities/review/PersonalReviewCard";
 import { WEBVIEW_SCREEN } from "@/shared/consts/webview/screen";
+import React from "react";
 
 const ReviewInfinite = ({ idx }: Props) => {
   const router = useRouter();
@@ -46,13 +47,13 @@ const ReviewInfinite = ({ idx }: Props) => {
           !error &&
           Array(10)
             .fill(0)
-            .map(() => (
-              <>
+            .map((_, index) => (
+              <React.Fragment key={index}>
                 <div className="px-[24px]">
                   <PersonalReviewCardSkeleton />
                 </div>
                 <Divider width="100%" height="8px" margin="8px 0" />
-              </>
+              </React.Fragment>
             ))}
         {data && data.pages[0]?.reviewList.length === 0 && (
           <div className="absolute text-body3 text-grey-03 top-[50%] left-[50%] translate-x-[-50%] translate-y-[50%]">

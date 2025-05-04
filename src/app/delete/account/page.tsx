@@ -20,7 +20,7 @@ export default function Page() {
   const setToken = authStore(({ setToken }) => setToken);
   const { mutate } = useDeleteAccount({
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      queryClient.clear();
       setAuthToken("");
       setToken("");
       stackRouterPush(router, {

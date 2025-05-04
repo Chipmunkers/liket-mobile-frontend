@@ -33,7 +33,7 @@ const ContentCardMedium = ({ content, onClick, className }: Props) => {
           });
         }}
       >
-        <div className="relative w-[72px] h-[100px] mr-[16px]">
+        <div className="relative w-[72px] min-w-[72px] h-[100px] mr-[16px]">
           <DefaultImg src={content.thumbnail} />
         </div>
         <div className="flex flex-col items-start">
@@ -41,7 +41,7 @@ const ContentCardMedium = ({ content, onClick, className }: Props) => {
           <div className="text-body4 text-skyblue-01 mt-[4px]">
             {content.genre.name}
           </div>
-          <h2 className="text-body2 mt-[4px]">{content.title}</h2>
+          <h2 className="text-body2 mt-[4px] line-clamp-2">{content.title}</h2>
           <div className="text-body5 text-grey-04 mt-[4px]">
             {content.location.region1Depth +
               " " +
