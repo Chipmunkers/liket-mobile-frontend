@@ -24,7 +24,7 @@ interface GoogleMapProps {
 export const CommonGoogleMap = ({
   children,
   center,
-  zoom = 10,
+  zoom = 14,
   onChangeMap,
   onClickMap,
   onDragStart,

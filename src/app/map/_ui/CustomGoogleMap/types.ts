@@ -3,6 +3,7 @@ import { SetState } from "@/shared/types/react";
 import { MapContentEntity } from "@/shared/types/api/map/MapContentEntity";
 import { MapInfo } from "../../_types/types";
 import Supercluster from "supercluster";
+import { Coordinate } from "@/shared/types/ui/map/type";
 
 export type Props = {
   isOnlyOneSingleIconMarkerVisibleInMap: boolean;
@@ -21,6 +22,11 @@ export type Props = {
     lat: number;
     lng: number;
   };
+  onChangeMapInfo: (
+    bound: MapInfo["bound"],
+    center: Coordinate,
+    zoomLevel: number
+  ) => void;
   onDragStart: () => void;
   onClickMap: () => void;
   setMapInfo: SetState<MapInfo>;

@@ -1,22 +1,25 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Props } from "./types";
-import { Sido, SIDO_LIST } from "@/shared/consts/region/sido";
+import { SIDO_LIST } from "@/shared/consts/region/sido";
 import { classNames } from "@/shared/helpers/classNames";
 import { ButtonBase } from "@mui/material";
-import { Sigungu, SIGUNGU_LIST } from "@/shared/consts/region/sigungu";
+import { SIGUNGU_LIST } from "@/shared/consts/region/sigungu";
 import Button from "@/shared/ui/Button";
 import { Header, HeaderLeft, HeaderMiddle } from "@/shared/ui/Header";
 import BottomButtonTab from "@/shared/ui/BottomButtonTab";
-import { useState } from "react";
 
-const LocationDrawer = ({ isOpen, selectLocation, onChangeRegion }: Props) => {
+const LocationDrawer = ({
+  isOpen,
+  selectedLocation,
+  dispatchSelectedLocation,
+  onChangeRegion,
+}: Props) => {
   const router = useRouter();
-  const [selectSido, setSelectSido] = useState<Sido>(selectLocation.sido);
-  const [selectSigungu, setSelectSigungu] = useState<Sigungu | null>(
-    selectLocation.sigungu
-  );
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams.toString());
+  const { draft } = selectedLocation;
 
   return (
     <div
@@ -30,10 +33,9 @@ const LocationDrawer = ({ isOpen, selectLocation, onChangeRegion }: Props) => {
           option={{
             close: {
               onClick: () => {
-                const { sido, sigungu } = selectLocation;
-                setSelectSido(sido);
-                setSelectSigungu(sigungu);
-                router.replace("/map");
+                dispatchSelectedLocation({ type: "ABORT_DRAFT" });
+                params.delete("isTownSelectionModalOpen");
+                router.replace(`?${params.toString()}`);
               },
             },
           }}
@@ -50,14 +52,22 @@ const LocationDrawer = ({ isOpen, selectLocation, onChangeRegion }: Props) => {
                     key={index}
                     className={classNames(
                       "center h-[48px]",
-                      selectSido.cd === sido.cd
+                      draft.sido.cd === sido.cd
                         ? "bg-white text-skyblue-01"
                         : "bg-grey-01 text-grey-04"
                     )}
                   >
                     <ButtonBase
                       className="w-[100%] h-[100%]"
-                      onClick={() => setSelectSido(sido)}
+                      onClick={() => {
+                        dispatchSelectedLocation({
+                          type: "UPDATE_DRAFT",
+                          payload: {
+                            sido,
+                            sigungu: null,
+                          },
+                        });
+                      }}
                     >
                       {sido.fullName}
                     </ButtonBase>
@@ -67,21 +77,29 @@ const LocationDrawer = ({ isOpen, selectLocation, onChangeRegion }: Props) => {
             </ul>
           </div>
           <div className="w-[50%]">
-            <ul className="flex flex-col size-full overflow-y-auto">
+            <ul className="flex flex-col size-full overflow-y-auto pb-[64px]">
               {SIGUNGU_LIST.filter((sigungu) =>
-                sigungu.bjd_cd.startsWith(selectSido.cd)
+                sigungu.bjd_cd.startsWith(draft.sido.cd)
               ).map((sigungu, index) => {
                 return (
                   <li
                     key={index}
                     className={classNames(
                       "center h-[48px] shrink-0",
-                      selectSigungu?.cd === sigungu.cd && "text-skyblue-01"
+                      draft.sigungu?.cd === sigungu.cd && "text-skyblue-01"
                     )}
                   >
                     <ButtonBase
                       className="size-full"
-                      onClick={() => setSelectSigungu(sigungu)}
+                      onClick={() => {
+                        dispatchSelectedLocation({
+                          type: "UPDATE_DRAFT",
+                          payload: {
+                            sido: draft.sido,
+                            sigungu,
+                          },
+                        });
+                      }}
                     >
                       {sigungu.name}
                     </ButtonBase>
@@ -97,31 +115,28 @@ const LocationDrawer = ({ isOpen, selectLocation, onChangeRegion }: Props) => {
           className="h-[48px] flex-1"
           onClick={() => {
             if (
-              !selectSigungu ||
-              !selectSigungu.bjd_cd.startsWith(selectSido.cd)
+              !draft.sigungu ||
+              !draft.sigungu.bjd_cd.startsWith(draft.sido.cd)
             ) {
-              setSelectSigungu(null);
               onChangeRegion(
                 {
-                  sido: selectSido,
+                  sido: draft.sido,
                   sigungu: null,
                 },
                 {
-                  lat: Number(selectSido.lat),
-                  lng: Number(selectSido.lng),
+                  lat: Number(draft.sido.lat),
+                  lng: Number(draft.sido.lng),
                 }
               );
             } else {
               onChangeRegion(
-                { sido: selectSido, sigungu: selectSigungu },
+                { sido: draft.sido, sigungu: draft.sigungu },
                 {
-                  lat: Number(selectSigungu.lat),
-                  lng: Number(selectSigungu.lng),
+                  lat: Number(draft.sigungu.lat),
+                  lng: Number(draft.sigungu.lng),
                 }
               );
             }
-
-            router.replace("/map");
           }}
         >
           설정하기
