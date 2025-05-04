@@ -19,6 +19,7 @@ import { MainFooter } from "@/app/_ui/MainFooter";
 import InterestingTagAlert from "@/app/_ui/InterestingTag";
 import PopupSection from "@/app/_ui/PopupSection";
 import SeongsuSection from "@/app/_ui/SeongsuSection";
+import ExhibitionSection from "@/app/_ui/ExhibitionSection";
 
 const Home = async () => {
   const { contentList: soonOpenContents } =
@@ -51,8 +52,11 @@ const Home = async () => {
 
         <Divider height="8px" width="100%" />
 
+        {/* 전시회 컨텐츠 */}
+        <ExhibitionSection />
+
         {/* 오픈 예정 컨텐츠 */}
-        <SoonOpenContentSection contentList={shuffle(soonOpenContents)} />
+        {/* <SoonOpenContentSection contentList={shuffle(soonOpenContents)} /> */}
 
         {/* 종료 예정 컨텐츠 */}
         <SoonEndContentSection

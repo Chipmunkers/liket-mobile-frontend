@@ -87,6 +87,30 @@ export const usePopupContents = () =>
     },
   });
 
+export const useExhibitionContents = () =>
+  useQuery<
+    {
+      contentList: SummaryContentEntity[];
+    },
+    AxiosError
+  >({
+    queryKey: ["main-exhibition-contents"],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get<{
+        contentList: SummaryContentEntity[];
+      }>(
+        `/apis/culture-content/all?accept=true&genre=${GENRES[1].idx}&page=1`,
+        {
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        }
+      );
+
+      return data;
+    },
+  });
+
 export const useSeongsuContents = () =>
   useQuery<
     {
