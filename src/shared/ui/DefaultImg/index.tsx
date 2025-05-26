@@ -82,6 +82,7 @@ const DefaultImg = ({
           }
           alt={alt}
           fill
+          unoptimized
           style={
             cover
               ? {
@@ -109,6 +110,7 @@ const DefaultImg = ({
           className={classNames(!select ? "select-none" : "")}
           src={srcHost + src}
           onError={handleError}
+          unoptimized
           alt={alt}
           fill
           style={
