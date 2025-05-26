@@ -40,10 +40,12 @@ const Home = async () => {
         <MainBannerCarousel bannerList={bannerList} />
 
         {/* 팝업 컨텐츠 */}
-        <PopupSection />
+        {/* <PopupSection /> */}
+        <HotStyleSection />
 
         {/* 전시회 컨텐츠 */}
-        <ExhibitionSection />
+        {/* <ExhibitionSection /> */}
+        <HotAgeSection />
 
         <Divider height="8px" width="100%" />
 
@@ -52,10 +54,10 @@ const Home = async () => {
 
         <Divider height="8px" width="100%" />
 
-        <SeongsuSection />
+        {/* <SeongsuSection /> */}
 
         {/* 오픈 예정 컨텐츠 */}
-        {/* <SoonOpenContentSection contentList={shuffle(soonOpenContents)} /> */}
+        <SoonOpenContentSection contentList={shuffle(soonOpenContents)} />
 
         {/* 종료 예정 컨텐츠 */}
         <SoonEndContentSection
